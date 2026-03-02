@@ -209,7 +209,6 @@ details[open] > summary .chevron {
 </div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
 const GITHUB_OWNER  = "HJexe";
 const GITHUB_REPO   = "Class-12-ISC";
 const GITHUB_BRANCH = "main";
@@ -218,10 +217,9 @@ const SUBJECT_FOLDERS = [
   "Economics",
   "Accounts",
   "Business Studies",
-  "Maths",
+  "Maths-(creds-Abhinav)",
   "Commerce"
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
 const RAW_BASE = `https://${GITHUB_OWNER}.github.io/${GITHUB_REPO}/`;
 
@@ -242,7 +240,6 @@ function setActiveLink(path) {
 
 function previewUrl(path) {
   const fileUrl = rawUrl(path);
-  // Render through Google Docs viewer to avoid executing PDF-embedded auto-print actions.
   return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fileUrl)}`;
 }
 
@@ -254,7 +251,6 @@ function showPreview(path) {
   setActiveLink(path);
 }
 
-// Build a nested tree from a flat list of relative paths (no subject prefix)
 function buildTree(paths) {
   const root = { dirs: new Map(), files: [] };
   for (const p of paths) {
@@ -314,8 +310,11 @@ function buildFolderSection(subject, paths) {
   const details = document.createElement("details");
   details.className = "accordion";
 
+  // Show a cleaner display name for folders with suffixes
+  const displayName = subject.replace(/-(creds-.+)$/i, "");
+
   const summary = document.createElement("summary");
-  summary.innerHTML = `<span class="folder-info">📂 ${subject}</span><span class="chevron">▶</span>`;
+  summary.innerHTML = `<span class="folder-info">📂 ${displayName}</span><span class="chevron">▶</span>`;
   details.appendChild(summary);
 
   if (paths.length === 0) {
@@ -324,7 +323,6 @@ function buildFolderSection(subject, paths) {
     empty.textContent = "No resources found.";
     details.appendChild(empty);
   } else {
-    // Strip the "Subject/" prefix before building the tree
     const relative = paths.map(p => p.slice(subject.length + 1));
     details.appendChild(renderSubtree(buildTree(relative), subject));
   }
@@ -347,11 +345,10 @@ function getSubjectFolders(allFiles) {
 
 async function loadResources() {
   try {
-    // files.json lives at the root of the repo, served via GitHub Pages
     const res = await fetch("files.json");
     if (!res.ok) throw new Error(`files.json not found (${res.status}). Has the GitHub Action run yet?`);
 
-    const allFiles = await res.json(); // flat array of paths like "Economics/Papers/foo.pdf"
+    const allFiles = await res.json();
 
     $folders.innerHTML = "";
 
