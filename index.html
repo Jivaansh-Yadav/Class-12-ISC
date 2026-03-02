@@ -57,6 +57,81 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-tt{color:#7fff5f !important;border:1px solid rgba(127,255,95,.35);padding:.3rem .85rem;}
 .nav-tt:hover{background:rgba(127,255,95,.1) !important;}
 
+/* ── UPDATES BOX ── */
+.updates-wrap{
+  position:fixed;
+  top:116px;
+  right:24px;
+  z-index:480;
+  opacity:0;
+  animation:upin .5s .4s ease forwards;
+}
+@keyframes upin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.updates-box{
+  width:300px;
+  background:rgba(8,8,9,0.92);
+  border:1px solid rgba(127,255,95,0.2);
+  border-radius:4px;
+  overflow:hidden;
+  backdrop-filter:blur(16px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+}
+.ub-head{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;
+  background:rgba(127,255,95,0.06);
+  border-bottom:1px solid rgba(127,255,95,0.1);
+}
+.ub-badge{
+  background:#7fff5f;color:#080809;
+  font-size:.52rem;font-weight:700;
+  letter-spacing:1.5px;padding:2px 6px;
+  text-transform:uppercase;flex-shrink:0;
+}
+.ub-title{
+  font-size:.58rem;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;flex:1;
+}
+.ub-dot{
+  width:5px;height:5px;background:#7fff5f;
+  border-radius:50%;box-shadow:0 0 6px #7fff5f;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.ub-body{padding:2px 0;}
+.ub-item{
+  display:flex;align-items:flex-start;gap:8px;
+  padding:8px 12px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.ub-item:last-child{border-bottom:none;}
+.ub-sym{color:#7fff5f;font-size:.65rem;flex-shrink:0;margin-top:1px;}
+.ub-tag{
+  display:inline-block;
+  font-size:.5rem;letter-spacing:1px;text-transform:uppercase;
+  color:#7fff5f;border:1px solid rgba(127,255,95,0.3);
+  padding:1px 4px;margin-bottom:3px;
+}
+.ub-tag.pdf{color:#fbbf24;border-color:rgba(251,191,36,0.3);}
+.ub-text{font-size:.63rem;color:rgba(220,220,232,0.6);line-height:1.5;display:block;}
+.ub-text strong{color:var(--text);font-weight:600;}
+.ub-time{font-size:.52rem;color:var(--dim);margin-top:2px;display:block;}
+
+.ub-foot{
+  padding:6px 12px;
+  border-top:1px solid rgba(127,255,95,0.08);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.ub-foot-txt{font-size:.52rem;color:var(--dim);letter-spacing:.5px;}
+.ub-foot-link{
+  font-size:.52rem;color:#7fff5f;
+  text-decoration:none;letter-spacing:.5px;
+  transition:opacity .2s;
+}
+.ub-foot-link:hover{opacity:0.7;}
+
 /* HERO */
 .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:2rem 3rem 0;gap:4rem;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(127,255,95,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(127,255,95,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;}
@@ -151,6 +226,8 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
   .hero{grid-template-columns:1fr;padding-top:6rem;}.hero-r{display:none;}
   nav{padding:1rem 1.5rem;}.sec-in{padding:4rem 1.5rem;}
   footer{flex-direction:column;gap:1rem;text-align:center;}
+  .updates-wrap{right:12px;top:80px;}
+  .updates-box{width:260px;}
 }
 </style>
 </head>
@@ -176,6 +253,55 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
   <span class="beta-tag">BETA</span>
   <span class="beta-msg">This is an early build — resources are actively being added. Check back soon for more content.</span>
   <span class="beta-dismiss" onclick="this.parentElement.style.display='none'">✕</span>
+</div>
+
+<!-- UPDATES BOX -->
+<div class="updates-wrap">
+  <div class="updates-box">
+    <div class="ub-head">
+      <span class="ub-badge">New</span>
+      <span class="ub-title">Recent Updates</span>
+      <span class="ub-dot"></span>
+    </div>
+    <div class="ub-body">
+      <div class="ub-item">
+        <span class="ub-sym">+</span>
+        <div>
+          <span class="ub-tag">Notes</span>
+          <span class="ub-text"><strong>Maths</strong> — Chapter notes added</span>
+          <span class="ub-time">48 min ago</span>
+        </div>
+      </div>
+      <div class="ub-item">
+        <span class="ub-sym">+</span>
+        <div>
+          <span class="ub-tag pdf">PDF</span>
+          <span class="ub-text"><strong>Accounts</strong> — New PDFs uploaded</span>
+          <span class="ub-time">6 hrs ago</span>
+        </div>
+      </div>
+      <div class="ub-item">
+        <span class="ub-sym">+</span>
+        <div>
+          <span class="ub-tag pdf">PDF</span>
+          <span class="ub-text"><strong>Economics</strong> — Study material added</span>
+          <span class="ub-time">17 hrs ago</span>
+        </div>
+      </div>
+      <div class="ub-item">
+        <span class="ub-sym">+</span>
+        <div>
+          <span class="ub-tag">Notes</span>
+          <span class="ub-text"><strong>Business Studies</strong> — Notes uploaded</span>
+          <span class="ub-time">1 day ago</span>
+        </div>
+      </div>
+    </div>
+    <div class="ub-foot">
+      <span class="ub-foot-txt">Resources updated regularly</span>
+      <a href="https://github.com/HJexe/Class-12-ISC" target="_blank" rel="noopener" class="ub-foot-link">View all →</a>
+    </div>
+  </div>
 </div>
 
 <!-- HERO -->
