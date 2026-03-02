@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISC.exe — Timetable 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0b;
+      --surface: #111114;
+      --surface2: #18181d;
+      --border: #2a2a35;
+      --accent: #7fff5f;
+      --accent2: #5fafff;
+      --accent3: #ff5f7e;
+      --text: #e8e8f0;
+      --muted: #6b6b80;
+      --science: #5fafff;
+      --commerce: #ffb85f;
+      --common: #a0a0b8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* Nav */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 4rem 2.5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .eyebrow span { color: var(--accent); }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Controls */
+    .controls {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .dropdown-wrap {
+      position: relative;
+    }
+
+    .dropdown-wrap::before {
+      content: '→';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      pointer-events: none;
+      font-size: 0.85rem;
+    }
+
+    select {
+      appearance: none;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.6rem 3rem 0.6rem 2.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 3px;
+    }
+
+    select:focus { border-color: var(--accent); }
+
+    .dropdown-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      font-size: 0.75rem;
+    }
+
+    .stream-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 2px;
+      border: 1px solid;
+      transition: all 0.3s;
+    }
+
+    .stream-badge.science { color: var(--science); border-color: var(--science); background: rgba(95,175,255,0.08); }
+    .stream-badge.commerce { color: var(--commerce); border-color: var(--commerce); background: rgba(255,184,95,0.08); }
+
+    /* Stats bar */
+    .stats-bar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2.5rem 2rem;
+      display: flex;
+      gap: 2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .stats-bar span { color: var(--accent); font-weight: 600; }
+
+    /* Table container */
+    .table-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2.5rem 4rem;
+    }
+
+    .table-container {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .table-header-bar {
+      background: var(--surface2);
+      padding: 0.8rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      display: flex;
+      gap: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      background: var(--surface2);
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      font-weight: 400;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(42,42,53,0.5);
+      transition: background 0.15s;
+      animation: fadeRow 0.4s ease both;
+    }
+
+    @keyframes fadeRow {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    tbody tr:hover { background: var(--surface2); }
+
+    tbody tr:last-child { border-bottom: none; }
+
+    td {
+      padding: 0.9rem 1.5rem;
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+
+    .td-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+      min-width: 160px;
+    }
+
+    .td-day {
+      display: block;
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .td-datenum {
+      color: var(--text);
+      font-size: 0.88rem;
+    }
+
+    .td-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .subject-name {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .subject-tag {
+      display: inline-block;
+      margin-top: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .tag-science  { background: rgba(95,175,255,0.12); color: var(--science); }
+    .tag-commerce { background: rgba(255,184,95,0.12); color: var(--commerce); }
+    .tag-common   { background: rgba(160,160,184,0.08); color: var(--common); }
+
+    .td-dur {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .today-row {
+      background: rgba(127,255,95,0.04) !important;
+      border-left: 3px solid var(--accent);
+    }
+
+    .today-row td:first-child::before {
+      content: '← today';
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .past-row { opacity: 0.4; }
+
+    /* Month divider */
+    .month-divider td {
+      background: var(--surface2);
+      padding: 0.5rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* No exams message */
+    .no-exams {
+      padding: 4rem;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem; }
+      .hero, .controls, .stats-bar, .table-wrap { padding-left: 1rem; padding-right: 1rem; }
+      th, td { padding: 0.7rem 0.8rem; }
+      .td-date { min-width: 100px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/">ISC.exe</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/resource.html">Resources</a></li>
+    <li><a href="https://github.com/HJexe/Class-12-ISC">GitHub</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="eyebrow">// exam · schedule · <span>2026</span></p>
+  <h1>Timetable, <em>sorted.</em></h1>
+  <p class="subtitle">ISC Class XII · Year 2026 · Board Examination Schedule</p>
+</section>
+
+<div class="controls">
+  <div class="dropdown-wrap">
+    <select id="streamSelect" onchange="renderTable()">
+      <option value="science">Science Stream</option>
+      <option value="commerce">Commerce Stream</option>
+    </select>
+  </div>
+  <div id="streamBadge" class="stream-badge science">SCIENCE</div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+  <div>Total exams: <span id="statTotal">—</span></div>
+  <div>Remaining: <span id="statRemaining">—</span></div>
+  <div>Next: <span id="statNext">—</span></div>
+</div>
+
+<div class="table-wrap">
+  <div class="table-container">
+    <div class="table-header-bar">
+      <span>isc-timetable-2026.dat</span>
+      <span>·</span>
+      <span>all times 2:00 PM IST unless noted</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Subject / Paper</th>
+          <th style="text-align:right">Duration</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+    <div id="noExams" class="no-exams" style="display:none">No exams found for selected stream.</div>
+  </div>
+</div>
+
+<footer>
+  <span>ISC.exe · © 2025 HJexe</span>
+  <span><a href="https://github.com/HJexe/Class-12-ISC">HJexe / Class-12-ISC</a></span>
+</footer>
+
+<script>
+  // All exams from timetable image
+  // stream: 'science' | 'commerce' | 'both'
+  const ALL_EXAMS = [
+    { date: '2026-02-12', day: 'Thursday',  time: '2:00 PM', subject: 'Psychology',                        stream: 'both' },
+    { date: '2026-02-13', day: 'Friday',    time: '2:00 PM', subject: 'English — Paper 1 (English Language)', stream: 'both' },
+    { date: '2026-02-14', day: 'Saturday',  time: '9:00 AM', subject: 'Art Paper 3 (Drawing or Painting of a Living Person)', stream: 'both' },
+    { date: '2026-02-14', day: 'Saturday',  time: '2:00 PM', subject: 'Legal Studies',                     stream: 'both' },
+    { date: '2026-02-16', day: 'Monday',    time: '2:00 PM', subject: 'English — Paper 2 (Literature in English)', stream: 'both' },
+    { date: '2026-02-17', day: 'Tuesday',   time: '2:00 PM', subject: 'Home Science — Paper 1 (Theory)',   stream: 'both' },
+    { date: '2026-02-17', day: 'Tuesday',   time: '2:00 PM', subject: 'Electricity and Electronics',       stream: 'science' },
+    { date: '2026-02-17', day: 'Tuesday',   time: '2:00 PM', subject: 'Geometrical & Mechanical Drawing',  stream: 'both' },
+    { date: '2026-02-20', day: 'Friday',    time: '2:00 PM', subject: 'Accounts',                          stream: 'commerce' },
+    { date: '2026-02-21', day: 'Saturday',  time: '2:00 PM', subject: 'Mass Media & Communication',        stream: 'both' },
+    { date: '2026-02-23', day: 'Monday',    time: '2:00 PM', subject: 'Chemistry — Paper 1 (Theory)',      stream: 'science' },
+    { date: '2026-02-25', day: 'Wednesday', time: '2:00 PM', subject: 'History',                           stream: 'both' },
+    { date: '2026-02-27', day: 'Friday',    time: '2:00 PM', subject: 'Commerce',                          stream: 'commerce' },
+    { date: '2026-02-28', day: 'Saturday',  time: '9:00 AM', subject: 'Art Paper 1 (Drawing or Painting from Still Life)', stream: 'both' },
+    { date: '2026-03-02', day: 'Monday',    time: '2:00 PM', subject: 'Environmental Science — Paper 1 (Theory)', stream: 'science' },
+    { date: '2026-03-06', day: 'Friday',    time: '2:00 PM', subject: 'Biology — Paper 1 (Theory)',        stream: 'science' },
+    { date: '2026-03-07', day: 'Saturday',  time: '2:00 PM', subject: 'Fashion Designing — Paper 1 (Theory)', stream: 'both' },
+    { date: '2026-03-07', day: 'Saturday',  time: '2:00 PM', subject: 'Indian Music — Hindustani — Paper 1 (Theory)', stream: 'both' },
+    { date: '2026-03-09', day: 'Monday',    time: '2:00 PM', subject: 'Mathematics',                       stream: 'science' },
+    { date: '2026-03-11', day: 'Wednesday', time: '2:00 PM', subject: 'Business Studies',                  stream: 'commerce' },
+    { date: '2026-03-13', day: 'Friday',    time: '2:00 PM', subject: 'Bengali, Gujarati, Hindi, Kannada & other regional languages', stream: 'both' },
+    { date: '2026-03-14', day: 'Saturday',  time: '9:00 AM', subject: 'Art Paper 2 (Drawing or Painting from Nature)', stream: 'both' },
+    { date: '2026-03-16', day: 'Monday',    time: '2:00 PM', subject: 'Physics — Paper 1 (Theory)',        stream: 'science' },
+    { date: '2026-03-18', day: 'Wednesday', time: '2:00 PM', subject: 'Physical Education',                stream: 'both' },
+    { date: '2026-03-23', day: 'Monday',    time: '2:00 PM', subject: 'Economics',                         stream: 'commerce' },
+    { date: '2026-03-23', day: 'Monday',    time: '2:00 PM', subject: 'Biotechnology — Paper 1 (Theory)',  stream: 'science' },
+    { date: '2026-03-25', day: 'Wednesday', time: '2:00 PM', subject: 'Sociology',                         stream: 'both' },
+    { date: '2026-03-27', day: 'Friday',    time: '2:00 PM', subject: 'Computer Science — Paper 1 (Theory)', stream: 'science' },
+    { date: '2026-03-28', day: 'Saturday',  time: '9:00 AM', subject: 'Art Paper 4 (Original Imaginative Composition in Colour)', stream: 'both' },
+    { date: '2026-03-30', day: 'Monday',    time: '2:00 PM', subject: 'Political Science',                 stream: 'both' },
+    { date: '2026-04-01', day: 'Wednesday', time: '2:00 PM', subject: 'Elective English',                  stream: 'both' },
+    { date: '2026-04-01', day: 'Wednesday', time: '2:00 PM', subject: 'Hospitality Management',            stream: 'commerce' },
+    { date: '2026-04-04', day: 'Saturday',  time: '9:00 AM', subject: "Art Paper 5 (Crafts 'A')",          stream: 'both' },
+    { date: '2026-04-06', day: 'Monday',    time: '2:00 PM', subject: 'Geography',                         stream: 'both' },
+  ];
+
+  // Stream-specific subjects map
+  const SUBJECT_STREAM_MAP = {
+    'Accounts': 'commerce',
+    'Commerce': 'commerce',
+    'Business Studies': 'commerce',
+    'Economics': 'commerce',
+    'Hospitality Management': 'commerce',
+    'Chemistry — Paper 1 (Theory)': 'science',
+    'Biology — Paper 1 (Theory)': 'science',
+    'Physics — Paper 1 (Theory)': 'science',
+    'Mathematics': 'science',
+    'Computer Science — Paper 1 (Theory)': 'science',
+    'Biotechnology — Paper 1 (Theory)': 'science',
+    'Environmental Science — Paper 1 (Theory)': 'science',
+    'Electricity and Electronics': 'science',
+  };
+
+  function getSubjectTag(subject, filterStream) {
+    const s = SUBJECT_STREAM_MAP[subject];
+    if (s === 'science') return { cls: 'tag-science', label: 'SCI' };
+    if (s === 'commerce') return { cls: 'tag-commerce', label: 'COM' };
+    return { cls: 'tag-common', label: 'ALL' };
+  }
+
+  function renderTable() {
+    const stream = document.getElementById('streamSelect').value;
+    const badge = document.getElementById('streamBadge');
+    badge.className = 'stream-badge ' + stream;
+    badge.textContent = stream.toUpperCase();
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    // Filter
+    const filtered = ALL_EXAMS.filter(e => e.stream === 'both' || e.stream === stream);
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    if (filtered.length === 0) {
+      document.getElementById('noExams').style.display = 'block';
+      return;
+    }
+    document.getElementById('noExams').style.display = 'none';
+
+    let lastMonth = null;
+    let total = 0, remaining = 0, nextSubject = null;
+
+    filtered.forEach((exam, i) => {
+      const examDate = new Date(exam.date);
+      examDate.setHours(0,0,0,0);
+      const isPast = examDate < today;
+      const isToday = examDate.getTime() === today.getTime();
+
+      total++;
+      if (!isPast || isToday) remaining++;
+      if (!isPast && !isToday && !nextSubject) nextSubject = exam;
+
+      // Month divider
+      const month = examDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+      if (month !== lastMonth) {
+        lastMonth = month;
+        const divRow = document.createElement('tr');
+        divRow.className = 'month-divider';
+        divRow.innerHTML = `<td colspan="4">${month.toUpperCase()}</td>`;
+        tbody.appendChild(divRow);
+      }
+
+      const tag = getSubjectTag(exam.subject, stream);
+      const dateStr = examDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+
+      const tr = document.createElement('tr');
+      if (isToday) tr.className = 'today-row';
+      else if (isPast) tr.className = 'past-row';
+      tr.style.animationDelay = (i * 0.015) + 's';
+
+      tr.innerHTML = `
+        <td class="td-date">
+          <span class="td-day">${exam.day}</span>
+          <span class="td-datenum">${dateStr} 2026</span>
+        </td>
+        <td class="td-time">${exam.time}</td>
+        <td>
+          <div class="subject-name">${exam.subject}</div>
+          <span class="subject-tag ${tag.cls}">${tag.label}</span>
+        </td>
+        <td class="td-dur">3 hrs.</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statRemaining').textContent = remaining;
+    document.getElementById('statNext').textContent = nextSubject
+      ? nextSubject.subject.split('—')[0].split('(')[0].trim()
+      : 'All done!';
+  }
+
+  renderTable();
+</script>
+</body>
+</html>
