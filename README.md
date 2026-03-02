@@ -19,5 +19,3 @@ materials in one place.
 -   Clean, minimal UI
 
 
-Made with ❤️ by Hrishi
-
