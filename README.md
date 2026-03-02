@@ -52,7 +52,7 @@ You can now keep using local repo files **and** add Google Drive files inside th
 }
 ```
 
-> For Drive **folders**, use object entries in `files.json` (not a plain `text` file inside the repo).
+> Preferred: use object entries in `files.json`. Legacy fallback: a plain `text` file with one URL is also supported.
 
 ### Important fields
 
@@ -68,6 +68,7 @@ You can now keep using local repo files **and** add Google Drive files inside th
   - `Business Studies/Chapter 2/Revision/Notes.pdf`
 - The site automatically builds nested folders from this path.
 - You can mix local files and Drive files in the same folder.
+- Backward compatibility: a file named `text` inside a subject folder can contain a single URL and it will be shown as `Google Drive Folder` in the tree.
 
 
 ### Zero-manual update flow (autonomous)
