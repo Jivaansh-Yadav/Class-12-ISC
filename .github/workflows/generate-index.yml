@@ -20,7 +20,7 @@ jobs:
           python3 - <<'EOF'
           import os, json
 
-          SUBJECTS = ["Economics", "Accounts", "Business Studies", "Commerce"]
+          SUBJECTS = ["Economics", "Accounts", "Business Studies", "Commerce", "Mathematics"]
           ALLOWED = {".pdf", ".txt", ".png", ".jpg", ".jpeg", ".docx", ".xlsx"}
 
           files = []
