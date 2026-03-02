@@ -204,7 +204,7 @@ details[open] > summary .chevron {
       <div id="currentPath">Select a resource...</div>
       <a id="openTab" class="btn" target="_blank" rel="noopener noreferrer">Open in new tab</a>
     </div>
-    <iframe id="viewer" title="PDF Preview"></iframe>
+    <iframe id="viewer" title="PDF Preview" sandbox="allow-scripts allow-same-origin"></iframe>
   </div>
 </div>
 
@@ -239,11 +239,17 @@ function setActiveLink(path) {
   if (el) el.classList.add("active");
 }
 
+function previewUrl(path) {
+  const fileUrl = rawUrl(path);
+  // Render through Google Docs viewer to avoid executing PDF-embedded auto-print actions.
+  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fileUrl)}`;
+}
+
 function showPreview(path) {
-  const url = rawUrl(path);
-  $viewer.src = url;
+  const raw = rawUrl(path);
+  $viewer.src = previewUrl(path);
   $currentPath.textContent = path;
-  $openTab.href = url;
+  $openTab.href = raw;
   setActiveLink(path);
 }
 
