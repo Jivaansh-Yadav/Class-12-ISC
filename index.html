@@ -10,17 +10,9 @@
 html{scroll-behavior:smooth}
 :root{
   --bg:#0a0a0d;--surf:#0f0f13;--surf2:#141418;--border:#1e1e26;
-  --green:#7fff5f;--green2:#4dff2a;
-  --text:#dcdce8;--muted:#52526a;--dim:#2e2e3e;
+  --green:#7fff5f;--text:#dcdce8;--muted:#52526a;--dim:#2e2e3e;
 }
 body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;overflow-x:hidden;cursor:none}
-
-/* BETA BANNER */
-.beta-banner{display:flex;align-items:center;gap:1rem;background:rgba(127,255,95,0.06);border-bottom:1px solid rgba(127,255,95,0.2);padding:.65rem 3rem;font-size:.72rem;position:sticky;top:64px;z-index:490;}
-.beta-tag{background:#7fff5f;color:#080809;font-weight:700;font-size:.6rem;padding:.2rem .55rem;letter-spacing:1.5px;flex-shrink:0;}
-.beta-msg{color:var(--muted);line-height:1.5;}
-.beta-dismiss{margin-left:auto;color:var(--dim);cursor:pointer;font-size:.75rem;flex-shrink:0;transition:color .2s;padding:.2rem .4rem;}
-.beta-dismiss:hover{color:var(--text);}
 
 /* CURSOR */
 #cur,#cur-ring{position:fixed;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:9999;}
@@ -39,11 +31,9 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .nav-tt{color:#7fff5f !important;border:1px solid rgba(127,255,95,.35);padding:.3rem .85rem;}
 .nav-tt:hover{background:rgba(127,255,95,.1) !important;}
 
-/* DISCLAIMER NAV BUTTON */
+/* DISCLAIMER */
 .disc-nav-btn{background:rgba(255,180,50,0.08);border:1px solid rgba(255,180,50,0.35);color:rgba(255,180,50,0.9);font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;padding:.3rem .75rem;cursor:pointer;transition:background .2s,border-color .2s,color .2s;}
 .disc-nav-btn:hover{background:rgba(255,180,50,0.15);border-color:rgba(255,180,50,0.7);color:rgba(255,200,80,1);}
-
-/* DISCLAIMER POPUP */
 .disc-popup{position:fixed;top:72px;left:3rem;z-index:600;}
 .disc-popup-inner{width:380px;background:rgba(10,10,13,0.97);border:1px solid rgba(255,180,50,0.3);border-top:2px solid rgba(255,180,50,0.6);backdrop-filter:blur(20px);box-shadow:0 16px 48px rgba(0,0,0,0.6);}
 .disc-popup-head{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;border-bottom:1px solid rgba(255,180,50,0.1);background:rgba(255,180,50,0.05);}
@@ -54,6 +44,13 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 .disc-popup-body strong{color:#fff;font-weight:700;}
 .disc-popup-body a{color:rgba(255,180,50,0.85);text-decoration:none;border-bottom:1px solid rgba(255,180,50,0.3);}
 .disc-popup-body a:hover{color:rgba(255,200,80,1);}
+
+/* BETA BANNER */
+.beta-banner{display:flex;align-items:center;gap:1rem;background:rgba(127,255,95,0.06);border-bottom:1px solid rgba(127,255,95,0.2);padding:.65rem 3rem;font-size:.72rem;position:sticky;top:64px;z-index:490;}
+.beta-tag{background:#7fff5f;color:#080809;font-weight:700;font-size:.6rem;padding:.2rem .55rem;letter-spacing:1.5px;flex-shrink:0;}
+.beta-msg{color:var(--muted);line-height:1.5;}
+.beta-dismiss{margin-left:auto;color:var(--dim);cursor:pointer;font-size:.75rem;flex-shrink:0;transition:color .2s;padding:.2rem .4rem;}
+.beta-dismiss:hover{color:var(--text);}
 
 /* UPDATES BOX */
 .updates-wrap{position:fixed;top:116px;right:24px;z-index:480;opacity:0;animation:upin .5s .4s ease forwards;}
@@ -98,25 +95,11 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,5.5vw,5.8rem);fon
 h1 .l1{color:var(--text);display:block;}
 h1 .l2{color:var(--muted);font-style:italic;font-weight:400;display:block;}
 h1 .l3{color:#7fff5f;display:block;}
-.desc{font-size:.8rem;color:var(--muted);line-height:1.9;max-width:400px;margin-bottom:1.6rem;}
-.ctas{display:flex;align-items:center;gap:1.5rem;}
+.stream-label{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:#7fff5f;margin-bottom:1rem;opacity:0;animation:up .7s .5s ease forwards;}
+.desc{font-size:.8rem;color:var(--muted);line-height:1.9;max-width:400px;margin-bottom:1.6rem;opacity:0;animation:up .7s .6s ease forwards;}
+.ctas{opacity:0;animation:up .7s .75s ease forwards;}
 .btn{display:inline-flex;align-items:center;gap:.6rem;background:#7fff5f;color:#080809;padding:.72rem 1.8rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));transition:background .2s,transform .2s,box-shadow .2s;}
 .btn:hover{background:#4dff2a;transform:translateY(-2px);box-shadow:0 8px 30px rgba(127,255,95,.3);}
-
-/* STREAM SWITCHER */
-.stream-switch{display:flex;gap:.6rem;margin-bottom:1.6rem;opacity:0;animation:up .7s .5s ease forwards;}
-.stream-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:1.5px;padding:.45rem 1.1rem;cursor:pointer;transition:border-color .2s,color .2s;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:.4rem;}
-.stream-btn:hover{border-color:rgba(127,255,95,.3);color:rgba(127,255,95,.7);}
-.stream-btn.active{background:none;border-color:rgba(127,255,95,.3);color:rgba(127,255,95,.7);}
-
-/* SCIENCE DROPDOWNS */
-.sci-subjects{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.8rem;}
-.sci-drop{border:1px solid var(--border);background:var(--surf);transition:border-color .2s;}
-.sci-drop[open]{border-color:rgba(127,255,95,.2);}
-.sci-drop summary{list-style:none;cursor:pointer;padding:.65rem 1rem;font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:.6rem;transition:color .2s;user-select:none;}
-.sci-drop summary::-webkit-details-marker{display:none;}
-.sci-drop[open] summary{color:var(--green);}
-.sci-drop-body{padding:.6rem 1rem .9rem 2.2rem;font-size:.72rem;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);}
 
 /* ORBITAL */
 .hero-r{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadein 1s .9s ease forwards;}
@@ -160,7 +143,6 @@ h2 em{font-style:italic;color:#7fff5f;font-weight:400;}
 
 /* FOOTER */
 footer{border-top:1px solid var(--border);padding:1.8rem 3rem;display:flex;justify-content:space-between;align-items:center;font-size:.68rem;color:var(--muted);}
-footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
 .flogo{color:var(--text);font-weight:600;}.flogo b{color:#7fff5f;}
 
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -182,44 +164,39 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
 <div id="cur-ring"></div>
 <div id="glow"></div>
 
-<!-- NAV -->
 <nav>
   <div style="display:flex;align-items:center;gap:1.2rem;">
     <a href="/" class="logo">ISC<b>Nerds</b></a>
-    <button class="disc-nav-btn" onclick="toggleDisc()">⚠ Disclaimer</button>
+    <button class="disc-nav-btn" onclick="toggleDisc()">&#9888; Disclaimer</button>
   </div>
   <ul class="nav-links">
-    <li><a href="timetable.html" class="nav-tt">⏱ Timetable</a></li>
+    <li><a href="timetable.html" class="nav-tt">&#9201; Timetable</a></li>
   </ul>
 </nav>
 
-<!-- DISCLAIMER POPUP -->
 <div id="disc-popup" class="disc-popup" style="display:none;">
   <div class="disc-popup-inner">
     <div class="disc-popup-head">
-      <span>⚠️</span>
+      <span>&#9888;&#65039;</span>
       <span class="disc-popup-title">Disclaimer</span>
-      <button class="disc-popup-close" onclick="toggleDisc()">✕</button>
+      <button class="disc-popup-close" onclick="toggleDisc()">&#10005;</button>
     </div>
     <p class="disc-popup-body">
       ISCNerds is a <strong>free aggregator</strong> of study notes and resources found publicly online.
       We hold <strong>no copyrights, licences, or ownership</strong> over any material hosted or linked here.
       All content belongs to its respective creators and publishers.<br/><br/>
       If you are the <strong>rightful owner</strong> of any content and wish it removed,
-      please contact us at <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a>
-      and we will act promptly.
+      please contact us at <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> and we will act promptly.
     </p>
   </div>
 </div>
 
-<!-- BETA BANNER -->
 <div class="beta-banner">
   <span class="beta-tag">BETA</span>
   <span class="beta-msg">This is an early build — resources are actively being added. Check back soon for more content.</span>
-  <span class="beta-dismiss" onclick="this.parentElement.style.display='none'">✕</span>
+  <span class="beta-dismiss" onclick="this.parentElement.style.display='none'">&#10005;</span>
 </div>
 
-<!-- UPDATES BOX -->
 <div class="updates-wrap">
   <div class="updates-box">
     <div class="ub-head">
@@ -235,59 +212,23 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
     </div>
     <div class="ub-foot">
       <span class="ub-foot-txt">Resources updated regularly</span>
-      <span class="ub-foot-link">View all →</span>
+      <a href="resource.html" class="ub-foot-link">View all &#8594;</a>
     </div>
   </div>
 </div>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-l">
-    <p class="eyebrow">Class 12 · <em>ISC</em> · 2024–25</p>
+    <p class="eyebrow">Class 12 · <em>ISC</em> · 2024&#8211;25</p>
     <h1>
       <span class="l1">Study</span>
       <span class="l2">smarter,</span>
       <span class="l3">not harder.</span>
     </h1>
-
-    <!-- Stream switcher -->
-    <div class="stream-switch">
-      <button class="stream-btn active" id="btn-commerce">📊 Commerce</button>
-      <button class="stream-btn" id="btn-science">🔬 Science</button>
-    </div>
-
-    <!-- Commerce content -->
-    <div id="stream-commerce">
-      <p class="desc">All your Class 12 ISC resources — PDFs, notes, and study materials — organized, searchable, and viewable in one place.</p>
-      <div class="ctas">
-        <a href="resource.html" class="btn">→ Open Resource Hub</a>
-      </div>
-    </div>
-
-    <!-- Science content -->
-    <div id="stream-science" style="display:none;">
-      <p class="desc">Class 12 ISC Science resources — Physics, Chemistry, Biology, Maths — all your study materials in one place.</p>
-      <div class="sci-subjects">
-        <details class="sci-drop">
-          <summary>⚛️ Physics</summary>
-          <div class="sci-drop-body">Coming soon — resources being added.</div>
-        </details>
-        <details class="sci-drop">
-          <summary>🧪 Chemistry</summary>
-          <div class="sci-drop-body">Coming soon — resources being added.</div>
-        </details>
-        <details class="sci-drop">
-          <summary>🧬 Biology</summary>
-          <div class="sci-drop-body">Coming soon — resources being added.</div>
-        </details>
-        <details class="sci-drop">
-          <summary>📐 Mathematics</summary>
-          <div class="sci-drop-body">Coming soon — resources being added.</div>
-        </details>
-      </div>
-      <div class="ctas">
-        <a href="resource.html#science" class="btn">→ Open Science Hub</a>
-      </div>
+    <p class="stream-label">Commerce &amp; Science</p>
+    <p class="desc">All your Class 12 ISC resources — PDFs, notes, and study materials — organized, searchable, and viewable in one place.</p>
+    <div class="ctas">
+      <a href="resource.html" class="btn">&#8594; Open Resource Hub</a>
     </div>
   </div>
 
@@ -297,17 +238,16 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
       <div class="ring ring2"><div class="dot dot2"></div></div>
       <div class="orb-c">
         <span class="orb-lbl">ISC · 2025</span>
-        <span class="orb-n" id="stat-total-files">—</span>
-        <span class="orb-s">Commerce</span>
+        <span class="orb-n" id="stat-total-files">&#8212;</span>
+        <span class="orb-s">Resources</span>
       </div>
-      <div class="sf sf1"><strong id="stat-subjects">—</strong>Subjects</div>
-      <div class="sf sf2"><strong id="stat-files">—</strong>PDFs &amp; Notes</div>
+      <div class="sf sf1"><strong id="stat-subjects">&#8212;</strong>Subjects</div>
+      <div class="sf sf2"><strong id="stat-files">&#8212;</strong>PDFs &amp; Notes</div>
       <div class="sf sf3"><strong>100%</strong>Free Forever</div>
     </div>
   </div>
 </section>
 
-<!-- TERMINAL -->
 <section class="sec" id="term">
   <div class="sec-in">
     <p class="sec-eye">// 01 — Under the Hood</p>
@@ -319,53 +259,50 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}
         <span class="tname">iscnerds — bash</span>
       </div>
       <div class="tbody">
-        <div><span class="tc">→</span> fetch api.github.com/repos/HJexe/Class-12-ISC</div>
-        <div><span class="tok">✓</span> Repo metadata loaded · branch: <span class="tc">main</span></div>
-        <div class="tdim">────────────────────────────────────</div>
-        <div><span class="tc">→</span> get git/trees/main?recursive=1</div>
-        <div id="term-scanning"><span class="tok">✓</span> scanning subjects...</div>
-        <div class="tdim">────────────────────────────────────</div>
+        <div><span class="tc">&#8594;</span> fetch api.github.com/repos/HJexe/Class-12-ISC</div>
+        <div><span class="tok">&#10003;</span> Repo metadata loaded · branch: <span class="tc">main</span></div>
+        <div class="tdim">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
+        <div><span class="tc">&#8594;</span> get git/trees/main?recursive=1</div>
+        <div id="term-scanning"><span class="tok">&#10003;</span> scanning subjects...</div>
+        <div class="tdim">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
         <div id="term-subject-lines"></div>
-        <div class="tdim">────────────────────────────────────</div>
-        <div><span class="tc">→</span> render sidebar // build accordion tree</div>
-        <div><span class="tok">✓</span> File tree rendered · 0 dependencies required</div>
-        <div class="tdim">────────────────────────────────────</div>
-        <div><span class="tc">→</span> <span class="tcur"></span></div>
+        <div class="tdim">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
+        <div><span class="tc">&#8594;</span> render sidebar</div>
+        <div><span class="tok">&#10003;</span> File tree rendered · 0 dependencies required</div>
+        <div class="tdim">&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;</div>
+        <div><span class="tc">&#8594;</span> <span class="tcur"></span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
 <section class="sec" id="cta">
   <div class="cta-in">
     <p class="cta-pre">// Ready?</p>
     <h2>Start <em>studying</em> right now.</h2>
     <p class="cta-sub">No login · No download · Free forever</p>
-    <a href="resource.html" class="btn" style="font-size:.78rem;padding:.9rem 2.5rem">→ Open ISCNerds</a>
+    <a href="resource.html" class="btn" style="font-size:.78rem;padding:.9rem 2.5rem">&#8594; Open ISCNerds</a>
     <div class="chips">
-      <span>✓ No login required</span>
-      <span>✓ Always free</span>
-      <span>✓ Live from GitHub</span>
-      <span>✓ Mobile friendly</span>
+      <span>&#10003; No login required</span>
+      <span>&#10003; Always free</span>
+      <span>&#10003; Live from GitHub</span>
+      <span>&#10003; Mobile friendly</span>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <span class="flogo">ISC<b>Nerds</b></span>
-  <span>© 2025 HJexe · Class 12 ISC</span>
+  <span>&#169; 2025 HJexe · Class 12 ISC</span>
   <span>HJexe / Class-12-ISC</span>
 </footer>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────
 const GITHUB_OWNER  = 'HJexe';
 const GITHUB_REPO   = 'Class-12-ISC';
 const GITHUB_BRANCH = 'main';
 const SUBJECT_FOLDERS = ['Economics','Accounts','Business Studies','Maths-(creds-Abhinav)','Commerce'];
-const ALLOWED_EXT   = new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
+const ALLOWED_EXT = new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 
 function isAllowed(path) {
   const ext = path.split('.').pop().toLowerCase();
@@ -375,11 +312,10 @@ function isSubjectPath(path) {
   return SUBJECT_FOLDERS.some(s => path.startsWith(s + '/'));
 }
 
-// ── LIVE STATS ──────────────────────────────────────────────────────
 async function loadStats() {
   try {
     const res = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/${GITHUB_BRANCH}?recursive=1`,
+      'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/git/trees/' + GITHUB_BRANCH + '?recursive=1',
       { headers: { Accept: 'application/vnd.github+json' } }
     );
     if (!res.ok) return;
@@ -392,54 +328,37 @@ async function loadStats() {
       .filter(p => isSubjectPath(p) && isAllowed(p));
 
     const subjectMap = {};
-    SUBJECT_FOLDERS.forEach(s => subjectMap[s] = 0);
+    SUBJECT_FOLDERS.forEach(s => { subjectMap[s] = 0; });
     files.forEach(p => {
       const s = SUBJECT_FOLDERS.find(s => p.startsWith(s + '/'));
       if (s) subjectMap[s]++;
     });
 
     const activeSubjects = Object.values(subjectMap).filter(c => c > 0).length;
-    const totalFiles     = files.length;
+    const totalFiles = files.length;
 
     document.getElementById('stat-subjects').textContent    = activeSubjects;
     document.getElementById('stat-files').textContent       = totalFiles;
     document.getElementById('stat-total-files').textContent = totalFiles;
 
-    const termLines = document.getElementById('term-subject-lines');
     const scanLine  = document.getElementById('term-scanning');
-    scanLine.innerHTML = `<span class="tok">✓</span> ${activeSubjects} subjects found · ${totalFiles} files indexed`;
+    const termLines = document.getElementById('term-subject-lines');
+    scanLine.innerHTML  = '<span class="tok">&#10003;</span> ' + activeSubjects + ' subjects found &middot; ' + totalFiles + ' files indexed';
     termLines.innerHTML = SUBJECT_FOLDERS
       .filter(s => subjectMap[s] > 0)
-      .map(s => {
-        const display = s.replace(/-(creds-.+)$/i, '').padEnd(18, ' ');
-        return `<div><span class="tok">✓</span> ${display}→ ${subjectMap[s]} files</div>`;
-      }).join('');
+      .map(s => '<div><span class="tok">&#10003;</span> ' + s.replace(/-(creds-.+)$/i, '') + ' &rarr; ' + subjectMap[s] + ' files</div>')
+      .join('');
   } catch (e) {
     console.warn('Stats fetch failed:', e);
   }
 }
 loadStats();
 
-// ── STREAM TOGGLE ───────────────────────────────────────────────────
-document.getElementById('btn-commerce').addEventListener('click', function() {
-  document.getElementById('stream-commerce').style.display = 'block';
-  document.getElementById('stream-science').style.display  = 'none';
-  this.classList.add('active');
-  document.getElementById('btn-science').classList.remove('active');
-});
-document.getElementById('btn-science').addEventListener('click', function() {
-  document.getElementById('stream-commerce').style.display = 'none';
-  document.getElementById('stream-science').style.display  = 'block';
-  this.classList.add('active');
-  document.getElementById('btn-commerce').classList.remove('active');
-});
-
-// ── DISCLAIMER ──────────────────────────────────────────────────────
 function toggleDisc() {
   const p = document.getElementById('disc-popup');
   p.style.display = p.style.display === 'none' ? 'block' : 'none';
 }
-document.addEventListener('click', e => {
+document.addEventListener('click', function(e) {
   const popup = document.getElementById('disc-popup');
   if (popup.style.display === 'block'
     && !popup.contains(e.target)
@@ -448,35 +367,36 @@ document.addEventListener('click', e => {
   }
 });
 
-// ── CURSOR ──────────────────────────────────────────────────────────
 const cur  = document.getElementById('cur');
 const ring = document.getElementById('cur-ring');
 const glow = document.getElementById('glow');
-document.addEventListener('mousemove', e => {
-  cur.style.left  = e.clientX + 'px'; cur.style.top  = e.clientY + 'px';
-  ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px';
-  glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px';
+document.addEventListener('mousemove', function(e) {
+  cur.style.left  = e.clientX + 'px';
+  cur.style.top   = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px';
+  ring.style.top  = e.clientY + 'px';
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
 });
-document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; ring.style.opacity = '0'; });
-document.addEventListener('mouseenter', () => { cur.style.opacity = '1'; ring.style.opacity = '1'; });
-document.querySelectorAll('a, .sci-drop').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.style.width = '16px'; cur.style.height = '16px'; ring.style.width = '52px'; ring.style.height = '52px'; });
-  el.addEventListener('mouseleave', () => { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '38px'; ring.style.height = '38px'; });
+document.addEventListener('mouseleave', function() { cur.style.opacity = '0'; ring.style.opacity = '0'; });
+document.addEventListener('mouseenter', function() { cur.style.opacity = '1'; ring.style.opacity = '1'; });
+document.querySelectorAll('a').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cur.style.width = '16px'; cur.style.height = '16px'; ring.style.width = '52px'; ring.style.height = '52px'; });
+  el.addEventListener('mouseleave', function() { cur.style.width = '10px'; cur.style.height = '10px'; ring.style.width = '38px'; ring.style.height = '38px'; });
 });
 
-// ── SCROLL ANIMATIONS ───────────────────────────────────────────────
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
+const obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
     if (e.isIntersecting) {
       e.target.style.opacity = '1';
       e.target.style.transform = 'translateY(0)';
     }
   });
-}, { threshold: .1 });
-document.querySelectorAll('.sc, .fc').forEach((el, i) => {
+}, { threshold: 0.1 });
+document.querySelectorAll('.sc, .fc').forEach(function(el, i) {
   el.style.opacity = '0';
   el.style.transform = 'translateY(20px)';
-  el.style.transition = `opacity .5s ${i * .07}s ease, transform .5s ${i * .07}s ease`;
+  el.style.transition = 'opacity .5s ' + (i * 0.07) + 's ease, transform .5s ' + (i * 0.07) + 's ease';
   obs.observe(el);
 });
 </script>
