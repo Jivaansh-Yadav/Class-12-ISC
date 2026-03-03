@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ISC.exe | File Viewer</title>
+<title>ISCNerds | File Viewer</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -215,7 +215,7 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
 </head>
 <body>
   <nav class="navbar">
-    <div class="brand">ISC<span>.exe</span> / File Viewer</div>
+    <div class="brand">ISC<span>Nerds</span> / File Viewer</div>
     <div class="nav-links">
       <a class="nav-btn" href="index.html">← Back to Landing</a>
       <a class="nav-btn" href="timetable.html">Open Timetable</a>
@@ -259,7 +259,7 @@ const GITHUB_BRANCH = "main";
 const ALLOWED_EXTENSIONS = new Set(["pdf", "doc", "docx", "txt", "ppt", "pptx", "xls", "xlsx"]);
 
 function isLegacyDriveLinkPath(path) {
-  return /\/text\.?$/i.test(path); // matches "text" and "text."
+  return /\/text\.?$/i.test(path);
 }
 
 function toRawGithubUrl(path) {
@@ -336,39 +336,45 @@ async function fetchRepoFiles() {
       const txt = await fetch(toRawGithubUrl(path));
       if (!txt.ok) return null;
       const raw = (await txt.text()).trim();
+      const baseDir = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : path;
 
-      // Support two formats:
-      // 1) "My File Name|https://drive.google.com/..."  ← name + URL
-      // 2) "https://drive.google.com/..."               ← URL only (fallback to folder name)
-      let fileName, link;
-      if (raw.includes('|')) {
-        const sep = raw.indexOf('|');
-        fileName  = raw.slice(0, sep).trim();
-        link      = raw.slice(sep + 1).trim();
-      } else {
-        link      = raw;
-        fileName  = null;
+      // Split into lines — supports multiple links per text file
+      const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+      const results = [];
+
+      for (const line of lines) {
+        let fileName, link;
+        if (line.includes('|')) {
+          const sep = line.indexOf('|');
+          fileName  = line.slice(0, sep).trim();
+          link      = line.slice(sep + 1).trim();
+        } else {
+          link      = line;
+          fileName  = null;
+        }
+
+        if (!looksLikeUrl(link)) continue;
+
+        const folderName  = baseDir.split('/').pop();
+        const displayName = fileName || folderName;
+
+        results.push(normalizeEntry({
+          path:   `${baseDir}/${displayName}`,
+          url:    link,
+          source: 'gdrive'
+        }));
       }
 
-      if (!looksLikeUrl(link)) return null;
+      return results.length ? results : null;
 
-      const baseDir    = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : path;
-      const folderName = baseDir.split('/').pop();
-      const displayName = fileName || folderName;
-
-      return normalizeEntry({
-        path:   `${baseDir}/${displayName}`,
-        url:    link,
-        source: 'gdrive'
-      });
     } catch (err) {
-      console.warn('Failed to parse legacy drive link file:', path, err);
+      console.warn('Failed to parse drive link file:', path, err);
       return null;
     }
-
   }));
 
-  return entries.filter(Boolean);
+  // Flatten arrays (multi-link text files return arrays) and remove nulls
+  return entries.flat().filter(Boolean);
 }
 
 function normalizeEntry(item) {
