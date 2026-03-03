@@ -211,6 +211,48 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
   .viewer { min-height: 70vh; }
   .nav-links { display: none; }
 }
+
+/* STREAM TABS */
+.stream-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.stream-tab {
+  flex: 1; padding: 10px; font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  background: transparent; border: none; color: var(--muted);
+  cursor: pointer; transition: color .2s, background .2s;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.stream-tab:hover { color: var(--fg); background: rgba(127,255,95,0.03); }
+.stream-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* SCIENCE DROPDOWNS */
+.sci-section { padding: 10px 12px 16px; }
+.sci-drop {
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 8px; background: rgba(8,12,8,.9);
+  overflow: hidden;
+}
+.sci-drop summary {
+  list-style: none; cursor: pointer; padding: 10px 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); display: flex; justify-content: space-between;
+  align-items: center; transition: color .2s; user-select: none;
+}
+.sci-drop summary::-webkit-details-marker { display: none; }
+.sci-drop[open] summary { color: var(--accent); }
+.sci-chevron { font-size: 9px; transition: transform .2s; }
+.sci-drop[open] .sci-chevron { transform: rotate(90deg); }
+.sci-drop-body { padding: 6px 12px 12px; }
+.sci-link {
+  display: block; text-decoration: none; color: var(--fg);
+  border: 1px solid transparent; border-radius: 10px;
+  padding: 9px; font-size: 13px; margin-top: 6px;
+  transition: border-color .2s, color .2s, background .2s;
+}
+.sci-link:hover {
+  border-color: rgba(127,255,95,.3); color: var(--accent);
+  background: rgba(127,255,95,.06);
+}
+.sci-coming { font-size: 12px; color: var(--muted); padding: 6px 0; font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
@@ -227,10 +269,54 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
         <h1 class="title">Study Files</h1>
         <p class="subtitle">Browse by subject, search instantly, and preview notes before downloading.</p>
       </div>
-      <div class="search-wrap">
-        <input id="search" type="search" placeholder="Search file name, subject, worksheet…" />
+      <div class="stream-tabs">
+        <button class="stream-tab active" onclick="switchTab('commerce')">📊 Commerce</button>
+        <button class="stream-tab" onclick="switchTab('science')">🔬 Science</button>
       </div>
-      <div id="folders"><div class="message">Loading resources…</div></div>
+
+      <!-- COMMERCE PANEL -->
+      <div id="tab-commerce">
+        <div class="search-wrap">
+          <input id="search" type="search" placeholder="Search file name, subject, worksheet…" />
+        </div>
+        <div id="folders"><div class="message">Loading resources…</div></div>
+      </div>
+
+      <!-- SCIENCE PANEL -->
+      <div id="tab-science" style="display:none;">
+        <div class="sci-section">
+          <details class="sci-drop">
+            <summary><span>⚛️ Physics</span><span class="sci-chevron">▶</span></summary>
+            <div class="sci-drop-body">
+              <p class="sci-coming">// resources coming soon</p>
+            </div>
+          </details>
+          <details class="sci-drop">
+            <summary><span>🧪 Chemistry</span><span class="sci-chevron">▶</span></summary>
+            <div class="sci-drop-body">
+              <p class="sci-coming">// resources coming soon</p>
+            </div>
+          </details>
+          <details class="sci-drop">
+            <summary><span>🧬 Biology</span><span class="sci-chevron">▶</span></summary>
+            <div class="sci-drop-body">
+              <p class="sci-coming">// resources coming soon</p>
+            </div>
+          </details>
+          <details class="sci-drop">
+            <summary><span>📐 Mathematics</span><span class="sci-chevron">▶</span></summary>
+            <div class="sci-drop-body">
+              <p class="sci-coming">// resources coming soon</p>
+            </div>
+          </details>
+          <details class="sci-drop">
+            <summary><span>💻 Computer Science</span><span class="sci-chevron">▶</span></summary>
+            <div class="sci-drop-body">
+              <p class="sci-coming">// resources coming soon</p>
+            </div>
+          </details>
+        </div>
+      </div>
     </section>
     <section class="panel viewer">
       <div class="viewer-bar">
@@ -562,6 +648,18 @@ async function loadResources() {
 
   renderList(allFiles);
 }
+
+
+// STREAM TAB SWITCHER
+function switchTab(tab) {
+  document.getElementById('tab-commerce').style.display = tab === 'commerce' ? 'block' : 'none';
+  document.getElementById('tab-science').style.display  = tab === 'science'  ? 'block' : 'none';
+  document.querySelectorAll('.stream-tab').forEach((btn, i) => {
+    btn.classList.toggle('active', (tab === 'commerce' && i === 0) || (tab === 'science' && i === 1));
+  });
+}
+// Auto-switch tab based on URL hash
+if (window.location.hash === '#science') switchTab('science');
 
 $search.addEventListener('input', () => renderList(allFiles));
 loadResources();
