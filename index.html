@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ISC.exe — Class 12 Resource Hub</title>
+<title>ISCNerds — Class 12 Resource Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,900;1,400;1,900&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 :root{
-  --bg:#080809;--surf:#0f0f12;--surf2:#141418;--border:#1e1e26;
+  --bg:#0a0a0d;--surf:#0f0f13;--surf2:#141418;--border:#1e1e26;
   --green:#7fff5f;--green2:#4dff2a;
   --text:#dcdce8;--muted:#52526a;--dim:#2e2e3e;
 }
@@ -30,7 +30,7 @@ body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospa
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px);pointer-events:none;z-index:9000;}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1.3rem 3rem;border-bottom:1px solid var(--border);background:rgba(8,8,9,.9);backdrop-filter:blur(14px);z-index:500;}
+nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:1.3rem 3rem;border-bottom:1px solid var(--border);background:rgba(10,10,13,.9);backdrop-filter:blur(14px);z-index:500;}
 .logo{font-size:.95rem;font-weight:700;color:var(--text);text-decoration:none;}
 .logo b{color:#7fff5f;}
 .nav-links{display:flex;gap:2.2rem;list-style:none;align-items:center;}
@@ -45,7 +45,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 
 /* DISCLAIMER POPUP */
 .disc-popup{position:fixed;top:72px;left:3rem;z-index:600;animation:upin .2s ease;}
-.disc-popup-inner{width:380px;background:rgba(10,10,12,0.97);border:1px solid rgba(255,180,50,0.3);border-top:2px solid rgba(255,180,50,0.6);backdrop-filter:blur(20px);box-shadow:0 16px 48px rgba(0,0,0,0.6),0 0 0 1px rgba(255,180,50,0.05);}
+.disc-popup-inner{width:380px;background:rgba(10,10,13,0.97);border:1px solid rgba(255,180,50,0.3);border-top:2px solid rgba(255,180,50,0.6);backdrop-filter:blur(20px);box-shadow:0 16px 48px rgba(0,0,0,0.6),0 0 0 1px rgba(255,180,50,0.05);}
 .disc-popup-head{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;border-bottom:1px solid rgba(255,180,50,0.1);background:rgba(255,180,50,0.05);}
 .disc-popup-title{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,180,50,0.9);flex:1;}
 .disc-popup-close{background:none;border:none;color:var(--dim);font-size:.75rem;cursor:pointer;font-family:'JetBrains Mono',monospace;padding:.1rem .3rem;transition:color .2s;}
@@ -58,7 +58,7 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 /* UPDATES BOX */
 .updates-wrap{position:fixed;top:116px;right:24px;z-index:480;opacity:0;animation:upin .5s .4s ease forwards;}
 @keyframes upin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.updates-box{width:300px;background:rgba(8,8,9,0.92);border:1px solid rgba(127,255,95,0.2);border-radius:4px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.updates-box{width:300px;background:rgba(10,10,13,0.92);border:1px solid rgba(127,255,95,0.2);border-radius:4px;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 8px 32px rgba(0,0,0,0.5);}
 .ub-head{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(127,255,95,0.06);border-bottom:1px solid rgba(127,255,95,0.1);}
 .ub-badge{background:#7fff5f;color:#080809;font-size:.52rem;font-weight:700;letter-spacing:1.5px;padding:2px 6px;text-transform:uppercase;flex-shrink:0;}
 .ub-title{font-size:.58rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;flex:1;}
@@ -80,7 +80,18 @@ nav{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-
 
 /* HERO */
 .hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:2rem 3rem 0;gap:4rem;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(127,255,95,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(127,255,95,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;}
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(127,255,95,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(127,255,95,.06) 1px,transparent 1px),
+    linear-gradient(rgba(127,255,95,.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(127,255,95,.02) 1px,transparent 1px);
+  background-size:64px 64px, 64px 64px, 16px 16px, 16px 16px;
+  pointer-events:none;
+}
 .hero-l{position:relative;z-index:2;padding-top:6rem;}
 .eyebrow{display:flex;align-items:center;gap:.8rem;font-size:.62rem;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:2rem;opacity:0;animation:up .6s .2s ease forwards;}
 .eyebrow::before{content:'';display:block;width:2.5rem;height:1px;background:#7fff5f;}
@@ -94,12 +105,6 @@ h1 .l1{color:var(--text);display:block;}h1 .l2{color:var(--muted);font-style:ita
 .btn:hover{background:#4dff2a;transform:translateY(-2px);box-shadow:0 8px 30px rgba(127,255,95,.3);}
 .ghost{color:var(--muted);text-decoration:none;font-size:.72rem;letter-spacing:1px;transition:color .2s;}
 .ghost:hover{color:var(--text);}.ghost::after{content:' →';}
-
-/* DISCLAIMER (hero) */
-.disclaimer{margin-top:2rem;max-width:420px;font-size:.62rem;font-weight:700;color:#ffffff;line-height:1.8;letter-spacing:.3px;padding:.75rem 1rem;border:1px solid rgba(127,255,95,0.1);border-left:2px solid rgba(127,255,95,0.4);background:rgba(127,255,95,0.03);border-radius:0 4px 4px 0;}
-.disc-sym{color:rgba(127,255,95,0.6);margin-right:.4rem;font-size:.7rem;}
-.disclaimer a{color:#ffffff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.45);transition:border-color .2s;}
-.disclaimer a:hover{border-color:#ffffff;}
 
 /* ORBITAL */
 .hero-r{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;opacity:0;animation:fadein 1s .9s ease forwards;}
@@ -184,12 +189,10 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
 <!-- NAV -->
 <nav>
   <div style="display:flex;align-items:center;gap:1.2rem;">
-    <a href="/" class="logo">ISC<b>.exe</b></a>
+    <a href="/" class="logo">ISC<b>Nerds</b></a>
     <button class="disc-nav-btn" onclick="toggleDisc()">⚠ Disclaimer</button>
   </div>
   <ul class="nav-links">
-    <li><a href="#subjects">Subjects</a></li>
-    <li><a href="#features">Features</a></li>
     <li><a href="timetable.html" class="nav-tt">⏱ Timetable</a></li>
   </ul>
 </nav>
@@ -203,7 +206,7 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
       <button class="disc-popup-close" onclick="toggleDisc()">✕</button>
     </div>
     <p class="disc-popup-body">
-      ISC.exe is a <strong>free aggregator</strong> of study notes and resources found publicly online.
+      ISCNerds is a <strong>free aggregator</strong> of study notes and resources found publicly online.
       We hold <strong>no copyrights, licences, or ownership</strong> over any material hosted or linked here.
       All content belongs to its respective creators and publishers.<br/><br/>
       If you are the <strong>rightful owner</strong> of any content and wish it removed,
@@ -255,10 +258,6 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
     <div class="ctas">
       <a href="resource.html" class="btn">→ Open Resource Hub</a>
     </div>
-    <p class="disclaimer">
-      <span class="disc-sym">⚠</span>
-      ISC.exe is a free aggregator of study notes found publicly online — we hold no copyrights, licences, or ownership over any material. If you are the rightful owner of any content and wish it removed, please write to us at <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> and we will act promptly.
-    </p>
   </div>
 
   <div class="hero-r">
@@ -277,38 +276,6 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
   </div>
 </section>
 
-<!-- SUBJECTS -->
-<section class="sec" id="subjects">
-  <div class="sec-in">
-    <p class="sec-eye">// 01 — Subjects</p>
-    <div class="rule"></div>
-    <h2>What's <em>inside</em></h2>
-    <div class="sbg">
-      <a href="resource.html" class="sc"><span class="sc-n">01</span><span class="sc-i">📈</span><span class="sc-t">Economics</span><span class="sc-d">Micro & macro economics, consumer theory, market structures, national income, and more — fully organized by topic.</span><span class="sc-l">Browse resources</span></a>
-      <a href="resource.html" class="sc"><span class="sc-n">02</span><span class="sc-i">🧾</span><span class="sc-t">Accounts</span><span class="sc-d">Partnership accounts, company accounts, cash flow statements, ratio analysis — all ISC board syllabus covered.</span><span class="sc-l">Browse resources</span></a>
-      <a href="resource.html" class="sc"><span class="sc-n">03</span><span class="sc-i">🏢</span><span class="sc-t">Business Studies</span><span class="sc-d">Management principles, planning, organizing, directing, controlling, and entrepreneurship topics for ISC boards.</span><span class="sc-l">Browse resources</span></a>
-      <a href="resource.html" class="sc"><span class="sc-n">04</span><span class="sc-i">💹</span><span class="sc-t">Commerce</span><span class="sc-d">Trade, banking, insurance, warehousing, means of transport, and all general commerce concepts neatly filed.</span><span class="sc-l">Browse resources</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="sec" id="features">
-  <div class="sec-in">
-    <p class="sec-eye">// 02 — Features</p>
-    <div class="rule"></div>
-    <h2>Built to <em>last</em></h2>
-    <div class="fbg">
-      <div class="fc"><div class="fc-i">📂</div><div class="fc-t">Smart File Tree</div><div class="fc-d">Nested folder navigation with instant expand/collapse. Find exactly what you need without scrolling endlessly.</div></div>
-      <div class="fc"><div class="fc-i">👁️</div><div class="fc-t">Inline PDF Viewer</div><div class="fc-d">Preview any PDF directly in the browser without downloading. No third-party apps, no fuss.</div></div>
-      <div class="fc"><div class="fc-i">🔗</div><div class="fc-t">Direct GitHub Links</div><div class="fc-d">Every resource links straight back to the repo. Always up-to-date with the latest uploaded content.</div></div>
-      <div class="fc"><div class="fc-i">📱</div><div class="fc-t">Mobile Friendly</div><div class="fc-d">Responsive layout that works on any screen. Study on your phone, tablet, or desktop — your choice.</div></div>
-      <div class="fc"><div class="fc-i">⚡</div><div class="fc-t">Zero Dependencies</div><div class="fc-d">Pure HTML, CSS, and vanilla JS. No frameworks, no build steps. Just open and go.</div></div>
-      <div class="fc"><div class="fc-i">🌙</div><div class="fc-t">Dark by Default</div><div class="fc-d">Easy on the eyes for late-night study sessions. Crafted for those 2 AM revision marathons.</div></div>
-    </div>
-  </div>
-</section>
-
 <!-- TERMINAL -->
 <section class="sec" id="term">
   <div class="sec-in">
@@ -318,7 +285,7 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
     <div class="tw">
       <div class="tb">
         <div class="td2 tr"></div><div class="td2 ty"></div><div class="td2 tg"></div>
-        <span class="tname">isc.exe — bash</span>
+        <span class="tname">iscnerds — bash</span>
       </div>
       <div class="tbody" id="terminal-body">
         <div><span class="tc">→</span> fetch api.github.com/repos/HJexe/Class-12-ISC</div>
@@ -344,7 +311,7 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
     <p class="cta-pre">// Ready?</p>
     <h2>Start <em>studying</em> right now.</h2>
     <p class="cta-sub">No login · No download · Free forever</p>
-    <a href="resource.html" class="btn" style="font-size:.78rem;padding:.9rem 2.5rem">→ Open ISC.exe</a>
+    <a href="resource.html" class="btn" style="font-size:.78rem;padding:.9rem 2.5rem">→ Open ISCNerds</a>
     <div class="chips">
       <span>✓ No login required</span>
       <span>✓ Always free</span>
@@ -356,7 +323,7 @@ footer a{color:var(--muted);text-decoration:none;transition:color .2s;}.footer a
 
 <!-- FOOTER -->
 <footer>
-  <span class="flogo">ISC<b>.exe</b></span>
+  <span class="flogo">ISC<b>Nerds</b></span>
   <span>© 2025 HJexe · Class 12 ISC Commerce</span>
   <span>HJexe / Class-12-ISC</span>
 </footer>
@@ -425,7 +392,6 @@ async function loadStats() {
       .join('');
 
   } catch (e) {
-    // silently fail — fallback text stays as-is
     console.warn('Stats fetch failed:', e);
   }
 }
