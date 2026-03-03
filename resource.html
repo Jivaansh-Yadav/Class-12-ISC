@@ -284,38 +284,10 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
 
       <!-- SCIENCE PANEL -->
       <div id="tab-science" style="display:none;">
-        <div class="sci-section">
-          <details class="sci-drop">
-            <summary><span>⚛️ Physics</span><span class="sci-chevron">▶</span></summary>
-            <div class="sci-drop-body">
-              <p class="sci-coming">// resources coming soon</p>
-            </div>
-          </details>
-          <details class="sci-drop">
-            <summary><span>🧪 Chemistry</span><span class="sci-chevron">▶</span></summary>
-            <div class="sci-drop-body">
-              <p class="sci-coming">// resources coming soon</p>
-            </div>
-          </details>
-          <details class="sci-drop">
-            <summary><span>🧬 Biology</span><span class="sci-chevron">▶</span></summary>
-            <div class="sci-drop-body">
-              <p class="sci-coming">// resources coming soon</p>
-            </div>
-          </details>
-          <details class="sci-drop">
-            <summary><span>📐 Mathematics</span><span class="sci-chevron">▶</span></summary>
-            <div class="sci-drop-body">
-              <p class="sci-coming">// resources coming soon</p>
-            </div>
-          </details>
-          <details class="sci-drop">
-            <summary><span>💻 Computer Science</span><span class="sci-chevron">▶</span></summary>
-            <div class="sci-drop-body">
-              <p class="sci-coming">// resources coming soon</p>
-            </div>
-          </details>
+        <div class="search-wrap">
+          <input id="search-science" type="search" placeholder="Search science files…" />
         </div>
+        <div id="folders-science"><div class="message">Loading science resources…</div></div>
       </div>
     </section>
     <section class="panel viewer">
@@ -332,13 +304,17 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
   </main>
 
 <script>
-const SUBJECT_FOLDERS = [
+const SUBJECT_FOLDERS_COMMERCE = [
   "Economics",
   "Accounts",
   "Business Studies",
   "Maths-(creds-Abhinav)",
   "Commerce"
 ];
+const SUBJECT_FOLDERS_SCIENCE = [
+  "Science"
+];
+const SUBJECT_FOLDERS = [...SUBJECT_FOLDERS_COMMERCE, ...SUBJECT_FOLDERS_SCIENCE];
 const GITHUB_OWNER  = "HJexe";
 const GITHUB_REPO   = "Class-12-ISC";
 const GITHUB_BRANCH = "main";
@@ -380,7 +356,6 @@ function repoPreviewUrl(path) {
 }
 
 const $folders     = document.getElementById("folders");
-const $search      = document.getElementById("search");
 const $viewer      = document.getElementById("viewer");
 const $currentPath = document.getElementById("currentPath");
 const $openTab     = document.getElementById("openTab");
@@ -565,16 +540,15 @@ function renderSubtree(node, subject, fileMap, prefix = "") {
   return ul;
 }
 
-function getOrderedSubjects(files) {
+function getOrderedSubjects(files, folders) {
   const discovered = new Set(files.map(f => f.path.split('/')[0]).filter(Boolean));
   const extras = [...discovered].filter(s => !SUBJECT_FOLDERS.includes(s)).sort((a,b) => a.localeCompare(b));
-  return [...SUBJECT_FOLDERS, ...extras];
+  return [...folders, ...extras].filter(s => discovered.has(s));
 }
 
-function renderList(files) {
-  const query    = $search.value.trim().toLowerCase();
-  const subjects = getOrderedSubjects(files);
-  $folders.innerHTML = '';
+function renderList(files, targetEl, query, folderSet) {
+  const subjects = getOrderedSubjects(files, folderSet);
+  targetEl.innerHTML = '';
 
   subjects.forEach(subject => {
     const subjectFiles = files.filter(file => file.path.startsWith(subject + '/'));
@@ -586,7 +560,7 @@ function renderList(files) {
     details.open = query.length > 0;
 
     const summary = document.createElement('summary');
-    const displayName = subject.replace(/-(creds-.+)$/i, '');
+    const displayName = subject.replace(/-(creds-.+)$/i, '').replace(/^Science\//, '');
     summary.innerHTML = `<span>📂 ${displayName}</span><span class="chevron">▶ &nbsp;${filtered.length}</span>`;
     details.appendChild(summary);
 
@@ -612,12 +586,24 @@ function renderList(files) {
       details.appendChild(renderSubtree(buildTree(relative), subject, fileMap));
     }
 
-    $folders.appendChild(details);
+    targetEl.appendChild(details);
   });
 
-  if (!$folders.children.length) {
-    $folders.innerHTML = '<div class="message">No files match this search.</div>';
+  if (!targetEl.children.length) {
+    targetEl.innerHTML = '<div class="message">No files match this search.</div>';
   }
+}
+
+function renderCommerce() {
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  const files = allFiles.filter(f => SUBJECT_FOLDERS_COMMERCE.some(s => f.path.startsWith(s + '/')));
+  renderList(files, $folders, query, SUBJECT_FOLDERS_COMMERCE);
+}
+
+function renderScience() {
+  const query = document.getElementById('search-science').value.trim().toLowerCase();
+  const files = allFiles.filter(f => SUBJECT_FOLDERS_SCIENCE.some(s => f.path.startsWith(s + '/')));
+  renderList(files, document.getElementById('folders-science'), query, SUBJECT_FOLDERS_SCIENCE);
 }
 
 async function loadResources() {
@@ -646,7 +632,8 @@ async function loadResources() {
     return;
   }
 
-  renderList(allFiles);
+  renderCommerce();
+  renderScience();
 }
 
 
@@ -661,7 +648,8 @@ function switchTab(tab) {
 // Auto-switch tab based on URL hash
 if (window.location.hash === '#science') switchTab('science');
 
-$search.addEventListener('input', () => renderList(allFiles));
+document.getElementById('search').addEventListener('input', renderCommerce);
+document.getElementById('search-science').addEventListener('input', renderScience);
 loadResources();
 </script>
 </body>
