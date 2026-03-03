@@ -284,8 +284,8 @@ iframe { width: 100%; height: 100%; border: 0; background: #050705; }
 
       <!-- SCIENCE PANEL -->
       <div id="tab-science" style="display:none;">
-        <div class="search-wrap" style="padding:12px 16px;border-bottom:1px solid var(--border);">
-          <input id="search-science" type="search" placeholder="Search science files…" style="width:100%;background:#090e09;color:var(--fg);border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:14px;" />
+        <div class="search-wrap">
+          <input id="search-science" type="search" placeholder="Search science files…" />
         </div>
         <div id="folders-science"><div class="message">Loading science resources…</div></div>
       </div>
@@ -312,7 +312,11 @@ const SUBJECT_FOLDERS_COMMERCE = [
   "Commerce"
 ];
 const SUBJECT_FOLDERS_SCIENCE = [
-  "Science"
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Mathematics",
+  "Computer Science"
 ];
 const SUBJECT_FOLDERS = [...SUBJECT_FOLDERS_COMMERCE, ...SUBJECT_FOLDERS_SCIENCE];
 const GITHUB_OWNER  = "HJexe";
