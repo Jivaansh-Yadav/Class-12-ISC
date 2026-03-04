@@ -47,18 +47,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Stash the generated file (works whether staged or unstaged)
-          git stash push --include-untracked -m "files-json-update"
-
-          # Pull latest cleanly
-          git pull --rebase origin main
-
-          # Restore the generated file
-          git stash pop
-
-          # Stage and commit if changed
           git add files.json
-          git diff --staged --quiet && echo "No changes to commit" && exit 0
-          git commit -m "chore: update file index [skip ci]"
-          git push origin main
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: update file index [skip ci]"
+            git push origin main
+          fi
