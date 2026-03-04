@@ -3,684 +3,773 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ISCNerds | File Viewer</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>ISC.exe | Resources</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #060a06;
-  --surface: #0a0f0a;
-  --card: #0d130d;
-  --border: #1a2a1a;
-  --accent: #7fff5f;
-  --fg: #e8f0e8;
-  --muted: #709270;
-  --danger: #ff7f7f;
+  --bg:        #111210;
+  --bg2:       #151714;
+  --surface:   #1a1d19;
+  --surface2:  #1f221e;
+  --border:    #272b25;
+  --border2:   #313630;
+  --accent:    #7ab86a;
+  --accent-lo: rgba(122,184,106,0.09);
+  --accent-md: rgba(122,184,106,0.15);
+  --fg:        #dde3da;
+  --fg2:       #96a492;
+  --fg3:       #505c4e;
+  --pdf:       #c8956a;
+  --doc:       #6a96c8;
+  --txt:       #8a8a7a;
 }
-* { box-sizing: border-box; }
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
 body {
-  margin: 0;
-  font-family: 'Outfit', sans-serif;
-  background: radial-gradient(circle at 80% -20%, rgba(127,255,95,0.08), transparent 45%), var(--bg);
+  background: var(--bg);
   color: var(--fg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.55;
+  overflow: hidden;
 }
+
+/* Grain overlay */
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(127,255,95,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(127,255,95,0.03) 1px, transparent 1px);
-  background-size: 64px 64px;
-  z-index: 0;
+  content: '';
+  position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.022;
 }
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 9;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 28px;
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 50px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 22px;
+  background: rgba(17,18,16,0.92);
+  backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
-  background: rgba(6,10,6,0.9);
-  backdrop-filter: blur(16px);
 }
-.brand {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-}
-.brand span { color: var(--accent); }
-.nav-links { display: flex; gap: 14px; }
-.nav-btn {
+.nav-brand {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px; font-weight: 500;
   color: var(--fg);
+  display: flex; align-items: center; gap: 9px;
+}
+.nav-brand-mark {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.nav-links { display: flex; gap: 5px; }
+.nav-link {
   text-decoration: none;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  transition: border-color .2s, color .2s, background .2s;
-}
-.nav-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(127,255,95,0.08);
-}
-.layout {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 16px;
-  padding: 18px;
-  min-height: calc(100vh - 69px);
-}
-.panel {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(14,20,14,.95), rgba(10,15,10,.95));
-  overflow: hidden;
-}
-.sidebar { display: grid; grid-template-rows: auto auto 1fr; }
-.sidebar-head { padding: 16px; border-bottom: 1px solid var(--border); }
-.title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 34px;
-  font-weight: 700;
-  margin: 0;
-  line-height: .95;
-}
-.subtitle { margin-top: 8px; color: var(--muted); font-size: 13px; }
-.search-wrap { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-#search, #search-science {
-  width: 100%;
-  background: #090e09;
-  color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 14px;
-  font-family: inherit;
-}
-#search:focus, #search-science:focus { border-color: var(--accent); outline: none; }
-#folders { overflow: auto; padding: 10px 12px 16px; }
-.subject {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 10px;
-  background: rgba(8,12,8,.9);
-}
-.subject summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--muted);
-}
-.subject summary::-webkit-details-marker { display: none; }
-.subject[open] summary { color: var(--accent); }
-.sub-folder {
-  border: 1px solid rgba(127,255,95,0.08);
-  border-radius: 8px;
-  margin: 4px 0;
-  background: rgba(6,10,6,0.6);
-}
-.sub-folder summary {
-  cursor: pointer;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--muted);
-}
-.sub-folder summary::-webkit-details-marker { display: none; }
-.sub-folder[open] summary { color: var(--accent); }
-.sub-folder .file-list { padding: 0 10px 8px; }
-.chevron { font-size: 9px; transition: transform .2s; }
-.sub-folder[open] > summary .chevron,
-.subject[open] > summary .chevron { transform: rotate(90deg); }
-.file-list { list-style: none; margin: 0; padding: 0 12px 10px; }
-.file-list li + li { margin-top: 7px; }
-.file-link {
-  display: block;
-  text-decoration: none;
-  color: var(--fg);
+  color: var(--fg3);
+  font-family: 'DM Mono', monospace; font-size: 11.5px;
+  padding: 5px 13px;
   border: 1px solid transparent;
-  border-radius: 10px;
-  padding: 9px;
-  font-size: 13px;
-  transition: border-color .2s, color .2s, background .2s;
+  border-radius: 6px;
+  transition: color .18s, border-color .18s, background .18s;
+  display: flex; align-items: center; gap: 6px;
 }
-.file-link:hover,
-.file-link.active {
-  border-color: rgba(127,255,95,.3);
-  color: var(--accent);
-  background: rgba(127,255,95,.06);
+.nav-link:hover { color: var(--fg2); border-color: var(--border2); background: var(--surface); }
+.nav-link-pip {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); opacity: 0.7;
+  animation: breathe 2.8s ease-in-out infinite;
 }
-.viewer { display: grid; grid-template-rows: auto auto 1fr; }
-.viewer-bar {
-  padding: 13px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+@keyframes breathe { 0%,100%{opacity:.45} 50%{opacity:.85} }
+
+/* ── LAYOUT ── */
+.layout {
+  display: grid;
+  grid-template-columns: 308px 1fr;
+  height: 100vh;
+  padding-top: 50px;
 }
-#currentPath {
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--muted);
-  font-size: 12px;
+
+/* ── SIDEBAR ── */
+.sidebar {
+  display: flex; flex-direction: column;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
   overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.sidebar-head {
+  padding: 22px 18px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-heading {
+  font-family: 'Lora', serif;
+  font-size: 24px; font-weight: 400;
+  color: var(--fg); line-height: 1.1;
+  margin-bottom: 5px;
+}
+.sidebar-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; color: var(--fg3); letter-spacing: .4px;
+}
+
+/* Stream tabs */
+.tabs {
+  display: flex;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  gap: 5px; flex-shrink: 0;
+}
+.tab {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 7px 0;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: .5px; text-transform: uppercase;
+  border: 1px solid var(--border2); border-radius: 7px;
+  background: transparent; color: var(--fg3);
+  cursor: pointer; transition: all .18s;
+}
+.tab:hover { color: var(--fg2); background: var(--surface); border-color: var(--border2); }
+.tab.active {
+  color: var(--accent);
+  background: var(--accent-lo);
+  border-color: rgba(122,184,106,0.28);
+}
+
+/* Search */
+.search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.search-box {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px; padding: 8px 11px;
+  transition: border-color .18s;
+}
+.search-box:focus-within { border-color: rgba(122,184,106,0.4); }
+.search-ico { color: var(--fg3); font-size: 12px; }
+#search {
+  background: none; border: none; outline: none;
+  color: var(--fg); font-family: 'DM Sans', sans-serif;
+  font-size: 13px; width: 100%;
+}
+#search::placeholder { color: var(--fg3); }
+
+/* File tree scroll area */
+#folders {
+  flex: 1; overflow-y: auto; padding: 8px 8px 24px;
+}
+#folders::-webkit-scrollbar { width: 3px; }
+#folders::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* Subject */
+.subject { border-radius: 9px; margin-bottom: 4px; }
+.subject > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 11px; border-radius: 9px;
+  color: var(--fg2); font-size: 13px; font-weight: 500;
+  transition: background .14s, color .14s;
+  user-select: none;
+}
+.subject > summary::-webkit-details-marker { display: none; }
+.subject > summary:hover { background: var(--surface); color: var(--fg); }
+.subject[open] > summary { color: var(--fg); background: var(--surface); }
+
+.s-icon { font-size: 14px; }
+.s-name { flex: 1; }
+.s-count {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: var(--fg3); background: var(--surface2);
+  padding: 1px 7px; border-radius: 10px;
+  transition: all .14s;
+}
+.subject[open] .s-count { color: var(--accent); background: var(--accent-lo); }
+.s-arr {
+  font-size: 8px; color: var(--fg3);
+  transition: transform .2s;
+}
+.subject[open] .s-arr { transform: rotate(90deg); }
+
+/* Sub-folder */
+.sub-folder { margin: 2px 0 2px 10px; border-radius: 7px; }
+.sub-folder > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 10px; border-radius: 7px;
+  font-size: 12px; color: var(--fg3);
+  transition: background .14s, color .14s;
+  user-select: none;
+}
+.sub-folder > summary::-webkit-details-marker { display: none; }
+.sub-folder > summary:hover { background: var(--surface2); color: var(--fg2); }
+.sub-folder[open] > summary { color: var(--fg2); }
+.sf-arr { font-size: 7px; margin-left: auto; transition: transform .2s; }
+.sub-folder[open] > summary .sf-arr { transform: rotate(90deg); }
+.sub-folder > .file-list { padding: 2px 8px 6px; }
+
+/* Files */
+.file-list { list-style: none; padding: 2px 4px 4px; }
+.file-list li + li { margin-top: 1px; }
+
+.file-link {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none; color: var(--fg2);
+  border-radius: 7px; padding: 6px 10px;
+  font-size: 12.5px; cursor: pointer;
+  transition: background .12s, color .12s;
+  border: 1px solid transparent;
+}
+.file-link:hover { background: var(--surface2); color: var(--fg); }
+.file-link.active {
+  background: var(--accent-lo);
+  color: var(--fg);
+  border-color: rgba(122,184,106,0.22);
+}
+.file-link.active .f-name { color: var(--fg); }
+
+.f-badge {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  padding: 1px 5px; border-radius: 3px;
+  flex-shrink: 0; text-transform: uppercase; letter-spacing: .4px;
+  font-weight: 500; opacity: .85;
+}
+.badge-pdf  { background: rgba(200,149,106,0.14); color: var(--pdf); }
+.badge-doc  { background: rgba(106,150,200,0.14); color: var(--doc); }
+.badge-txt  { background: rgba(138,138,122,0.14); color: var(--txt); }
+.badge-def  { background: var(--surface2); color: var(--fg3); }
+
+.f-name { flex: 1; line-height: 1.35; }
+.msg { padding: 18px 12px; color: var(--fg3); font-size: 12px; font-family: 'DM Mono', monospace; }
+
+/* ── VIEWER ── */
+.viewer {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.viewer-bar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 20px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  min-height: 50px;
+}
+.v-path {
+  flex: 1;
+  font-family: 'DM Mono', monospace; font-size: 11px; color: var(--fg3);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.v-path .vp-file { color: var(--fg2); }
+.v-btns { display: flex; gap: 6px; }
+
+.vbtn {
+  text-decoration: none; cursor: pointer;
+  border: 1px solid var(--border2); border-radius: 7px;
+  font-size: 11.5px; font-family: 'DM Mono', monospace;
+  color: var(--fg3); padding: 6px 13px;
+  background: transparent; transition: all .18s;
+  display: flex; align-items: center; gap: 5px;
   white-space: nowrap;
 }
-.actions { display: flex; gap: 8px; }
-.btn {
-  text-decoration: none;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 12px;
-  color: var(--fg);
-  padding: 8px 11px;
-  font-family: 'JetBrains Mono', monospace;
+.vbtn:hover { border-color: var(--fg3); color: var(--fg2); background: var(--surface); }
+.vbtn.dl {
+  color: var(--accent); opacity: .85;
+  border-color: rgba(122,184,106,0.3);
+  background: var(--accent-lo);
 }
-.btn:hover { border-color: var(--accent); color: var(--accent); }
-#downloadBtn { background: rgba(127,255,95,.1); border-color: rgba(127,255,95,.45); }
-#meta {
-  padding: 12px 16px;
+.vbtn.dl:hover { opacity: 1; background: var(--accent-md); }
+
+/* Meta */
+.viewer-meta {
+  padding: 9px 20px;
+  background: var(--bg2);
   border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.6;
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  font-size: 12px; color: var(--fg3);
 }
-#meta b { color: var(--fg); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-iframe { width: 100%; height: 100%; border: 0; background: #050705; }
-.message { padding: 14px; color: var(--muted); }
-.error { color: var(--danger); }
-@media (max-width: 980px) {
+.m-chip {
+  font-family: 'DM Mono', monospace; font-size: 9.5px;
+  padding: 2px 8px; border-radius: 4px;
+  background: var(--surface2); color: var(--fg3);
+  border: 1px solid var(--border2);
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.m-name { color: var(--fg2); font-weight: 500; }
+.m-sep  { color: var(--border2); }
+
+/* Empty state */
+.empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%; gap: 14px; color: var(--fg3);
+  user-select: none;
+}
+.empty-ico {
+  font-size: 40px; opacity: .22;
+  animation: bob 3.5s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
+.empty-h {
+  font-family: 'Lora', serif; font-style: italic;
+  font-size: 19px; color: var(--fg3);
+}
+.empty-s { font-family: 'DM Mono', monospace; font-size: 11px; }
+
+iframe {
+  width: 100%; height: 100%; border: 0;
+  background: #181a17;
+}
+
+/* ── EXAM ALERT ── */
+.exam-alert {
+  position: fixed; top: 50px; left: 0; right: 0; z-index: 150;
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 22px;
+  background: rgba(42, 36, 10, 0.97);
+  border-bottom: 1px solid rgba(220,180,60,0.3);
+  backdrop-filter: blur(12px);
+  animation: slideDown .3s ease;
+}
+@keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+
+.ea-icon {
+  font-size: 15px; flex-shrink: 0;
+}
+.ea-label {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(220,180,60,0.7); flex-shrink: 0;
+}
+.ea-divider {
+  width: 1px; height: 16px; background: rgba(220,180,60,0.2); flex-shrink: 0;
+}
+.ea-subject {
+  font-weight: 500; font-size: 13px;
+  color: #f0d060;
+}
+.ea-date {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: rgba(220,180,60,0.6);
+}
+.ea-days {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: rgba(220,180,60,0.5);
+  flex-shrink: 0;
+}
+.ea-days strong { color: #f0d060; font-size: 13px; }
+.ea-link {
+  text-decoration: none;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  color: rgba(220,180,60,0.5);
+  border: 1px solid rgba(220,180,60,0.2);
+  border-radius: 5px; padding: 3px 9px;
+  transition: all .18s; flex-shrink: 0;
+}
+.ea-link:hover { color: #f0d060; border-color: rgba(220,180,60,0.5); }
+
+/* push layout down when alert visible */
+.layout.alert-visible { padding-top: 0; margin-top: 36px; }
+
+@media (max-width: 820px) {
   .layout { grid-template-columns: 1fr; }
-  .viewer { min-height: 70vh; }
-  .nav-links { display: none; }
+  .viewer { display: none; }
+  .exam-alert { flex-wrap: wrap; gap: 6px; }
+  .ea-days { margin-left: 0; }
 }
-
-/* STREAM TABS */
-.stream-tabs { display: flex; border-bottom: 1px solid var(--border); }
-.stream-tab {
-  flex: 1; padding: 10px; font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
-  background: transparent; border: none; color: var(--muted);
-  cursor: pointer; transition: color .2s, background .2s;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-}
-.stream-tab:hover { color: var(--fg); background: rgba(127,255,95,0.03); }
-.stream-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-/* SCIENCE DROPDOWNS */
-.sci-section { padding: 10px 12px 16px; }
-.sci-drop {
-  border: 1px solid var(--border); border-radius: 10px;
-  margin-bottom: 8px; background: rgba(8,12,8,.9);
-  overflow: hidden;
-}
-.sci-drop summary {
-  list-style: none; cursor: pointer; padding: 10px 12px;
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  color: var(--muted); display: flex; justify-content: space-between;
-  align-items: center; transition: color .2s; user-select: none;
-}
-.sci-drop summary::-webkit-details-marker { display: none; }
-.sci-drop[open] summary { color: var(--accent); }
-.sci-chevron { font-size: 9px; transition: transform .2s; }
-.sci-drop[open] .sci-chevron { transform: rotate(90deg); }
-.sci-drop-body { padding: 6px 12px 12px; }
-.sci-link {
-  display: block; text-decoration: none; color: var(--fg);
-  border: 1px solid transparent; border-radius: 10px;
-  padding: 9px; font-size: 13px; margin-top: 6px;
-  transition: border-color .2s, color .2s, background .2s;
-}
-.sci-link:hover {
-  border-color: rgba(127,255,95,.3); color: var(--accent);
-  background: rgba(127,255,95,.06);
-}
-.sci-coming { font-size: 12px; color: var(--muted); padding: 6px 0; font-family: 'JetBrains Mono', monospace; }
 </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand">ISC<span>Nerds</span> / File Viewer</div>
-    <div class="nav-links">
-      <a class="nav-btn" href="index.html">← Back to Landing</a>
-      <a class="nav-btn" href="timetable.html">Open Timetable</a>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-brand-mark"></div>
+    ISC.exe / Resources
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">← Home</a>
+    <a class="nav-link" href="timetable.html">
+      <span class="nav-link-pip"></span>
+      Timetable
+    </a>
+  </div>
+</nav>
+
+<div id="examAlert"></div>
+
+<div class="layout" id="mainLayout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-heading">Study Files</div>
+      <div class="sidebar-sub">browse · search · preview</div>
     </div>
-  </nav>
-  <main class="layout">
-    <section class="panel sidebar">
-      <div class="sidebar-head">
-        <h1 class="title">Study Files</h1>
-        <p class="subtitle">Browse by subject, search instantly, and preview notes before downloading.</p>
-      </div>
-      <div class="stream-tabs">
-        <button class="stream-tab active" onclick="switchTab('commerce')">📊 Commerce</button>
-        <button class="stream-tab" onclick="switchTab('science')">🔬 Science</button>
-      </div>
 
-      <!-- COMMERCE PANEL -->
-      <div id="tab-commerce">
-        <div class="search-wrap">
-          <input id="search" type="search" placeholder="Search file name, subject, worksheet…" />
-        </div>
-        <div id="folders"><div class="message">Loading resources…</div></div>
-      </div>
+    <div class="tabs">
+      <button class="tab active" id="tab-commerce" onclick="switchStream('commerce')">📊 Commerce</button>
+      <button class="tab" id="tab-science" onclick="switchStream('science')">🔬 Science</button>
+    </div>
 
-      <!-- SCIENCE PANEL -->
-      <div id="tab-science" style="display:none;">
-        <div class="search-wrap">
-          <input id="search-science" type="search" placeholder="Search science files…" />
-        </div>
-        <div id="folders-science"><div class="message">Loading science resources…</div></div>
+    <div class="search-wrap">
+      <div class="search-box">
+        <span class="search-ico">◎</span>
+        <input id="search" type="search" placeholder="Search files…" />
       </div>
-    </section>
-    <section class="panel viewer">
-      <div class="viewer-bar">
-        <div id="currentPath">Select a file to preview.</div>
-        <div class="actions">
-          <a id="openTab" class="btn" target="_blank" rel="noopener noreferrer">Open</a>
-          <a id="downloadBtn" class="btn" download>Download</a>
-        </div>
+    </div>
+
+    <div id="folders"><div class="msg">Loading…</div></div>
+  </aside>
+
+  <!-- VIEWER -->
+  <section class="viewer">
+    <div class="viewer-bar">
+      <div class="v-path" id="vPath">Select a file to preview</div>
+      <div class="v-btns">
+        <a id="openTab" class="vbtn" target="_blank" rel="noopener noreferrer">↗ Open</a>
+        <a id="dlBtn" class="vbtn dl" download>↓ Download</a>
       </div>
-      <div id="meta"><b>DESCRIPTION:</b> Choose any file from the left panel to see an instant preview, short description, and direct download option.</div>
-      <iframe id="viewer" title="PDF Preview" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
-    </section>
-  </main>
+    </div>
+
+    <div class="viewer-meta" id="vMeta">
+      <span class="m-chip">info</span>
+      <span>Choose a file from the sidebar to preview it here.</span>
+    </div>
+
+    <div id="vBody">
+      <div class="empty">
+        <div class="empty-ico">📖</div>
+        <div class="empty-h">Nothing open yet</div>
+        <div class="empty-s">pick a file from the sidebar</div>
+      </div>
+    </div>
+  </section>
+
+</div>
 
 <script>
-const SUBJECT_FOLDERS_COMMERCE = [
-  "Economics",
-  "Accounts",
-  "Business Studies",
-  "Maths-(creds-Abhinav)",
-  "Commerce"
-];
-const SUBJECT_FOLDERS_SCIENCE = [
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "Mathematics",
-  "Computer Science"
-];
-const SUBJECT_FOLDERS = [...SUBJECT_FOLDERS_COMMERCE, ...SUBJECT_FOLDERS_SCIENCE];
-const GITHUB_OWNER  = "HJexe";
-const GITHUB_REPO   = "Class-12-ISC";
-const GITHUB_BRANCH = "main";
-const ALLOWED_EXTENSIONS = new Set(["pdf", "doc", "docx", "txt", "ppt", "pptx", "xls", "xlsx"]);
+const OWNER  = 'HJexe';
+const REPO   = 'Class-12-ISC';
+const BRANCH = 'main';
 
-function isLegacyDriveLinkPath(path) {
-  return /\/text\.?$/i.test(path);
-}
-
-function toRawGithubUrl(path) {
-  return `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${rawUrl(path)}`;
-}
-
-function looksLikeUrl(value) {
-  return /^https?:\/\//i.test((value || '').trim());
-}
-
-function extractDriveFileId(url) {
-  const patterns = [
-    /\/file\/d\/([a-zA-Z0-9_-]{10,})/,
-    /[?&]id=([a-zA-Z0-9_-]{10,})/
-  ];
-  for (const re of patterns) {
-    const m = url.match(re);
-    if (m) return m[1];
-  }
-  return null;
-}
-
-function driveEmbedUrl(url) {
-  const id = extractDriveFileId(url);
-  if (id) return `https://drive.google.com/file/d/${id}/preview`;
-  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
-}
-
-function repoPreviewUrl(path) {
-  const fileUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${rawUrl(path)}`;
-  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(fileUrl)}`;
-}
-
-const $folders     = document.getElementById("folders");
-const $viewer      = document.getElementById("viewer");
-const $currentPath = document.getElementById("currentPath");
-const $openTab     = document.getElementById("openTab");
-const $downloadBtn = document.getElementById("downloadBtn");
-const $meta        = document.getElementById("meta");
+const STREAMS = {
+  commerce: ['Economics','Accounts','Business Studies','Commerce','Maths-(creds-Abhinav)'],
+  science:  ['Physics','Chemistry','Biology','Maths-(creds-Abhinav)','Computer Science']
+};
+const ICONS = {
+  Economics:'📈', Accounts:'🧾', 'Business Studies':'🏢', Commerce:'💹',
+  Physics:'⚛️', Chemistry:'🧪', Biology:'🌿', 'Computer Science':'💻',
+  'Maths-(creds-Abhinav)':'📐'
+};
+const ALLOWED = new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 
 let allFiles = [];
+let stream   = 'commerce';
 
-function createFileKey(entry) { return `${entry.path}::${entry.url}`; }
-function rawUrl(path) { return path.split("/").map(encodeURIComponent).join("/"); }
-
-function hasAllowedExtension(path) {
-  const ext = path.split('.').pop().toLowerCase();
-  return ALLOWED_EXTENSIONS.has(ext);
+function raw(path) { return path.split('/').map(encodeURIComponent).join('/'); }
+function previewUrl(path) {
+  const u = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(path)}`;
+  return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;
 }
-
-function isSubjectPath(path) {
-  return SUBJECT_FOLDERS.some(subject => path.startsWith(subject + '/'));
+function drivePreview(url) {
+  const m = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  return m ? `https://drive.google.com/file/d/${m[1]}/preview`
+           : `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
 }
-
-async function fetchRepoFiles() {
-  const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/git/trees/${GITHUB_BRANCH}?recursive=1`;
-  const res = await fetch(endpoint, { headers: { Accept: 'application/vnd.github+json' } });
-  if (!res.ok) throw new Error(`GitHub tree fetch failed (${res.status})`);
-
-  const data = await res.json();
-  if (!Array.isArray(data.tree)) return [];
-
-  const candidatePaths = data.tree
-    .filter(item => item.type === 'blob')
-    .map(item => item.path)
-    .filter(path => isSubjectPath(path) && (hasAllowedExtension(path) || isLegacyDriveLinkPath(path)));
-
-  const entries = await Promise.all(candidatePaths.map(async path => {
-    if (hasAllowedExtension(path)) return normalizeEntry(path);
-    if (!isLegacyDriveLinkPath(path)) return null;
-
-    try {
-      const txt = await fetch(toRawGithubUrl(path));
-      if (!txt.ok) return null;
-      const raw = (await txt.text()).trim();
-      const baseDir = path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : path;
-
-      // Split into lines — supports multiple links per text file
-      const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
-      const results = [];
-
-      for (const line of lines) {
-        let fileName, link;
-        if (line.includes('|')) {
-          const sep = line.indexOf('|');
-          fileName  = line.slice(0, sep).trim();
-          link      = line.slice(sep + 1).trim();
-        } else {
-          link      = line;
-          fileName  = null;
-        }
-
-        if (!looksLikeUrl(link)) continue;
-
-        const folderName  = baseDir.split('/').pop();
-        const displayName = fileName || folderName;
-
-        results.push(normalizeEntry({
-          path:   `${baseDir}/${displayName}`,
-          url:    link,
-          source: 'gdrive'
-        }));
-      }
-
-      return results.length ? results : null;
-
-    } catch (err) {
-      console.warn('Failed to parse drive link file:', path, err);
-      return null;
-    }
-  }));
-
-  // Flatten arrays (multi-link text files return arrays) and remove nulls
-  return entries.flat().filter(Boolean);
+function isUrl(v) { return /^https?:\/\//i.test((v||'').trim()); }
+function allowed(p) {
+  const e = p.split('.').pop().toLowerCase();
+  return ALLOWED.has(e) || /\/text\.?$/i.test(p);
 }
+function inSubjects(p, subs) { return subs.some(s => p.startsWith(s + '/')); }
+function key(e) { return `${e.path}::${e.url}`; }
 
-function normalizeEntry(item) {
+function normalize(item) {
   if (typeof item === 'string') {
-    return {
-      path:    item,
-      url:     `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${rawUrl(item)}`,
-      preview: repoPreviewUrl(item),
-      source:  'repo'
-    };
+    return { path: item, url: `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(item)}`, preview: previewUrl(item), source: 'repo' };
   }
-  if (!item || typeof item !== 'object' || !item.path || !item.url) return null;
-
-  const isDrive = item.source === 'gdrive' || /drive\.google\.com/i.test(item.url);
-  return {
-    path:    item.path,
-    url:     item.url,
-    preview: isDrive ? driveEmbedUrl(item.url) : (item.previewUrl || repoPreviewUrl(item.path)),
-    source:  isDrive ? 'gdrive' : (item.source || 'repo')
-  };
+  if (!item?.path || !item?.url) return null;
+  const drive = item.source === 'gdrive' || /drive\.google\.com/i.test(item.url);
+  return { path: item.path, url: item.url, preview: drive ? drivePreview(item.url) : previewUrl(item.path), source: drive ? 'gdrive' : 'repo' };
 }
 
-function describe(entry) {
-  const ext     = entry.path.split('.').pop().toLowerCase();
-  const subject = entry.path.split('/')[0].replace(/-(creds-.+)$/i, '');
-  const title   = entry.path.split('/').pop();
-  const typeMap = {
-    pdf:  'Document PDF with printable study material.',
-    docx: 'Word document containing class notes.',
-    txt:  'Plain text support file or quick notes.'
-  };
-  const sourceText = entry.source === 'gdrive' ? 'Hosted on Google Drive.' : 'Hosted in this repository.';
-  return `<b>DESCRIPTION:</b> <strong>${title}</strong> belongs to <strong>${subject}</strong>. ${typeMap[ext] || 'Study resource file available for preview/download.'} ${sourceText}`;
+function badge(path) {
+  const ext = path.split('.').pop().toLowerCase();
+  const cls = ext === 'pdf' ? 'badge-pdf' : (ext==='doc'||ext==='docx') ? 'badge-doc' : ext==='txt' ? 'badge-txt' : 'badge-def';
+  return `<span class="f-badge ${cls}">${ext}</span>`;
 }
 
-function setActive(key) {
-  document.querySelectorAll('.file-link.active').forEach(el => el.classList.remove('active'));
-  const active = document.querySelector(`.file-link[data-key="${CSS.escape(key)}"]`);
-  if (active) active.classList.add('active');
+async function load() {
+  const merged = new Map();
+  try {
+    const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`, { headers:{Accept:'application/vnd.github+json'} });
+    if (r.ok) {
+      const d = await r.json();
+      const allSubs = [...new Set([...STREAMS.commerce,...STREAMS.science])];
+      (d.tree||[]).filter(i=>i.type==='blob').map(i=>i.path)
+        .filter(p=>inSubjects(p,allSubs)&&allowed(p))
+        .map(normalize).filter(Boolean)
+        .forEach(f=>merged.set(key(f),f));
+    }
+  } catch {}
+  try {
+    const r = await fetch('files.json');
+    if (r.ok) (await r.json()).map(normalize).filter(Boolean).forEach(f=>merged.set(key(f),f));
+  } catch {}
+  allFiles = [...merged.values()];
+  if (!allFiles.length) { document.getElementById('folders').innerHTML = '<div class="msg">⚠ No resources found.</div>'; return; }
+  render();
 }
 
-function showPreview(entry) {
-  const key = createFileKey(entry);
-  $viewer.src = entry.preview;
-  $currentPath.textContent = entry.path;
-  $openTab.href = entry.url;
-  $downloadBtn.href = entry.url;
-  $downloadBtn.setAttribute('download', entry.path.split('/').pop());
-  $meta.innerHTML = describe(entry);
-  setActive(key);
+function switchStream(s) {
+  stream = s;
+  document.getElementById('tab-commerce').classList.toggle('active', s==='commerce');
+  document.getElementById('tab-science').classList.toggle('active', s==='science');
+  render();
+}
+
+function render() {
+  const q    = document.getElementById('search').value.trim().toLowerCase();
+  const subs = STREAMS[stream] || [];
+  const wrap = document.getElementById('folders');
+  wrap.innerHTML = '';
+
+  const streamFiles = allFiles.filter(f=>inSubjects(f.path, subs));
+
+  subs.forEach(subj => {
+    const filtered = streamFiles.filter(f=>f.path.startsWith(subj+'/')&&f.path.toLowerCase().includes(q));
+    if (!filtered.length) return;
+
+    const det  = document.createElement('details');
+    det.className = 'subject';
+    if (q) det.open = true;
+
+    const disp = subj.replace(/-(creds-.+)$/i,'');
+    const icon = ICONS[subj] || '📁';
+    const sum  = document.createElement('summary');
+    sum.innerHTML = `<span class="s-icon">${icon}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
+    det.appendChild(sum);
+
+    if (q) {
+      const ul = document.createElement('ul');
+      ul.className = 'file-list';
+      filtered.sort((a,b)=>a.path.localeCompare(b.path)).forEach(f=>ul.appendChild(fileLi(f, f.path.split('/').slice(1).join(' › '))));
+      det.appendChild(ul);
+    } else {
+      const rel  = filtered.map(f=>f.path.slice(subj.length+1));
+      const fmap = new Map(filtered.map(f=>[f.path,f]));
+      det.appendChild(subtree(buildTree(rel), subj, fmap));
+    }
+    wrap.appendChild(det);
+  });
+
+  if (!wrap.children.length) wrap.innerHTML = `<div class="msg">No results for "${q}"</div>`;
 }
 
 function buildTree(paths) {
   const root = { dirs: new Map(), files: [] };
   for (const p of paths) {
-    const parts = p.split("/").filter(Boolean);
+    const pts = p.split('/').filter(Boolean);
     let node = root;
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (!node.dirs.has(parts[i])) node.dirs.set(parts[i], { dirs: new Map(), files: [] });
-      node = node.dirs.get(parts[i]);
+    for (let i=0; i<pts.length-1; i++) {
+      if (!node.dirs.has(pts[i])) node.dirs.set(pts[i],{dirs:new Map(),files:[]});
+      node = node.dirs.get(pts[i]);
     }
-    const filename = parts[parts.length - 1];
-    if (filename) node.files.push(filename);
+    const f = pts[pts.length-1]; if (f) node.files.push(f);
   }
   return root;
 }
 
-function renderSubtree(node, subject, fileMap, prefix = "") {
-  const ul = document.createElement("ul");
-  ul.className = "file-list";
-
-  [...node.dirs.keys()].sort((a, b) => a.localeCompare(b)).forEach(folderName => {
-    const li      = document.createElement("li");
-    const details = document.createElement("details");
-    details.className = "sub-folder";
-    const summary = document.createElement("summary");
-    const SUB_EMOJI = {
-      'Physics': '⚛️', 'Chemistry': '🧪', 'Biology': '🧬',
-      'Mathematics': '📐', 'Maths': '📐', 'Computer Science': '💻',
-      'Papers': '📄', 'Worksheets': '📝', 'Notes': '📒',
-      'Important Questions': '❓', 'Question Bank': '🗂️',
-      'Formula Sheets': '🔢', 'School Papers': '🏫',
-      'Revision Notes': '🔁', 'Sample Papers': '📋',
-    };
-    const subEmoji = SUB_EMOJI[folderName] || '📁';
-    summary.innerHTML = `<span>${subEmoji} ${folderName}</span><span class="chevron">▶</span>`;
-    const nextPrefix = prefix ? `${prefix}/${folderName}` : folderName;
-    details.appendChild(summary);
-    details.appendChild(renderSubtree(node.dirs.get(folderName), subject, fileMap, nextPrefix));
-    li.appendChild(details);
-    ul.appendChild(li);
+function subtree(node, subj, fmap, prefix='') {
+  const ul = document.createElement('ul'); ul.className = 'file-list';
+  [...node.dirs.keys()].sort((a,b)=>a.localeCompare(b)).forEach(name => {
+    const li = document.createElement('li');
+    const d  = document.createElement('details'); d.className = 'sub-folder';
+    const s  = document.createElement('summary');
+    s.innerHTML = `<span>📁</span><span style="flex:1;font-size:12px">${name}</span><span class="sf-arr">▶</span>`;
+    d.appendChild(s);
+    d.appendChild(subtree(node.dirs.get(name), subj, fmap, prefix ? `${prefix}/${name}` : name));
+    li.appendChild(d); ul.appendChild(li);
   });
-
-  [...node.files].sort((a, b) => a.localeCompare(b)).forEach(filename => {
-    const relative = prefix ? `${prefix}/${filename}` : filename;
-    const fullPath = `${subject}/${relative}`;
-    const entry    = fileMap.get(fullPath);
-    if (!entry) return;
-    const fileKey = createFileKey(entry);
-    const li = document.createElement("li");
-    const a  = document.createElement("a");
-    a.href        = entry.url;
-    a.className   = "file-link";
-    a.dataset.key = fileKey;
-    a.textContent = filename;
-    a.onclick = e => { e.preventDefault(); showPreview(entry); };
-    li.appendChild(a);
-    ul.appendChild(li);
+  [...node.files].sort((a,b)=>a.localeCompare(b)).forEach(fname => {
+    const rel  = prefix ? `${prefix}/${fname}` : fname;
+    const entry = fmap.get(`${subj}/${rel}`);
+    if (entry) ul.appendChild(fileLi(entry, fname));
   });
-
   return ul;
 }
 
-function getOrderedSubjects(files, folders) {
-  const discovered = new Set(files.map(f => f.path.split('/')[0]).filter(Boolean));
-  const extras = [...discovered].filter(s => !SUBJECT_FOLDERS.includes(s)).sort((a,b) => a.localeCompare(b));
-  return [...folders, ...extras].filter(s => discovered.has(s));
+function fileLi(entry, label) {
+  const li = document.createElement('li');
+  const a  = document.createElement('a');
+  a.href = entry.url; a.className = 'file-link'; a.dataset.key = key(entry);
+  a.innerHTML = `${badge(entry.path)}<span class="f-name">${label}</span>`;
+  a.onclick = e => { e.preventDefault(); preview(entry); };
+  li.appendChild(a); return li;
 }
 
-function renderList(files, targetEl, query, folderSet) {
-  const subjects = getOrderedSubjects(files, folderSet);
-  targetEl.innerHTML = '';
+function preview(entry) {
+  document.querySelectorAll('.file-link.active').forEach(e=>e.classList.remove('active'));
+  const el = document.querySelector(`.file-link[data-key="${CSS.escape(key(entry))}"]`);
+  if (el) el.classList.add('active');
 
-  subjects.forEach(subject => {
-    const subjectFiles = files.filter(file => file.path.startsWith(subject + '/'));
-    const filtered     = subjectFiles.filter(file => file.path.toLowerCase().includes(query));
-    if (!filtered.length) return;
+  const parts   = entry.path.split('/');
+  const fname   = parts[parts.length-1];
+  const ext     = fname.split('.').pop().toLowerCase();
+  const subjDisp = parts[0].replace(/-(creds-.+)$/i,'');
 
-    const details = document.createElement('details');
-    details.className = 'subject';
-    details.open = query.length > 0;
+  // Path
+  document.getElementById('vPath').innerHTML =
+    parts.slice(0,-1).map(p=>`<span style="color:var(--fg3)">${p} /</span>`).join(' ') +
+    ` <span class="vp-file">${fname}</span>`;
 
-    const summary = document.createElement('summary');
-    const displayName = subject.replace(/-(creds-.+)$/i, '').replace(/^Science\//, '');
-    const SUBJECT_EMOJI = {
-      'Economics': '📈',
-      'Accounts': '🧾',
-      'Business Studies': '🏢',
-      'Commerce': '💹',
-      'Maths': '📐',
-      'Science': '🔬',
-      'Physics': '⚛️',
-      'Chemistry': '🧪',
-      'Biology': '🧬',
-      'Mathematics': '📐',
-      'Computer Science': '💻',
-      'English': '📖',
-      'History': '📜',
-    };
-    const emoji = SUBJECT_EMOJI[displayName] || '📂';
-    summary.innerHTML = `<span>${emoji} ${displayName}</span><span class="chevron">▶ &nbsp;${filtered.length}</span>`;
-    details.appendChild(summary);
+  // Buttons
+  document.getElementById('openTab').href = entry.url;
+  const dl = document.getElementById('dlBtn');
+  dl.href = entry.url; dl.setAttribute('download', fname);
 
-    if (query.length > 0) {
-      const ul = document.createElement('ul');
-      ul.className = 'file-list';
-      filtered.sort((a,b) => a.path.localeCompare(b.path)).forEach(file => {
-        const fileKey = createFileKey(file);
-        const li = document.createElement('li');
-        const a  = document.createElement('a');
-        a.href        = file.url;
-        a.className   = 'file-link';
-        a.dataset.key = fileKey;
-        a.textContent = file.path.split('/').slice(1).join(' / ');
-        a.onclick = e => { e.preventDefault(); showPreview(file); };
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      details.appendChild(ul);
-    } else {
-      const relative = filtered.map(file => file.path.slice(subject.length + 1));
-      const fileMap  = new Map(filtered.map(file => [file.path, file]));
-      details.appendChild(renderSubtree(buildTree(relative), subject, fileMap));
-    }
+  // Meta
+  const typeMap = {pdf:'PDF',docx:'Word Doc',doc:'Word Doc',txt:'Text',pptx:'Slides',xlsx:'Spreadsheet'};
+  const srcMap  = {repo:'GitHub',gdrive:'Drive'};
+  document.getElementById('vMeta').innerHTML = `
+    <span class="m-chip">${typeMap[ext]||'File'}</span>
+    <span class="m-name">${fname}</span>
+    <span class="m-sep">·</span>
+    <span>${subjDisp}</span>
+    <span class="m-sep">·</span>
+    <span>${srcMap[entry.source]||''}</span>
+  `;
 
-    targetEl.appendChild(details);
-  });
-
-  if (!targetEl.children.length) {
-    targetEl.innerHTML = '<div class="message">No files match this search.</div>';
-  }
+  // iFrame
+  const body = document.getElementById('vBody');
+  body.innerHTML = '';
+  const f = document.createElement('iframe');
+  f.src = entry.preview; f.title = fname;
+  f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups allow-forms');
+  body.appendChild(f);
 }
 
-function renderCommerce() {
-  const query = document.getElementById('search').value.trim().toLowerCase();
-  const files = allFiles.filter(f => SUBJECT_FOLDERS_COMMERCE.some(s => f.path.startsWith(s + '/')));
-  renderList(files, $folders, query, SUBJECT_FOLDERS_COMMERCE);
+// ── TIMETABLE DATA (from timetable.html) ──────────────────────
+const ALL_EXAMS = [
+  { date:'2026-02-12', subject:'Psychology',                                           stream:'both' },
+  { date:'2026-02-13', subject:'English — Paper 1 (English Language)',                 stream:'both' },
+  { date:'2026-02-14', subject:'Art Paper 3 (Drawing or Painting of a Living Person)', stream:'both' },
+  { date:'2026-02-14', subject:'Legal Studies',                                        stream:'both' },
+  { date:'2026-02-16', subject:'English — Paper 2 (Literature in English)',            stream:'both' },
+  { date:'2026-02-17', subject:'Home Science — Paper 1 (Theory)',                     stream:'both' },
+  { date:'2026-02-17', subject:'Electricity and Electronics',                          stream:'science' },
+  { date:'2026-02-17', subject:'Geometrical & Mechanical Drawing',                     stream:'both' },
+  { date:'2026-02-20', subject:'Accounts',                                             stream:'commerce' },
+  { date:'2026-02-21', subject:'Mass Media & Communication',                           stream:'both' },
+  { date:'2026-02-23', subject:'Chemistry — Paper 1 (Theory)',                         stream:'science' },
+  { date:'2026-02-25', subject:'History',                                              stream:'both' },
+  { date:'2026-02-27', subject:'Commerce',                                             stream:'commerce' },
+  { date:'2026-02-28', subject:'Art Paper 1 (Drawing or Painting from Still Life)',   stream:'both' },
+  { date:'2026-03-02', subject:'Environmental Science — Paper 1 (Theory)',             stream:'science' },
+  { date:'2026-03-06', subject:'Biology — Paper 1 (Theory)',                           stream:'science' },
+  { date:'2026-03-07', subject:'Fashion Designing — Paper 1 (Theory)',                stream:'both' },
+  { date:'2026-03-07', subject:'Indian Music — Hindustani — Paper 1 (Theory)',        stream:'both' },
+  { date:'2026-03-09', subject:'Mathematics',                                          stream:'both' },
+  { date:'2026-03-11', subject:'Business Studies',                                     stream:'commerce' },
+  { date:'2026-03-13', subject:'Bengali, Gujarati, Hindi, Kannada & other languages', stream:'both' },
+  { date:'2026-03-14', subject:'Art Paper 2 (Drawing or Painting from Nature)',        stream:'both' },
+  { date:'2026-03-16', subject:'Physics — Paper 1 (Theory)',                           stream:'science' },
+  { date:'2026-03-18', subject:'Physical Education',                                   stream:'both' },
+  { date:'2026-03-23', subject:'Economics',                                            stream:'commerce' },
+  { date:'2026-03-23', subject:'Biotechnology — Paper 1 (Theory)',                    stream:'science' },
+  { date:'2026-03-25', subject:'Sociology',                                            stream:'both' },
+  { date:'2026-03-27', subject:'Computer Science — Paper 1 (Theory)',                 stream:'science' },
+  { date:'2026-03-28', subject:'Art Paper 4 (Original Imaginative Composition)',       stream:'both' },
+  { date:'2026-03-30', subject:'Political Science',                                    stream:'both' },
+  { date:'2026-04-01', subject:'Elective English',                                     stream:'both' },
+  { date:'2026-04-04', subject:"Art Paper 5 (Crafts 'A')",                            stream:'both' },
+  { date:'2026-04-06', subject:'Geography',                                            stream:'both' },
+];
+
+// Subjects shown per stream in alert
+const ALERT_SUBJECTS = {
+  commerce: ['Business Studies','Accounts','Mathematics','Commerce','Economics'],
+  science:  ['Physics','Chemistry','Biology','Mathematics'],
+};
+
+// Normalise for matching (strip paper info for comparison)
+function normaliseSubj(s) {
+  return s.toLowerCase()
+    .replace(/\s*—.*$/,'')
+    .replace(/\s*-\s*paper.*$/,'')
+    .replace(/\s*\(.*\)/g,'')
+    .trim();
 }
 
-function renderScience() {
-  const query = document.getElementById('search-science').value.trim().toLowerCase();
-  const files = allFiles.filter(f => SUBJECT_FOLDERS_SCIENCE.some(s => f.path.startsWith(s + '/')));
-  renderList(files, document.getElementById('folders-science'), query, SUBJECT_FOLDERS_SCIENCE);
+function showExamAlert(currentStream) {
+  const alertEl = document.getElementById('examAlert');
+  const watchList = ALERT_SUBJECTS[currentStream] || [];
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  // Find next upcoming exam from watchList for this stream
+  const upcoming = ALL_EXAMS
+    .filter(e => {
+      if (e.stream !== 'both' && e.stream !== currentStream) return false;
+      const norm = normaliseSubj(e.subject);
+      return watchList.some(w => norm.includes(normaliseSubj(w)) || normaliseSubj(w).includes(norm));
+    })
+    .map(e => ({ ...e, dateObj: new Date(e.date) }))
+    .filter(e => { e.dateObj.setHours(0,0,0,0); return e.dateObj >= today; })
+    .sort((a,b) => a.dateObj - b.dateObj);
+
+  if (!upcoming.length) { alertEl.innerHTML = ''; return; }
+
+  const next = upcoming[0];
+  const diffMs   = next.dateObj - today;
+  const diffDays = Math.round(diffMs / (1000*60*60*24));
+
+  const dateStr = next.dateObj.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short' });
+  const daysStr = diffDays === 0 ? 'Today!' : diffDays === 1 ? 'Tomorrow' : `in ${diffDays} days`;
+
+  // Clean subject label
+  const subjLabel = next.subject.replace(/\s*—.*$/,'').replace(/\s*-\s*Paper.*$/i,'').replace(/\s*\(Theory\)/i,'').trim();
+
+  alertEl.innerHTML = `
+    <div class="exam-alert">
+      <span class="ea-icon">⚡</span>
+      <span class="ea-label">Next Exam</span>
+      <div class="ea-divider"></div>
+      <span class="ea-subject">${subjLabel}</span>
+      <span class="ea-date">${dateStr}</span>
+      <span class="ea-days"><strong>${daysStr}</strong></span>
+      <a class="ea-link" href="timetable.html">Full schedule →</a>
+    </div>
+  `;
+
+  // Push layout down
+  document.getElementById('mainLayout').style.marginTop = '36px';
 }
 
-async function loadResources() {
-  const merged = new Map();
+document.getElementById('search').addEventListener('input', render);
 
-  try {
-    const repoFiles = await fetchRepoFiles();
-    repoFiles.forEach(file => merged.set(createFileKey(file), file));
-  } catch (err) {
-    console.warn('Failed to auto-load repo files from GitHub API:', err);
-  }
-
-  try {
-    const res = await fetch('files.json');
-    if (res.ok) {
-      const rawItems = await res.json();
-      rawItems.map(normalizeEntry).filter(Boolean).forEach(file => merged.set(createFileKey(file), file));
-    }
-  } catch (err) {
-    console.warn('Failed to load optional files.json entries:', err);
-  }
-
-  allFiles = [...merged.values()];
-  if (!allFiles.length) {
-    $folders.innerHTML = '<div class="message error">⚠ No resources found. Add files in subject folders or provide files.json entries.</div>';
-    return;
-  }
-
-  renderCommerce();
-  renderScience();
+// Update alert when stream switches
+const _origSwitch = switchStream;
+function switchStream(s) {
+  stream = s;
+  document.getElementById('tab-commerce').classList.toggle('active', s==='commerce');
+  document.getElementById('tab-science').classList.toggle('active', s==='science');
+  render();
+  showExamAlert(s);
 }
 
-
-// STREAM TAB SWITCHER
-function switchTab(tab) {
-  document.getElementById('tab-commerce').style.display = tab === 'commerce' ? 'block' : 'none';
-  document.getElementById('tab-science').style.display  = tab === 'science'  ? 'block' : 'none';
-  document.querySelectorAll('.stream-tab').forEach((btn, i) => {
-    btn.classList.toggle('active', (tab === 'commerce' && i === 0) || (tab === 'science' && i === 1));
-  });
-}
-// Auto-switch tab based on URL hash
-if (window.location.hash === '#science') switchTab('science');
-
-document.getElementById('search').addEventListener('input', renderCommerce);
-document.getElementById('search-science').addEventListener('input', renderScience);
-loadResources();
+load();
+showExamAlert('commerce'); // default stream
 </script>
 </body>
 </html>
