@@ -463,8 +463,13 @@ const BRANCH = 'main';
 
 const STREAMS = {
   commerce: ['Economics','Accounts','Business Studies','Commerce','Maths-(creds-Abhinav)'],
-  science:  ['Physics','Chemistry','Biology','Maths-(creds-Abhinav)','Computer Science']
+  science:  ['Physics','Chemistry','Biology','Maths-(creds-Abhinav)','Computer Science','Biotechnology','Environmental Science']
 };
+
+// All known repo folders — used for fetching
+const ALL_SUBJECT_FOLDERS = ['Economics','Accounts','Business Studies','Commerce',
+  'Physics','Chemistry','Biology','Maths-(creds-Abhinav)','Computer Science',
+  'Biotechnology','Environmental Science'];
 const ICONS = {
   Economics:'📈', Accounts:'🧾', 'Business Studies':'🏢', Commerce:'💹',
   Physics:'⚛️', Chemistry:'🧪', Biology:'🌿', 'Computer Science':'💻',
@@ -509,62 +514,75 @@ function badge(path) {
 }
 
 async function load() {
+  const el = document.getElementById('folders');
+  el.innerHTML = '<div class="msg">⏳ Loading resources…</div>';
   const merged = new Map();
-  try {
-    const r = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`, { headers:{Accept:'application/vnd.github+json'} });
-    if (r.ok) {
-      const d = await r.json();
-      const allSubs = [...new Set([...STREAMS.commerce,...STREAMS.science])];
-      const paths = (d.tree||[]).filter(i=>i.type==='blob').map(i=>i.path)
-        .filter(p=>inSubjects(p,allSubs)&&allowed(p));
 
-      // Separate regular files from text pointer files
-      const regularPaths = paths.filter(p => { const e=p.split('.').pop().toLowerCase(); return ALLOWED.has(e); });
-      const textPaths    = paths.filter(p => /\/text\.?$/i.test(p));
-
-      // Add regular files directly
-      regularPaths.map(normalize).filter(Boolean).forEach(f=>merged.set(key(f),f));
-
-      // Fetch each text file and parse drive links out of it
-      await Promise.all(textPaths.map(async tp => {
-        try {
-          const rawUrl = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${tp.split('/').map(encodeURIComponent).join('/')}`;
-          const tr = await fetch(rawUrl);
-          if (!tr.ok) return;
-          const lines = (await tr.text()).trim().split('
-').filter(Boolean);
-          lines.forEach(line => {
-            line = line.trim();
-            let name, url;
-            if (line.includes('|')) {
-              const sep = line.indexOf('|');
-              name = line.slice(0, sep).trim();
-              url  = line.slice(sep + 1).trim();
-            } else if (/^https?:\/\//i.test(line)) {
-              url  = line;
-              name = tp.split('/').slice(-2,-1)[0] || 'File'; // use folder name
-            } else return;
-            if (!/^https?:\/\//i.test(url)) return;
-            // Build a fake path using the folder the text file lives in
-            const dir = tp.split('/').slice(0,-1).join('/');
-            const entry = {
-              path:    `${dir}/${name}`,
-              url:     url,
-              preview: drivePreview(url),
-              source:  'gdrive'
-            };
-            merged.set(key(entry), entry);
-          });
-        } catch {}
-      }));
-    }
-  } catch {}
+  // Step 1: files.json first (fast, no API needed)
   try {
     const r = await fetch('files.json');
-    if (r.ok) (await r.json()).map(normalize).filter(Boolean).forEach(f=>merged.set(key(f),f));
-  } catch {}
+    if (r.ok) {
+      const items = await r.json();
+      items.map(normalize).filter(Boolean).forEach(f => merged.set(key(f), f));
+    }
+  } catch(e) { console.warn('files.json failed', e); }
+
+  // Show immediately if we have something
+  if (merged.size > 0) { allFiles = [...merged.values()]; render(); }
+
+  // Step 2: Enhance with GitHub API
+  try {
+    const r = await fetch(
+      `https://api.github.com/repos/${OWNER}/${REPO}/git/trees/${BRANCH}?recursive=1`,
+      { headers: { Accept: 'application/vnd.github+json' } }
+    );
+    if (r.ok) {
+      const d = await r.json();
+      if (d.message) { console.warn('GitHub API:', d.message); }
+      else {
+        const paths = (d.tree||[])
+          .filter(i => i.type === 'blob')
+          .map(i => i.path)
+          .filter(p => inSubjects(p, ALL_SUBJECT_FOLDERS) && allowed(p));
+
+        const regular = paths.filter(p => ALLOWED.has(p.split('.').pop().toLowerCase()));
+        const textFiles = paths.filter(p => /\/text\.?$/i.test(p));
+
+        regular.map(normalize).filter(Boolean).forEach(f => merged.set(key(f), f));
+
+        await Promise.all(textFiles.map(async tp => {
+          try {
+            const rawUrl = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/' + BRANCH + '/' + tp.split('/').map(encodeURIComponent).join('/');
+            const tr = await fetch(rawUrl);
+            if (!tr.ok) return;
+            const lines = (await tr.text()).trim().split('\n').filter(Boolean);
+            const dir = tp.split('/').slice(0, -1).join('/');
+            lines.forEach(line => {
+              line = line.trim();
+              let name, url;
+              if (line.includes('|')) {
+                const sep = line.indexOf('|');
+                name = line.slice(0, sep).trim();
+                url  = line.slice(sep + 1).trim();
+              } else if (/^https?:\/\//i.test(line)) {
+                url  = line;
+                name = dir.split('/').pop() || 'File';
+              } else return;
+              if (!/^https?:\/\//i.test(url)) return;
+              const entry = { path: dir + '/' + name, url, preview: drivePreview(url), source: 'gdrive' };
+              merged.set(key(entry), entry);
+            });
+          } catch {}
+        }));
+      }
+    }
+  } catch(e) { console.warn('GitHub API failed:', e); }
+
   allFiles = [...merged.values()];
-  if (!allFiles.length) { document.getElementById('folders').innerHTML = '<div class="msg">⚠ No resources found.</div>'; return; }
+  if (!allFiles.length) {
+    el.innerHTML = '<div class="msg">⚠ No resources found. Check connection or try again.</div>';
+    return;
+  }
   render();
 }
 
