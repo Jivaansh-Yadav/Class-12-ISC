@@ -510,8 +510,9 @@ function normalize(item) {
   return { path: item.path, url: item.url, preview: drive ? drivePreview(item.url) : previewUrl(item.path), source: drive ? 'gdrive' : 'repo' };
 }
 
-function badge(path) {
-  const ext = path.split('.').pop().toLowerCase();
+function badge(path, source) {
+  let ext = path.split('.').pop().toLowerCase();
+  if (source === 'gdrive' && (ext === path.toLowerCase() || ext.length > 5)) ext = 'pdf';
   const cls = ext === 'pdf' ? 'badge-pdf' : (ext==='doc'||ext==='docx') ? 'badge-doc' : ext==='txt' ? 'badge-txt' : 'badge-def';
   return `<span class="f-badge ${cls}">${ext}</span>`;
 }
@@ -621,7 +622,7 @@ function render() {
     if (q) {
       const ul = document.createElement('ul');
       ul.className = 'file-list';
-      filtered.sort((a,b)=>a.path.localeCompare(b.path)).forEach(f=>ul.appendChild(fileLi(f, f.path.split('/').slice(1).join(' › '))));
+      filtered.sort((a,b)=>a.path.localeCompare(b.path)).forEach(f=>ul.appendChild(fileLi(f, f.path.split('/').pop())));
       det.appendChild(ul);
     } else {
       const rel  = filtered.map(f=>f.path.slice(subj.length+1));
@@ -660,8 +661,10 @@ function subtree(node, subj, fmap, prefix='') {
     li.appendChild(d); ul.appendChild(li);
   });
   [...node.files].sort((a,b)=>a.localeCompare(b)).forEach(fname => {
-    const rel  = prefix ? `${prefix}/${fname}` : fname;
-    const entry = fmap.get(`${subj}/${rel}`);
+    const rel   = prefix ? `${prefix}/${fname}` : fname;
+    const fpath = `${subj}/${rel}`;
+    // Try exact match first, then suffix match for drive entries
+    const entry = fmap.get(fpath) || [...fmap.values()].find(e => e.path === fpath || e.path.endsWith('/' + fname));
     if (entry) ul.appendChild(fileLi(entry, fname));
   });
   return ul;
@@ -671,7 +674,7 @@ function fileLi(entry, label) {
   const li = document.createElement('li');
   const a  = document.createElement('a');
   a.href = entry.url; a.className = 'file-link'; a.dataset.key = key(entry);
-  a.innerHTML = `${badge(entry.path)}<span class="f-name">${label}</span>`;
+  a.innerHTML = `${badge(entry.path, entry.source)}<span class="f-name">${label}</span>`;
   a.onclick = e => { e.preventDefault(); preview(entry); };
   li.appendChild(a); return li;
 }
