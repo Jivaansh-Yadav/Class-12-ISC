@@ -87,7 +87,7 @@ body::before {
 /* ── LAYOUT ── */
 .layout {
   display: grid;
-  grid-template-columns: 308px 1fr;
+  grid-template-columns: 340px 1fr;
   height: 100vh;
   padding-top: 50px;
 }
@@ -206,6 +206,7 @@ body::before {
   font-size: 12px; color: var(--fg3);
   transition: background .14s, color .14s;
   user-select: none;
+  min-width: 0;
 }
 .sub-folder > summary::-webkit-details-marker { display: none; }
 .sub-folder > summary:hover { background: var(--surface2); color: var(--fg2); }
@@ -225,6 +226,7 @@ body::before {
   font-size: 12.5px; cursor: pointer;
   transition: background .12s, color .12s;
   border: 1px solid transparent;
+  min-width: 0;
 }
 .file-link:hover { background: var(--surface2); color: var(--fg); }
 .file-link.active {
@@ -245,7 +247,7 @@ body::before {
 .badge-txt  { background: rgba(138,138,122,0.14); color: var(--txt); }
 .badge-def  { background: var(--surface2); color: var(--fg3); }
 
-.f-name { flex: 1; line-height: 1.35; }
+.f-name { flex: 1; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .msg { padding: 18px 12px; color: var(--fg3); font-size: 12px; font-family: 'DM Mono', monospace; }
 
 /* ── VIEWER ── */
@@ -267,6 +269,7 @@ body::before {
   flex: 1;
   font-family: 'DM Mono', monospace; font-size: 11px; color: var(--fg3);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  min-width: 0;
 }
 .v-path .vp-file { color: var(--fg2); }
 .v-btns { display: flex; gap: 6px; }
