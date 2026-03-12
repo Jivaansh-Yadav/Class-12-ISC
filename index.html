@@ -59,9 +59,45 @@ body::before{
     linear-gradient(90deg,rgba(122,184,106,0.025) 1px,transparent 1px);
   background-size:52px 52px;
 }
-#cur,#cur-ring{position:fixed;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);z-index:10000;}
-#cur{width:7px;height:7px;background:var(--accent);transition:width .15s,height .15s,background .3s;}
-#cur-ring{width:30px;height:30px;border:1px solid rgba(122,184,106,.3);z-index:9997;transition:width .18s,height .18s;}
+
+/* ════ CURSOR ════ */
+#cur,#cur-ring{position:fixed;pointer-events:none;top:0;left:0;will-change:transform;}
+#cur{
+  --s:8px;
+  width:var(--s);height:var(--s);
+  background:var(--accent);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--accent),0 0 20px var(--accent);
+  z-index:10001;
+  opacity:0;
+  transition:
+    --s .18s cubic-bezier(.34,1.56,.64,1),
+    width .18s cubic-bezier(.34,1.56,.64,1),
+    height .18s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .25s,opacity .2s;
+}
+#cur-ring{
+  --rs:22px;
+  width:var(--rs);height:var(--rs);
+  border:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent);
+  border-radius:50%;
+  z-index:10000;
+  opacity:0;
+  transition:
+    width .25s cubic-bezier(.34,1.56,.64,1),
+    height .25s cubic-bezier(.34,1.56,.64,1),
+    border-color .25s,
+    border-radius .25s,
+    box-shadow .25s,
+    opacity .3s;
+}
+.cur-trail{
+  position:fixed;pointer-events:none;z-index:9999;top:0;left:0;
+  width:4px;height:4px;border-radius:50%;
+  background:var(--accent);opacity:0;
+  will-change:transform;
+}
+
 body{animation:pgIn .4s ease both;}
 @keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes breathe{0%,100%{opacity:.45}50%{opacity:.85}}
@@ -561,8 +597,14 @@ footer a:hover{color:var(--fg2);}
 </head>
 <body>
 
+<!-- CURSOR: dot + trailing ring + 4 ghost trails -->
 <div id="cur"></div>
 <div id="cur-ring"></div>
+<div class="cur-trail" id="t0"></div>
+<div class="cur-trail" id="t1"></div>
+<div class="cur-trail" id="t2"></div>
+<div class="cur-trail" id="t3"></div>
+
 <div class="grid-bg"></div>
 
 <!-- LOCK MODAL -->
@@ -737,13 +779,117 @@ footer a:hover{color:var(--fg2);}
 </footer>
 
 <script>
-/* CURSOR */
-const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';});
-document.querySelectorAll('a,button,.nav-card,.nav-pill').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.width='13px';cur.style.height='13px';ring.style.width='42px';ring.style.height='42px';});
-  el.addEventListener('mouseleave',()=>{cur.style.width='7px';cur.style.height='7px';ring.style.width='30px';ring.style.height='30px';});
-});
+/* ════ CURSOR (RAF lerp + ghost trails) ════ */
+(()=>{
+  const dot    = document.getElementById('cur');
+  const ring   = document.getElementById('cur-ring');
+  const trails = [0,1,2,3].map(i => document.getElementById('t'+i));
+
+  let mx = -200, my = -200;   // off-screen until first move
+  let rx = mx,   ry = my;
+  const HIST = 20;
+  let history = Array.from({length:HIST}, () => [mx, my]);
+  let visible = false;
+  let isHover = false;
+  let dotW = 8, ringW = 22;   // track current sizes for centering
+
+  const LERP = 0.22;
+  function lerp(a,b,t){ return a+(b-a)*t; }
+
+  // ── Center helper: translate so element is centered on (x,y) ────────────────
+  // We read the element's actual offsetWidth at transition end to stay accurate,
+  // but during RAF we use the tracked variables for performance.
+  function centerDot(x, y, scale) {
+    const h = dotW / 2;
+    dot.style.transform = `translate(${x-h}px,${y-h}px)${scale ? ' scale('+scale+')' : ''}`;
+  }
+  function centerRing(x, y) {
+    const h = ringW / 2;
+    ring.style.transform = `translate(${x-h}px,${y-h}px)`;
+  }
+
+  // ── Mouse move: dot snaps instantly ─────────────────────────────────────────
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    if (!visible) {
+      visible = true;
+      dot.style.opacity  = '1';
+      ring.style.opacity = '0.85';
+    }
+    centerDot(mx, my);
+  });
+
+  document.addEventListener('mouseleave', () => {
+    visible = false;
+    dot.style.opacity  = '0';
+    ring.style.opacity = '0';
+    trails.forEach(t => t.style.opacity = '0');
+  });
+
+  // ── Hover states ─────────────────────────────────────────────────────────────
+  const HOVER = 'a,button,.nav-card,.nav-pill,.nav-card--locked,.preset,.cs-btn,.color-trigger,.disc-btn,.lock-close,.reset-btn,.apply-btn,.nav-link';
+
+  function setHover(on) {
+    isHover = on;
+    if (on) {
+      dotW = 10; ringW = 38;
+      dot.style.width  = dotW + 'px';
+      dot.style.height = dotW + 'px';
+      dot.style.boxShadow = '0 0 14px var(--accent),0 0 32px var(--accent)';
+      ring.style.width  = ringW + 'px';
+      ring.style.height = ringW + 'px';
+      ring.style.borderRadius = '10px';
+      ring.style.borderColor  = 'color-mix(in srgb,var(--accent) 65%,transparent)';
+      ring.style.boxShadow    = '0 0 14px color-mix(in srgb,var(--accent) 20%,transparent)';
+    } else {
+      dotW = 8; ringW = 22;
+      dot.style.width  = dotW + 'px';
+      dot.style.height = dotW + 'px';
+      dot.style.boxShadow = '0 0 8px var(--accent),0 0 20px var(--accent)';
+      ring.style.width  = ringW + 'px';
+      ring.style.height = ringW + 'px';
+      ring.style.borderRadius = '50%';
+      ring.style.borderColor  = 'color-mix(in srgb,var(--accent) 40%,transparent)';
+      ring.style.boxShadow    = 'none';
+    }
+  }
+
+  document.addEventListener('mouseover', e => {
+    setHover(!!e.target.closest(HOVER));
+  });
+
+  // ── Click: dot squish ────────────────────────────────────────────────────────
+  document.addEventListener('mousedown', () => {
+    centerDot(mx, my, 0.5);
+    ring.style.borderColor = 'color-mix(in srgb,var(--accent) 90%,transparent)';
+  });
+  document.addEventListener('mouseup', () => {
+    centerDot(mx, my, 1);
+    setHover(isHover);
+  });
+
+  // ── RAF loop: ring lerps, trails sample history ──────────────────────────────
+  const TRAIL_OFFSETS = [3, 6, 9, 13];
+
+  function tick() {
+    rx = lerp(rx, mx, LERP);
+    ry = lerp(ry, my, LERP);
+    centerRing(rx, ry);
+
+    history.unshift([mx, my]);
+    if (history.length > HIST) history.pop();
+
+    trails.forEach((el, i) => {
+      const idx = Math.min(TRAIL_OFFSETS[i], history.length - 1);
+      const [tx, ty] = history[idx];
+      el.style.transform = `translate(${tx - 2}px,${ty - 2}px)`;
+      el.style.opacity   = visible ? (0.18 - i * 0.04).toFixed(3) : '0';
+    });
+
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
 
 /* ════ LOCK MODAL ════ */
 function triggerLocked(){
