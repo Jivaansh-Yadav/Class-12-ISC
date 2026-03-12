@@ -77,17 +77,17 @@ body::before{
     box-shadow .25s,opacity .2s;
 }
 #cur-ring{
-  --rs:34px;
+  --rs:22px;
   width:var(--rs);height:var(--rs);
   border:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent);
   border-radius:50%;
   z-index:10000;
   opacity:0;
   transition:
-    width .3s cubic-bezier(.34,1.56,.64,1),
-    height .3s cubic-bezier(.34,1.56,.64,1),
+    width .25s cubic-bezier(.34,1.56,.64,1),
+    height .25s cubic-bezier(.34,1.56,.64,1),
     border-color .25s,
-    border-radius .28s,
+    border-radius .25s,
     box-shadow .25s,
     opacity .3s;
 }
@@ -838,7 +838,7 @@ footer a:hover{color:var(--fg2);}
       dot.style.boxShadow = '0 0 14px var(--accent),0 0 32px var(--accent)';
       ring.style.width  = ringW + 'px';
       ring.style.height = ringW + 'px';
-      ring.style.borderRadius = '12px';
+      ring.style.borderRadius = '10px';
       ring.style.borderColor  = 'color-mix(in srgb,var(--accent) 65%,transparent)';
       ring.style.boxShadow    = '0 0 14px color-mix(in srgb,var(--accent) 20%,transparent)';
     } else {
