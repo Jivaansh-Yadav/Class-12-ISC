@@ -5,13 +5,7 @@ materials in one place. **New updates will be coming soon**
 
 🔗 Live Website: https://class-12-isc.vercel.app/
 
-## 📂 Subjects Included
-
--    Economics
--    Accounts
--    Business Studies
--    Commerce
--    Maths
+Now updated with both streams, Commerce and Science
 ## 🚀 Features
 
 -   Organized subject-wise folders
