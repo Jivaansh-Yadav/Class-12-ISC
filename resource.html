@@ -988,6 +988,21 @@ function resolveDeepLink() {
   }
 
   preview(entry);
+
+  // After preview() highlights the active link, open every ancestor
+  // <details> element (subject accordion + any sub-folder accordions)
+  // so the file is actually visible in the sidebar tree.
+  requestAnimationFrame(() => {
+    const activeLink = document.querySelector(`.file-link[data-key="${CSS.escape(key(entry))}"]`);
+    if (!activeLink) return;
+    let node = activeLink.parentElement;
+    while (node && node.id !== 'folders') {
+      if (node.tagName === 'DETAILS') node.open = true;
+      node = node.parentElement;
+    }
+    // Scroll the active link into view after expanding
+    activeLink.scrollIntoView({ block: 'nearest' });
+  });
 }
 
 async function load() {
