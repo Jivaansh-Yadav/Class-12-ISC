@@ -999,12 +999,13 @@ function resolveDeepLink() {
     return;
   }
 
-  // FOLDER path — open all matching <details data-folder>
+  // FOLDER path — only open ancestors of the target + the target itself
   requestAnimationFrame(() => {
     let scrollTarget = null;
     document.querySelectorAll('details[data-folder]').forEach(det => {
       const f = det.dataset.folder;
-      if (p.startsWith(f) || f.startsWith(p)) {
+      // Open only if this folder IS the target or is a direct ancestor of it
+      if (p.startsWith(f + '/') || f === p) {
         det.open = true;
         if (f === p) scrollTarget = det;
       }
