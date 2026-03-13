@@ -972,36 +972,57 @@ function copyShareLink() {
 }
 
 function resolveDeepLink() {
-  const hash = location.hash.slice(1); // remove leading #
+  const hash = location.hash.slice(1);
   if (!hash) return;
-  const path = decodeURIComponent(hash);
+  const p = decodeURIComponent(hash);
 
-  const entry = allFiles.find(f => f.path === path);
-  if (!entry) return;
-
-  // Switch to the correct stream tab if needed
+  // Switch to correct stream first
   const matchedStream = Object.entries(STREAMS).find(([, subs]) =>
-    subs.some(s => path.startsWith(s + '/'))
+    subs.some(s => p.startsWith(s + '/') || p === s)
   );
-  if (matchedStream && matchedStream[0] !== stream) {
-    switchStream(matchedStream[0]);
+  if (matchedStream && matchedStream[0] !== stream) switchStream(matchedStream[0]);
+
+  // FILE path?
+  const entry = allFiles.find(f => f.path === p);
+  if (entry) {
+    preview(entry);
+    requestAnimationFrame(() => {
+      const activeLink = document.querySelector('.file-link.active');
+      if (!activeLink) return;
+      let node = activeLink.parentElement;
+      while (node && node.id !== 'folders') {
+        if (node.tagName === 'DETAILS') node.open = true;
+        node = node.parentElement;
+      }
+      activeLink.scrollIntoView({ block: 'nearest' });
+    });
+    return;
   }
 
-  preview(entry);
-
-  // After preview() highlights the active link, open every ancestor
-  // <details> element (subject accordion + any sub-folder accordions)
-  // so the file is actually visible in the sidebar tree.
+  // FOLDER path — open all matching <details data-folder>
   requestAnimationFrame(() => {
-    const activeLink = document.querySelector(`.file-link[data-key="${CSS.escape(key(entry))}"]`);
-    if (!activeLink) return;
-    let node = activeLink.parentElement;
-    while (node && node.id !== 'folders') {
-      if (node.tagName === 'DETAILS') node.open = true;
-      node = node.parentElement;
-    }
-    // Scroll the active link into view after expanding
-    activeLink.scrollIntoView({ block: 'nearest' });
+    let scrollTarget = null;
+    document.querySelectorAll('details[data-folder]').forEach(det => {
+      const f = det.dataset.folder;
+      if (p.startsWith(f) || f.startsWith(p)) {
+        det.open = true;
+        if (f === p) scrollTarget = det;
+      }
+    });
+    if (scrollTarget) scrollTarget.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  });
+}
+
+function shareFolderLink(folderPath) {
+  history.replaceState(null, '', '#' + encodeURIComponent(folderPath));
+  navigator.clipboard.writeText(location.href).then(() => {
+    showToast('🔗 Folder link copied!');
+  }).catch(() => {
+    const inp = document.createElement('input');
+    inp.value = location.href;
+    document.body.appendChild(inp); inp.select();
+    document.execCommand('copy'); inp.remove();
+    showToast('🔗 Folder link copied!');
   });
 }
 
@@ -1081,10 +1102,13 @@ function render() {
     const filtered = streamFiles.filter(f => f.path.startsWith(subj+'/') && f.path.toLowerCase().includes(q));
     if (!filtered.length) return;
     const det = document.createElement('details'); det.className = 'subject';
+    det.dataset.folder = subj;
     if (q) det.open = true;
     const disp = subj.replace(/-(creds-.+)$/i,'');
     const sum  = document.createElement('summary');
+    sum.title = 'Shift+click to copy folder link';
     sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
+    sum.addEventListener('click', e => { if (e.shiftKey) { e.preventDefault(); shareFolderLink(subj); } });
     det.appendChild(sum);
     if (q) {
       const ul = document.createElement('ul'); ul.className = 'file-list';
@@ -1118,8 +1142,12 @@ function subtree(node, subj, fmap, prefix='') {
   [...node.dirs.keys()].sort((a,b)=>a.localeCompare(b)).forEach(name => {
     const li = document.createElement('li');
     const d  = document.createElement('details'); d.className = 'sub-folder';
+    const folderPath = `${subj}/${prefix ? prefix+'/' : ''}${name}`;
+    d.dataset.folder = folderPath;
     const s  = document.createElement('summary');
+    s.title = 'Shift+click to copy folder link';
     s.innerHTML = `<span>📁</span><span style="flex:1;font-size:11.5px">${name}</span><span class="sf-arr">▶</span>`;
+    s.addEventListener('click', e => { if (e.shiftKey) { e.preventDefault(); shareFolderLink(folderPath); } });
     d.appendChild(s);
     d.appendChild(subtree(node.dirs.get(name), subj, fmap, prefix ? `${prefix}/${name}` : name));
     li.appendChild(d); ul.appendChild(li);
