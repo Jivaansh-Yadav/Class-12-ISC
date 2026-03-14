@@ -46,17 +46,35 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 nav{
   position:sticky;top:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;height:50px;
-  background:rgba(17,18,16,0.95);backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--border);
+  padding:0 24px;height:52px;
+  background:rgba(17,18,16,0.97);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border2);
 }
 .logo{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--fg);
-  text-decoration:none;display:flex;align-items:center;gap:8px;}
-.logo-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);transition:background .3s,box-shadow .3s;}
-.nav-right{display:flex;align-items:center;gap:6px;}
-.nav-link{text-decoration:none;color:var(--fg3);font-family:'DM Mono',monospace;font-size:11px;
-  padding:5px 12px;border:1px solid transparent;border-radius:6px;transition:all .18s;}
-.nav-link:hover{color:var(--fg2);border-color:var(--border2);background:var(--surface);}
+  text-decoration:none;display:flex;align-items:center;gap:9px;}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);transition:background .3s,box-shadow .3s;flex-shrink:0;}
+.nav-right{display:flex;align-items:center;gap:5px;}
+.nav-link{
+  text-decoration:none;
+  color:var(--fg2);
+  font-family:'DM Mono',monospace;font-size:11.5px;
+  padding:6px 14px;
+  border:1px solid var(--border2);
+  border-radius:7px;
+  background:var(--surface);
+  transition:all .18s;
+  letter-spacing:.2px;
+}
+.nav-link:hover{
+  color:var(--fg);
+  border-color:rgba(255,255,255,0.12);
+  background:var(--surface2);
+}
+.nav-link.active{
+  color:var(--accent);
+  border-color:rgba(122,184,106,0.35);
+  background:var(--accent-lo);
+}
 
 /* THEME PICKER */
 .picker-wrap{position:relative;}
@@ -250,10 +268,9 @@ footer{
 <nav>
   <a class="logo" href="/">
     <span class="logo-dot" id="logoDot"></span>
-    ISC.exe
+    ISC<span style="color:var(--accent)">.exe</span>
   </a>
   <div class="nav-right">
-    <!-- theme picker -->
     <div class="picker-wrap" id="pickerWrap">
       <button class="color-trigger" id="colorTrigger" onclick="togglePicker()">
         <span class="trigger-swatch" id="triggerSwatch"></span>
@@ -279,8 +296,10 @@ footer{
         </div>
       </div>
     </div>
+    <div style="width:1px;height:18px;background:var(--border2);margin:0 2px;flex-shrink:0"></div>
     <a class="nav-link" href="/">← Home</a>
     <a class="nav-link" href="/resource">Resources</a>
+    <a class="nav-link active">📅 Timetable</a>
   </div>
 </nav>
 
