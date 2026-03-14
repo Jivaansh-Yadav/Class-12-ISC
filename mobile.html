@@ -379,8 +379,12 @@ nav{
   overflow:hidden;
 }
 .sheet.open{transform:translateY(0);}
-.sheet-handle{flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:10px 0 4px;}
-.handle-bar{width:36px;height:4px;border-radius:2px;background:var(--border2);}
+.sheet-handle{
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  padding:10px 0 6px;cursor:pointer;touch-action:none;
+}
+.handle-bar{width:44px;height:5px;border-radius:3px;background:var(--border2);transition:background .15s,width .15s;}
+.sheet-handle:active .handle-bar{background:var(--fg3);width:56px;}
 .sheet-infobar{
   flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 14px;
   height:40px;background:color-mix(in srgb, var(--accent) 4%, var(--bg2));
@@ -488,7 +492,7 @@ nav{
     <p class="disc-body">
       ISC.exe is a <strong>free aggregator</strong> of study notes and resources found publicly online.
       We hold <strong>no copyrights, licences, or ownership</strong> over any material.<br/><br/>
-      Rightful owners may contact <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> for removal.
+      Rightful owners may contact <a href="/cdn-cgi/l/email-protection#076f756868746f6e476372646c2964686a"><span class="__cf_email__" data-cfemail="cea6bca1a1bda6a78eaabbada5e0ada1a3">[email&#160;protected]</span></a> for removal.
     </p>
   </div>
 </div>
@@ -558,7 +562,7 @@ nav{
         </a>
       </div>
     </div>
-    <div class="disc-inline">⚠ Free aggregator of public study notes — we hold no ownership. Contact <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> for removal.</div>
+    <div class="disc-inline">⚠ Free aggregator of public study notes — we hold no ownership. Contact <a href="/cdn-cgi/l/email-protection#3e564c51514d56577e5a4b5d55105d5153"><span class="__cf_email__" data-cfemail="81e9f3eeeef2e9e8c1e5f4e2eaafe2eeec">[email&#160;protected]</span></a> for removal.</div>
   </div>
 </div>
 
@@ -619,7 +623,7 @@ nav{
       Reload
     </button>
     <span class="tb-spacer"></span>
-    <button class="tbtn" onclick="closeSheet()">✕</button>
+    <button class="tbtn" onclick="closeSheet()" style="color:var(--fg2);font-size:16px;padding:6px 14px;border-color:var(--border2);">✕ Close</button>
   </div>
   <div class="sheet-body" id="sheetBody">
     <div class="sheet-empty" id="sheetEmpty">
@@ -891,6 +895,8 @@ function openSheet(entry){
 function onFrameLoad(){document.getElementById('sheetLoader').classList.add('hidden');}
 
 function closeSheet(){
+  _sheet.style.transition='';
+  _sheet.style.transform='';
   document.getElementById('backdrop').classList.remove('open');
   document.getElementById('sheet').classList.remove('open');
   document.body.style.overflow='';
@@ -911,10 +917,35 @@ function reloadSheet(){
   setTimeout(()=>loader.classList.add('hidden'),9000);
 }
 
-let _sy=0;
+let _sy=0, _dragging=false;
 const _sheet=document.getElementById('sheet');
-_sheet.addEventListener('touchstart',e=>{_sy=e.touches[0].clientY;},{passive:true});
-_sheet.addEventListener('touchmove',e=>{if(e.touches[0].clientY-_sy>75)closeSheet();},{passive:true});
+const _handle=document.querySelector('.sheet-handle');
+
+/* tap the handle bar = close */
+_handle.addEventListener('click', closeSheet);
+
+_sheet.addEventListener('touchstart',e=>{
+  _sy=e.touches[0].clientY;
+  _dragging=true;
+  _sheet.style.transition='none';
+},{passive:true});
+
+_sheet.addEventListener('touchmove',e=>{
+  if(!_dragging) return;
+  const dy=e.touches[0].clientY-_sy;
+  if(dy>0) _sheet.style.transform=`translateY(${dy}px)`;
+},{passive:true});
+
+_sheet.addEventListener('touchend',e=>{
+  _dragging=false;
+  _sheet.style.transition='';
+  const dy=e.changedTouches[0].clientY-_sy;
+  if(dy>80){
+    closeSheet();
+  } else {
+    _sheet.style.transform='translateY(0)';
+  }
+},{passive:true});
 
 /* ── EXAM ALERT ── */
 const EXAMS_ALERT=[
@@ -986,24 +1017,27 @@ function renderTimetable(){
     if(month!==lastMonth){
       lastMonth=month;
       const div=document.createElement('div');
-      div.style.cssText='padding:8px 6px 4px;font-family:\'DM Mono\',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--fg4);border-bottom:1px solid var(--border);margin-bottom:2px;';
+      div.style.cssText="padding:8px 6px 4px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--fg4);border-bottom:1px solid var(--border);margin-bottom:2px;";
       div.textContent=month;
       wrap.appendChild(div);
     }
     const row=document.createElement('div');
-    const accentColor=ttStream==='commerce'?'var(--amber)':'var(--cyan)';
-    row.style.cssText=`display:flex;align-items:center;gap:10px;padding:11px 8px;border-bottom:1px solid rgba(39,43,37,.5);border-radius:6px;margin-bottom:2px;transition:background .12s;${isPast?'opacity:.3;':isToday?`background:rgba(122,184,106,.04);border-left:2px solid var(--accent);`:''}`;
-    row.innerHTML=`
-      <div style="flex-shrink:0;text-align:center;min-width:48px;">
-        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--fg4);text-transform:uppercase;letter-spacing:.5px">${exam.day.slice(0,3)}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--fg2)">${d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</div>
-      </div>
-      <div style="flex:1;min-width:0;">
-        ${isToday?`<div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Today</div>`:''}
-        <div style="font-size:13px;font-weight:500;color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${exam.subject}</div>
-        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--fg4);margin-top:2px">${exam.time}</div>
-      </div>
-      <span style="font-family:'DM Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;background:rgba(122,184,106,.07);color:${accentColor};flex-shrink:0;border:1px solid rgba(122,184,106,.15)">${exam.stream==='both'?'ALL':exam.stream.toUpperCase()}</span>`;
+    const isCommerce=ttStream==='commerce';
+    const accentColor=isCommerce?'var(--amber)':'var(--cyan)';
+    let rowStyle='display:flex;align-items:center;gap:10px;padding:11px 8px;border-bottom:1px solid rgba(39,43,37,.5);border-radius:6px;margin-bottom:2px;transition:background .12s;';
+    if(isPast) rowStyle+='opacity:.3;';
+    else if(isToday) rowStyle+='background:rgba(122,184,106,.04);border-left:2px solid var(--accent);';
+    row.style.cssText=rowStyle;
+    const todayBadge=isToday?'<div style="font-family:\'DM Mono\',monospace;font-size:8px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">Today</div>':'';
+    row.innerHTML='<div style="flex-shrink:0;text-align:center;min-width:48px;">'
+      +'<div style="font-family:\'DM Mono\',monospace;font-size:9px;color:var(--fg4);text-transform:uppercase;letter-spacing:.5px">'+exam.day.slice(0,3)+'</div>'
+      +'<div style="font-family:\'DM Mono\',monospace;font-size:12px;color:var(--fg2)">'+d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+'</div>'
+      +'</div>'
+      +'<div style="flex:1;min-width:0;">'+todayBadge
+      +'<div style="font-size:13px;font-weight:500;color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+exam.subject+'</div>'
+      +'<div style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--fg4);margin-top:2px">'+exam.time+'</div>'
+      +'</div>'
+      +'<span style="font-family:\'DM Mono\',monospace;font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(122,184,106,.07);color:'+accentColor+';flex-shrink:0;border:1px solid rgba(122,184,106,.12)">'+(exam.stream==='both'?'ALL':exam.stream.toUpperCase())+'</span>';
     wrap.appendChild(row);
   });
   if(!wrap.children.length) wrap.innerHTML='<div class="res-msg">No exams for this stream.</div>';
