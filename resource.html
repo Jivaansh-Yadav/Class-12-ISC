@@ -255,17 +255,21 @@ body::before {
 .subject > summary {
   list-style: none; cursor: pointer;
   display: flex; align-items: center; gap: 8px;
-  padding: 9px 10px; border-radius: 8px;
+  padding: 9px 10px 9px 8px; border-radius: 8px;
   color: var(--fg); font-size: 13px; font-weight: 500;
   transition: background .14s, color .14s; user-select: none;
   border: 1px solid transparent;
+  border-left: 2px solid var(--subj-color);
+  opacity: 0.9;
 }
 .subject > summary::-webkit-details-marker { display: none; }
-.subject > summary:hover { background: var(--surface); border-color: var(--border2); }
+.subject > summary:hover { background: var(--surface); border-color: transparent; border-left-color: var(--subj-color); opacity: 1; }
 .subject[open] > summary {
   color: var(--fg);
-  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
-  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  background: var(--surface);
+  border-color: transparent;
+  border-left: 2px solid var(--subj-color);
+  opacity: 1;
 }
 .s-icon { font-size: 15px; flex-shrink: 0; }
 .s-name { flex: 1; }
@@ -276,11 +280,12 @@ body::before {
   padding: 2px 7px; border-radius: 9px; transition: all .14s;
 }
 .subject[open] .s-count {
-  color: var(--accent); background: var(--accent-lo);
-  border-color: rgba(122,184,106,0.3);
+  color: var(--subj-color);
+  background: var(--accent-lo);
+  border-color: var(--subj-color);
 }
 .s-arr { font-size: 7px; color: var(--fg2); transition: transform .2s; flex-shrink: 0; }
-.subject[open] .s-arr { transform: rotate(90deg); color: var(--accent); }
+.subject[open] .s-arr { transform: rotate(90deg); color: var(--subj-color); }
 
 .sub-folder { margin: 2px 0 2px 8px; border-radius: 6px; }
 .sub-folder > summary {
@@ -707,6 +712,12 @@ const ICONS = {
   Physics:'⚛️', Chemistry:'🧪', Biology:'🌿', 'Computer Science':'💻',
   'Maths':'📐', Biotechnology:'🔬', 'Environmental Science':'🌍'
 };
+const COLORS = {
+  Economics:'#639922', Accounts:'#378add', 'Business Studies':'#ba7517',
+  Commerce:'#d4537e', Maths:'#7f77dd', Physics:'#5fd4e8',
+  Chemistry:'#5fffa0', Biology:'#7ab86a', 'Computer Science':'#60b3ff',
+  Biotechnology:'#bf5fff', 'Environmental Science':'#ffbe3f'
+};
 const ALLOWED = new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 
 let allFiles = [];
@@ -875,6 +886,8 @@ function render() {
     if (!filtered.length) return;
     const det = document.createElement('details'); det.className = 'subject';
     det.dataset.folder = subj;
+    const subjColor = COLORS[subj] || 'var(--accent)';
+    det.style.setProperty('--subj-color', subjColor);
     if (q) det.open = true;
     const disp = subj.replace(/-(creds-.+)$/i,'');
     const sum  = document.createElement('summary');
