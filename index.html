@@ -128,7 +128,7 @@ body{animation:pgIn .4s ease both;}
 .bottom-dock{
   position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
   z-index:600;
-  width:fit-content;  /* ADD THIS */
+  width:fit-content;
   display:flex;align-items:center;gap:3px;
   background:rgba(14,16,13,0.94);
   border:1px solid var(--border2);
@@ -213,6 +213,71 @@ body{animation:pgIn .4s ease both;}
 .disc-body a{color:rgba(212,168,75,.85);text-decoration:none;border-bottom:1px solid rgba(212,168,75,.35);}
 .disc-body a:hover{color:#d4a84b;}
 
+/* ════ GRADIENT THEME SUPPORT ════ */
+body.grad-mode .hero-title .l1,
+body.grad-mode .hero-sub{
+  background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+body.grad-mode .row-card{
+  border-left:2px solid transparent;
+  border-image:linear-gradient(180deg,var(--grad-a),var(--grad-b)) 1;
+}
+body.grad-mode .eyebrow-line{
+  background:linear-gradient(90deg,var(--grad-a),var(--grad-b)) !important;
+}
+body.grad-mode .eyebrow em{
+  background:linear-gradient(135deg,var(--grad-a),var(--grad-b));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+body.grad-mode .nav-brand-mark{
+  background:linear-gradient(135deg,var(--grad-a),var(--grad-b)) !important;
+}
+body.grad-mode .trigger-swatch{
+  background:linear-gradient(135deg,var(--grad-a),var(--grad-b)) !important;
+}
+body.grad-mode .ps-tab.active{
+  color:var(--grad-a);
+}
+body.grad-mode .bottom-dock .ps-pip{
+  background:var(--grad-a) !important;
+}
+
+/* Picker mode toggle */
+.picker-mode-toggle{
+  display:flex;gap:3px;
+  background:rgba(255,255,255,.04);border-radius:7px;padding:3px;
+  margin:8px 13px 6px;
+}
+.pmt-btn{
+  flex:1;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.2px;
+  text-transform:uppercase;padding:5px 0;border-radius:5px;
+  border:none;background:transparent;color:var(--fg3);
+  transition:all .15s;
+}
+.pmt-btn.active{
+  background:var(--surface2);color:var(--fg2);
+  box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+
+/* Gradient presets */
+.grad-presets{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:0 13px 11px;}
+.grad-preset{
+  aspect-ratio:1;border-radius:6px;border:2px solid transparent;
+  position:relative;transition:transform .14s,border-color .14s;outline:none;
+}
+.grad-preset:hover{transform:scale(1.13);}
+.grad-preset.active{border-color:rgba(255,255,255,.65);}
+.grad-preset.active::after{
+  content:'✓';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;
+  font-size:9px;color:rgba(0,0,0,.55);font-weight:700;
+}
+
 /* Color picker */
 .picker-wrap{position:relative;}
 .color-trigger{
@@ -295,15 +360,36 @@ body{animation:pgIn .4s ease both;}
 }
 .eyebrow-line{width:28px;height:1px;background:var(--accent);transition:background .3s;}
 .eyebrow em{color:var(--accent);font-style:normal;transition:color .3s;}
+
+/* ════ HERO TITLE — new visual hierarchy ════ */
 .hero-title{
-  font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5.5vw,5rem);
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,5.5vw,5rem);
   font-weight:400;line-height:.96;letter-spacing:-.5px;
   margin-bottom:16px;opacity:0;animation:up .7s .22s ease forwards;
   position:relative;z-index:1;
 }
-.hero-title .l1{color:var(--fg);display:block;}
-.hero-title .l2{color:rgba(221,227,218,.18);font-style:italic;display:block;}
-.hero-title .l3{color:var(--accent);display:block;transition:color .3s;}
+/* "Study smarter," — big, accent coloured, the hero statement */
+.hero-title .l1{
+  color:var(--accent);
+  display:block;
+  font-weight:500;
+  transition:color .3s;
+}
+.hero-title .l1 em{
+  font-style:italic;
+  font-weight:400;
+}
+/* "not harder." — faded whisper underneath */
+.hero-title .l2{
+  color:rgba(221,227,218,.2);
+  font-style:italic;
+  font-weight:300;
+  display:block;
+  font-size:.82em;
+  letter-spacing:.5px;
+}
+
 .hero-sub{
   font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--accent);
   margin-bottom:12px;opacity:0;animation:up .7s .38s ease forwards;
@@ -394,25 +480,6 @@ body{animation:pgIn .4s ease both;}
 }
 .row-card:hover .rc-arrow{color:var(--accent);transform:translateX(3px);}
 
-/* ════ STATS BAR ════ */
-.stats-bar{
-  position:relative;z-index:1;
-  border-top:1px solid var(--border);display:flex;
-  opacity:0;animation:up .6s .9s ease forwards;
-}
-.stat-b{flex:1;padding:18px 36px;border-right:1px solid var(--border);}
-.stat-b:last-child{border-right:none;}
-.stat-b-n{font-family:'Lora',serif;font-size:1.9rem;font-weight:400;color:var(--fg);line-height:1;display:block;}
-.stat-b-l{font-family:'DM Mono',monospace;font-size:9px;color:var(--fg3);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px;display:block;}
-
-footer{
-  position:relative;z-index:1;border-top:1px solid var(--border);
-  padding:16px 28px;display:flex;justify-content:space-between;align-items:center;
-  font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);
-}
-footer a{color:var(--fg3);text-decoration:none;transition:color .18s;}
-footer a:hover{color:var(--fg2);}
-
 /* ════ COMMUNITY STRIP ════ */
 .community-strip{
   display:flex;align-items:center;gap:14px;
@@ -439,11 +506,8 @@ footer a:hover{color:var(--fg2);}
 
 @media(max-width:700px){
   .nav-cards{max-width:100%;}
-  .stats-bar{flex-wrap:wrap;}
-  .stat-b{flex:1 1 50%;border-right:none;border-bottom:1px solid var(--border);}
   .bottom-dock{bottom:12px;padding:5px 6px;}
   .ps-tab{padding:5px 10px;font-size:9.5px;}
-  footer{flex-direction:column;gap:8px;text-align:center;}
   .community-strip{flex-wrap:wrap;justify-content:center;}
 }
 </style>
@@ -492,17 +556,27 @@ footer a:hover{color:var(--fg2);}
       </button>
       <div class="picker-panel" id="pickerPanel">
         <div class="picker-head">
-          <span class="picker-head-title">Accent Color</span>
+          <span class="picker-head-title">Theme</span>
           <button class="picker-head-close" onclick="togglePicker()">✕</button>
         </div>
-        <div class="picker-row-label">Presets</div>
-        <div class="presets" id="presetsGrid"></div>
-        <div class="picker-sep"></div>
-        <div class="custom-row">
-          <span class="custom-label">Custom</span>
-          <input type="color" class="native-picker" id="nativePicker"/>
-          <input type="text"  class="hex-input"    id="hexInput" maxlength="7" placeholder="#7AB86A"/>
-          <button class="apply-btn" onclick="applyHex()">OK</button>
+        <div class="picker-mode-toggle">
+          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode("solid")">⬛ Solid</button>
+          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode("gradient")">🌈 Gradient</button>
+        </div>
+        <div id="solidPanel">
+          <div class="picker-row-label">Presets</div>
+          <div class="presets" id="presetsGrid"></div>
+          <div class="picker-sep"></div>
+          <div class="custom-row">
+            <span class="custom-label">Custom</span>
+            <input type="color" class="native-picker" id="nativePicker"/>
+            <input type="text"  class="hex-input"    id="hexInput" maxlength="7" placeholder="#7AB86A"/>
+            <button class="apply-btn" onclick="applyHex()">OK</button>
+          </div>
+        </div>
+        <div id="gradPanel" style="display:none;">
+          <div class="picker-row-label">Gradient Presets</div>
+          <div class="grad-presets" id="gradPresetsGrid"></div>
         </div>
         <div class="picker-footer">
           <button class="reset-btn" onclick="resetAccent()">↺ Reset</button>
@@ -514,7 +588,7 @@ footer a:hover{color:var(--fg2);}
   </div>
 </nav>
 
-<!-- BOTTOM DOCK (2 tabs only) -->
+<!-- BOTTOM DOCK -->
 <div class="bottom-dock">
   <a class="ps-tab active" href="resource.html" data-hint="PDFs &amp; notes">
     📚&nbsp;Resources & Notes
@@ -536,16 +610,15 @@ footer a:hover{color:var(--fg2);}
   </div>
 
   <h1 class="hero-title">
-    <span class="l1">Study</span>
-    <span class="l2">smarter,</span>
-    <span class="l3" id="heroL3">not harder.</span>
+    <span class="l1" id="heroL1">Study <em>smarter,</em></span>
+    <span class="l2">not harder.</span>
   </h1>
 
   <p class="hero-sub" id="heroSub">Commerce &amp; Science</p>
 
   <p class="hero-desc">All your Class 12 ISC resources — PDFs, notes, exam schedule and study tools — organized, searchable, and viewable in one place.</p>
 
-  <!-- ROW CARDS (2 only) -->
+  <!-- ROW CARDS -->
   <div class="nav-cards">
 
     <a class="row-card" href="resource.html">
@@ -597,18 +670,6 @@ footer a:hover{color:var(--fg2);}
     </div>
   </div>
 </section>
-
-<div class="stats-bar">
-  <div class="stat-b"><span class="stat-b-n">5+</span><span class="stat-b-l">Subjects</span></div>
-  <div class="stat-b"><span class="stat-b-n">∞</span><span class="stat-b-l">PDFs &amp; Notes</span></div>
-  <div class="stat-b"><span class="stat-b-n">0</span><span class="stat-b-l">Login Required</span></div>
-  <div class="stat-b"><span class="stat-b-n">100%</span><span class="stat-b-l">Free Forever</span></div>
-</div>
-
-<footer>
-  <span>ISC.exe · © 2025 HJexe</span>
-  <a href="https://github.com/HJexe/Class-12-ISC" target="_blank">HJexe / Class-12-ISC</a>
-</footer>
 
 <script>
 /* ════ CURSOR ════ */
@@ -672,42 +733,106 @@ footer a:hover{color:var(--fg2);}
   requestAnimationFrame(tick);
 })();
 
-/* ════ COLOR PICKER ════ */
+/* ════ COLOR PICKER + GRADIENT THEMES ════ */
 const PRESETS=[
   {name:'Lime',hex:'#7ab86a'},{name:'Neon',hex:'#7fff5f'},{name:'Mint',hex:'#5fffa0'},
   {name:'Cyan',hex:'#5fd4e8'},{name:'Sky',hex:'#60b3ff'},{name:'Indigo',hex:'#7c6fff'},
   {name:'Violet',hex:'#bf5fff'},{name:'Pink',hex:'#ff5fbe'},{name:'Amber',hex:'#ffbe3f'},{name:'Rose',hex:'#ff6b6b'},
 ];
-const DEFAULT_ACCENT='#7ab86a',STORE_KEY='isc-accent';
-let currentAccent=localStorage.getItem(STORE_KEY)||DEFAULT_ACCENT,pickerOpen=false;
+const GRAD_PRESETS=[
+  {name:'Aurora',a:'#7af5a0',b:'#5fd4e8'},
+  {name:'Sunset',a:'#ff6b6b',b:'#ffbe3f'},
+  {name:'Neon Dream',a:'#bf5fff',b:'#ff5fbe'},
+  {name:'Ocean',a:'#5fd4e8',b:'#60b3ff'},
+  {name:'Forest',a:'#7ab86a',b:'#5fffa0'},
+  {name:'Lava',a:'#ff6b6b',b:'#bf5fff'},
+  {name:'Gold Rush',a:'#ffbe3f',b:'#ff6b6b'},
+  {name:'Cosmic',a:'#7c6fff',b:'#bf5fff'},
+  {name:'Jade',a:'#5fffa0',b:'#5fd4e8'},
+  {name:'Rose Gold',a:'#ff5fbe',b:'#ffbe3f'},
+];
+const DEFAULT_ACCENT='#7ab86a',STORE_KEY='isc-accent',GRAD_KEY='isc-gradient';
+let currentAccent=localStorage.getItem(STORE_KEY)||DEFAULT_ACCENT;
+let currentGrad=JSON.parse(localStorage.getItem(GRAD_KEY)||'null');
+let pickerOpen=false,pickerMode='solid';
 
 function hexAlpha(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgba(${r},${g},${b},${a})`;}
+function hexToRgb(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
 
 function applyAccent(hex,save){
+  // Exit gradient mode
+  document.body.classList.remove('grad-mode');
+  currentGrad=null;
+  if(save)localStorage.removeItem(GRAD_KEY);
+
   currentAccent=hex;
   const root=document.documentElement;
   root.style.setProperty('--accent',hex);
   root.style.setProperty('--accent-lo',hexAlpha(hex,.09));
   root.style.setProperty('--accent-md',hexAlpha(hex,.15));
+  root.style.setProperty('--grad-a',hex);
+  root.style.setProperty('--grad-b',hex);
   const gc=hexAlpha(hex,.025);
   document.querySelector('.grid-bg').style.backgroundImage=`linear-gradient(${gc} 1px,transparent 1px),linear-gradient(90deg,${gc} 1px,transparent 1px)`;
-  const sw=document.getElementById('triggerSwatch');if(sw){sw.style.background=hex;sw.style.boxShadow=`0 0 5px ${hex}`;}
+  const sw=document.getElementById('triggerSwatch');
+  if(sw){sw.style.background=hex;sw.style.boxShadow=`0 0 5px ${hex}`;}
   ['navMark','navPip','autosaveDot'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=hex;});
   const panel=document.getElementById('pickerPanel');if(panel)panel.style.borderTopColor=hex;
   const ab=document.querySelector('.apply-btn');if(ab){ab.style.background=hex;ab.style.color='#000';}
-  const hl=document.getElementById('heroL3');if(hl)hl.style.color=hex;
-  const hs=document.getElementById('heroSub');if(hs)hs.style.color=hex;
+  const hl=document.getElementById('heroL1');
+  if(hl){hl.style.color=hex;hl.style.background='';hl.style.webkitBackgroundClip='';hl.style.webkitTextFillColor='';hl.style.backgroundClip='';}
+  const hs=document.getElementById('heroSub');
+  if(hs){hs.style.color=hex;hs.style.background='';hs.style.webkitBackgroundClip='';hs.style.webkitTextFillColor='';hs.style.backgroundClip='';}
   const glow=document.getElementById('heroGlow');if(glow)glow.style.background=`radial-gradient(circle,${hexAlpha(hex,.065)} 0%,transparent 65%)`;
   ['eyeLine1','eyeLine2'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=hex;});
-  const em=document.getElementById('eyeEm');if(em)em.style.color=hex;
-  document.querySelectorAll('.row-card').forEach(el=>{el.style.borderLeftColor=hex;});
+  const em=document.getElementById('eyeEm');if(em){em.style.color=hex;em.style.background='';em.style.webkitBackgroundClip='';em.style.webkitTextFillColor='';}
+  document.querySelectorAll('.row-card').forEach(el=>{el.style.borderLeftColor=hex;el.style.borderImage='';});
   document.querySelectorAll('.ps-tab.active').forEach(el=>{el.style.color=hex;});
   document.querySelectorAll('.rc-badge--open').forEach(el=>{el.style.color=hex;el.style.borderColor=hexAlpha(hex,.22);el.style.background=hexAlpha(hex,.1);});
+  document.querySelectorAll('.eyebrow-line').forEach(el=>{el.style.background=hex;});
   document.querySelectorAll('.preset').forEach((el,i)=>{
     el.classList.toggle('active',PRESETS[i].hex.toLowerCase()===hex.toLowerCase());
     el.style.setProperty('--p-color',PRESETS[i].hex);
   });
+  document.querySelectorAll('.grad-preset').forEach(el=>el.classList.remove('active'));
   if(save)localStorage.setItem(STORE_KEY,hex);
+}
+
+function applyGradient(a,b,save){
+  currentGrad={a,b};
+  document.body.classList.add('grad-mode');
+  const root=document.documentElement;
+  root.style.setProperty('--grad-a',a);
+  root.style.setProperty('--grad-b',b);
+  root.style.setProperty('--accent',a);
+  root.style.setProperty('--accent-lo',hexAlpha(a,.09));
+  root.style.setProperty('--accent-md',hexAlpha(a,.15));
+  const gc=hexAlpha(a,.02);
+  document.querySelector('.grid-bg').style.backgroundImage=`linear-gradient(${gc} 1px,transparent 1px),linear-gradient(90deg,${gc} 1px,transparent 1px)`;
+  // Swatch shows gradient
+  const sw=document.getElementById('triggerSwatch');
+  if(sw){sw.style.background=`linear-gradient(135deg,${a},${b})`;sw.style.boxShadow=`0 0 5px ${a}`;}
+  const panel=document.getElementById('pickerPanel');if(panel)panel.style.borderTopColor=a;
+  const glow=document.getElementById('heroGlow');
+  if(glow)glow.style.background=`radial-gradient(circle,${hexAlpha(a,.06)} 0%,${hexAlpha(b,.04)} 50%,transparent 70%)`;
+  // navMark gradient via inline style hack
+  ['navMark','autosaveDot'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=`linear-gradient(135deg,${a},${b})`;});
+  const pip=document.getElementById('navPip');if(pip)pip.style.background=a;
+  // Borders
+  document.querySelectorAll('.row-card').forEach(el=>{
+    el.style.borderLeft='2px solid transparent';
+    el.style.borderImage=`linear-gradient(180deg,${a},${b}) 1`;
+  });
+  // Badge
+  document.querySelectorAll('.rc-badge--open').forEach(el=>{el.style.color=a;el.style.borderColor=hexAlpha(a,.3);el.style.background=hexAlpha(a,.1);});
+  // Active tab
+  document.querySelectorAll('.ps-tab.active').forEach(el=>{el.style.color=a;});
+  // Mark active grad preset
+  document.querySelectorAll('.grad-preset').forEach(el=>{
+    el.classList.toggle('active',el.dataset.a===a&&el.dataset.b===b);
+  });
+  document.querySelectorAll('.preset').forEach(el=>el.classList.remove('active'));
+  if(save)localStorage.setItem(GRAD_KEY,JSON.stringify({a,b}));
 }
 
 function buildPresets(){
@@ -717,9 +842,31 @@ function buildPresets(){
     btn.className='preset';btn.style.background=p.hex;btn.style.boxShadow=`0 2px 8px ${p.hex}44`;
     btn.style.setProperty('--p-color',p.hex);btn.title=p.name;
     btn.onclick=()=>{applyAccent(p.hex,true);closePicker();};
-    if(p.hex.toLowerCase()===currentAccent.toLowerCase())btn.classList.add('active');
+    if(!currentGrad&&p.hex.toLowerCase()===currentAccent.toLowerCase())btn.classList.add('active');
     grid.appendChild(btn);
   });
+}
+
+function buildGradPresets(){
+  const grid=document.getElementById('gradPresetsGrid');grid.innerHTML='';
+  GRAD_PRESETS.forEach(g=>{
+    const btn=document.createElement('button');
+    btn.className='grad-preset';
+    btn.style.background=`linear-gradient(135deg,${g.a},${g.b})`;
+    btn.style.boxShadow=`0 2px 10px ${g.a}55`;
+    btn.dataset.a=g.a;btn.dataset.b=g.b;btn.title=g.name;
+    btn.onclick=()=>{applyGradient(g.a,g.b,true);closePicker();};
+    if(currentGrad&&currentGrad.a===g.a&&currentGrad.b===g.b)btn.classList.add('active');
+    grid.appendChild(btn);
+  });
+}
+
+function switchPickerMode(mode){
+  pickerMode=mode;
+  document.getElementById('solidPanel').style.display=mode==='solid'?'':'none';
+  document.getElementById('gradPanel').style.display=mode==='gradient'?'':'none';
+  document.getElementById('pmtSolid').classList.toggle('active',mode==='solid');
+  document.getElementById('pmtGrad').classList.toggle('active',mode==='gradient');
 }
 
 function applyHex(){
@@ -733,11 +880,13 @@ function resetAccent(){
   applyAccent(DEFAULT_ACCENT,true);
   document.getElementById('hexInput').value=DEFAULT_ACCENT.toUpperCase();
   document.getElementById('nativePicker').value=DEFAULT_ACCENT;
+  localStorage.removeItem(GRAD_KEY);
 }
 function togglePicker(){
   pickerOpen=!pickerOpen;
   document.getElementById('pickerPanel').classList.toggle('open',pickerOpen);
   document.getElementById('colorTrigger').classList.toggle('open',pickerOpen);
+  if(pickerOpen){buildGradPresets();}
 }
 function closePicker(){
   pickerOpen=false;
@@ -748,7 +897,17 @@ document.addEventListener('click',e=>{if(pickerOpen&&!document.getElementById('p
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&pickerOpen)closePicker();});
 
 document.addEventListener('DOMContentLoaded',()=>{
-  buildPresets();applyAccent(currentAccent,false);
+  buildPresets();
+  buildGradPresets();
+  // Restore saved theme
+  const savedGrad=localStorage.getItem(GRAD_KEY);
+  if(savedGrad){
+    const g=JSON.parse(savedGrad);
+    applyGradient(g.a,g.b,false);
+    switchPickerMode('gradient');
+  } else {
+    applyAccent(currentAccent,false);
+  }
   document.getElementById('hexInput').value=currentAccent.toUpperCase();
   document.getElementById('nativePicker').value=currentAccent;
   document.getElementById('nativePicker').addEventListener('input',e=>{
