@@ -178,10 +178,10 @@ body{animation:pgIn .4s ease both;}
 /* Disclaimer */
 .disc-wrap{position:relative;}
 .disc-btn{
-  display:flex;align-items:center;gap:8px;
-  font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
-  letter-spacing:.6px;text-transform:uppercase;
-  padding:7px 16px;border-radius:8px;
+  display:flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:6px;
   background:rgba(212,168,75,.13);
   border:1px solid rgba(212,168,75,.45);
   color:#d4a84b;
@@ -201,14 +201,14 @@ body{animation:pgIn .4s ease both;}
 .disc-wrap:hover .disc-popup{display:block;animation:popIn .18s ease;}
 @keyframes popIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
 .disc-inner{
-  width:360px;background:rgba(14,15,13,.98);
+  width:300px;background:rgba(14,15,13,.98);
   border:1px solid rgba(212,168,75,.28);border-top:2px solid rgba(212,168,75,.7);
   backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02);
   border-radius:10px;overflow:hidden;
 }
-.disc-head{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid rgba(212,168,75,.12);background:rgba(212,168,75,.06);}
+.disc-head{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid rgba(212,168,75,.12);background:rgba(212,168,75,.06);}
 .disc-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,168,75,.9);flex:1;}
-.disc-body{padding:16px;font-size:12px;color:rgba(221,227,218,.65);line-height:1.8;}
+.disc-body{padding:10px 14px;font-size:11.5px;color:rgba(221,227,218,.65);line-height:1.7;}
 .disc-body strong{color:#fff;}
 .disc-body a{color:rgba(212,168,75,.85);text-decoration:none;border-bottom:1px solid rgba(212,168,75,.35);}
 .disc-body a:hover{color:#d4a84b;}
@@ -222,8 +222,7 @@ body.grad-mode .hero-sub{
   background-clip:text;
 }
 body.grad-mode .row-card{
-  border-left:2px solid transparent;
-  border-image:linear-gradient(180deg,var(--grad-a),var(--grad-b)) 1;
+  border-left:2px solid var(--grad-a);
 }
 body.grad-mode .eyebrow-line{
   background:linear-gradient(90deg,var(--grad-a),var(--grad-b)) !important;
@@ -560,8 +559,8 @@ body.grad-mode .bottom-dock .ps-pip{
           <button class="picker-head-close" onclick="togglePicker()">✕</button>
         </div>
         <div class="picker-mode-toggle">
-          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode("solid")">⬛ Solid</button>
-          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode("gradient")">🌈 Gradient</button>
+          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('solid')">⬛ Solid</button>
+          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('gradient')">🌈 Gradient</button>
         </div>
         <div id="solidPanel">
           <div class="picker-row-label">Presets</div>
@@ -786,7 +785,7 @@ function applyAccent(hex,save){
   const glow=document.getElementById('heroGlow');if(glow)glow.style.background=`radial-gradient(circle,${hexAlpha(hex,.065)} 0%,transparent 65%)`;
   ['eyeLine1','eyeLine2'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=hex;});
   const em=document.getElementById('eyeEm');if(em){em.style.color=hex;em.style.background='';em.style.webkitBackgroundClip='';em.style.webkitTextFillColor='';}
-  document.querySelectorAll('.row-card').forEach(el=>{el.style.borderLeftColor=hex;el.style.borderImage='';});
+  document.querySelectorAll('.row-card').forEach(el=>{el.style.borderLeftColor=hex;el.style.borderImage='';el.style.background='';});
   document.querySelectorAll('.ps-tab.active').forEach(el=>{el.style.color=hex;});
   document.querySelectorAll('.rc-badge--open').forEach(el=>{el.style.color=hex;el.style.borderColor=hexAlpha(hex,.22);el.style.background=hexAlpha(hex,.1);});
   document.querySelectorAll('.eyebrow-line').forEach(el=>{el.style.background=hex;});
@@ -820,8 +819,9 @@ function applyGradient(a,b,save){
   const pip=document.getElementById('navPip');if(pip)pip.style.background=a;
   // Borders
   document.querySelectorAll('.row-card').forEach(el=>{
-    el.style.borderLeft='2px solid transparent';
-    el.style.borderImage=`linear-gradient(180deg,${a},${b}) 1`;
+    el.style.borderLeft=`2px solid ${a}`;
+    el.style.borderImage='';
+    el.style.background=`linear-gradient(135deg,${hexAlpha(a,.07)} 0%,var(--surface) 55%)`;
   });
   // Badge
   document.querySelectorAll('.rc-badge--open').forEach(el=>{el.style.color=a;el.style.borderColor=hexAlpha(a,.3);el.style.background=hexAlpha(a,.1);});
