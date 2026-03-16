@@ -245,6 +245,39 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:9px 18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--fg);z-index:9000;white-space:nowrap;animation:toastIn .2s ease;box-shadow:0 8px 32px rgba(0,0,0,.5);}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ── THEME BUTTON ── */
+.theme-btn{display:flex;align-items:center;gap:7px;padding:5px 13px;border:1px solid var(--border2);border-radius:6px;background:transparent;color:var(--fg2);font-family:'DM Mono',monospace;font-size:11.5px;font-weight:500;cursor:pointer;transition:all .18s;letter-spacing:.3px;}
+.theme-btn:hover{color:var(--fg);border-color:var(--accent);background:var(--accent-lo);}
+.theme-btn-swatch{width:12px;height:12px;border-radius:3px;background:linear-gradient(135deg,var(--grad-a,var(--accent)),var(--grad-b,var(--accent)));flex-shrink:0;box-shadow:0 0 6px var(--accent);transition:background .3s,box-shadow .3s;}
+
+/* ── THEME PANEL ── */
+.theme-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .22s;}
+.theme-overlay.open{opacity:1;pointer-events:all;}
+.theme-panel{position:fixed;top:0;right:0;bottom:0;z-index:1001;width:280px;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s cubic-bezier(.22,.61,.36,1);box-shadow:-12px 0 48px rgba(0,0,0,.5);}
+.theme-panel.open{transform:translateX(0);}
+.tp-head{padding:16px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tp-title{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--fg);letter-spacing:.5px;text-transform:uppercase;}
+.tp-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--fg3);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.tp-close:hover{color:var(--fg);border-color:var(--border2);background:var(--surface);}
+.tp-body{flex:1;overflow-y:auto;padding:14px 16px 24px;}
+.tp-body::-webkit-scrollbar{width:3px;}
+.tp-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.tp-section{margin-bottom:20px;}
+.tp-label{font-family:'DM Mono',monospace;font-size:9.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--fg3);margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--border);}
+.tp-swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+.tp-swatch{width:100%;aspect-ratio:1;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .15s;position:relative;}
+.tp-swatch:hover{transform:scale(1.1);border-color:rgba(255,255,255,.25);}
+.tp-swatch.active{border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.4),0 0 12px var(--sw-color);}
+.tp-swatch::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;opacity:0;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+.tp-swatch.active::after{opacity:1;}
+.tp-gradients{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;}
+.tp-grad{width:100%;height:32px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .15s;}
+.tp-grad:hover{transform:scale(1.03);border-color:rgba(255,255,255,.25);}
+.tp-grad.active{border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.3),0 0 14px rgba(255,255,255,.1);}
+.tp-reset{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--fg3);font-family:'DM Mono',monospace;font-size:10.5px;cursor:pointer;transition:all .18s;letter-spacing:.4px;margin-top:4px;}
+.tp-reset:hover{color:var(--fg);border-color:var(--border2);background:var(--surface2);}
+.tp-current{margin-top:14px;padding:10px 12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;color:var(--fg3);line-height:1.8;letter-spacing:.3px;}
 </style>
 </head>
 <body>
@@ -264,8 +297,34 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
       </a>
     </div>
   </div>
-  <div class="nav-right"></div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="openThemePanel()">
+      <span class="theme-btn-swatch" id="themeSwatch"></span>
+      Theme
+    </button>
+  </div>
 </nav>
+
+<!-- THEME OVERLAY + PANEL -->
+<div class="theme-overlay" id="themeOverlay" onclick="closeThemePanel()"></div>
+<div class="theme-panel" id="themePanel">
+  <div class="tp-head">
+    <span class="tp-title">⬡ Accent Theme</span>
+    <button class="tp-close" onclick="closeThemePanel()">✕</button>
+  </div>
+  <div class="tp-body">
+    <div class="tp-section">
+      <div class="tp-label">Solid Accents</div>
+      <div class="tp-swatches" id="tpSwatches"></div>
+    </div>
+    <div class="tp-section">
+      <div class="tp-label">Gradients</div>
+      <div class="tp-gradients" id="tpGradients"></div>
+    </div>
+    <button class="tp-reset" onclick="resetTheme()">↺ Reset to default green</button>
+    <div class="tp-current" id="tpCurrent"></div>
+  </div>
+</div>
 
 <div class="layout">
   <!-- SIDEBAR -->
@@ -421,19 +480,91 @@ function makeSVG(pat,color,bg,w=400,h=150){
   return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">${base}${(F[pat]||F.dots)()}</svg>`;
 }
 
-// Ratings
-const CK='isc_commR_v6';
-const sv=new Set(JSON.parse(sessionStorage.getItem('isc_sv6')||'[]'));
-const gCom=()=>{try{return JSON.parse(localStorage.getItem(CK)||'{}')}catch{return{}}};
-const addCom=(id,s)=>{const r=gCom(),pk=id+'c',pv=parseFloat(sessionStorage.getItem('prev_'+pk)||'0');if(!r[id])r[id]={t:0,n:0};if(sv.has(pk)&&pv>0)r[id].t=Math.max(0,r[id].t-pv+s);else{r[id].t+=s;r[id].n++;}localStorage.setItem(CK,JSON.stringify(r));sv.add(pk);sessionStorage.setItem('isc_sv6',JSON.stringify([...sv]));sessionStorage.setItem('prev_'+pk,s);};
-const cAvg=id=>{const r=gCom()[id];return r&&r.n?r.t/r.n:0;};
-const cCnt=id=>gCom()[id]?.n||0;
-const prevVote=id=>parseFloat(sessionStorage.getItem('prev_'+id+'c')||'0');
-const fmt=v=>v?v.toFixed(1):'—';
-const combined=id=>cAvg(id);
-const rankSort=(chs,chObjs)=>[...chObjs||chs.map(c=>c)].sort((a,b)=>{const sa=combined(a.id),sb=combined(b.id);if(sb!==sa)return sb-sa;return(b.isTop?1:0)-(a.isTop?1:0);});
-const rankCls=i=>['cr-1','cr-2','cr-3','cr-n'][Math.min(i,3)];
-const rankEmoji=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+// ━━ SUPABASE GLOBAL RATINGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SB_URL = 'https://kswlexxuceivjkjkxsdm.supabase.co';
+const SB_KEY = 'sb_publishable_li_VAb6qJ4zO3Yor7aACCg_RaCXOw5p';
+const SB_HEADERS = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+// In-memory cache of {id: {total, count}}
+const votesCache = {};
+// Track this user's votes in localStorage so they can update
+const MY_VOTES_KEY = 'isc_my_votes_v1';
+const getMyVotes = () => { try{return JSON.parse(localStorage.getItem(MY_VOTES_KEY)||'{}')}catch{return{}} };
+const setMyVote  = (id,v) => { const m=getMyVotes(); m[id]=v; localStorage.setItem(MY_VOTES_KEY,JSON.stringify(m)); };
+const getMyVote  = id => getMyVotes()[id]||0;
+
+// Fetch all votes from Supabase on load
+async function fetchAllVotes(){
+  try{
+    const res = await fetch(`${SB_URL}/rest/v1/votes?select=id,total,count`,{headers:SB_HEADERS});
+    if(!res.ok) return;
+    const rows = await res.json();
+    rows.forEach(r=>{ votesCache[r.id]={total:r.total,count:r.count}; });
+  }catch(e){ console.warn('votes fetch failed',e); }
+}
+
+// Submit or update a vote
+async function submitVote(id, newVal){
+  const prev = getMyVote(id);
+  const cached = votesCache[id] || {total:0, count:0};
+  let newTotal, newCount;
+  if(prev > 0){
+    // update existing vote: replace old value
+    newTotal = Math.max(0, cached.total - prev + newVal);
+    newCount = cached.count; // count stays same
+  } else {
+    newTotal = cached.total + newVal;
+    newCount = cached.count + 1;
+  }
+  // Optimistic update
+  votesCache[id] = {total:newTotal, count:newCount};
+  setMyVote(id, newVal);
+  updateCardUI(id);
+  try{
+    const res = await fetch(`${SB_URL}/rest/v1/votes?id=eq.${encodeURIComponent(id)}`,{
+      method:'GET', headers:SB_HEADERS
+    });
+    const exists = res.ok && (await res.json()).length > 0;
+    if(exists){
+      await fetch(`${SB_URL}/rest/v1/votes?id=eq.${encodeURIComponent(id)}`,{
+        method:'PATCH',
+        headers:{...SB_HEADERS,'Prefer':'return=minimal'},
+        body: JSON.stringify({total:newTotal, count:newCount})
+      });
+    } else {
+      await fetch(`${SB_URL}/rest/v1/votes`,{
+        method:'POST',
+        headers:{...SB_HEADERS,'Prefer':'return=minimal'},
+        body: JSON.stringify({id, total:newVal, count:1})
+      });
+    }
+  }catch(e){ console.warn('vote submit failed',e); }
+}
+
+function updateCardUI(id){
+  const data = votesCache[id]||{total:0,count:0};
+  const avg  = data.count > 0 ? data.total / data.count : 0;
+  const cnt  = data.count;
+  const fill = document.getElementById('ccf-'+id);
+  if(fill) fill.style.width = (avg>0?(avg/5)*100:0)+'%';
+  const sc = document.getElementById('ccs-'+id);
+  if(sc) sc.textContent = avg>0 ? avg.toFixed(1) : '—';
+  const vt = document.getElementById('ccv-'+id);
+  if(vt) vt.textContent = cnt ? cnt+' vote'+(cnt!==1?'s':'') : 'no votes';
+}
+
+const cAvg = id => { const d=votesCache[id]; return d&&d.count?d.total/d.count:0; };
+const cCnt = id => votesCache[id]?.count||0;
+const prevVote = id => getMyVote(id);
+const fmt = v => v ? v.toFixed(1) : '—';
+const combined = id => cAvg(id);
+const rankSort = (chs,chObjs) => [...chObjs||chs].sort((a,b)=>{
+  const sa=combined(a.id),sb=combined(b.id);
+  if(sb!==sa) return sb-sa;
+  return (b.isTop?1:0)-(a.isTop?1:0);
+});
+const rankCls   = i => ['cr-1','cr-2','cr-3','cr-n'][Math.min(i,3)];
+const rankEmoji = i => i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
 
 let stream='commerce',activeGroup=null;
 
@@ -502,7 +633,7 @@ function renderGrid(g){
 }
 
 function mkCard(ch,g,idx){
-  const ca=cAvg(ch.id),cc=cCnt(ch.id),sc=combined(ch.id);
+  const sc=combined(ch.id);
   const card=document.createElement('div');
   card.className='ch-card';
   card.style.setProperty('--subj-color',g.color);
@@ -535,7 +666,7 @@ function mkCard(ch,g,idx){
 
   // community rating zone
   const zone=document.createElement('div');zone.className='cc-co-zone';
-  buildCoZone(zone,ch.id,ca,cc);
+  buildCoZone(zone,ch.id);
   card.appendChild(zone);
 
   // YT link
@@ -546,8 +677,9 @@ function mkCard(ch,g,idx){
   return card;
 }
 
-function buildCoZone(zone,id,avg,cnt){
+function buildCoZone(zone,id){
   zone.innerHTML='';
+  const avg=cAvg(id), cnt=cCnt(id);
   const lbl=document.createElement('div');lbl.className='cc-co-lbl';
   lbl.innerHTML='◎ <span>Community Rating</span>';
   const bigSc=document.createElement('span');bigSc.className='cc-co-score';bigSc.id='ccs-'+id;
@@ -556,7 +688,8 @@ function buildCoZone(zone,id,avg,cnt){
   zone.appendChild(lbl);
   const barRow=document.createElement('div');barRow.className='co-bar-row';
   const bar=document.createElement('div');bar.className='co-bar';
-  const fill=document.createElement('div');fill.className='co-fill';fill.id='ccf-'+id;fill.style.width=(avg>0?(avg/5)*100:0)+'%';
+  const fill=document.createElement('div');fill.className='co-fill';fill.id='ccf-'+id;
+  fill.style.width=(avg>0?(avg/5)*100:0)+'%';
   bar.appendChild(fill);barRow.appendChild(bar);
   const votes=document.createElement('span');votes.className='co-votes';votes.id='ccv-'+id;
   votes.textContent=cnt?cnt+' vote'+(cnt!==1?'s':''):'no votes';
@@ -582,15 +715,11 @@ function mkStars(id,val){
     star.addEventListener('click',e=>{
       const r=star.getBoundingClientRect();const clicked=(e.clientX-r.left)<r.width/2?i-.5:i;
       wrap.dataset.saved=clicked;
-      addCom(id,clicked);
-      const ca=cAvg(id),cc2=cCnt(id);
-      const fill=document.getElementById('ccf-'+id);if(fill)fill.style.width=((ca/5)*100)+'%';
-      const sc=document.getElementById('ccs-'+id);if(sc)sc.textContent=fmt(ca);
-      const vt=document.getElementById('ccv-'+id);if(vt)vt.textContent=cc2+' vote'+(cc2!==1?'s':'');
-      // update hint
+      wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=clicked>=j+1?'f':clicked>=j+.5?'h':'0');
+      submitVote(id,clicked);
       const zoneEl=wrap.closest('.cc-co-zone');
       if(zoneEl){const h=zoneEl.querySelector('div:last-child');if(h)h.textContent=`✓ your vote: ${fmt(clicked)} · update anytime`;}
-      toast('◎ Voted '+fmt(clicked)+' / 5 — thanks!');
+      toast('◎ Voted '+fmt(clicked)+' / 5 — shared with everyone!');
     });
     wrap.appendChild(star);
   }
@@ -604,19 +733,157 @@ function toast(msg){
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),320);},2600);
 }
 
-// Init — apply saved theme accent to nav mark
-(function initTheme(){
+// ━━ THEME ENGINE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const SOLID_ACCENTS=[
+  {name:'Forest Green', hex:'#7ab86a'},
+  {name:'Sage',         hex:'#8fbe7f'},
+  {name:'Mint',         hex:'#5fd4a0'},
+  {name:'Cyan',         hex:'#5fd4e8'},
+  {name:'Sky',          hex:'#5fa8e8'},
+  {name:'Cobalt',       hex:'#5f7fe8'},
+  {name:'Violet',       hex:'#9d7fe8'},
+  {name:'Rose',         hex:'#e87fd4'},
+  {name:'Crimson',      hex:'#e8635f'},
+  {name:'Amber',        hex:'#d4a84b'},
+  {name:'Gold',         hex:'#f5c842'},
+  {name:'Coral',        hex:'#e8845f'},
+  {name:'Teal',         hex:'#5fc7c2'},
+  {name:'Lime',         hex:'#a8d44b'},
+  {name:'Lavender',     hex:'#a07fe8'},
+];
+const GRADIENTS=[
+  {name:'Aurora',    a:'#7ab86a', b:'#5fd4e8'},
+  {name:'Dusk',      a:'#e87fd4', b:'#5f7fe8'},
+  {name:'Ember',     a:'#f5c842', b:'#e8635f'},
+  {name:'Ocean',     a:'#5fa8e8', b:'#5fc7c2'},
+  {name:'Nebula',    a:'#9d7fe8', b:'#e87fd4'},
+  {name:'Jungle',    a:'#a8d44b', b:'#5fd4a0'},
+  {name:'Sunset',    a:'#e8845f', b:'#f5c842'},
+  {name:'Night',     a:'#5f7fe8', b:'#9d7fe8'},
+];
+
+function hexToRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function applyAccent(hex){
+  const [r,g,b]=hexToRgb(hex);
+  document.documentElement.style.setProperty('--accent',hex);
+  document.documentElement.style.setProperty('--accent-lo',`rgba(${r},${g},${b},0.12)`);
+  document.documentElement.style.setProperty('--accent-md',`rgba(${r},${g},${b},0.22)`);
+  document.documentElement.style.setProperty('--grad-a',hex);
+  document.documentElement.style.setProperty('--grad-b',hex);
+  updateNavMark(hex,null);updateSwatch(hex,null);updateCurrentLabel();
+  // re-render active subject if open so sidebar colours update
+  if(activeGroup)renderGrid(activeGroup);
+  renderSubjects();
+}
+function applyGradient(a,b){
+  const [r,g,bv]=hexToRgb(a);
+  document.documentElement.style.setProperty('--accent',a);
+  document.documentElement.style.setProperty('--accent-lo',`rgba(${r},${g},${bv},0.12)`);
+  document.documentElement.style.setProperty('--accent-md',`rgba(${r},${g},${bv},0.22)`);
+  document.documentElement.style.setProperty('--grad-a',a);
+  document.documentElement.style.setProperty('--grad-b',b);
+  updateNavMark(a,b);updateSwatch(a,b);updateCurrentLabel();
+  if(activeGroup)renderGrid(activeGroup);
+  renderSubjects();
+}
+function updateNavMark(a,b){
   const mark=document.getElementById('navMark');
   const pip=document.getElementById('navPip');
+  if(mark){mark.style.background=b?`linear-gradient(135deg,${a},${b})`:a;mark.style.boxShadow=`0 0 8px ${a}`;}
+  if(pip)pip.style.background=a;
+}
+function updateSwatch(a,b){
+  const sw=document.getElementById('themeSwatch');
+  if(sw){sw.style.background=b?`linear-gradient(135deg,${a},${b})`:a;sw.style.boxShadow=`0 0 6px ${a}`;}
+}
+function updateCurrentLabel(){
+  const el=document.getElementById('tpCurrent');
+  if(!el)return;
   const s=localStorage.getItem('isc-accent');
   const g=localStorage.getItem('isc-gradient');
-  if(g){const gr=JSON.parse(g);if(mark){mark.style.background=`linear-gradient(135deg,${gr.a},${gr.b})`;mark.style.boxShadow=`0 0 8px ${gr.a}`;}if(pip)pip.style.background=gr.a;}
-  else if(s){if(mark){mark.style.background=s;mark.style.boxShadow=`0 0 8px ${s}`;}if(pip)pip.style.background=s;}
+  if(g){const gr=JSON.parse(g);el.innerHTML=`gradient · ${gr.name||'custom'}<br>${gr.a} → ${gr.b}`;}
+  else if(s){const found=SOLID_ACCENTS.find(x=>x.hex===s);el.innerHTML=`solid · ${found?found.name:'custom'}<br>${s}`;}
+  else el.innerHTML='default · Forest Green<br>#7ab86a';
+}
+function buildThemePanel(){
+  // solids
+  const sw=document.getElementById('tpSwatches');
+  const savedS=localStorage.getItem('isc-accent');
+  const savedG=localStorage.getItem('isc-gradient');
+  const savedGA=savedG?JSON.parse(savedG):null;
+  sw.innerHTML='';
+  SOLID_ACCENTS.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='tp-swatch'+((!savedG&&savedS===p.hex)||(!savedG&&!savedS&&p.hex==='#7ab86a')?' active':'');
+    d.style.cssText=`background:${p.hex};--sw-color:${p.hex}`;
+    d.title=p.name;
+    d.onclick=()=>{
+      localStorage.setItem('isc-accent',p.hex);
+      localStorage.removeItem('isc-gradient');
+      applyAccent(p.hex);
+      document.querySelectorAll('.tp-swatch').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.tp-grad').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');
+      updateCurrentLabel();
+    };
+    sw.appendChild(d);
+  });
+  // gradients
+  const gr=document.getElementById('tpGradients');
+  gr.innerHTML='';
+  GRADIENTS.forEach(p=>{
+    const d=document.createElement('div');
+    d.className='tp-grad'+(savedGA&&savedGA.a===p.a&&savedGA.b===p.b?' active':'');
+    d.style.cssText=`background:linear-gradient(135deg,${p.a},${p.b})`;
+    d.title=p.name;
+    d.onclick=()=>{
+      const obj={name:p.name,a:p.a,b:p.b};
+      localStorage.setItem('isc-gradient',JSON.stringify(obj));
+      localStorage.setItem('isc-accent',p.a);
+      applyGradient(p.a,p.b);
+      document.querySelectorAll('.tp-grad').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.tp-swatch').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');
+      updateCurrentLabel();
+    };
+    gr.appendChild(d);
+  });
+  updateCurrentLabel();
+}
+function openThemePanel(){
+  buildThemePanel();
+  document.getElementById('themePanel').classList.add('open');
+  document.getElementById('themeOverlay').classList.add('open');
+}
+function closeThemePanel(){
+  document.getElementById('themePanel').classList.remove('open');
+  document.getElementById('themeOverlay').classList.remove('open');
+}
+function resetTheme(){
+  localStorage.removeItem('isc-accent');
+  localStorage.removeItem('isc-gradient');
+  applyAccent('#7ab86a');
+  buildThemePanel();
+}
+
+// Init theme on load
+(function initTheme(){
+  const s=localStorage.getItem('isc-accent');
+  const g=localStorage.getItem('isc-gradient');
+  if(g){const gr=JSON.parse(g);applyGradient(gr.a,gr.b);}
+  else if(s){applyAccent(s);}
+  else{updateNavMark('#7ab86a',null);updateSwatch('#7ab86a',null);}
 })();
 
 // set active tab classes properly
 document.getElementById('tab-commerce').classList.add('active');
 renderSubjects();
+
+// Load global votes from Supabase, then refresh any open subject
+fetchAllVotes().then(()=>{
+  if(activeGroup) renderGrid(activeGroup);
+  renderSubjects();
+});
 </script>
 </body>
 </html>
