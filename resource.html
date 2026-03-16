@@ -485,35 +485,47 @@ body.grad-mode .picker-panel {
 .vi-chip.src-drive { color: #7aabcc; border-color: rgba(122,171,204,0.3); background: rgba(122,171,204,0.1); }
 .vi-chip.src-repo  { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: var(--accent-lo); }
 
-/* ── SIDEBAR CREDITS PILL ── */
-.sidebar-creds-pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 7px 2px 5px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, rgba(96,179,255,0.13), rgba(122,184,106,0.06));
-  border: 1px solid rgba(96,179,255,0.28);
-  font-family: 'DM Mono', monospace; font-size: 8px;
-  color: #60b3ff; letter-spacing: 0.2px;
-  white-space: nowrap; flex-shrink: 0;
-  transition: all .2s;
-  cursor: default;
-  margin-right: 2px;
+/* ── SIDEBAR CREDITS PILL (inline, hidden now) ── */
+
+/* ── FLOATING CREDS CALLOUT ── */
+.creds-callout {
+  position: fixed;
+  z-index: 300;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-6px) scale(0.92);
+  transition: opacity .22s cubic-bezier(.34,1.56,.64,1), transform .22s cubic-bezier(.34,1.56,.64,1);
 }
-.sidebar-creds-pill:hover {
-  border-color: rgba(96,179,255,0.55);
-  background: linear-gradient(135deg, rgba(96,179,255,0.2), rgba(122,184,106,0.1));
-  box-shadow: 0 0 8px rgba(96,179,255,0.2);
+.creds-callout.visible {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: all;
 }
-.scp-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: #60b3ff;
-  box-shadow: 0 0 5px rgba(96,179,255,0.7);
-  flex-shrink: 0;
-  animation: scpPulse 2.8s ease-in-out infinite;
+.creds-callout-inner {
+  display: flex; align-items: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(13,16,13,0.97);
+  border: 1px solid rgba(96,179,255,0.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 12px rgba(96,179,255,0.07);
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
 }
-@keyframes scpPulse {
-  0%,100% { opacity: 0.6; box-shadow: 0 0 4px rgba(96,179,255,0.5); }
-  50%      { opacity: 1;   box-shadow: 0 0 8px rgba(96,179,255,0.9); }
+.creds-callout-inner::before {
+  content: '';
+  position: absolute; left: -5px; top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: rgba(96,179,255,0.25);
+  border-left: none;
+}
+.creds-callout-tag {
+  font-family: 'DM Mono', monospace; font-size: 10.5px;
+  color: rgba(200,220,200,0.65); letter-spacing: 0.2px;
+}
+.creds-prefix {
+  color: #60b3ff;
+  opacity: 0.85;
 }
 
 /* ── CREDITS BUBBLE (infobar, kept for future use) ── */
@@ -1278,12 +1290,7 @@ function render() {
     const disp = subj.replace(/-(creds-.+)$/i,'');
     const sum  = document.createElement('summary');
     sum.title = 'Shift+click to copy folder link';
-    const credBadge = CREDS_MAP[disp]
-      ? `<span class="sidebar-creds-pill" title="Resources by ${CREDS_MAP[disp].user}">
-           <span class="scp-dot"></span>${CREDS_MAP[disp].user}
-         </span>`
-      : '';
-    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span>${credBadge}<span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
+    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
     sum.addEventListener('click', e => { if (e.shiftKey) { e.preventDefault(); shareFolderLink(subj); } });
     det.appendChild(sum);
     if (q) {
@@ -1298,6 +1305,67 @@ function render() {
     wrap.appendChild(det);
   });
   if (!wrap.children.length) wrap.innerHTML = `<div class="msg">No results for "${q}"</div>`;
+
+  // Re-attach floating callout observers after render
+  attachCredsCallout();
+}
+
+/* ── FLOATING CREDITS CALLOUT ── */
+let _calloutEl = null;
+
+function getOrCreateCallout() {
+  if (!_calloutEl) {
+    _calloutEl = document.createElement('div');
+    _calloutEl.className = 'creds-callout';
+    _calloutEl.innerHTML = `
+      <div class="creds-callout-inner">
+        <span class="creds-callout-tag"><span class="creds-prefix">creds-</span>u/Active-Judgment-250</span>
+      </div>`;
+    document.body.appendChild(_calloutEl);
+  }
+  return _calloutEl;
+}
+
+function attachCredsCallout() {
+  const folders = document.getElementById('folders');
+  // find the Computer Science <details> element
+  const csDetails = [...folders.querySelectorAll('details.subject')].find(d => {
+    const sname = d.querySelector('.s-name');
+    return sname && sname.textContent.trim() === 'Computer Science';
+  });
+  if (!csDetails) return;
+
+  const callout = getOrCreateCallout();
+
+  function positionCallout() {
+    const rect = csDetails.querySelector('summary').getBoundingClientRect();
+    const sidebarWidth = document.querySelector('.sidebar').getBoundingClientRect().right;
+    callout.style.left = (sidebarWidth + 14) + 'px';
+    callout.style.top  = (rect.top + rect.height / 2 - 22) + 'px';
+  }
+
+  function updateVisibility() {
+    if (csDetails.open) {
+      positionCallout();
+      callout.classList.add('visible');
+    } else {
+      callout.classList.remove('visible');
+    }
+  }
+
+  // remove old listener if any
+  if (csDetails._credsToggle) {
+    csDetails.removeEventListener('toggle', csDetails._credsToggle);
+  }
+  csDetails._credsToggle = updateVisibility;
+  csDetails.addEventListener('toggle', updateVisibility);
+
+  // show immediately if already open
+  updateVisibility();
+
+  // reposition on scroll/resize
+  folders.addEventListener('scroll', () => { if (csDetails.open) positionCallout(); }, { passive: true });
+  window.addEventListener('resize',  () => { if (csDetails.open) positionCallout(); }, { passive: true });
 }
 
 function buildTree(paths) {
