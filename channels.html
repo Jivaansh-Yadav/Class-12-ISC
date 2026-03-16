@@ -4,9 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <script>
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    window.location.replace('mobile.html');
-  }
   (function(){
     const s=localStorage.getItem('isc-accent');
     const g=localStorage.getItem('isc-gradient');
@@ -17,6 +14,7 @@
 <title>ISC.exe — YouTube Channels</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
+/* ── EXACT resource.html variables ── */
 :root{
   --bg:#111210;--bg2:#151714;
   --surface:#1a1d19;--surface2:#1f221e;
@@ -35,6 +33,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   opacity:.022;}
 
+/* ── NAV — exact resource.html ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:200;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:rgba(17,18,16,.95);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);}
 .nav-left{display:flex;align-items:center;gap:14px;}
 .nav-brand{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--fg);display:flex;align-items:center;gap:9px;}
@@ -47,49 +46,210 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .nav-link-pip{width:5px;height:5px;border-radius:50%;background:var(--accent);opacity:.7;animation:breathe 2.8s ease-in-out infinite;}
 @keyframes breathe{0%,100%{opacity:.45}50%{opacity:.85}}
 
+/* ── LAYOUT — 300px sidebar matching resource.html ── */
 .layout{display:grid;grid-template-columns:300px 1fr;height:100vh;padding-top:50px;}
+
+/* ── SIDEBAR — exact resource.html ── */
 .sidebar{display:flex;flex-direction:column;background:color-mix(in srgb,var(--accent) 2.5%,var(--bg2));border-right:1px solid color-mix(in srgb,var(--accent) 12%,var(--border));overflow:hidden;transition:background .35s,border-color .35s;}
 .sidebar-head{padding:16px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .sidebar-heading{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--fg);line-height:1.1;margin-bottom:4px;}
 .sidebar-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);letter-spacing:.4px;}
+
+/* ── TABS — exact resource.html commerce/science tabs ── */
 .tabs{display:flex;padding:8px 10px;border-bottom:1px solid var(--border);gap:5px;flex-shrink:0;background:var(--bg2);}
 .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 0;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--border2);border-radius:8px;background:transparent;color:var(--fg3);cursor:pointer;transition:all .2s;font-weight:500;position:relative;overflow:hidden;}
 .tab::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .2s;border-radius:2px 2px 0 0;}
 .tab:hover{color:var(--fg2);background:var(--surface);border-color:var(--border2);}
-#tab-commerce::before{background:var(--amber);}#tab-commerce:hover{border-color:rgba(212,168,75,.25);}#tab-commerce.active{color:var(--amber);background:rgba(212,168,75,.08);border-color:rgba(212,168,75,.35);box-shadow:inset 0 1px 0 rgba(212,168,75,.08);}#tab-commerce.active::before{transform:scaleX(1);}
-#tab-science::before{background:var(--cyan);}#tab-science:hover{border-color:rgba(95,212,232,.25);}#tab-science.active{color:var(--cyan);background:rgba(95,212,232,.07);border-color:rgba(95,212,232,.3);box-shadow:inset 0 1px 0 rgba(95,212,232,.07);}#tab-science.active::before{transform:scaleX(1);}
+#tab-commerce::before{background:var(--amber);}
+#tab-commerce:hover{border-color:rgba(212,168,75,.25);}
+#tab-commerce.active{color:var(--amber);background:rgba(212,168,75,.08);border-color:rgba(212,168,75,.35);box-shadow:inset 0 1px 0 rgba(212,168,75,.08);}
+#tab-commerce.active::before{transform:scaleX(1);}
+#tab-science::before{background:var(--cyan);}
+#tab-science:hover{border-color:rgba(95,212,232,.25);}
+#tab-science.active{color:var(--cyan);background:rgba(95,212,232,.07);border-color:rgba(95,212,232,.3);box-shadow:inset 0 1px 0 rgba(95,212,232,.07);}
+#tab-science.active::before{transform:scaleX(1);}
 
-#subjList{flex:1;overflow-y:auto;padding:6px 6px 20px;}#subjList::-webkit-scrollbar{width:3px;}#subjList::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.subj-block{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;border:1px solid color-mix(in srgb,var(--subj-color) 18%,transparent);border-left:3px solid var(--subj-color,var(--border2));background:color-mix(in srgb,var(--subj-color) 5%,transparent);cursor:pointer;margin-bottom:3px;opacity:.88;box-shadow:inset 4px 0 16px color-mix(in srgb,var(--subj-color) 6%,transparent);transition:all .18s;}
-.subj-block:hover{background:color-mix(in srgb,var(--subj-color) 11%,var(--surface));border-color:color-mix(in srgb,var(--subj-color) 32%,transparent);border-left-color:var(--subj-color,var(--accent));opacity:1;box-shadow:inset 4px 0 20px color-mix(in srgb,var(--subj-color) 10%,transparent);}
-.subj-block.active{background:color-mix(in srgb,var(--subj-color) 13%,var(--surface));border-color:color-mix(in srgb,var(--subj-color) 32%,transparent);border-left-color:var(--subj-color,var(--accent));opacity:1;box-shadow:0 2px 14px color-mix(in srgb,var(--subj-color) 14%,transparent), inset 4px 0 20px color-mix(in srgb,var(--subj-color) 9%,transparent);}
-.subj-block.active .sb-name{color:var(--fg);} .sb-icon{font-size:15px;flex-shrink:0;} .sb-name{font-size:13px;font-weight:500;color:var(--fg2);transition:color .15s;}
-.sb-count{font-family:'DM Mono',monospace;font-size:9.5px;color:color-mix(in srgb,var(--subj-color) 80%,var(--fg3));background:color-mix(in srgb,var(--subj-color) 12%,var(--surface2));border:1px solid color-mix(in srgb,var(--subj-color) 38%,var(--border2));padding:2px 7px;border-radius:9px;transition:all .18s;}
-.subj-block.active .sb-count{color:var(--subj-color);background:color-mix(in srgb,var(--subj-color) 20%,var(--surface2));border-color:color-mix(in srgb,var(--subj-color) 60%,transparent);box-shadow:0 0 8px color-mix(in srgb,var(--subj-color) 30%,transparent);} .sb-arr{font-size:7px;color:color-mix(in srgb,var(--subj-color) 60%,var(--fg4));transition:transform .2s,filter .18s;flex-shrink:0;} .subj-block.active .sb-arr{transform:rotate(90deg);color:var(--subj-color);filter:drop-shadow(0 0 4px var(--subj-color));}
+/* ── SUBJECT LIST ── */
+#subjList{flex:1;overflow-y:auto;padding:6px 6px 20px;}
+#subjList::-webkit-scrollbar{width:3px;}
+#subjList::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ── SUBJECT BLOCKS — styled like resource.html subject rows ── */
+.subj-block{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 10px;border-radius:8px;
+  border:1px solid color-mix(in srgb,var(--subj-color) 18%,transparent);
+  border-left:3px solid var(--subj-color,var(--border2));
+  background:color-mix(in srgb,var(--subj-color) 5%,transparent);
+  cursor:pointer;margin-bottom:3px;opacity:.88;
+  box-shadow:inset 4px 0 16px color-mix(in srgb,var(--subj-color) 6%,transparent);
+  transition:all .18s;
+}
+.subj-block:hover{
+  background:color-mix(in srgb,var(--subj-color) 11%,var(--surface));
+  border-color:color-mix(in srgb,var(--subj-color) 32%,transparent);
+  border-left-color:var(--subj-color,var(--accent));
+  opacity:1;
+  box-shadow:inset 4px 0 20px color-mix(in srgb,var(--subj-color) 10%,transparent);
+}
+.subj-block.active{
+  background:color-mix(in srgb,var(--subj-color) 13%,var(--surface));
+  border-color:color-mix(in srgb,var(--subj-color) 32%,transparent);
+  border-left-color:var(--subj-color,var(--accent));
+  opacity:1;
+  box-shadow:0 2px 14px color-mix(in srgb,var(--subj-color) 14%,transparent),
+             inset 4px 0 20px color-mix(in srgb,var(--subj-color) 9%,transparent);
+}
+.subj-block.active .sb-name{color:var(--fg);}
+.sb-icon{font-size:15px;flex-shrink:0;}
+.sb-info{flex:1;min-width:0;}
+.sb-name{font-size:13px;font-weight:500;color:var(--fg2);transition:color .15s;}
+.sb-count{
+  font-family:'DM Mono',monospace;font-size:9.5px;
+  color:color-mix(in srgb,var(--subj-color) 80%,var(--fg3));
+  background:color-mix(in srgb,var(--subj-color) 12%,var(--surface2));
+  border:1px solid color-mix(in srgb,var(--subj-color) 38%,var(--border2));
+  padding:2px 7px;border-radius:9px;transition:all .18s;
+}
+.subj-block.active .sb-count{
+  color:var(--subj-color);
+  background:color-mix(in srgb,var(--subj-color) 20%,var(--surface2));
+  border-color:color-mix(in srgb,var(--subj-color) 60%,transparent);
+  box-shadow:0 0 8px color-mix(in srgb,var(--subj-color) 30%,transparent);
+}
+
+
+/* ── RIGHT PANEL ── */
 .panel{display:flex;flex-direction:column;background:var(--bg);overflow:hidden;}
-.panel-infobar{display:flex;align-items:center;gap:10px;padding:0 20px;height:44px;background:color-mix(in srgb,var(--accent) 4%,var(--bg2));border-bottom:1px solid color-mix(in srgb,var(--accent) 12%,var(--border));flex-shrink:0;min-width:0;transition:background .35s,border-color .35s;position:relative;}
-.pi-icon{font-size:18px;flex-shrink:0;}.pi-title{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--fg);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.pi-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);flex-shrink:0;}
-.panel-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 22px 32px;} .panel-body::-webkit-scrollbar{width:4px;} .panel-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.panel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;} .panel-empty-h{font-family:'Lora',serif;font-style:italic;font-size:18px;color:var(--fg2);} .panel-empty-s{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);opacity:.7;}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ── INFOBAR — exact viewer-infobar from resource.html ── */
+.panel-infobar{
+  display:flex;align-items:center;gap:10px;padding:0 20px;height:44px;
+  background:color-mix(in srgb,var(--accent) 4%,var(--bg2));
+  border-bottom:1px solid color-mix(in srgb,var(--accent) 12%,var(--border));
+  flex-shrink:0;min-width:0;transition:background .35s,border-color .35s;
+  position:relative;
+}
+.pi-icon{font-size:18px;flex-shrink:0;}
+.pi-title{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--fg);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pi-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);flex-shrink:0;}
+.pi-chips{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.pi-chip{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--fg2);border:1px solid var(--border2);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+
+/* ── PANEL BODY ── */
+.panel-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 22px 32px;}
+.panel-body::-webkit-scrollbar{width:4px;}
+.panel-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.panel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;}
+.panel-empty-h{font-family:'Lora',serif;font-style:italic;font-size:18px;color:var(--fg2);}
+.panel-empty-s{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);opacity:.7;}
+
+/* ── CARD GRID ── */
 .ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
-.ch-card{border-radius:10px;border:1px solid var(--border2);background:var(--bg2);overflow:hidden;display:flex;flex-direction:column;transition:border-color .18s,box-shadow .18s,background .18s;animation:cardIn .22s ease both;}
+
+/* ── CHANNEL CARD ── */
+.ch-card{
+  border-radius:10px;border:1px solid var(--border2);
+  background:var(--bg2);overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+  animation:cardIn .22s ease both;
+}
 @keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.ch-card:hover{border-color:color-mix(in srgb,var(--subj-color,var(--accent)) 40%,transparent);background:var(--surface);box-shadow:0 4px 24px rgba(0,0,0,.35),0 0 0 1px color-mix(in srgb,var(--subj-color,transparent) 15%,transparent);}
-.cc-cover{width:100%;aspect-ratio:16/6;position:relative;overflow:hidden;flex-shrink:0;} .cc-cover svg,.cc-cover img.banner{width:100%;height:100%;display:block;object-fit:cover;} .cc-cover img.banner{position:absolute;inset:0;} .cc-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(21,23,20,.9) 100%);} 
+.ch-card:hover{
+  border-color:color-mix(in srgb,var(--subj-color,var(--accent)) 40%,transparent);
+  background:var(--surface);
+  box-shadow:0 4px 24px rgba(0,0,0,.35),
+             0 0 0 1px color-mix(in srgb,var(--subj-color,transparent) 15%,transparent);
+}
+
+/* COVER */
+.cc-cover{width:100%;aspect-ratio:16/6;position:relative;overflow:hidden;flex-shrink:0;}
+.cc-cover svg,.cc-cover img.banner{width:100%;height:100%;display:block;object-fit:cover;}
+.cc-cover img.banner{position:absolute;inset:0;}
+.cc-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(21,23,20,.9) 100%);}
+/* TOP badge */
 .cc-top{position:absolute;top:8px;left:9px;z-index:2;font-family:'DM Mono',monospace;font-size:7.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(122,184,106,.88);color:#071207;letter-spacing:.4px;}
-.cc-rank{position:absolute;top:8px;right:9px;z-index:2;font-family:'DM Mono',monospace;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;border:1px solid;background:rgba(21,23,20,.72);backdrop-filter:blur(4px);} .cr-1{border-color:rgba(245,200,66,.5);color:#f5c842;} .cr-2{border-color:rgba(192,190,184,.4);color:#c0beb8;} .cr-3{border-color:rgba(205,127,50,.4);color:#cd7f32;} .cr-n{border-color:var(--border2);color:var(--fg4);} 
-.cc-av{position:absolute;bottom:10px;left:12px;z-index:2;width:38px;height:38px;border-radius:8px;border:2px solid rgba(255,255,255,.14);overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 10px rgba(0,0,0,.5);} .cc-av img{width:100%;height:100%;object-fit:cover;} .cc-cover-name{position:absolute;bottom:13px;left:58px;right:10px;z-index:2;font-size:13.5px;font-weight:600;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cc-body{padding:10px 14px 0;display:flex;flex-direction:column;gap:0;flex:1;} .cc-handle{font-family:'DM Mono',monospace;font-size:9px;color:var(--fg4);margin-bottom:6px;} .cc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;} .cc-tag{font-family:'DM Mono',monospace;font-size:7.5px;padding:2px 6px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--fg3);text-transform:uppercase;letter-spacing:.3px;} .cc-tag.t-top{background:rgba(122,184,106,.1);border-color:rgba(122,184,106,.22);color:var(--accent);} .cc-tag.t-pyq{background:var(--amber-lo);border-color:rgba(212,168,75,.2);color:var(--amber);} .cc-desc{font-size:12px;color:var(--fg3);line-height:1.65;margin-bottom:8px;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.cc-motto{font-family:'DM Mono',monospace;font-size:9px;font-style:italic;color:var(--fg4);line-height:1.6;padding:7px 10px;border-left:2px solid var(--subj-color,var(--accent));background:color-mix(in srgb,var(--subj-color,var(--accent)) 5%,transparent);border-radius:0 5px 5px 0;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.cc-co-zone{border-top:1px solid var(--border);padding:9px 14px 10px;background:rgba(95,212,232,.03);display:flex;flex-direction:column;gap:5px;} .cc-co-zone:hover{background:rgba(95,212,232,.06);} .cc-co-lbl{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(95,212,232,.7);} .cc-co-score{margin-left:auto;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--cyan);} .co-bar-row{display:flex;align-items:center;gap:7px;} .co-bar{height:4px;border-radius:2px;background:rgba(95,212,232,.1);overflow:hidden;flex:1;} .co-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),rgba(95,212,232,.4));transition:width .45s;} .co-votes{font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(95,212,232,.4);flex-shrink:0;}
-.hs-wrap{display:flex;gap:3px;align-items:center;} .hs{position:relative;width:20px;height:20px;flex-shrink:0;cursor:pointer;transition:transform .1s;} .hs:hover{transform:scale(1.2);} .hs svg{position:absolute;inset:0;width:100%;height:100%;} .hs .hbg{fill:rgba(95,212,232,.1);} .hs .hl{fill:#f5c842;clip-path:inset(0 50% 0 0);} .hs .hr{fill:#f5c842;clip-path:inset(0 0 0 50%);} .hs .hf{fill:#f5c842;} .hs[data-s="0"] .hl,.hs[data-s="0"] .hr,.hs[data-s="0"] .hf{opacity:0;} .hs[data-s="0"] .hbg{fill:rgba(95,212,232,.12);} .hs[data-s="h"] .hl{opacity:1;}.hs[data-s="h"] .hr{opacity:0;}.hs[data-s="h"] .hf{opacity:0;} .hs[data-s="f"] .hl{opacity:0;}.hs[data-s="f"] .hr{opacity:0;}.hs[data-s="f"] .hf{opacity:1;} .hs-wrap.ro .hs{cursor:default;pointer-events:none;transform:none;}
-.cc-yt{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-top:1px solid var(--border);color:rgba(255,107,107,.7);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;text-decoration:none;letter-spacing:.3px;transition:all .16s;} .cc-yt:hover{background:rgba(255,40,40,.07);color:#ff6b6b;} .cc-yt svg{width:12px;height:12px;flex-shrink:0;}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:9px 18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--fg);z-index:9000;white-space:nowrap;animation:toastIn .2s ease;box-shadow:0 8px 32px rgba(0,0,0,.5);} @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-@media (max-width: 900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}.panel{width:100%;}}
+/* rank */
+.cc-rank{position:absolute;top:8px;right:9px;z-index:2;font-family:'DM Mono',monospace;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;border:1px solid;background:rgba(21,23,20,.72);backdrop-filter:blur(4px);}
+.cr-1{border-color:rgba(245,200,66,.5);color:#f5c842;}
+.cr-2{border-color:rgba(192,190,184,.4);color:#c0beb8;}
+.cr-3{border-color:rgba(205,127,50,.4);color:#cd7f32;}
+.cr-n{border-color:var(--border2);color:var(--fg4);}
+/* avatar + name over cover */
+.cc-av{position:absolute;bottom:10px;left:12px;z-index:2;width:38px;height:38px;border-radius:8px;border:2px solid rgba(255,255,255,.14);overflow:hidden;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 10px rgba(0,0,0,.5);}
+.cc-av img{width:100%;height:100%;object-fit:cover;}
+.cc-cover-name{position:absolute;bottom:13px;left:58px;right:10px;z-index:2;font-size:13.5px;font-weight:600;color:#fff;text-shadow:0 1px 5px rgba(0,0,0,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* BODY */
+.cc-body{padding:10px 14px 0;display:flex;flex-direction:column;gap:0;flex:1;}
+.cc-handle{font-family:'DM Mono',monospace;font-size:9px;color:var(--fg4);margin-bottom:6px;}
+.cc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
+.cc-tag{font-family:'DM Mono',monospace;font-size:7.5px;padding:2px 6px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--fg3);text-transform:uppercase;letter-spacing:.3px;}
+.cc-tag.t-top{background:rgba(122,184,106,.1);border-color:rgba(122,184,106,.22);color:var(--accent);}
+.cc-tag.t-pyq{background:var(--amber-lo);border-color:rgba(212,168,75,.2);color:var(--amber);}
+.cc-desc{font-size:12px;color:var(--fg3);line-height:1.65;margin-bottom:8px;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* MOTTO — tinted accent left border like resource.html subject rows */
+.cc-motto{
+  font-family:'DM Mono',monospace;font-size:9px;font-style:italic;
+  color:var(--fg4);line-height:1.6;padding:7px 10px;
+  border-left:2px solid var(--subj-color,var(--accent));
+  background:color-mix(in srgb,var(--subj-color,var(--accent)) 5%,transparent);
+  border-radius:0 5px 5px 0;margin-bottom:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+/* ── COMMUNITY RATING ZONE — cyan tinted ── */
+.cc-co-zone{
+  border-top:1px solid var(--border);
+  padding:9px 14px 10px;
+  background:rgba(95,212,232,.03);
+  display:flex;flex-direction:column;gap:5px;
+}
+.cc-co-zone:hover{background:rgba(95,212,232,.06);}
+.cc-co-lbl{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:8.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(95,212,232,.7);}
+.cc-co-score{margin-left:auto;font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:var(--cyan);}
+.co-bar-row{display:flex;align-items:center;gap:7px;}
+.co-bar{height:4px;border-radius:2px;background:rgba(95,212,232,.1);overflow:hidden;flex:1;}
+.co-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),rgba(95,212,232,.4));transition:width .45s;}
+.co-votes{font-family:'DM Mono',monospace;font-size:8.5px;color:rgba(95,212,232,.4);flex-shrink:0;}
+
+/* half-stars */
+.hs-wrap{display:flex;gap:3px;align-items:center;}
+.hs{position:relative;width:20px;height:20px;flex-shrink:0;cursor:pointer;transition:transform .1s;}
+.hs:hover{transform:scale(1.2);}
+.hs svg{position:absolute;inset:0;width:100%;height:100%;}
+.hs .hbg{fill:rgba(95,212,232,.1);}
+.hs .hl{fill:#f5c842;clip-path:inset(0 50% 0 0);}
+.hs .hr{fill:#f5c842;clip-path:inset(0 0 0 50%);}
+.hs .hf{fill:#f5c842;}
+.hs[data-s="0"] .hl,.hs[data-s="0"] .hr,.hs[data-s="0"] .hf{opacity:0;}
+.hs[data-s="0"] .hbg{fill:rgba(95,212,232,.12);}
+.hs[data-s="h"] .hl{opacity:1;}.hs[data-s="h"] .hr{opacity:0;}.hs[data-s="h"] .hf{opacity:0;}
+.hs[data-s="f"] .hl{opacity:0;}.hs[data-s="f"] .hr{opacity:0;}.hs[data-s="f"] .hf{opacity:1;}
+.hs-wrap.ro .hs{cursor:default;pointer-events:none;transform:none;}
+
+/* YT link — matches resource.html .tbtn.primary style */
+.cc-yt{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 14px;
+  border-top:1px solid var(--border);
+  color:rgba(255,107,107,.7);font-family:'DM Mono',monospace;font-size:11px;font-weight:500;
+  text-decoration:none;letter-spacing:.3px;
+  transition:all .16s;
+}
+.cc-yt:hover{background:rgba(255,40,40,.07);color:#ff6b6b;}
+.cc-yt svg{width:12px;height:12px;flex-shrink:0;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:9px 18px;font-family:'DM Mono',monospace;font-size:11px;color:var(--fg);z-index:9000;white-space:nowrap;animation:toastIn .2s ease;box-shadow:0 8px 32px rgba(0,0,0,.5);}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 </style>
 </head>
 <body>
+
+<!-- NAV — exact resource.html structure -->
 <nav class="nav">
   <div class="nav-left">
     <div class="nav-brand">
@@ -98,7 +258,7 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     </div>
     <div class="nav-links">
       <a class="nav-link" href="/">← Home</a>
-      <a class="nav-link" href="/resource">
+      <a class="nav-link" href="resource.html">
         <span class="nav-link-pip" id="navPip"></span>
         Resources
       </a>
@@ -108,18 +268,26 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 </nav>
 
 <div class="layout">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-head">
       <div class="sidebar-heading">Best YouTube<br>Channels to Learn</div>
       <div class="sidebar-sub">ISC 2026 · handpicked · ranked</div>
     </div>
     <div class="tabs">
-      <button class="tab active" id="tab-commerce" onclick="setStream('commerce')"><span style="width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:.7;flex-shrink:0;transition:opacity .2s"></span>📊 Commerce</button>
-      <button class="tab" id="tab-science" onclick="setStream('science')"><span style="width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:.4;flex-shrink:0;transition:opacity .2s"></span>🔬 Science</button>
+      <button class="tab active" id="tab-commerce" onclick="setStream('commerce')">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--amber);opacity:.7;flex-shrink:0;transition:opacity .2s"></span>
+        📊 Commerce
+      </button>
+      <button class="tab" id="tab-science" onclick="setStream('science')">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--cyan);opacity:.4;flex-shrink:0;transition:opacity .2s"></span>
+        🔬 Science
+      </button>
     </div>
     <div id="subjList"></div>
   </aside>
 
+  <!-- PANEL -->
   <section class="panel">
     <div class="panel-infobar" id="panelInfobar">
       <span class="pi-icon" id="piIcon">📺</span>
@@ -136,40 +304,319 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
     </div>
   </section>
 </div>
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
 <script>
 // ━━ TEACHER IMAGES — only edit this block ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const TEACHER_IMAGES = {
-  yash:     { avatar: '', banner: '' },
-  rajat:    { avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgqErvUCL4m1QoYEcaWDQ7T9yT-VTLs9HLQg&s', banner: 'https://i.ytimg.com/vi/G3pIz8jBciI/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCFdwipSO7EH6ketGeZe0qFunvTFw' },
-  sunil:    { avatar: 'https://yt3.ggpht.com/QEGh26V-RkzSZK7uTkEG7I9wDIiujJ0laL8gelY7-bqVgF7A5Of_D2YU6ZXLhUoqdH4hBXf74w=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/vi/PPF34SUT6M0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAIZ35eT4h_r6H8tC4BmbRmqKhzEA' },
-  parag:    { avatar: 'https://yt3.googleusercontent.com/ytc/AIdro_mQbmRmTcXoDOOvxIqQhIxZrNlH_pG_jwWu-WvycG1Zn78=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/vi/yJi56uQR0Ck/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCUjxrI6OB6xyq21J5-n5eDHz5UTg' },
-  shubham:  { avatar: 'https://yt3.ggpht.com/sQoYwxFOEYWAssQIcCfok4qYGrwPi-5sbn_7KLocFD-dnU9jq7b_PkXgSJOWbtDDZkYSIuBYdA=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/an_webp/DuSiGnbHoOY/mqdefault_6s.webp?du=3000&sqp=CND83c0G&rs=AOn4CLAIqCP0x_TGbs7GYBIhqz4lfkZaLQ' },
-  sudhir:   { avatar: '', banner: '' }, aryan:    { avatar: '', banner: '' }, edufyhub: { avatar: '', banner: '' }, sourabh:  { avatar: '', banner: '' }, ashu:     { avatar: '', banner: '' }, commbaba: { avatar: '', banner: '' },
+  yash     : { avatar: 'https://yt3.ggpht.com/jtJeh-RBZlyUU81h0N5haFeX7T88iCoIe_BvcA-rLdOOSSpcCN0I_BA9Z-Yg4O8PMYfLfKt8eQ=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://yt3.googleusercontent.com/ZgsjV55CNR6nm9S2Q_0UsXGN8KIfzs4LzwrLUg3yUHWX4sARwg-a-t4IpQsh7LGPGvTj_UqOhfw=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj' },  // Yash Maheshwari
+  rajat    : { avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgqErvUCL4m1QoYEcaWDQ7T9yT-VTLs9HLQg&s', banner: 'https://i.ytimg.com/vi/G3pIz8jBciI/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCFdwipSO7EH6ketGeZe0qFunvTFw' },  // Rajat Arora
+  sunil    : { avatar: 'https://yt3.ggpht.com/QEGh26V-RkzSZK7uTkEG7I9wDIiujJ0laL8gelY7-bqVgF7A5Of_D2YU6ZXLhUoqdH4hBXf74w=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/vi/PPF34SUT6M0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAIZ35eT4h_r6H8tC4BmbRmqKhzEA' },  // Sunil Panda
+  parag    : { avatar: 'https://yt3.googleusercontent.com/ytc/AIdro_mQbmRmTcXoDOOvxIqQhIxZrNlH_pG_jwWu-WvycG1Zn78=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/vi/yJi56uQR0Ck/hqdefault.jpg?sqp=-oaymwEXCOADEI4CSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLCUjxrI6OB6xyq21J5-n5eDHz5UTg' },  // CA Parag Gupta
+  shubham  : { avatar: 'https://yt3.ggpht.com/sQoYwxFOEYWAssQIcCfok4qYGrwPi-5sbn_7KLocFD-dnU9jq7b_PkXgSJOWbtDDZkYSIuBYdA=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/an_webp/RIvgj2PUiQM/mqdefault_6s.webp?du=3000&sqp=CNqu4M0G&rs=AOn4CLDqPPtnHeirl6Vf3azwmuJ-GE9kBw' },  // Shubham Jagdish
+  sudhir   : { avatar: 'https://yt3.ggpht.com/TT8MIUneWI5Xg430s0jyzVZIqoiiwGIu6rlCrLgMo-02ROHBeDl8bDTk9u9NbvrzzHfyUhQlT94=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/an_webp/E5IEIAD-5Cg/mqdefault_6s.webp?du=3000&sqp=CJC14M0G&rs=AOn4CLCKGOLGmKzUHHf6RlIw12wZ2ALTmA' },  // Study with Sudhir
+  aryan    : { avatar: 'https://yt3.ggpht.com/Ju8UM9o5dRAZQT5f-viOe6WnXdmLmKT1Mlrt0tYFLnKfbPU9mI66GMeojpbHNKDgLPYrR_cP=s176-c-k-c0x00ffffff-no-rj-mo', banner: 'https://i.ytimg.com/an_webp/aaQEHdEcdks/mqdefault_6s.webp?du=3000&sqp=CKm24M0G&rs=AOn4CLBAsVXomfpEFJyiy8YSVgbPmu2TDw' },  // Aryan Tutorials
+  edufyhub : { avatar: '', banner: '' },  // EdufyHub
+  sourabh  : { avatar: '', banner: '' },  // Sourabh Raina
+  ashu     : { avatar: '', banner: '' },  // Ashu Ghai
+  commbaba : { avatar: '', banner: '' },  // Commerce Baba
 };
-const ID_TO_TEACHER = {yash_phy:'yash',yash_chem:'yash',yash_bio:'yash',yash_maths:'yash',rajat_acc:'rajat',sunil_acc:'sunil',sunil_eco:'sunil',parag_acc:'parag',shubham_acc:'shubham',shubham_eco:'shubham',shubham_bst:'shubham',sudhir_eco:'sudhir',sudhir_bst:'sudhir',sudhir_eng_c:'sudhir',sudhir_eng_s:'sudhir',aryan_bst:'aryan',aryan_eng_c:'aryan',aryan_eng_s:'aryan',edufyhub_chem:'edufyhub',edufyhub_bio:'edufyhub',sourabh_chem:'sourabh',sourabh_bio:'sourabh',ashu_phy:'ashu',commbaba_bst:'commbaba'};
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const ID_TO_TEACHER = {
+  yash_phy:'yash',yash_chem:'yash',yash_bio:'yash',yash_maths:'yash',
+  rajat_acc:'rajat',sunil_acc:'sunil',sunil_eco:'sunil',parag_acc:'parag',
+  shubham_acc:'shubham',shubham_eco:'shubham',shubham_bst:'shubham',
+  sudhir_eco:'sudhir',sudhir_bst:'sudhir',sudhir_eng_c:'sudhir',sudhir_eng_s:'sudhir',
+  aryan_bst:'aryan',aryan_eng_c:'aryan',aryan_eng_s:'aryan',
+  edufyhub_chem:'edufyhub',edufyhub_bio:'edufyhub',
+  sourabh_chem:'sourabh',sourabh_bio:'sourabh',
+  ashu_phy:'ashu',commbaba_bst:'commbaba',
+};
 const getAvatar=id=>{const t=ID_TO_TEACHER[id];return t&&TEACHER_IMAGES[t]?.avatar||'';};
 const getBanner=id=>{const t=ID_TO_TEACHER[id];return t&&TEACHER_IMAGES[t]?.banner||'';};
 function applyAvatar(el,url){if(!url)return;el.textContent='';const img=document.createElement('img');img.src=url;img.alt='';img.style.cssText='width:100%;height:100%;object-fit:cover;';img.onerror=()=>img.remove();el.appendChild(img);}
-const MOTTOS={rajat_acc:'"Concepts first, marks follow."',sunil_acc:'"Complete syllabus, zero shortcuts."',parag_acc:'"Sure-shot topics. 100 target."',shubham_acc:'"Clarity over confusion." — TEDx speaker',sunil_eco:'"Theory + numericals, ISC style."',sudhir_eco:'"High scores through high clarity."',shubham_eco:'"Macro, micro — mastered."',sudhir_bst:'"From principles to practice."',commbaba_bst:'"Quick revision, smart scoring."',aryan_bst:'"2026-specific. No fluff."',shubham_bst:'"Sure-shot topics, board precision."',aryan_eng_c:'"Paper 1, 2, literature — all covered."',sudhir_eng_c:'"Solid coverage, multi-subject."',yash_phy:'"Derivations done right, every time."',ashu_phy:'"Deep concepts, PYQ mastery."',yash_chem:'"Inorganic, organic — board strategy."',edufyhub_chem:'"2026 paper analysis, maha-revision."',sourabh_chem:'"One-stop for clear concepts."',yash_bio:'"Sure-shot topics. 95+ strategy."',edufyhub_bio:'"2026-specific question practice."',sourabh_bio:'"Clear foundations, strong concepts."',yash_maths:'"Integration, vectors, 3D — solved."',aryan_eng_s:'"Literature to grammar, 2026 ready."',sudhir_eng_s:'"Solid English, multi-subject."'};
 
-const DATA={commerce:[{subject:'Accountancy',color:'#378add',bg:'#0a1020',icon:'🧾',channels:[{id:'rajat_acc',name:'Rajat Arora',handle:'@rajataroraofficial',av:'📊',avBg:'#0c1428',isTop:true,desc:'Top for conceptual depth, tricky problems, and quick revisions. Students consistently score 95+.',tags:['TOP PICK','Conceptual Depth','95+ Results'],url:'https://www.youtube.com/@rajataroraofficial',pat:'circuit'},{id:'sunil_acc',name:'Sunil Panda',handle:'@sunilpandaofficial',av:'🧾',avBg:'#0c1628',desc:'Community favourite — full lectures, scoring tips, complete syllabus with board-exam focus.',tags:['Community Fav','Full Lectures','ISC Focus'],url:'https://www.youtube.com/@sunilpandaofficial',pat:'dots'},{id:'parag_acc',name:'CA Parag Gupta',handle:'@caparaggupta',av:'🏆',avBg:'#0e1422',desc:'Guess papers, marathons, sure-shot questions. Great for 100-target revision.',tags:['Advanced','Guess Papers','100-Target'],url:'https://www.youtube.com/@caparaggupta',pat:'hexagons'},{id:'shubham_acc',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',isTop:true,desc:'ISC commerce legend — crystal-clear concepts, real exam strategy, TEDx speaker.',tags:['TOP PICK','One-Stop','Obsession'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'grid'}]},{subject:'Economics',color:'#639922',bg:'#0e1808',icon:'📈',channels:[{id:'sunil_eco',name:'Sunil Panda',handle:'@sunilpandaofficial',av:'📈',avBg:'#101c08',isTop:true,multi:true,desc:'Best for theory + numericals. Strong ISC board focus across all macro topics.',tags:['TOP PICK','Theory+Numericals'],url:'https://www.youtube.com/@sunilpandaofficial',pat:'grid'},{id:'sudhir_eco',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'💹',avBg:'#0e1a06',multi:true,desc:'Highly recommended for clear explanations, question solving, and high-scoring tips.',tags:['Clear Explanations','High-Scoring Tips'],url:'https://www.youtube.com/@StudywithSudhir',pat:'lines'},{id:'shubham_eco',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',multi:true,desc:'Excellent Economics under Obsession — macro and micro with ISC exam precision.',tags:['ISC Focused','Macro+Micro'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'dots'}]},{subject:'Business Studies',color:'#ba7517',bg:'#1e1208',icon:'🏢',channels:[{id:'sudhir_bst',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'🏢',avBg:'#201408',isTop:true,multi:true,desc:'Elite for ISC commerce — animated clarity, full syllabus, revision, and exam tips.',tags:['TOP PICK','Animated','Full Syllabus'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'},{id:'commbaba_bst',name:'Commerce Baba',handle:'@CommerceBaba',av:'💼',avBg:'#1c1208',desc:'Animated explanations and quick revision with great scoring strategy for BST.',tags:['Animated','Quick Revision'],url:'https://www.youtube.com/@CommerceBaba',pat:'triangles'},{id:'aryan_bst',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'📋',avBg:'#1e1408',multi:true,desc:'2026-specific important topics and paper analysis. Great last-minute prep.',tags:['2026 Specific','Paper Analysis'],url:'https://www.youtube.com/@AryanTutorials',pat:'dots'},{id:'shubham_bst',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',multi:true,desc:'BST with signature motivational clarity — ISC-pattern questions and sure-shot topics.',tags:['ISC Pattern','Sure-Shot Topics'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'circuit'}]},{subject:'English',color:'#e8a05f',bg:'#1e1408',icon:'📖',channels:[{id:'aryan_eng_c',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'✍️',avBg:'#221508',isTop:true,multi:true,desc:'Dominates 2026 prep — Paper 1/2, grammar, directed writing, CFQs, and literature.',tags:['TOP PICK','Paper 1+2','Literature'],url:'https://www.youtube.com/@AryanTutorials',pat:'lines'},{id:'sudhir_eng_c',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'📝',avBg:'#1c1408',multi:true,desc:'Solid English coverage alongside multi-subject commerce support.',tags:['Solid Coverage','Multi-Subject'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'}]}],science:[{subject:'Physics',color:'#5fd4e8',bg:'#081620',icon:'⚛️',channels:[{id:'yash_phy',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0d1e2a',isTop:true,desc:'Top pick for ISC derivations, full lectures, competency questions, and 2026 expected questions.',tags:['TOP PICK','Derivations','Full Syllabus'],url:'https://www.youtube.com/@YASHHESH',pat:'circuit'},{id:'ashu_phy',name:'Ashu Ghai',handle:'Science and Fun',av:'🔭',avBg:'#0d1525',desc:'Community legend for deep concepts and PYQ practice.',tags:['Deep Concepts','PYQ Practice'],url:'https://www.youtube.com/@ScienceAndFun',pat:'waves'}]},{subject:'Chemistry',color:'#5fffa0',bg:'#081e12',icon:'🧪',channels:[{id:'yash_chem',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0e2016',isTop:true,multi:true,desc:'Full ISC syllabus — strong inorganic/organic breakdown with board-exam strategy.',tags:['TOP PICK','Full Syllabus','Inorganic/Organic'],url:'https://www.youtube.com/@YASHHESH',pat:'hexagons'},{id:'edufyhub_chem',name:'EdufyHub',handle:'@EdufyHub',av:'🔬',avBg:'#0c1c12',desc:'2026 paper analysis, maha-revision, exact board-style questions.',tags:['Paper Analysis','Maha-Revision'],url:'https://www.youtube.com/@EdufyHub',pat:'dots'},{id:'sourabh_chem',name:'Sourabh Raina',handle:'@SourabhRaina',av:'⚗️',avBg:'#0c1a12',desc:'One-stop for clear concepts. Especially strong paired with Bio.',tags:['One-Stop','Clear Concepts'],url:'https://www.youtube.com/@SourabhRaina',pat:'triangles'}]},{subject:'Biology',color:'#7ab86a',bg:'#0c1e0c',icon:'🌿',channels:[{id:'yash_bio',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0e2010',isTop:true,multi:true,desc:'Elite for maha-revision, sure-shot topics, and 95+ strategy. Full syllabus fast.',tags:['TOP PICK','Maha-Revision','95+ Strategy'],url:'https://www.youtube.com/@YASHHESH',pat:'cells'},{id:'edufyhub_bio',name:'EdufyHub',handle:'@EdufyHub',av:'🔬',avBg:'#0c1c0e',multi:true,desc:'2026-specific analysis and question practice. Pairs well with Yash.',tags:['2026 Analysis','Question Practice'],url:'https://www.youtube.com/@EdufyHub',pat:'dots'},{id:'sourabh_bio',name:'Sourabh Raina',handle:'@SourabhRaina',av:'🧬',avBg:'#0c1c10',multi:true,desc:'Highly praised one-stop for clear biological concepts.',tags:['One-Stop','Clear Concepts'],url:'https://www.youtube.com/@SourabhRaina',pat:'triangles'}]},{subject:'Mathematics',color:'#7f77dd',bg:'#10101e',icon:'📐',channels:[{id:'yash_maths',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#12102a',isTop:true,multi:true,desc:'One-shots, integration/vectors/3D, important questions, ISC pattern solutions.',tags:['TOP PICK','One-Shots','Integration'],url:'https://www.youtube.com/@YASHHESH',pat:'grid'}]},{subject:'English',color:'#e8a05f',bg:'#1e1408',icon:'📖',channels:[{id:'aryan_eng_s',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'✍️',avBg:'#221508',isTop:true,desc:'Paper 1/2, grammar, directed writing, CFQs, and literature.',tags:['TOP PICK','Paper 1+2','Literature'],url:'https://www.youtube.com/@AryanTutorials',pat:'lines'},{id:'sudhir_eng_s',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'📝',avBg:'#1c1408',multi:true,desc:'Solid English coverage + multi-subject support.',tags:['Solid Coverage','Multi-Subject'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'}]}]};
+const MOTTOS={
+  rajat_acc:'"Concepts first, marks follow."',sunil_acc:'"Complete syllabus, zero shortcuts."',
+  parag_acc:'"Sure-shot topics. 100 target."',shubham_acc:'"Clarity over confusion." — TEDx speaker',
+  sunil_eco:'"Theory + numericals, ISC style."',sudhir_eco:'"High scores through high clarity."',
+  shubham_eco:'"Macro, micro — mastered."',sudhir_bst:'"From principles to practice."',
+  commbaba_bst:'"Quick revision, smart scoring."',aryan_bst:'"2026-specific. No fluff."',
+  shubham_bst:'"Sure-shot topics, board precision."',aryan_eng_c:'"Paper 1, 2, literature — all covered."',
+  sudhir_eng_c:'"Solid coverage, multi-subject."',yash_phy:'"Derivations done right, every time."',
+  ashu_phy:'"Deep concepts, PYQ mastery."',yash_chem:'"Inorganic, organic — board strategy."',
+  edufyhub_chem:'"2026 paper analysis, maha-revision."',sourabh_chem:'"One-stop for clear concepts."',
+  yash_bio:'"Sure-shot topics. 95+ strategy."',edufyhub_bio:'"2026-specific question practice."',
+  sourabh_bio:'"Clear foundations, strong concepts."',yash_maths:'"Integration, vectors, 3D — solved."',
+  aryan_eng_s:'"Literature to grammar, 2026 ready."',sudhir_eng_s:'"Solid English, multi-subject."',
+};
 
+const DATA={
+  commerce:[
+    {subject:'Accountancy',color:'#378add',bg:'#0a1020',icon:'🧾',channels:[
+      {id:'rajat_acc',name:'Rajat Arora',handle:'@rajataroraofficial',av:'📊',avBg:'#0c1428',isTop:true,desc:'Top for conceptual depth, tricky problems, and quick revisions. Students consistently score 95+.',tags:['TOP PICK','Conceptual Depth','95+ Results'],url:'https://www.youtube.com/@rajataroraofficial',pat:'circuit'},
+      {id:'sunil_acc',name:'Sunil Panda',handle:'@sunilpandaofficial',av:'🧾',avBg:'#0c1628',desc:'Community favourite — full lectures, scoring tips, complete syllabus with board-exam focus.',tags:['Community Fav','Full Lectures','ISC Focus'],url:'https://www.youtube.com/@sunilpandaofficial',pat:'dots'},
+      {id:'parag_acc',name:'CA Parag Gupta',handle:'@caparaggupta',av:'🏆',avBg:'#0e1422',desc:'Guess papers, marathons, sure-shot questions. Great for 100-target revision.',tags:['Advanced','Guess Papers','100-Target'],url:'https://www.youtube.com/@caparaggupta',pat:'hexagons'},
+      {id:'shubham_acc',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',isTop:true,desc:'ISC commerce legend — crystal-clear concepts, real exam strategy, TEDx speaker.',tags:['TOP PICK','One-Stop','Obsession'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'grid'},
+    ]},
+    {subject:'Economics',color:'#639922',bg:'#0e1808',icon:'📈',channels:[
+      {id:'sunil_eco',name:'Sunil Panda',handle:'@sunilpandaofficial',av:'📈',avBg:'#101c08',isTop:true,multi:true,desc:'Best for theory + numericals. Strong ISC board focus across all macro topics.',tags:['TOP PICK','Theory+Numericals'],url:'https://www.youtube.com/@sunilpandaofficial',pat:'grid'},
+      {id:'sudhir_eco',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'💹',avBg:'#0e1a06',multi:true,desc:'Highly recommended for clear explanations, question solving, and high-scoring tips.',tags:['Clear Explanations','High-Scoring Tips'],url:'https://www.youtube.com/@StudywithSudhir',pat:'lines'},
+      {id:'shubham_eco',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',multi:true,desc:'Excellent Economics under Obsession — macro and micro with ISC exam precision.',tags:['ISC Focused','Macro+Micro'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'dots'},
+    ]},
+    {subject:'Business Studies',color:'#ba7517',bg:'#1e1208',icon:'🏢',channels:[
+      {id:'sudhir_bst',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'🏢',avBg:'#201408',isTop:true,multi:true,desc:'Elite for ISC commerce — animated clarity, full syllabus, revision, and exam tips.',tags:['TOP PICK','Animated','Full Syllabus'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'},
+      {id:'commbaba_bst',name:'Commerce Baba',handle:'@CommerceBaba',av:'💼',avBg:'#1c1208',desc:'Animated explanations and quick revision with great scoring strategy for BST.',tags:['Animated','Quick Revision'],url:'https://www.youtube.com/@CommerceBaba',pat:'triangles'},
+      {id:'aryan_bst',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'📋',avBg:'#1e1408',multi:true,desc:'2026-specific important topics and paper analysis. Great last-minute prep.',tags:['2026 Specific','Paper Analysis'],url:'https://www.youtube.com/@AryanTutorials',pat:'dots'},
+      {id:'shubham_bst',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',multi:true,desc:'BST with signature motivational clarity — ISC-pattern questions and sure-shot topics.',tags:['ISC Pattern','Sure-Shot Topics'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'circuit'},
+    ]},
+    {subject:'English',color:'#e8a05f',bg:'#1e1408',icon:'📖',channels:[
+      {id:'aryan_eng_c',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'✍️',avBg:'#221508',isTop:true,multi:true,desc:'Dominates 2026 prep — Paper 1/2, grammar, directed writing, CFQs, and literature.',tags:['TOP PICK','Paper 1+2','Literature'],url:'https://www.youtube.com/@AryanTutorials',pat:'lines'},
+      {id:'sudhir_eng_c',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'📝',avBg:'#1c1408',multi:true,desc:'Solid English coverage alongside multi-subject commerce support.',tags:['Solid Coverage','Multi-Subject'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'},
+    ]},
+  ],
+  science:[
+    {subject:'Physics',color:'#5fd4e8',bg:'#081620',icon:'⚛️',channels:[
+      {id:'yash_phy',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0d1e2a',isTop:true,desc:'Top pick for ISC derivations, full lectures, competency questions, and 2026 expected questions.',tags:['TOP PICK','Derivations','Full Syllabus'],url:'https://www.youtube.com/@YASHHESH',pat:'circuit'},
+      {id:'ashu_phy',name:'Ashu Ghai',handle:'Science and Fun',av:'🔭',avBg:'#0d1525',desc:'Community legend for deep concepts and PYQ practice.',tags:['Deep Concepts','PYQ Practice'],url:'https://www.youtube.com/@ScienceAndFun',pat:'waves'},
+    ]},
+    {subject:'Chemistry',color:'#5fffa0',bg:'#081e12',icon:'🧪',channels:[
+      {id:'yash_chem',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0e2016',isTop:true,multi:true,desc:'Full ISC syllabus — strong inorganic/organic breakdown with board-exam strategy.',tags:['TOP PICK','Full Syllabus','Inorganic/Organic'],url:'https://www.youtube.com/@YASHHESH',pat:'hexagons'},
+      {id:'edufyhub_chem',name:'EdufyHub',handle:'@EdufyHub',av:'🔬',avBg:'#0c1c12',desc:'2026 paper analysis, maha-revision, exact board-style questions.',tags:['Paper Analysis','Maha-Revision'],url:'https://www.youtube.com/@EdufyHub',pat:'dots'},
+      {id:'sourabh_chem',name:'Sourabh Raina',handle:'@SourabhRaina',av:'⚗️',avBg:'#0c1a12',desc:'One-stop for clear concepts. Especially strong paired with Bio.',tags:['One-Stop','Clear Concepts'],url:'https://www.youtube.com/@SourabhRaina',pat:'triangles'},
+    ]},
+    {subject:'Biology',color:'#7ab86a',bg:'#0c1e0c',icon:'🌿',channels:[
+      {id:'yash_bio',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#0e2010',isTop:true,multi:true,desc:'Elite for maha-revision, sure-shot topics, and 95+ strategy. Full syllabus fast.',tags:['TOP PICK','Maha-Revision','95+ Strategy'],url:'https://www.youtube.com/@YASHHESH',pat:'cells'},
+      {id:'edufyhub_bio',name:'EdufyHub',handle:'@EdufyHub',av:'🔬',avBg:'#0c1c0e',multi:true,desc:'2026-specific analysis and question practice. Pairs well with Yash.',tags:['2026 Analysis','Question Practice'],url:'https://www.youtube.com/@EdufyHub',pat:'dots'},
+      {id:'sourabh_bio',name:'Sourabh Raina',handle:'@SourabhRaina',av:'🧬',avBg:'#0c1c10',multi:true,desc:'Highly praised one-stop for clear biological concepts.',tags:['One-Stop','Clear Concepts'],url:'https://www.youtube.com/@SourabhRaina',pat:'triangles'},
+    ]},
+    {subject:'Mathematics',color:'#7f77dd',bg:'#10101e',icon:'📐',channels:[
+      {id:'yash_maths',name:'Yash Maheshwari',handle:'@YASHHESH',av:'👨‍🏫',avBg:'#12102a',isTop:true,multi:true,desc:'One-shots, integration/vectors/3D, important questions, ISC pattern solutions.',tags:['TOP PICK','One-Shots','Integration'],url:'https://www.youtube.com/@YASHHESH',pat:'grid'},
+    ]},
+    {subject:'English',color:'#e8a05f',bg:'#1e1408',icon:'📖',channels:[
+      {id:'aryan_eng_s',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'✍️',avBg:'#221508',isTop:true,desc:'Paper 1/2, grammar, directed writing, CFQs, and literature.',tags:['TOP PICK','Paper 1+2','Literature'],url:'https://www.youtube.com/@AryanTutorials',pat:'lines'},
+      {id:'sudhir_eng_s',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'📝',avBg:'#1c1408',multi:true,desc:'Solid English coverage + multi-subject support.',tags:['Solid Coverage','Multi-Subject'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'},
+    ]},
+  ],
+};
+
+// SVG patterns
 const SP='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z';
-function makeSVG(pat,color,bg,w=400,h=150){const c=color,b=bg||'#111210';const rg=`<defs><radialGradient id="rg" cx="40%" cy="50%"><stop offset="0%" stop-color="${c}" stop-opacity=".14"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/></radialGradient></defs>`;const base=`<rect width="${w}" height="${h}" fill="${b}"/>${rg}<rect width="${w}" height="${h}" fill="url(#rg)"/>`;const cx=w/2,cy=h/2;const F={circuit(){const pts=[[w*.05,h*.3],[w*.22,h*.3],[w*.22,h*.6],[w*.48,h*.6],[w*.48,h*.25],[w*.72,h*.25],[w*.72,h*.7],[w*.93,h*.7]];const l=pts.slice(0,-1).map((_,i)=>`<line x1="${pts[i][0].toFixed()}" y1="${pts[i][1].toFixed()}" x2="${pts[i+1][0].toFixed()}" y2="${pts[i+1][1].toFixed()}" stroke="${c}" stroke-width="1.4" opacity=".4"/>`).join('');const n=pts.map((p,i)=>`<circle cx="${p[0].toFixed()}" cy="${p[1].toFixed()}" r="${i%2===0?3.5:2}" fill="${c}" opacity="${i%2===0?.7:.35}"/>`).join('');return l+n;},hexagons(){const hex=(px,py,r)=>{const p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i-Math.PI/6;p.push(`${(px+r*Math.cos(a)).toFixed(1)},${(py+r*Math.sin(a)).toFixed(1)}`);}return`<polygon points="${p.join(' ')}" fill="none" stroke="${c}" stroke-width="1" opacity=".28"/>`;};return[w*.12,w*.33,w*.54,w*.75,w*.92].map((px,i)=>[h*.32,h*.75].map(py=>hex(px,py+(i%2?.5:0)*h*.22,h*.18))).flat().join('');},dots(){let d='';for(let xi=0;xi<=13;xi++)for(let yi=0;yi<=5;yi++){const px=xi*(w/13),py=yi*(h/5);d+=`<circle cx="${px.toFixed()}" cy="${py.toFixed()}" r="${(xi+yi)%5<1?3:1.4}" fill="${c}" opacity="${(.05+Math.abs(Math.sin(xi*yi*.2))*.14).toFixed(2)}"/>`;}return d;},waves(){return[h*.2,h*.38,h*.55,h*.72,h*.88].map((y,i)=>`<path d="M0,${y.toFixed()} ${[...Array(14)].map((_,j)=>`Q${((j+.5)*w/13).toFixed()},${(y-(h*.08+i*3)).toFixed()} ${((j+1)*w/13).toFixed()},${y.toFixed()}`).join(' ')}" fill="none" stroke="${c}" stroke-width="${i===2?2:1}" opacity="${[.15,.25,.44,.25,.12][i]}"/>`).join('');},triangles(){const t=(px,py,s,op)=>`<polygon points="${px.toFixed()},${(py-s).toFixed()} ${(px-s*.86).toFixed()},${(py+s*.5).toFixed()} ${(px+s*.86).toFixed()},${(py+s*.5).toFixed()}" fill="none" stroke="${c}" stroke-width="1" opacity="${op}"/>`;return t(w*.2,cy,h*.3,.44)+t(w*.2,cy,h*.17,.2)+t(w*.62,cy*.7,h*.34,.38)+t(w*.82,h*.75,h*.2,.3);},grid(){let g='';for(let x=0;x<=w;x+=w/12)g+=`<line x1="${x.toFixed()}" y1="0" x2="${x.toFixed()}" y2="${h}" stroke="${c}" stroke-width=".5" opacity=".12"/>`;for(let y=0;y<=h;y+=h/6)g+=`<line x1="0" y1="${y.toFixed()}" x2="${w}" y2="${y.toFixed()}" stroke="${c}" stroke-width=".5" opacity=".12"/>`;return g+`<circle cx="${cx}" cy="${cy}" r="${(h*.28).toFixed()}" fill="none" stroke="${c}" stroke-width="1.2" opacity=".28"/><circle cx="${cx}" cy="${cy}" r="4" fill="${c}" opacity=".55"/>`;},lines(){return[h*.15,h*.28,h*.42,h*.56,h*.7,h*.84].map((y,i)=>`<line x1="0" y1="${y.toFixed()}" x2="${w}" y2="${y.toFixed()}" stroke="${c}" stroke-width="${i===2?2.2:1}" opacity="${[.12,.18,.44,.18,.12,.08][i]}"/>`).join('');},cells(){const cl=(px,py,r,op)=>`<circle cx="${px.toFixed()}" cy="${py.toFixed()}" r="${r.toFixed()}" fill="none" stroke="${c}" stroke-width="1" opacity="${op}"/>`;return cl(w*.28,cy,h*.32,.38)+cl(w*.28,cy,h*.18,.2)+cl(w*.28,cy,h*.07,.5)+cl(w*.68,cy*.65,h*.22,.3);}};return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">${base}${(F[pat]||F.dots)()}</svg>`;}
-const CK='isc_commR_v5'; const sv=new Set(JSON.parse(sessionStorage.getItem('isc_sv5')||'[]')); const gCom=()=>{try{return JSON.parse(localStorage.getItem(CK)||'{}')}catch{return{}}}; const addCom=(id,s)=>{const r=gCom(),pk=id+'c',pv=parseFloat(sessionStorage.getItem('prev_'+pk)||'0');if(!r[id])r[id]={t:0,n:0};if(sv.has(pk)&&pv>0)r[id].t=Math.max(0,r[id].t-pv+s);else{r[id].t+=s;r[id].n++;}localStorage.setItem(CK,JSON.stringify(r));sv.add(pk);sessionStorage.setItem('isc_sv5',JSON.stringify([...sv]));sessionStorage.setItem('prev_'+pk,s);}; const cAvg=id=>{const r=gCom()[id];return r&&r.n?r.t/r.n:0;}; const cCnt=id=>gCom()[id]?.n||0; const prevVote=id=>parseFloat(sessionStorage.getItem('prev_'+id+'c')||'0'); const fmt=v=>v?v.toFixed(1):'—'; const combined=id=>cAvg(id); const rankSort=chs=>[...chs].sort((a,b)=>combined(b.id)-combined(a.id)); const rankCls=i=>['cr-1','cr-2','cr-3','cr-n'][Math.min(i,3)]; const rankEmoji=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+function makeSVG(pat,color,bg,w=400,h=150){
+  const c=color,b=bg||'#111210';
+  const rg=`<defs><radialGradient id="rg" cx="40%" cy="50%"><stop offset="0%" stop-color="${c}" stop-opacity=".14"/><stop offset="100%" stop-color="${c}" stop-opacity="0"/></radialGradient></defs>`;
+  const base=`<rect width="${w}" height="${h}" fill="${b}"/>${rg}<rect width="${w}" height="${h}" fill="url(#rg)"/>`;
+  const cx=w/2,cy=h/2;
+  const F={
+    circuit(){const pts=[[w*.05,h*.3],[w*.22,h*.3],[w*.22,h*.6],[w*.48,h*.6],[w*.48,h*.25],[w*.72,h*.25],[w*.72,h*.7],[w*.93,h*.7]];const l=pts.slice(0,-1).map((_,i)=>`<line x1="${pts[i][0].toFixed()}" y1="${pts[i][1].toFixed()}" x2="${pts[i+1][0].toFixed()}" y2="${pts[i+1][1].toFixed()}" stroke="${c}" stroke-width="1.4" opacity=".4"/>`).join('');const n=pts.map((p,i)=>`<circle cx="${p[0].toFixed()}" cy="${p[1].toFixed()}" r="${i%2===0?3.5:2}" fill="${c}" opacity="${i%2===0?.7:.35}"/>`).join('');return l+n;},
+    hexagons(){const hex=(px,py,r)=>{const p=[];for(let i=0;i<6;i++){const a=Math.PI/3*i-Math.PI/6;p.push(`${(px+r*Math.cos(a)).toFixed(1)},${(py+r*Math.sin(a)).toFixed(1)}`);}return`<polygon points="${p.join(' ')}" fill="none" stroke="${c}" stroke-width="1" opacity=".28"/>`;};return[w*.12,w*.33,w*.54,w*.75,w*.92].map((px,i)=>[h*.32,h*.75].map(py=>hex(px,py+(i%2?.5:0)*h*.22,h*.18))).flat().join('');},
+    dots(){let d='';for(let xi=0;xi<=13;xi++)for(let yi=0;yi<=5;yi++){const px=xi*(w/13),py=yi*(h/5);d+=`<circle cx="${px.toFixed()}" cy="${py.toFixed()}" r="${(xi+yi)%5<1?3:1.4}" fill="${c}" opacity="${(.05+Math.abs(Math.sin(xi*yi*.2))*.14).toFixed(2)}"/>`;}return d;},
+    waves(){return[h*.2,h*.38,h*.55,h*.72,h*.88].map((y,i)=>`<path d="M0,${y.toFixed()} ${[...Array(14)].map((_,j)=>`Q${((j+.5)*w/13).toFixed()},${(y-(h*.08+i*3)).toFixed()} ${((j+1)*w/13).toFixed()},${y.toFixed()}`).join(' ')}" fill="none" stroke="${c}" stroke-width="${i===2?2:1}" opacity="${[.15,.25,.44,.25,.12][i]}"/>`).join('');},
+    triangles(){const t=(px,py,s,op)=>`<polygon points="${px.toFixed()},${(py-s).toFixed()} ${(px-s*.86).toFixed()},${(py+s*.5).toFixed()} ${(px+s*.86).toFixed()},${(py+s*.5).toFixed()}" fill="none" stroke="${c}" stroke-width="1" opacity="${op}"/>`;return t(w*.2,cy,h*.3,.44)+t(w*.2,cy,h*.17,.2)+t(w*.62,cy*.7,h*.34,.38)+t(w*.82,h*.75,h*.2,.3);},
+    grid(){let g='';for(let x=0;x<=w;x+=w/12)g+=`<line x1="${x.toFixed()}" y1="0" x2="${x.toFixed()}" y2="${h}" stroke="${c}" stroke-width=".5" opacity=".12"/>`;for(let y=0;y<=h;y+=h/6)g+=`<line x1="0" y1="${y.toFixed()}" x2="${w}" y2="${y.toFixed()}" stroke="${c}" stroke-width=".5" opacity=".12"/>`;return g+`<circle cx="${cx}" cy="${cy}" r="${(h*.28).toFixed()}" fill="none" stroke="${c}" stroke-width="1.2" opacity=".28"/><circle cx="${cx}" cy="${cy}" r="4" fill="${c}" opacity=".55"/>`;},
+    lines(){return[h*.15,h*.28,h*.42,h*.56,h*.7,h*.84].map((y,i)=>`<line x1="0" y1="${y.toFixed()}" x2="${w}" y2="${y.toFixed()}" stroke="${c}" stroke-width="${i===2?2.2:1}" opacity="${[.12,.18,.44,.18,.12,.08][i]}"/>`).join('');},
+    cells(){const cl=(px,py,r,op)=>`<circle cx="${px.toFixed()}" cy="${py.toFixed()}" r="${r.toFixed()}" fill="none" stroke="${c}" stroke-width="1" opacity="${op}"/>`;return cl(w*.28,cy,h*.32,.38)+cl(w*.28,cy,h*.18,.2)+cl(w*.28,cy,h*.07,.5)+cl(w*.68,cy*.65,h*.22,.3);},
+  };
+  return`<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">${base}${(F[pat]||F.dots)()}</svg>`;
+}
+
+// Ratings
+const CK='isc_commR_v6';
+const sv=new Set(JSON.parse(sessionStorage.getItem('isc_sv6')||'[]'));
+const gCom=()=>{try{return JSON.parse(localStorage.getItem(CK)||'{}')}catch{return{}}};
+const addCom=(id,s)=>{const r=gCom(),pk=id+'c',pv=parseFloat(sessionStorage.getItem('prev_'+pk)||'0');if(!r[id])r[id]={t:0,n:0};if(sv.has(pk)&&pv>0)r[id].t=Math.max(0,r[id].t-pv+s);else{r[id].t+=s;r[id].n++;}localStorage.setItem(CK,JSON.stringify(r));sv.add(pk);sessionStorage.setItem('isc_sv6',JSON.stringify([...sv]));sessionStorage.setItem('prev_'+pk,s);};
+const cAvg=id=>{const r=gCom()[id];return r&&r.n?r.t/r.n:0;};
+const cCnt=id=>gCom()[id]?.n||0;
+const prevVote=id=>parseFloat(sessionStorage.getItem('prev_'+id+'c')||'0');
+const fmt=v=>v?v.toFixed(1):'—';
+const combined=id=>cAvg(id);
+const rankSort=(chs,chObjs)=>[...chObjs||chs.map(c=>c)].sort((a,b)=>{const sa=combined(a.id),sb=combined(b.id);if(sb!==sa)return sb-sa;return(b.isTop?1:0)-(a.isTop?1:0);});
+const rankCls=i=>['cr-1','cr-2','cr-3','cr-n'][Math.min(i,3)];
+const rankEmoji=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+
 let stream='commerce',activeGroup=null;
-function setStream(s){stream=s;const tc=document.getElementById('tab-commerce');const ts=document.getElementById('tab-science');tc.className='tab'+(s==='commerce'?' active':'');ts.className='tab'+(s==='science'?' active':'');tc.querySelector('span').style.opacity=s==='commerce'?'1':'.4';ts.querySelector('span').style.opacity=s==='science'?'1':'.4';activeGroup=null;renderSubjects();showEmpty();}
-function renderSubjects(){const wrap=document.getElementById('subjList');wrap.innerHTML='';(DATA[stream]||[]).forEach(g=>{const b=document.createElement('div');b.className='subj-block'+(activeGroup&&activeGroup.subject===g.subject?' active':'');b.style.setProperty('--subj-color',g.color);b.innerHTML=`<span class="sb-icon">${g.icon}</span><span class="sb-name">${g.subject}</span><span class="sb-count">${g.channels.length}</span><span class="sb-arr">▶</span>`;b.onclick=()=>selectSubject(g,b);wrap.appendChild(b);});}
-function selectSubject(g,block){document.querySelectorAll('.subj-block').forEach(b=>b.classList.remove('active'));block.classList.add('active');activeGroup=g;document.getElementById('piIcon').textContent=g.icon;document.getElementById('piTitle').textContent=g.subject;document.getElementById('piSub').textContent=`${g.channels.length} channels`;const ib=document.getElementById('panelInfobar');ib.style.background=`color-mix(in srgb,${g.color} 7%,var(--bg2))`;ib.style.borderBottomColor=`color-mix(in srgb,${g.color} 20%,var(--border))`;renderGrid(g);}
-function showEmpty(){document.getElementById('panelEmpty').style.display='flex';document.getElementById('chGrid').style.display='none';document.getElementById('piIcon').textContent='📺';document.getElementById('piTitle').textContent='Select a subject';document.getElementById('piSub').textContent='choose from the sidebar';const ib=document.getElementById('panelInfobar');ib.style.background='';ib.style.borderBottomColor='';}
-function renderGrid(g){const grid=document.getElementById('chGrid');document.getElementById('panelEmpty').style.display='none';grid.style.display='grid';grid.innerHTML='';rankSort(g.channels).forEach((ch,idx)=>grid.appendChild(mkCard(ch,g,idx)));}
-function mkCard(ch,g,idx){const ca=cAvg(ch.id),cc=cCnt(ch.id),sc=combined(ch.id);const card=document.createElement('div');card.className='ch-card';card.style.setProperty('--subj-color',g.color);card.style.animationDelay=(idx*.05)+'s';const cover=document.createElement('div');cover.className='cc-cover';cover.innerHTML=makeSVG(ch.pat,g.color,g.bg);const bn=getBanner(ch.id);if(bn){const bi=document.createElement('img');bi.className='banner';bi.src=bn;bi.alt='';bi.onerror=()=>bi.remove();cover.appendChild(bi);}if(ch.isTop){const tb=document.createElement('div');tb.className='cc-top';tb.textContent='★ TOP';cover.appendChild(tb);}if(sc>0){const rb=document.createElement('div');rb.className='cc-rank '+rankCls(idx);rb.textContent=rankEmoji(idx)+' '+sc.toFixed(1);cover.appendChild(rb);}const av=document.createElement('div');av.className='cc-av';av.textContent=ch.av;const avU=getAvatar(ch.id);if(avU)applyAvatar(av,avU);cover.appendChild(av);const cnm=document.createElement('div');cnm.className='cc-cover-name';cnm.textContent=ch.name;cover.appendChild(cnm);card.appendChild(cover);const body=document.createElement('div');body.className='cc-body';body.innerHTML=`<div class="cc-handle">${ch.handle}</div>`;const tags=document.createElement('div');tags.className='cc-tags';ch.tags.slice(0,3).forEach(t=>{const s=document.createElement('span');s.className='cc-tag'+(t==='TOP PICK'?' t-top':t.includes('PYQ')||t.includes('Maha')?' t-pyq':'');s.textContent=t;tags.appendChild(s);});body.appendChild(tags);const desc=document.createElement('div');desc.className='cc-desc';desc.textContent=ch.desc;body.appendChild(desc);const motto=MOTTOS[ch.id];if(motto){const m=document.createElement('div');m.className='cc-motto';m.style.setProperty('--subj-color',g.color);m.textContent=motto;body.appendChild(m);}card.appendChild(body);const zone=document.createElement('div');zone.className='cc-co-zone';buildCoZone(zone,ch.id,ca,cc);card.appendChild(zone);const yt=document.createElement('a');yt.className='cc-yt';yt.href=ch.url;yt.target='_blank';yt.rel='noopener noreferrer';yt.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>Watch on YouTube`;card.appendChild(yt);return card;}
-function buildCoZone(zone,id,avg,cnt){zone.innerHTML='';const lbl=document.createElement('div');lbl.className='cc-co-lbl';lbl.innerHTML='◎ <span>Community Rating</span>';const bigSc=document.createElement('span');bigSc.className='cc-co-score';bigSc.id='ccs-'+id;bigSc.textContent=avg>0?fmt(avg):'—';lbl.appendChild(bigSc);zone.appendChild(lbl);const barRow=document.createElement('div');barRow.className='co-bar-row';const bar=document.createElement('div');bar.className='co-bar';const fill=document.createElement('div');fill.className='co-fill';fill.id='ccf-'+id;fill.style.width=(avg>0?(avg/5)*100:0)+'%';bar.appendChild(fill);barRow.appendChild(bar);const votes=document.createElement('span');votes.className='co-votes';votes.id='ccv-'+id;votes.textContent=cnt?cnt+' vote'+(cnt!==1?'s':''):'no votes';barRow.appendChild(votes);zone.appendChild(barRow);const stars=mkStars(id,prevVote(id)||0);zone.appendChild(stars);const hint=document.createElement('div');hint.style.cssText='font-family:"DM Mono",monospace;font-size:8.5px;color:rgba(95,212,232,.4);margin-top:1px;';const pv=prevVote(id);hint.textContent=pv>0?`✓ your vote: ${fmt(pv)} · update anytime`:'hover left/right half for half stars';zone.appendChild(hint);} 
-function mkStars(id,val){const wrap=document.createElement('div');wrap.className='hs-wrap';wrap.dataset.saved=val;for(let i=1;i<=5;i++){const star=document.createElement('div');star.className='hs';star.innerHTML=`<svg viewBox="0 0 24 24"><path class="hbg" d="${SP}"/><path class="hl" d="${SP}"/><path class="hr" d="${SP}"/><path class="hf" d="${SP}"/></svg>`;star.dataset.s=val>=i?'f':val>=i-.5?'h':'0';star.addEventListener('mousemove',e=>{const r=star.getBoundingClientRect();const hv=(e.clientX-r.left)<r.width/2?i-.5:i;wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=hv>=j+1?'f':hv>=j+.5?'h':'0');});star.addEventListener('mouseleave',()=>{const sv2=parseFloat(wrap.dataset.saved||'0');wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=sv2>=j+1?'f':sv2>=j+.5?'h':'0');});star.addEventListener('click',e=>{const r=star.getBoundingClientRect();const clicked=(e.clientX-r.left)<r.width/2?i-.5:i;wrap.dataset.saved=clicked;addCom(id,clicked);const ca=cAvg(id),cc2=cCnt(id);const fill=document.getElementById('ccf-'+id);if(fill)fill.style.width=((ca/5)*100)+'%';const sc=document.getElementById('ccs-'+id);if(sc)sc.textContent=fmt(ca);const vt=document.getElementById('ccv-'+id);if(vt)vt.textContent=cc2+' vote'+(cc2!==1?'s':'');const zoneEl=wrap.closest('.cc-co-zone');if(zoneEl){const h=zoneEl.querySelector('div:last-child');if(h)h.textContent=`✓ your vote: ${fmt(clicked)} · update anytime`;}toast('◎ Voted '+fmt(clicked)+' / 5 — thanks!');});wrap.appendChild(star);}return wrap;}
-function toast(msg){const o=document.querySelector('.toast');if(o)o.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),320);},2600);} 
-(function initTheme(){const mark=document.getElementById('navMark');const pip=document.getElementById('navPip');const s=localStorage.getItem('isc-accent');const g=localStorage.getItem('isc-gradient');if(g){const gr=JSON.parse(g);if(mark){mark.style.background=`linear-gradient(135deg,${gr.a},${gr.b})`;mark.style.boxShadow=`0 0 8px ${gr.a}`;}if(pip)pip.style.background=gr.a;} else if(s){if(mark){mark.style.background=s;mark.style.boxShadow=`0 0 8px ${s}`;}if(pip)pip.style.background=s;}})();
-document.getElementById('tab-commerce').classList.add('active');renderSubjects();
+
+function setStream(s){
+  stream=s;
+  const tc=document.getElementById('tab-commerce');
+  const ts=document.getElementById('tab-science');
+  tc.className='tab'+(s==='commerce'?' active':'');
+  ts.className='tab'+(s==='science'?' active':'');
+  // dot opacity
+  tc.querySelector('span').style.opacity=s==='commerce'?'1':'.4';
+  ts.querySelector('span').style.opacity=s==='science'?'1':'.4';
+  // tab colour class
+  if(s==='commerce'){tc.classList.remove('active');tc.classList.add('active');ts.classList.remove('active');}
+  tc.id='tab-commerce'; ts.id='tab-science';
+  activeGroup=null;
+  renderSubjects();
+  showEmpty();
+}
+
+function renderSubjects(){
+  const wrap=document.getElementById('subjList');
+  wrap.innerHTML='';
+  (DATA[stream]||[]).forEach(g=>{
+    const b=document.createElement('div');
+    b.className='subj-block'+(activeGroup&&activeGroup.subject===g.subject?' active':'');
+    b.style.setProperty('--subj-color',g.color);
+    const countEl=`<span class="sb-count">${g.channels.length}</span>`;
+    b.innerHTML=`<span class="sb-icon">${g.icon}</span><span class="sb-name">${g.subject}</span>${countEl}`;
+    b.onclick=()=>selectSubject(g,b);
+    wrap.appendChild(b);
+  });
+}
+
+function selectSubject(g,block){
+  document.querySelectorAll('.subj-block').forEach(b=>b.classList.remove('active'));
+  block.classList.add('active');
+  activeGroup=g;
+  // infobar
+  document.getElementById('piIcon').textContent=g.icon;
+  document.getElementById('piTitle').textContent=g.subject;
+  document.getElementById('piSub').textContent=`${g.channels.length} channels`;
+  // tint infobar like resource.html viewer-infobar
+  const ib=document.getElementById('panelInfobar');
+  ib.style.background=`color-mix(in srgb,${g.color} 7%,var(--bg2))`;
+  ib.style.borderBottomColor=`color-mix(in srgb,${g.color} 20%,var(--border))`;
+  renderGrid(g);
+}
+
+function showEmpty(){
+  document.getElementById('panelEmpty').style.display='flex';
+  document.getElementById('chGrid').style.display='none';
+  document.getElementById('piIcon').textContent='📺';
+  document.getElementById('piTitle').textContent='Select a subject';
+  document.getElementById('piSub').textContent='choose from the sidebar';
+  const ib=document.getElementById('panelInfobar');
+  ib.style.background='';ib.style.borderBottomColor='';
+}
+
+function renderGrid(g){
+  const grid=document.getElementById('chGrid');
+  document.getElementById('panelEmpty').style.display='none';
+  grid.style.display='grid';
+  grid.innerHTML='';
+  rankSort(g.channels,g.channels).forEach((ch,idx)=>grid.appendChild(mkCard(ch,g,idx)));
+}
+
+function mkCard(ch,g,idx){
+  const ca=cAvg(ch.id),cc=cCnt(ch.id),sc=combined(ch.id);
+  const card=document.createElement('div');
+  card.className='ch-card';
+  card.style.setProperty('--subj-color',g.color);
+  card.style.animationDelay=(idx*.05)+'s';
+
+  // cover
+  const cover=document.createElement('div');cover.className='cc-cover';
+  cover.innerHTML=makeSVG(ch.pat,g.color,g.bg);
+  const bn=getBanner(ch.id);
+  if(bn){const bi=document.createElement('img');bi.className='banner';bi.src=bn;bi.alt='';bi.onerror=()=>bi.remove();cover.appendChild(bi);}
+  if(ch.isTop){const tb=document.createElement('div');tb.className='cc-top';tb.textContent='★ TOP';cover.appendChild(tb);}
+  if(sc>0){const rb=document.createElement('div');rb.className='cc-rank '+rankCls(idx);rb.textContent=rankEmoji(idx)+' '+sc.toFixed(1);cover.appendChild(rb);}
+  const av=document.createElement('div');av.className='cc-av';av.textContent=ch.av;
+  const avU=getAvatar(ch.id);if(avU)applyAvatar(av,avU);
+  cover.appendChild(av);
+  const cnm=document.createElement('div');cnm.className='cc-cover-name';cnm.textContent=ch.name;
+  cover.appendChild(cnm);
+  card.appendChild(cover);
+
+  // body
+  const body=document.createElement('div');body.className='cc-body';
+  body.innerHTML=`<div class="cc-handle">${ch.handle}</div>`;
+  const tags=document.createElement('div');tags.className='cc-tags';
+  ch.tags.slice(0,3).forEach(t=>{const s=document.createElement('span');s.className='cc-tag'+(t==='TOP PICK'?' t-top':t.includes('PYQ')||t.includes('Maha')?' t-pyq':'');s.textContent=t;tags.appendChild(s);});
+  body.appendChild(tags);
+  const desc=document.createElement('div');desc.className='cc-desc';desc.textContent=ch.desc;body.appendChild(desc);
+  const motto=MOTTOS[ch.id];
+  if(motto){const m=document.createElement('div');m.className='cc-motto';m.style.setProperty('--subj-color',g.color);m.textContent=motto;body.appendChild(m);}
+  card.appendChild(body);
+
+  // community rating zone
+  const zone=document.createElement('div');zone.className='cc-co-zone';
+  buildCoZone(zone,ch.id,ca,cc);
+  card.appendChild(zone);
+
+  // YT link
+  const yt=document.createElement('a');yt.className='cc-yt';
+  yt.href=ch.url;yt.target='_blank';yt.rel='noopener noreferrer';
+  yt.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>Watch on YouTube`;
+  card.appendChild(yt);
+  return card;
+}
+
+function buildCoZone(zone,id,avg,cnt){
+  zone.innerHTML='';
+  const lbl=document.createElement('div');lbl.className='cc-co-lbl';
+  lbl.innerHTML='◎ <span>Community Rating</span>';
+  const bigSc=document.createElement('span');bigSc.className='cc-co-score';bigSc.id='ccs-'+id;
+  bigSc.textContent=avg>0?fmt(avg):'—';
+  lbl.appendChild(bigSc);
+  zone.appendChild(lbl);
+  const barRow=document.createElement('div');barRow.className='co-bar-row';
+  const bar=document.createElement('div');bar.className='co-bar';
+  const fill=document.createElement('div');fill.className='co-fill';fill.id='ccf-'+id;fill.style.width=(avg>0?(avg/5)*100:0)+'%';
+  bar.appendChild(fill);barRow.appendChild(bar);
+  const votes=document.createElement('span');votes.className='co-votes';votes.id='ccv-'+id;
+  votes.textContent=cnt?cnt+' vote'+(cnt!==1?'s':''):'no votes';
+  barRow.appendChild(votes);
+  zone.appendChild(barRow);
+  const stars=mkStars(id,prevVote(id)||0);
+  zone.appendChild(stars);
+  const hint=document.createElement('div');
+  hint.style.cssText='font-family:"DM Mono",monospace;font-size:8.5px;color:rgba(95,212,232,.4);margin-top:1px;';
+  const pv=prevVote(id);
+  hint.textContent=pv>0?`✓ your vote: ${fmt(pv)} · update anytime`:'hover left/right half for half stars';
+  zone.appendChild(hint);
+}
+
+function mkStars(id,val){
+  const wrap=document.createElement('div');wrap.className='hs-wrap';wrap.dataset.saved=val;
+  for(let i=1;i<=5;i++){
+    const star=document.createElement('div');star.className='hs';
+    star.innerHTML=`<svg viewBox="0 0 24 24"><path class="hbg" d="${SP}"/><path class="hl" d="${SP}"/><path class="hr" d="${SP}"/><path class="hf" d="${SP}"/></svg>`;
+    star.dataset.s=val>=i?'f':val>=i-.5?'h':'0';
+    star.addEventListener('mousemove',e=>{const r=star.getBoundingClientRect();const hv=(e.clientX-r.left)<r.width/2?i-.5:i;wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=hv>=j+1?'f':hv>=j+.5?'h':'0');});
+    star.addEventListener('mouseleave',()=>{const sv2=parseFloat(wrap.dataset.saved||'0');wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=sv2>=j+1?'f':sv2>=j+.5?'h':'0');});
+    star.addEventListener('click',e=>{
+      const r=star.getBoundingClientRect();const clicked=(e.clientX-r.left)<r.width/2?i-.5:i;
+      wrap.dataset.saved=clicked;
+      addCom(id,clicked);
+      const ca=cAvg(id),cc2=cCnt(id);
+      const fill=document.getElementById('ccf-'+id);if(fill)fill.style.width=((ca/5)*100)+'%';
+      const sc=document.getElementById('ccs-'+id);if(sc)sc.textContent=fmt(ca);
+      const vt=document.getElementById('ccv-'+id);if(vt)vt.textContent=cc2+' vote'+(cc2!==1?'s':'');
+      // update hint
+      const zoneEl=wrap.closest('.cc-co-zone');
+      if(zoneEl){const h=zoneEl.querySelector('div:last-child');if(h)h.textContent=`✓ your vote: ${fmt(clicked)} · update anytime`;}
+      toast('◎ Voted '+fmt(clicked)+' / 5 — thanks!');
+    });
+    wrap.appendChild(star);
+  }
+  return wrap;
+}
+
+function toast(msg){
+  const o=document.querySelector('.toast');if(o)o.remove();
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),320);},2600);
+}
+
+// Init — apply saved theme accent to nav mark
+(function initTheme(){
+  const mark=document.getElementById('navMark');
+  const pip=document.getElementById('navPip');
+  const s=localStorage.getItem('isc-accent');
+  const g=localStorage.getItem('isc-gradient');
+  if(g){const gr=JSON.parse(g);if(mark){mark.style.background=`linear-gradient(135deg,${gr.a},${gr.b})`;mark.style.boxShadow=`0 0 8px ${gr.a}`;}if(pip)pip.style.background=gr.a;}
+  else if(s){if(mark){mark.style.background=s;mark.style.boxShadow=`0 0 8px ${s}`;}if(pip)pip.style.background=s;}
+})();
+
+// set active tab classes properly
+document.getElementById('tab-commerce').classList.add('active');
+renderSubjects();
 </script>
 </body>
 </html>
