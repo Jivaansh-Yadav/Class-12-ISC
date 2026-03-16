@@ -485,7 +485,38 @@ body.grad-mode .picker-panel {
 .vi-chip.src-drive { color: #7aabcc; border-color: rgba(122,171,204,0.3); background: rgba(122,171,204,0.1); }
 .vi-chip.src-repo  { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: var(--accent-lo); }
 
-/* ── CREDITS BUBBLE ── */
+/* ── SIDEBAR CREDITS PILL ── */
+.sidebar-creds-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 7px 2px 5px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(96,179,255,0.13), rgba(122,184,106,0.06));
+  border: 1px solid rgba(96,179,255,0.28);
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  color: #60b3ff; letter-spacing: 0.2px;
+  white-space: nowrap; flex-shrink: 0;
+  transition: all .2s;
+  cursor: default;
+  margin-right: 2px;
+}
+.sidebar-creds-pill:hover {
+  border-color: rgba(96,179,255,0.55);
+  background: linear-gradient(135deg, rgba(96,179,255,0.2), rgba(122,184,106,0.1));
+  box-shadow: 0 0 8px rgba(96,179,255,0.2);
+}
+.scp-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #60b3ff;
+  box-shadow: 0 0 5px rgba(96,179,255,0.7);
+  flex-shrink: 0;
+  animation: scpPulse 2.8s ease-in-out infinite;
+}
+@keyframes scpPulse {
+  0%,100% { opacity: 0.6; box-shadow: 0 0 4px rgba(96,179,255,0.5); }
+  50%      { opacity: 1;   box-shadow: 0 0 8px rgba(96,179,255,0.9); }
+}
+
+/* ── CREDITS BUBBLE (infobar, kept for future use) ── */
 .creds-bubble {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 3px 10px 3px 5px;
@@ -1247,7 +1278,12 @@ function render() {
     const disp = subj.replace(/-(creds-.+)$/i,'');
     const sum  = document.createElement('summary');
     sum.title = 'Shift+click to copy folder link';
-    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
+    const credBadge = CREDS_MAP[disp]
+      ? `<span class="sidebar-creds-pill" title="Resources by ${CREDS_MAP[disp].user}">
+           <span class="scp-dot"></span>${CREDS_MAP[disp].user}
+         </span>`
+      : '';
+    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span>${credBadge}<span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
     sum.addEventListener('click', e => { if (e.shiftKey) { e.preventDefault(); shareFolderLink(subj); } });
     det.appendChild(sum);
     if (q) {
@@ -1344,8 +1380,7 @@ function preview(entry) {
   document.getElementById('vChips').innerHTML =
     `<span class="vi-chip">${typeMap[ext]||ext.toUpperCase()}</span>
      <span class="vi-chip ${srcCls}">${srcLbl}</span>
-     <span class="vi-chip">${subjDisp}</span>
-     ${buildCredsBubble(subjDisp)}`;
+     <span class="vi-chip">${subjDisp}</span>`;
 
   document.getElementById('btnOpen').href = entry.url;
   const dl = document.getElementById('btnDownload');
