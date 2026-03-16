@@ -84,9 +84,7 @@ body.grad-mode .sidebar {
   background: linear-gradient(180deg,
     color-mix(in srgb, var(--grad-a) 4%, var(--bg2)) 0%,
     color-mix(in srgb, var(--grad-b) 2%, var(--bg2)) 100%) !important;
-}
-body.grad-mode .resizer {
-  background: color-mix(in srgb, var(--grad-a) 18%, var(--border)) !important;
+  border-right-color: color-mix(in srgb, var(--grad-a) 18%, var(--border)) !important;
 }
 body.grad-mode .viewer-infobar {
   background: linear-gradient(90deg,
@@ -286,7 +284,7 @@ body.grad-mode .picker-panel {
 }
 
 /* ── EXAM ALERT ── */
-#examAlert { position: fixed; top: 50px; left: 301px; right: 0; z-index: 150; }
+#examAlert { position: fixed; top: 50px; left: 300px; right: 0; z-index: 150; }
 .exam-alert {
   display: flex; align-items: center; gap: 12px;
   padding: 8px 22px;
@@ -310,39 +308,20 @@ body.grad-mode .picker-panel {
 
 /* ── LAYOUT ── */
 .layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: 300px 1fr;
   height: 100vh;
   padding-top: 50px;
 }
 .layout.with-alert { padding-top: 50px; margin-top: 34px; }
 
-/* ── RESIZER ── */
-.resizer {
-  width: 1px;
-  flex-shrink: 0;
-  background: var(--border);
-  cursor: col-resize;
-  position: relative;
-  transition: background .15s, width .15s;
-  z-index: 10;
-}
-.resizer:hover, .resizer.dragging {
-  width: 3px;
-  background: var(--accent);
-}
-.resizer::after { content: ''; position: absolute; inset: 0 -6px; }
-
 /* ── SIDEBAR ── */
 .sidebar {
   display: flex; flex-direction: column;
-  width: 300px;
-  min-width: 180px;
-  max-width: 600px;
-  flex-shrink: 0;
   background: color-mix(in srgb, var(--accent) 2.5%, var(--bg2));
-  border-right: none;
+  border-right: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border));
   overflow: hidden;
-  transition: background .35s;
+  transition: background .35s, border-color .35s;
 }
 .sidebar-head { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .sidebar-heading { font-family: 'Lora', serif; font-size: 22px; font-weight: 400; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
@@ -438,49 +417,6 @@ body.grad-mode .picker-panel {
 .s-arr { font-size: 7px; color: var(--fg2); transition: transform .2s; flex-shrink: 0; }
 .subject[open] .s-arr { transform: rotate(90deg); color: var(--subj-color); }
 
-/* ── CONTRIBUTOR BUBBLE ── */
-.s-contrib {
-  display: none;
-  align-items: center;
-  flex-shrink: 0;
-}
-.subject[open] .s-contrib { display: flex; }
-.s-contrib-pill {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 2px 8px 2px 4px;
-  border-radius: 20px;
-  background: color-mix(in srgb, var(--subj-color) 10%, var(--surface2));
-  border: 1px solid color-mix(in srgb, var(--subj-color) 35%, transparent);
-  font-family: 'DM Mono', monospace; font-size: 9px;
-  color: var(--subj-color);
-  letter-spacing: .3px;
-  cursor: default;
-  position: relative;
-  transition: background .2s, border-color .2s;
-  white-space: nowrap;
-}
-.s-contrib-pill:hover {
-  background: color-mix(in srgb, var(--subj-color) 18%, var(--surface2));
-  border-color: color-mix(in srgb, var(--subj-color) 60%, transparent);
-}
-.s-contrib-dot {
-  width: 14px; height: 14px; border-radius: 50%;
-  background: color-mix(in srgb, var(--subj-color) 25%, var(--surface));
-  border: 1px solid color-mix(in srgb, var(--subj-color) 50%, transparent);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 7px; font-weight: 700; flex-shrink: 0;
-  box-shadow: 0 0 5px color-mix(in srgb, var(--subj-color) 40%, transparent);
-}
-.s-contrib-pill[data-tip]:hover::after {
-  content: attr(data-tip);
-  position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%);
-  background: var(--surface2); border: 1px solid var(--border2);
-  font-family: 'DM Mono', monospace; font-size: 9px; color: var(--fg);
-  padding: 4px 10px; border-radius: 6px; white-space: nowrap;
-  pointer-events: none; z-index: 100;
-  box-shadow: 0 6px 16px rgba(0,0,0,.6);
-}
-
 .sub-folder { margin: 2px 0 2px 8px; border-radius: 6px; }
 .sub-folder > summary {
   list-style: none; cursor: pointer;
@@ -527,7 +463,6 @@ body.grad-mode .picker-panel {
 /* ── VIEWER ── */
 .viewer {
   display: flex; flex-direction: column;
-  flex: 1; min-width: 0;
   background: var(--bg); overflow: hidden; position: relative;
 }
 .viewer-infobar {
@@ -554,12 +489,6 @@ body.grad-mode .picker-panel {
 }
 .vi-chip.src-drive { color: #7aabcc; border-color: rgba(122,171,204,0.3); background: rgba(122,171,204,0.1); }
 .vi-chip.src-repo  { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: var(--accent-lo); }
-.vi-chip.vi-chip-creds {
-  color: #a78bfa;
-  border-color: rgba(167,139,250,0.35);
-  background: rgba(167,139,250,0.1);
-  letter-spacing: .2px;
-}
 
 .viewer-toolbar {
   display: flex; align-items: center; gap: 6px;
@@ -642,7 +571,21 @@ body.fullscreen-active .layout { display: block; }
 }
 @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
 
-
+.file-notice {
+  display: none; align-items: center; gap: 8px;
+  padding: 5px 14px;
+  background: rgba(50, 10, 10, 0.95);
+  border: 1px solid rgba(220, 80, 80, 0.4);
+  border-radius: 6px;
+  flex: 1; margin: 0 20px; max-width: 520px;
+}
+.file-notice.visible { display: flex; }
+.fn-icon { font-size: 12px; flex-shrink: 0; }
+.fn-tag { font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #000; background: #e05555; padding: 2px 6px; border-radius: 2px; flex-shrink: 0; }
+.fn-text { font-family: 'DM Mono', monospace; font-size: 10.5px; color: rgba(255, 200, 200, 0.9); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fn-kbd { display: inline-flex; align-items: center; justify-content: center; background: rgba(224, 85, 85, 0.25); border: 1px solid rgba(224, 85, 85, 0.5); border-radius: 3px; padding: 0px 5px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; color: #ff9999; margin: 0 2px; }
+.fn-close { background: none; border: none; color: rgba(220,150,150,0.6); cursor: pointer; font-size: 12px; padding: 1px 3px; border-radius: 3px; transition: color .15s; flex-shrink: 0; }
+.fn-close:hover { color: #ff9999; }
 
 @media (max-width: 820px) {
   .layout { grid-template-columns: 1fr; }
@@ -658,7 +601,12 @@ body.fullscreen-active .layout { display: block; }
     ISC.exe / Resources
   </div>
 
-
+  <div class="file-notice visible" id="fileNotice">
+    <span class="fn-icon">⚠️</span>
+    <span class="fn-tag">Notice</span>
+    <span class="fn-text">File not loading? Press <span class="fn-kbd">R</span> to reload — most errors fix on refresh.</span>
+    <button class="fn-close" onclick="document.getElementById('fileNotice').classList.remove('visible')" title="Dismiss">✕</button>
+  </div>
 
   <div class="nav-right">
     <div class="community-links">
@@ -756,9 +704,11 @@ body.fullscreen-active .layout { display: block; }
     <div id="folders"><div class="msg">Loading…</div></div>
   </aside>
 
-  <div class="resizer" id="resizer"></div>
-
   <section class="viewer" id="viewerPanel">
+    <div class="viewer-infobar" id="viewerInfobar">
+      <div class="vi-breadcrumb" id="vBreadcrumb">Select a file to preview</div>
+      <div class="vi-chips" id="vChips"></div>
+    </div>
     <div class="viewer-toolbar" id="viewerToolbar">
       <div class="tb-group">
         <a id="btnOpen" class="tbtn primary" target="_blank" rel="noopener noreferrer" title="Open in new tab">
@@ -890,7 +840,7 @@ function applyAccent(hex, save) {
   const sidebar = document.querySelector('.sidebar');
   if (sidebar) {
     sidebar.style.background = `color-mix(in srgb, ${hex} 2.5%, var(--bg2))`;
-    document.getElementById('resizer').style.background = `color-mix(in srgb, ${hex} 12%, var(--border))`;
+    sidebar.style.borderRightColor = `color-mix(in srgb, ${hex} 12%, var(--border))`;
   }
 
   // Viewer body glow
@@ -952,14 +902,6 @@ function applyGradient(a, b, save) {
     openBtn.style.borderColor = hexAlpha(a, 0.4);
     openBtn.style.background = `linear-gradient(135deg, ${hexAlpha(a, 0.15)}, ${hexAlpha(b, 0.08)})`;
   }
-
-  // Clear inline styles set by applyAccent so CSS class rules take over cleanly
-  const infobar2 = document.getElementById('viewerInfobar');
-  const toolbar2 = document.getElementById('viewerToolbar');
-  const sidebar2 = document.querySelector('.sidebar');
-  if (infobar2) { infobar2.style.background = ''; infobar2.style.borderBottomColor = ''; }
-  if (toolbar2) { toolbar2.style.background = ''; toolbar2.style.borderBottomColor = ''; }
-  if (sidebar2) { sidebar2.style.background = ''; document.getElementById('resizer').style.background = ''; }
 
   // Viewer body gradient glow
   const vbody = document.getElementById('viewerBody');
@@ -1242,22 +1184,7 @@ function switchStream(s) {
   showExamAlert(s);
 }
 
-// ── SUBJECT CONTRIBUTORS ──
-const CREDITS = {
-  'Computer Science': [{ name: 'u/Active-Judgment-250', initials: 'CS' }],
-};
-
-function buildContribBubble(subj, subjColor) {
-  const contributors = CREDITS[subj];
-  if (!contributors?.length) return '';
-  const pills = contributors.map(c =>
-    `<span class="s-contrib-pill" data-tip="Notes by ${c.name}" style="--subj-color:${subjColor}">
-      <span class="s-contrib-dot">✦</span>${c.name}
-    </span>`
-  ).join('');
-  return `<span class="s-contrib">${pills}</span>`;
-}
-
+function render() {
   const q    = document.getElementById('search').value.trim().toLowerCase();
   const subs = STREAMS[stream] || [];
   const wrap = document.getElementById('folders'); wrap.innerHTML = '';
@@ -1274,7 +1201,7 @@ function buildContribBubble(subj, subjColor) {
     const disp = subj.replace(/-(creds-.+)$/i,'');
     const sum  = document.createElement('summary');
     sum.title = 'Shift+click to copy folder link';
-    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span>${buildContribBubble(subj, subjColor)}<span class="s-arr">▶</span>`;
+    sum.innerHTML = `<span class="s-icon">${ICONS[subj]||'📁'}</span><span class="s-name">${disp}</span><span class="s-count">${filtered.length}</span><span class="s-arr">▶</span>`;
     sum.addEventListener('click', e => { if (e.shiftKey) { e.preventDefault(); shareFolderLink(subj); } });
     det.appendChild(sum);
     if (q) {
@@ -1352,14 +1279,10 @@ function preview(entry) {
   const typeMap = {pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Spreadsheet'};
   const srcCls  = entry.source === 'gdrive' ? 'src-drive' : 'src-repo';
   const srcLbl  = entry.source === 'gdrive' ? '⬡ Drive' : '⎔ GitHub';
-  const subjCredits = CREDITS[parts[0]];
-  const credsChip = subjCredits?.length
-    ? subjCredits.map(c => `<span class="vi-chip vi-chip-creds">✦ ${c.name}</span>`).join('')
-    : '';
   document.getElementById('vChips').innerHTML =
     `<span class="vi-chip">${typeMap[ext]||ext.toUpperCase()}</span>
      <span class="vi-chip ${srcCls}">${srcLbl}</span>
-     <span class="vi-chip">${subjDisp}</span>${credsChip}`;
+     <span class="vi-chip">${subjDisp}</span>`;
 
   document.getElementById('btnOpen').href = entry.url;
   const dl = document.getElementById('btnDownload');
@@ -1377,7 +1300,10 @@ function preview(entry) {
   setTimeout(() => {
     frame.src = entry.preview;
     frame.style.display = 'block';
-    frame.onload = () => loaderOverlay.classList.add('hidden');
+    frame.onload = () => {
+      loaderOverlay.classList.add('hidden');
+      document.getElementById('fileNotice').classList.remove('visible');
+    };
     setTimeout(() => loaderOverlay.classList.add('hidden'), 8000);
   }, 80);
 }
@@ -1456,48 +1382,12 @@ function showExamAlert(currentStream) {
       <a class="ea-link" href="/timetable">Schedule →</a>
       <button class="ea-close" onclick="this.closest('.exam-alert').parentElement.innerHTML='';document.getElementById('viewerPanel').style.paddingTop=''">✕</button>
     </div>`;
-  const sidebarW = document.querySelector('.sidebar')?.offsetWidth || 300;
-  document.getElementById('examAlert').style.left = (sidebarW + 1) + 'px';
-  document.getElementById('viewerPanel').style.paddingTop = '42px';
+  document.getElementById('viewerPanel').style.paddingTop = '34px';
 }
 
 document.getElementById('search').addEventListener('input', render);
 load();
 showExamAlert('commerce');
-
-/* ── RESIZER ── */
-(function(){
-  const resizer  = document.getElementById('resizer');
-  const sidebar  = document.querySelector('.sidebar');
-  const MIN = 180, MAX = 600;
-  let dragging = false, startX = 0, startW = 0;
-
-  resizer.addEventListener('mousedown', e => {
-    dragging = true;
-    startX = e.clientX;
-    startW = sidebar.offsetWidth;
-    resizer.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-  });
-
-  document.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    const w = Math.min(MAX, Math.max(MIN, startW + (e.clientX - startX)));
-    sidebar.style.width = w + 'px';
-    // keep exam alert left aligned with sidebar + resizer
-    const alert = document.getElementById('examAlert');
-    if (alert) alert.style.left = (w + 1) + 'px';
-  });
-
-  document.addEventListener('mouseup', () => {
-    if (!dragging) return;
-    dragging = false;
-    resizer.classList.remove('dragging');
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
-  });
-})();
 </script>
 </body>
 </html>
