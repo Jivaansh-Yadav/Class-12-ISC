@@ -361,7 +361,8 @@ body.grad-mode .picker-panel {
 }
 #tab-science.active::before { transform: scaleX(1); }
 
-.search-wrap { padding: 8px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+/* ── SEARCH (shifted 7px right) ── */
+.search-wrap { padding: 8px 10px 8px 17px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .search-box {
   display: flex; align-items: center; gap: 7px;
   background: var(--surface); border: 1px solid var(--border2);
@@ -376,41 +377,70 @@ body.grad-mode .picker-panel {
 #folders::-webkit-scrollbar { width: 3px; }
 #folders::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
+/* ── SUBJECT ROWS ── */
 .subject { border-radius: 8px; margin-bottom: 3px; }
 .subject > summary {
   list-style: none; cursor: pointer;
   display: flex; align-items: center; gap: 8px;
-  padding: 9px 10px 9px 8px; border-radius: 8px;
+  padding: 9px 10px 9px 10px; border-radius: 8px;
   color: var(--fg); font-size: 13px; font-weight: 500;
-  transition: background .14s, color .14s; user-select: none;
-  border: 1px solid transparent;
-  border-left: 2px solid var(--subj-color);
+  user-select: none;
+  /* Distinct look: tinted bg + stronger left border + inner glow */
+  border: 1px solid color-mix(in srgb, var(--subj-color) 18%, transparent);
+  border-left: 3px solid var(--subj-color);
+  background: color-mix(in srgb, var(--subj-color) 5%, transparent);
   opacity: 0.9;
+  box-shadow: inset 4px 0 16px color-mix(in srgb, var(--subj-color) 6%, transparent);
+  transition: background .18s, color .18s, box-shadow .18s, border-color .18s, opacity .18s;
 }
 .subject > summary::-webkit-details-marker { display: none; }
-.subject > summary:hover { background: var(--surface); border-color: transparent; border-left-color: var(--subj-color); opacity: 1; }
+.subject > summary:hover {
+  background: color-mix(in srgb, var(--subj-color) 11%, var(--surface));
+  border-color: color-mix(in srgb, var(--subj-color) 32%, transparent);
+  border-left-color: var(--subj-color);
+  opacity: 1;
+  box-shadow: inset 4px 0 20px color-mix(in srgb, var(--subj-color) 10%, transparent);
+}
 .subject[open] > summary {
   color: var(--fg);
-  background: var(--surface);
-  border-color: transparent;
-  border-left: 2px solid var(--subj-color);
+  background: color-mix(in srgb, var(--subj-color) 13%, var(--surface));
+  border-color: color-mix(in srgb, var(--subj-color) 32%, transparent);
+  border-left: 3px solid var(--subj-color);
   opacity: 1;
+  box-shadow:
+    0 2px 14px color-mix(in srgb, var(--subj-color) 14%, transparent),
+    inset 4px 0 20px color-mix(in srgb, var(--subj-color) 9%, transparent);
 }
 .s-icon { font-size: 15px; flex-shrink: 0; }
 .s-name { flex: 1; }
+
+/* Count badge — tinted with subject color even when closed */
 .s-count {
   font-family: 'DM Mono', monospace; font-size: 9.5px;
-  color: var(--fg2); background: var(--surface2);
-  border: 1px solid var(--border2);
-  padding: 2px 7px; border-radius: 9px; transition: all .14s;
+  color: color-mix(in srgb, var(--subj-color) 80%, var(--fg2));
+  background: color-mix(in srgb, var(--subj-color) 12%, var(--surface2));
+  border: 1px solid color-mix(in srgb, var(--subj-color) 38%, var(--border2));
+  padding: 2px 7px; border-radius: 9px; transition: all .18s;
 }
 .subject[open] .s-count {
   color: var(--subj-color);
-  background: var(--accent-lo);
-  border-color: var(--subj-color);
+  background: color-mix(in srgb, var(--subj-color) 20%, var(--surface2));
+  border-color: color-mix(in srgb, var(--subj-color) 60%, transparent);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--subj-color) 35%, transparent);
 }
-.s-arr { font-size: 7px; color: var(--fg2); transition: transform .2s; flex-shrink: 0; }
-.subject[open] .s-arr { transform: rotate(90deg); color: var(--subj-color); }
+
+/* Arrow — tinted + glow when open */
+.s-arr {
+  font-size: 7px;
+  color: color-mix(in srgb, var(--subj-color) 60%, var(--fg3));
+  transition: transform .2s, color .18s, filter .18s;
+  flex-shrink: 0;
+}
+.subject[open] .s-arr {
+  transform: rotate(90deg);
+  color: var(--subj-color);
+  filter: drop-shadow(0 0 4px var(--subj-color));
+}
 
 .sub-folder { margin: 2px 0 2px 8px; border-radius: 6px; }
 .sub-folder > summary {
@@ -528,7 +558,7 @@ body.grad-mode .picker-panel {
   opacity: 0.85;
 }
 
-/* ── CREDITS BUBBLE (infobar, kept for future use) ── */
+/* ── CREDITS BUBBLE ── */
 .creds-bubble {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 3px 10px 3px 5px;
