@@ -133,10 +133,13 @@ body.grad-mode .picker-panel {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   height: 50px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 22px;
+  padding: 0 22px 0 22px;
   background: rgba(17,18,16,0.95);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
+}
+.nav-left {
+  display: flex; align-items: center; gap: 14px;
 }
 .nav-brand {
   font-family: 'DM Mono', monospace;
@@ -150,15 +153,16 @@ body.grad-mode .picker-panel {
   transition: background .3s, box-shadow .3s;
 }
 .nav-right { display: flex; align-items: center; gap: 6px; }
-.nav-links { display: flex; gap: 5px; }
+.nav-links { display: flex; gap: 4px; }
 .nav-link {
-  text-decoration: none; color: var(--fg2);
-  font-family: 'DM Mono', monospace; font-size: 11.5px;
-  padding: 5px 13px; border: 1px solid transparent; border-radius: 6px;
+  text-decoration: none; color: #ffffff;
+  font-family: 'DM Mono', monospace; font-size: 11.5px; font-weight: 500;
+  padding: 5px 13px; border: 1px solid rgba(255,255,255,0.10); border-radius: 6px;
   transition: color .18s, border-color .18s, background .18s;
   display: flex; align-items: center; gap: 6px;
+  letter-spacing: .3px;
 }
-.nav-link:hover { color: var(--fg); border-color: var(--border2); background: var(--surface); }
+.nav-link:hover { color: #ffffff; border-color: rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); }
 .nav-link-pip {
   width: 5px; height: 5px; border-radius: 50%;
   background: var(--accent); opacity: 0.7;
@@ -170,9 +174,9 @@ body.grad-mode .picker-panel {
 .community-links { display: flex; align-items: center; gap: 3px; }
 .community-link {
   display: inline-flex; align-items: center; gap: 5px;
-  font-family: 'DM Mono', monospace; font-size: 11px;
-  color: var(--fg2); text-decoration: none;
-  padding: 5px 10px; border: 1px solid transparent;
+  font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+  color: #ffffff; text-decoration: none;
+  padding: 5px 10px; border: 1px solid rgba(255,255,255,0.10);
   border-radius: 6px; transition: all .18s; white-space: nowrap;
   letter-spacing: .3px;
 }
@@ -199,11 +203,11 @@ body.grad-mode .picker-panel {
   background: transparent;
   cursor: pointer;
   font-family: 'DM Mono', monospace;
-  font-size: 11px; color: var(--fg2);
+  font-size: 11px; color: #ffffff; font-weight: 500;
   letter-spacing: .4px;
   transition: border-color .18s, color .18s, background .18s;
 }
-.color-trigger:hover { border-color: var(--accent); color: var(--fg); background: var(--accent-lo); }
+.color-trigger:hover { border-color: var(--accent); color: #ffffff; background: var(--accent-lo); }
 .trigger-swatch {
   width: 13px; height: 13px; border-radius: 3px;
   background: var(--accent);
@@ -213,7 +217,7 @@ body.grad-mode .picker-panel {
 }
 .trigger-caret { font-size: 7px; color: var(--fg3); margin-left: 1px; transition: transform .2s, color .18s; }
 .color-trigger.open .trigger-caret { transform: rotate(180deg); color: var(--accent); }
-.color-trigger.open { border-color: var(--accent); color: var(--fg); background: var(--accent-lo); }
+.color-trigger.open { border-color: var(--accent); color: #ffffff; background: var(--accent-lo); }
 .picker-panel {
   position: absolute; top: calc(100% + 8px); right: 0; z-index: 9000;
   width: 252px; background: rgba(12,13,11,0.98);
@@ -710,7 +714,7 @@ body.fullscreen-active .layout { display: block; }
   background: rgba(50, 10, 10, 0.95);
   border: 1px solid rgba(220, 80, 80, 0.4);
   border-radius: 6px;
-  flex: 1; margin: 0 20px; max-width: 520px;
+  flex: 1; margin: 0 20px 0 32px; max-width: 480px;
 }
 .file-notice.visible { display: flex; }
 .fn-icon { font-size: 12px; flex-shrink: 0; }
@@ -729,15 +733,22 @@ body.fullscreen-active .layout { display: block; }
 <body>
 
 <nav class="nav">
-  <div class="nav-brand">
-    <div class="nav-brand-mark" id="navMark"></div>
-    ISC.exe / Resources
+  <div class="nav-left">
+    <div class="nav-brand">
+      <div class="nav-brand-mark" id="navMark"></div>
+      ISC.exe / Resources
+    </div>
+    <div class="nav-links">
+      <a class="nav-link" href="/">← Home</a>
+      <a class="nav-link" href="/timetable">
+        <span class="nav-link-pip" id="navPip"></span>
+        Timetable
+      </a>
+    </div>
   </div>
 
   <div class="file-notice visible" id="fileNotice">
-    <span class="fn-icon">⚠️</span>
-    <span class="fn-tag">Notice</span>
-    <span class="fn-text">File not loading? Press <span class="fn-kbd">R</span> to reload — most errors fix on refresh.</span>
+    <span class="fn-text">If files are not loading press <span class="fn-kbd">R</span> to reload.</span>
     <button class="fn-close" onclick="document.getElementById('fileNotice').classList.remove('visible')" title="Dismiss">✕</button>
   </div>
 
@@ -792,13 +803,6 @@ body.fullscreen-active .layout { display: block; }
           <span class="autosave-note"><span class="autosave-dot" id="autosaveDot"></span>Saved</span>
         </div>
       </div>
-    </div>
-    <div class="nav-links">
-      <a class="nav-link" href="/">← Home</a>
-      <a class="nav-link" href="/timetable">
-        <span class="nav-link-pip" id="navPip"></span>
-        Timetable
-      </a>
     </div>
   </div>
 </nav>
