@@ -341,7 +341,7 @@ const ID_TO_TEACHER={
   yash_phy:'yash',yash_chem:'yash',yash_bio:'yash',yash_maths:'yash',
   rajat_acc:'rajat',sunil_acc:'sunil',sunil_eco:'sunil',parag_acc:'parag',
   shubham_acc:'shubham',shubham_eco:'shubham',shubham_bst:'shubham',
-  sudhir_eco:'sudhir',sudhir_bst:'sudhir',sudhir_eng:'sudhir',
+  sudhir_eng:'sudhir',
   aryan_bst:'aryan',aryan_eng:'aryan',
   edufyhub_chem:'edufyhub',edufyhub_bio:'edufyhub',
   sourabh_chem:'sourabh',sourabh_bio:'sourabh',
@@ -354,8 +354,8 @@ function applyAvatar(el,url){if(!url)return;el.textContent='';const img=document
 const MOTTOS={
   rajat_acc:'"Concepts first, marks follow."',sunil_acc:'"Complete syllabus, zero shortcuts."',
   parag_acc:'"Sure-shot topics. 100 target."',shubham_acc:'"Clarity over confusion." — TEDx speaker',
-  sunil_eco:'"Theory + numericals, ISC style."',sudhir_eco:'"High scores through high clarity."',
-  shubham_eco:'"Macro, micro — mastered."',sudhir_bst:'"From principles to practice."',
+  sunil_eco:'"Theory + numericals, ISC style."',
+  shubham_eco:'"Macro, micro — mastered."',
   commbaba_bst:'"Quick revision, smart scoring."',aryan_bst:'"2026-specific. No fluff."',
   shubham_bst:'"Sure-shot topics, board precision."',aryan_eng:'"Paper 1, 2, literature — all covered."',
   sudhir_eng:'"Solid coverage, multi-subject."',yash_phy:'"Derivations done right, every time."',
@@ -375,11 +375,9 @@ const DATA={
     ]},
     {subject:'Economics',color:'#639922',bg:'#0e1808',icon:'📈',channels:[
       {id:'sunil_eco',name:'Sunil Panda',handle:'@sunilpandaofficial',av:'📈',avBg:'#101c08',isTop:true,desc:'Best for theory + numericals. Strong ISC board focus across all macro topics.',tags:['TOP PICK','Theory+Numericals'],url:'https://www.youtube.com/@sunilpandaofficial',pat:'grid'},
-      {id:'sudhir_eco',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'💹',avBg:'#0e1a06',desc:'Highly recommended for clear explanations, question solving, and high-scoring tips.',tags:['Clear Explanations','High-Scoring Tips'],url:'https://www.youtube.com/@StudywithSudhir',pat:'lines'},
       {id:'shubham_eco',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',desc:'Excellent Economics under Obsession — macro and micro with ISC exam precision.',tags:['ISC Focused','Macro+Micro'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'dots'},
     ]},
     {subject:'Business Studies',color:'#ba7517',bg:'#1e1208',icon:'🏢',channels:[
-      {id:'sudhir_bst',name:'Study with Sudhir',handle:'@StudywithSudhir',av:'🏢',avBg:'#201408',isTop:true,desc:'Elite for ISC commerce — animated clarity, full syllabus, revision, and exam tips.',tags:['TOP PICK','Animated','Full Syllabus'],url:'https://www.youtube.com/@StudywithSudhir',pat:'waves'},
       {id:'commbaba_bst',name:'Commerce Baba',handle:'@CommerceBaba',av:'💼',avBg:'#1c1208',desc:'Animated explanations and quick revision with great scoring strategy for BST.',tags:['Animated','Quick Revision'],url:'https://www.youtube.com/@CommerceBaba',pat:'triangles'},
       {id:'aryan_bst',name:'Aryan Tutorials',handle:'@AryanTutorials',av:'📋',avBg:'#1e1408',desc:'2026-specific important topics and paper analysis. Great last-minute prep.',tags:['2026 Specific','Paper Analysis'],url:'https://www.youtube.com/@AryanTutorials',pat:'dots'},
       {id:'shubham_bst',name:'Shubham Jagdish',handle:'@ShubhamJagdish',av:'💡',avBg:'#1a0a20',desc:'BST with signature motivational clarity — ISC-pattern questions and sure-shot topics.',tags:['ISC Pattern','Sure-Shot Topics'],url:'https://www.youtube.com/user/shubhamnidhi',pat:'circuit'},
