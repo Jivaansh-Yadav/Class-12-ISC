@@ -113,9 +113,9 @@ nav{
 .eyebrow em{color:var(--accent);font-style:normal;}
 .eyebrow-line{width:22px;height:1px;background:var(--accent);}
 .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.6rem,9vw,3.6rem);font-weight:400;line-height:.96;letter-spacing:-1px;margin-bottom:12px;text-align:center;animation:up .7s .22s ease both;position:relative;z-index:1;}
-.hero-title .l1{color:var(--fg);display:block;}
-.hero-title .l2{color:rgba(221,227,218,.18);font-style:italic;display:block;}
-.hero-title .l3{color:var(--accent);display:block;}
+.hero-title .l1{color:var(--accent);display:block;font-weight:700;}
+.hero-title .l1 em{font-style:italic;font-weight:400;}
+.hero-title .l2{color:color-mix(in srgb,var(--accent) 62%,var(--fg) 38%);font-style:normal;display:block;font-size:.86em;margin-top:6px;}
 .hero-edition{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;color:var(--accent);margin-bottom:10px;text-align:center;animation:up .7s .38s ease both;position:relative;z-index:1;}
 .hero-desc{font-size:12.5px;color:var(--fg3);line-height:1.85;max-width:340px;margin:0 auto 28px;text-align:center;animation:up .7s .5s ease both;position:relative;z-index:1;}
 .home-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;animation:up .7s .62s ease both;position:relative;z-index:1;}
@@ -464,8 +464,9 @@ nav{
     </div>
     <p class="disc-body">
       ISC.exe is a <strong>free aggregator</strong> of study notes and resources found publicly online.
+      This is an <strong>unofficial platform</strong> and is <strong>not affiliated with or connected to ISC (CISCE)</strong> in any way.
       We hold <strong>no copyrights, licences, or ownership</strong> over any material.<br/><br/>
-      Rightful owners may contact <a href="mailto:admin@isc.exe">admin@isc.exe</a> for removal.
+      Rightful owners may write to <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> for removal.
     </p>
   </div>
 </div>
@@ -488,20 +489,19 @@ nav{
       <span class="eyebrow-line"></span>
     </div>
     <h1 class="hero-title">
-      <span class="l1">Study</span>
-      <span class="l2">smarter,</span>
-      <span class="l3">not harder.</span>
+      <span class="l1">ISC <em>experience,</em></span>
+      <span class="l2">made better.</span>
     </h1>
     <p class="hero-edition">Commerce &amp; Science</p>
-    <p class="hero-desc">All your Class 12 ISC resources — PDFs, notes, study materials and top YouTube channels — organized in one place.</p>
+    <p class="hero-desc">All your Class 12 ISC resources — PDFs, notes, exam schedule and study tools — organized, searchable, and viewable in one place.</p>
 
     <div class="home-cards">
       <div class="home-card home-card--resources" onclick="switchTab('resources')">
         <div class="hc-icon">📚</div>
         <div class="hc-body">
-          <div class="hc-label">Files</div>
-          <div class="hc-title">Notes &amp; Resources</div>
-          <div class="hc-desc">Browse, search and preview PDFs &amp; notes.</div>
+          <div class="hc-label">Study Files</div>
+          <div class="hc-title">Resources &amp; Notes</div>
+          <div class="hc-desc">PDFs, notes &amp; past papers — search and preview without downloading.</div>
         </div>
         <div class="hc-right">
           <span class="hc-badge hc-badge--green">OPEN</span>
@@ -512,9 +512,9 @@ nav{
       <div class="home-card home-card--channels" onclick="switchTab('channels')">
         <div class="hc-icon">📺</div>
         <div class="hc-body">
-          <div class="hc-label">YouTube</div>
-          <div class="hc-title">Best Channels</div>
-          <div class="hc-desc">Handpicked + community-rated channels for ISC 2026.</div>
+          <div class="hc-label">Handpicked</div>
+          <div class="hc-title">YouTube Channels</div>
+          <div class="hc-desc">Community-rated ISC channel picks, ranked by subject.</div>
         </div>
         <div class="hc-right">
           <span class="hc-badge hc-badge--cyan">OPEN</span>
@@ -525,9 +525,9 @@ nav{
       <div class="home-card home-card--timetable" onclick="switchTab('timetable')">
         <div class="hc-icon">📅</div>
         <div class="hc-body">
-          <div class="hc-label">Schedule</div>
-          <div class="hc-title">Timetable</div>
-          <div class="hc-desc">Full ISC 2026 exam schedule &amp; countdowns.</div>
+          <div class="hc-label">2026 Board</div>
+          <div class="hc-title">Exam Timetable</div>
+          <div class="hc-desc">Full ISC 2026 schedule with live countdowns to every paper.</div>
         </div>
         <div class="hc-right">
           <span class="hc-badge hc-badge--amber">OPEN</span>
@@ -556,7 +556,7 @@ nav{
         </a>
       </div>
     </div>
-    <div class="disc-inline">⚠ Free aggregator of public study notes — we hold no ownership. Contact <a href="mailto:admin@isc.exe">admin@isc.exe</a> for removal.</div>
+    <div class="disc-inline">⚠ Free aggregator of public study notes — unofficial, not affiliated with ISC/CISCE. Contact <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> for removal.</div>
   </div>
 </div>
 
