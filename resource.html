@@ -1360,10 +1360,8 @@ function getOrCreateCallout() {
   }
   return _calloutEl;
 }
-
 function attachCredsCallout() {
   const folders = document.getElementById('folders');
-  // find the Computer Science <details> element
   const csDetails = [...folders.querySelectorAll('details.subject')].find(d => {
     const sname = d.querySelector('.s-name');
     return sname && sname.textContent.trim() === 'Computer Science';
@@ -1372,37 +1370,66 @@ function attachCredsCallout() {
 
   const callout = getOrCreateCallout();
 
-  function positionCallout() {
-    const rect = csDetails.querySelector('summary').getBoundingClientRect();
+  function getOpenSubFolder() {
+    if (!csDetails.open) return null;
+    return csDetails.querySelector('details.sub-folder[open]') || null;
+  }
+
+  function positionCallout(summaryEl) {
+    const rect = summaryEl.getBoundingClientRect();
     const sidebarWidth = document.querySelector('.sidebar').getBoundingClientRect().right;
     callout.style.left = (sidebarWidth + 14) + 'px';
     callout.style.top  = (rect.top + rect.height / 2 - 22) + 'px';
   }
 
   function updateVisibility() {
-    if (csDetails.open) {
-      positionCallout();
+    const openSF = getOpenSubFolder();
+    if (openSF) {
+      positionCallout(openSF.querySelector('summary'));
       callout.classList.add('visible');
     } else {
       callout.classList.remove('visible');
     }
   }
 
-  // remove old listener if any
+  // Clean up old CS-subject listener
   if (csDetails._credsToggle) {
     csDetails.removeEventListener('toggle', csDetails._credsToggle);
+    delete csDetails._credsToggle;
   }
-  csDetails._credsToggle = updateVisibility;
-  csDetails.addEventListener('toggle', updateVisibility);
+  // Hide callout when CS subject itself closes
+  csDetails.addEventListener('toggle', () => {
+    if (!csDetails.open) callout.classList.remove('visible');
+  });
 
-  // show immediately if already open
+  // Attach toggle listeners to each sub-folder
+  function attachSubFolderListeners() {
+    csDetails.querySelectorAll('details.sub-folder').forEach(sf => {
+      if (sf._credsSubToggle) return;
+      sf._credsSubToggle = updateVisibility;
+      sf.addEventListener('toggle', sf._credsSubToggle);
+    });
+  }
+
+  // Watch for sub-folders added dynamically
+  if (csDetails._credsObserver) csDetails._credsObserver.disconnect();
+  const obs = new MutationObserver(() => { attachSubFolderListeners(); updateVisibility(); });
+  obs.observe(csDetails, { childList: true, subtree: true });
+  csDetails._credsObserver = obs;
+
+  attachSubFolderListeners();
   updateVisibility();
 
-  // reposition on scroll/resize
-  folders.addEventListener('scroll', () => { if (csDetails.open) positionCallout(); }, { passive: true });
-  window.addEventListener('resize',  () => { if (csDetails.open) positionCallout(); }, { passive: true });
+  // Reposition on scroll/resize
+  folders.addEventListener('scroll', () => {
+    const openSF = getOpenSubFolder();
+    if (openSF) positionCallout(openSF.querySelector('summary'));
+  }, { passive: true });
+  window.addEventListener('resize', () => {
+    const openSF = getOpenSubFolder();
+    if (openSF) positionCallout(openSF.querySelector('summary'));
+  }, { passive: true });
 }
-
 function buildTree(paths) {
   const root = { dirs: new Map(), files: [] };
   for (const p of paths) {
