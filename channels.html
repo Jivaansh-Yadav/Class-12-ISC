@@ -338,16 +338,28 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   /* Panel fills remaining space */
   .panel{flex:1;min-height:0;overflow:visible;}
   .panel-body{overflow:visible;padding:14px 14px 32px;}
-  .panel-infobar{padding:0 14px;}
+
+  /* Sticky infobar so subject context stays visible while scrolling cards */
+  .panel-infobar{
+    position:sticky;top:50px;z-index:100;padding:0 14px;
+    box-shadow:0 2px 12px rgba(0,0,0,.4);
+  }
 
   /* Cards: single column on very small, two on wider mobile */
-  .ch-grid{
-    grid-template-columns:1fr;
-    gap:12px;
-  }
+  .ch-grid{grid-template-columns:1fr;gap:12px;}
 
   /* Empty state */
   .panel-empty{padding:40px 20px;}
+
+  /* Bigger, easier-to-tap stars on touch */
+  .hs{width:26px;height:26px;touch-action:none;}
+  .hs-wrap{gap:5px;}
+
+  /* Toast sits above browser chrome */
+  .toast{bottom:72px;font-size:10.5px;padding:8px 14px;}
+
+  /* Theme panel full-width on mobile */
+  .theme-panel{width:100%;border-left:none;border-top:1px solid var(--border);}
 }
 
 @media(min-width:480px) and (max-width:767px){
@@ -557,7 +569,7 @@ function makeSVG(pat,color,bg,w=400,h=150){
 
 // ━━ SUPABASE GLOBAL RATINGS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const SB_URL = 'https://kswlexxuceivjkjkxsdm.supabase.co';
-const SB_KEY = 'sb_publishable_li_VAb6qJ4zO3Yor7aACCg_RaCXOw5p';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd2xleHh1Y2Vpdmpramt4c2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzU2NzksImV4cCI6MjA4OTI1MTY3OX0.mbUoMFoFUrJvmJb16WsHeOMsDuWm7LPRdEKsqu_wbUk';
 const SB_HEADERS = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
 
 const votesCache = {};
@@ -577,37 +589,53 @@ async function fetchAllVotes(){
 
 async function submitVote(id, newVal){
   const prev = getMyVote(id);
+
+  // ── Optimistic local update (instant UI feedback) ──
   const cached = votesCache[id] || {total:0, count:0};
-  let newTotal, newCount;
-  if(prev > 0){
-    newTotal = Math.max(0, cached.total - prev + newVal);
-    newCount = cached.count;
-  } else {
-    newTotal = cached.total + newVal;
-    newCount = cached.count + 1;
-  }
-  votesCache[id] = {total:newTotal, count:newCount};
+  const optTotal = prev > 0 ? Math.max(0, cached.total - prev + newVal) : cached.total + newVal;
+  const optCount = prev > 0 ? cached.count : cached.count + 1;
+  votesCache[id] = {total:optTotal, count:optCount};
   setMyVote(id, newVal);
   updateCardUI(id);
+
   try{
-    const res = await fetch(`${SB_URL}/rest/v1/votes?id=eq.${encodeURIComponent(id)}`,{
-      method:'GET', headers:SB_HEADERS
-    });
-    const exists = res.ok && (await res.json()).length > 0;
-    if(exists){
+    // ── Re-fetch LIVE DB values before writing — prevents overwriting concurrent votes ──
+    const fetchRes = await fetch(
+      `${SB_URL}/rest/v1/votes?id=eq.${encodeURIComponent(id)}&select=id,total,count`,
+      {headers:SB_HEADERS}
+    );
+    if(!fetchRes.ok){ console.warn('vote fetch failed', fetchRes.status); return; }
+    const rows = await fetchRes.json();
+
+    if(rows.length > 0){
+      // Row exists — apply delta against the LIVE total, not the stale cache
+      const dbTotal = rows[0].total;
+      const dbCount = rows[0].count;
+      const newTotal = prev > 0
+        ? Math.max(0, dbTotal - prev + newVal)  // swap old vote for new
+        : dbTotal + newVal;                      // first-time vote
+      const newCount = prev > 0 ? dbCount : dbCount + 1;
+
+      // Sync cache to real computed value
+      votesCache[id] = {total:newTotal, count:newCount};
+      updateCardUI(id);
+
       await fetch(`${SB_URL}/rest/v1/votes?id=eq.${encodeURIComponent(id)}`,{
         method:'PATCH',
         headers:{...SB_HEADERS,'Prefer':'return=minimal'},
         body: JSON.stringify({total:newTotal, count:newCount})
       });
     } else {
+      // No row yet — insert as first vote for this channel
+      votesCache[id] = {total:newVal, count:1};
+      updateCardUI(id);
       await fetch(`${SB_URL}/rest/v1/votes`,{
         method:'POST',
         headers:{...SB_HEADERS,'Prefer':'return=minimal'},
         body: JSON.stringify({id, total:newVal, count:1})
       });
     }
-  }catch(e){ console.warn('vote submit failed',e); }
+  }catch(e){ console.warn('vote submit failed', e); }
 }
 
 function updateCardUI(id){
@@ -764,16 +792,20 @@ function buildCoZone(zone,id){
   const hint=document.createElement('div');
   hint.style.cssText='font-family:"DM Mono",monospace;font-size:8.5px;color:rgba(95,212,232,.4);margin-top:1px;';
   const pv=prevVote(id);
-  hint.textContent=pv>0?`✓ your vote: ${fmt(pv)} · update anytime`:'hover left/right half for half stars';
+  const isTouchDev = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  hint.textContent=pv>0?`✓ your vote: ${fmt(pv)} · update anytime`:(isTouchDev?'tap left/right half of star for half stars':'hover left/right half for half stars');
   zone.appendChild(hint);
 }
 
 function mkStars(id,val){
+  const isTouchDev = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
   const wrap=document.createElement('div');wrap.className='hs-wrap';wrap.dataset.saved=val;
   for(let i=1;i<=5;i++){
     const star=document.createElement('div');star.className='hs';
     star.innerHTML=`<svg viewBox="0 0 24 24"><path class="hbg" d="${SP}"/><path class="hl" d="${SP}"/><path class="hr" d="${SP}"/><path class="hf" d="${SP}"/></svg>`;
     star.dataset.s=val>=i?'f':val>=i-.5?'h':'0';
+
+    // ── Mouse (desktop) ──
     star.addEventListener('mousemove',e=>{const r=star.getBoundingClientRect();const hv=(e.clientX-r.left)<r.width/2?i-.5:i;wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=hv>=j+1?'f':hv>=j+.5?'h':'0');});
     star.addEventListener('mouseleave',()=>{const sv2=parseFloat(wrap.dataset.saved||'0');wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=sv2>=j+1?'f':sv2>=j+.5?'h':'0');});
     star.addEventListener('click',e=>{
@@ -785,6 +817,21 @@ function mkStars(id,val){
       if(zoneEl){const h=zoneEl.querySelector('div:last-child');if(h)h.textContent=`✓ your vote: ${fmt(clicked)} · update anytime`;}
       toast('◎ Voted '+fmt(clicked)+' / 5 — shared with everyone!');
     });
+
+    // ── Touch (mobile) — touchstart for instant feedback, no ghost-click delay ──
+    star.addEventListener('touchstart', e=>{
+      e.preventDefault(); // block ghost click
+      const touch = e.changedTouches[0];
+      const r = star.getBoundingClientRect();
+      const clicked = (touch.clientX - r.left) < r.width/2 ? i-0.5 : i;
+      wrap.dataset.saved = clicked;
+      wrap.querySelectorAll('.hs').forEach((s,j)=>s.dataset.s=clicked>=j+1?'f':clicked>=j+.5?'h':'0');
+      submitVote(id, clicked);
+      const zoneEl = wrap.closest('.cc-co-zone');
+      if(zoneEl){const h=zoneEl.querySelector('div:last-child');if(h)h.textContent=`✓ your vote: ${fmt(clicked)} · update anytime`;}
+      toast('◎ Voted '+fmt(clicked)+' / 5 — shared with everyone!');
+    }, {passive:false});
+
     wrap.appendChild(star);
   }
   return wrap;
