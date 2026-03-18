@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="ISC.exe elephant favicon">
+  <g fill="#dde8e3" stroke="#121615" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="150" cy="120" rx="39" ry="39"/>
+    <polygon points="82,95 118,86 127,108 104,132 88,120 82,106"/>
+    <polygon points="104,132 127,108 138,121 121,142"/>
+    <polygon points="113,119 126,119 126,157 114,157"/>
+    <polygon points="132,121 146,123 145,157 134,157"/>
+    <polygon points="160,132 174,143 173,157 158,157"/>
+    <polygon points="78,118 70,128 81,138"/>
+    <polygon points="175,91 191,103 190,149 178,149"/>
+    <path d="M84 106C77 113 70 118 51 125C44 127 39 127 35 123" fill="none" stroke-width="14"/>
+    <path d="M35 123L27 121" fill="none" stroke-width="10"/>
+  </g>
+  <path d="M66 124C64 130 62 140 74 151" fill="none" stroke="#121615" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M66 124C64 130 62 140 74 151" fill="none" stroke="#f5f9f6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M117 88L126 108L109 126" fill="none" stroke="#121615" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M187 116L190 136" fill="none" stroke="#121615" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="92" cy="101" r="2.5" fill="#121615"/>
+  <path d="M95 132H120L130 157H95Z" fill="transparent"/>
+</svg>
