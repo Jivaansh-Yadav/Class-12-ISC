@@ -430,9 +430,19 @@ body.sidebar-resizing .sidebar-divider::before {
 #search { background: none; border: none; outline: none; color: var(--fg); font-family: 'DM Sans', sans-serif; font-size: 12.5px; width: 100%; }
 #search::placeholder { color: var(--fg2); opacity: 0.6; }
 
-#folders { flex: 1; overflow-y: auto; padding: 6px 6px 20px; }
-#folders::-webkit-scrollbar { width: 3px; }
-#folders::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+#folders {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 6px 20px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+#folders::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  background: transparent !important;
+}
 
 /* ── SUBJECT ROWS ── */
 .subject { border-radius: 8px; margin-bottom: 3px; }
@@ -442,7 +452,6 @@ body.sidebar-resizing .sidebar-divider::before {
   padding: 9px 10px 9px 10px; border-radius: 8px;
   color: var(--fg); font-size: 13px; font-weight: 500;
   user-select: none;
-  /* Distinct look: tinted bg + stronger left border + inner glow */
   border: 1px solid color-mix(in srgb, var(--subj-color) 18%, transparent);
   border-left: 3px solid var(--subj-color);
   background: color-mix(in srgb, var(--subj-color) 5%, transparent);
@@ -471,7 +480,6 @@ body.sidebar-resizing .sidebar-divider::before {
 .s-icon { font-size: 15px; flex-shrink: 0; }
 .s-name { flex: 1; }
 
-/* Count badge — tinted with subject color even when closed */
 .s-count {
   font-family: 'DM Mono', monospace; font-size: 9.5px;
   color: color-mix(in srgb, var(--subj-color) 80%, var(--fg2));
@@ -486,7 +494,6 @@ body.sidebar-resizing .sidebar-divider::before {
   box-shadow: 0 0 9px color-mix(in srgb, var(--subj-color) 35%, transparent);
 }
 
-/* Arrow — tinted + glow when open */
 .s-arr {
   font-size: 7px;
   color: color-mix(in srgb, var(--subj-color) 60%, var(--fg3));
@@ -571,8 +578,6 @@ body.sidebar-resizing .sidebar-divider::before {
 }
 .vi-chip.src-drive { color: #7aabcc; border-color: rgba(122,171,204,0.3); background: rgba(122,171,204,0.1); }
 .vi-chip.src-repo  { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: var(--accent-lo); }
-
-/* ── SIDEBAR CREDITS PILL (inline, hidden now) ── */
 
 /* ── FLOATING CREDS CALLOUT ── */
 .creds-callout {
@@ -1283,7 +1288,6 @@ const COLORS = {
 };
 const ALLOWED = new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 
-/* subjects that get a credits bubble and who to credit */
 const CREDS_MAP = {
   'Computer Science': { user: 'u/Active-Judgment-250', reddit: true }
 };
@@ -1477,7 +1481,6 @@ function render() {
   });
   if (!wrap.children.length) wrap.innerHTML = `<div class="msg">No results for "${q}"</div>`;
 
-  // Re-attach floating callout observers after render
   attachCredsCallout();
 }
 
@@ -1528,17 +1531,14 @@ function attachCredsCallout() {
     }
   }
 
-  // Clean up old CS-subject listener
   if (csDetails._credsToggle) {
     csDetails.removeEventListener('toggle', csDetails._credsToggle);
     delete csDetails._credsToggle;
   }
-  // Hide callout when CS subject itself closes
   csDetails.addEventListener('toggle', () => {
     if (!csDetails.open) callout.classList.remove('visible');
   });
 
-  // Attach toggle listeners to each sub-folder
   function attachSubFolderListeners() {
     csDetails.querySelectorAll('details.sub-folder').forEach(sf => {
       if (sf._credsSubToggle) return;
@@ -1547,7 +1547,6 @@ function attachCredsCallout() {
     });
   }
 
-  // Watch for sub-folders added dynamically
   if (csDetails._credsObserver) csDetails._credsObserver.disconnect();
   const obs = new MutationObserver(() => { attachSubFolderListeners(); updateVisibility(); });
   obs.observe(csDetails, { childList: true, subtree: true });
@@ -1556,7 +1555,6 @@ function attachCredsCallout() {
   attachSubFolderListeners();
   updateVisibility();
 
-  // Reposition on scroll/resize
   folders.addEventListener('scroll', () => {
     const openSF = getOpenSubFolder();
     if (openSF) positionCallout(openSF.querySelector('summary'));
