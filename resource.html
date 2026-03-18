@@ -10,6 +10,10 @@
   (function(){
     const s = localStorage.getItem('isc-accent');
     const g = localStorage.getItem('isc-gradient');
+    const sidebarWidth = Number(localStorage.getItem('isc-resource-sidebar-width'));
+    if (sidebarWidth) {
+      document.documentElement.style.setProperty('--sidebar-width', `${Math.min(440, Math.max(240, sidebarWidth))}px`);
+    }
     if (g) {
       const gr = JSON.parse(g);
       const r=parseInt(gr.a.slice(1,3),16),gv=parseInt(gr.a.slice(3,5),16),b=parseInt(gr.a.slice(5,7),16);
@@ -50,6 +54,7 @@
   --amber:     #d4a84b;
   --grad-a:    #7ab86a;
   --grad-b:    #7ab86a;
+  --sidebar-width: 300px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,6 +67,13 @@ body {
   font-size: 13.5px;
   line-height: 1.55;
   overflow: hidden;
+}
+body.sidebar-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+body.sidebar-resizing * {
+  cursor: col-resize !important;
 }
 
 body::before {
@@ -283,7 +295,7 @@ body.grad-mode .picker-panel {
 }
 
 /* ── EXAM ALERT ── */
-#examAlert { position: fixed; top: 50px; left: 300px; right: 0; z-index: 150; }
+#examAlert { position: fixed; top: 50px; left: calc(var(--sidebar-width) + 12px); right: 0; z-index: 150; }
 .exam-alert {
   display: flex; align-items: center; gap: 12px;
   padding: 8px 22px;
@@ -308,7 +320,7 @@ body.grad-mode .picker-panel {
 /* ── LAYOUT ── */
 .layout {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: var(--sidebar-width) 12px minmax(0, 1fr);
   height: 100vh;
   padding-top: 50px;
 }
@@ -365,7 +377,48 @@ body.grad-mode .picker-panel {
 }
 #tab-science.active::before { transform: scaleX(1); }
 
-/* ── SEARCH (shifted 7px right) ── */
+/* ── SIDEBAR RESIZE HANDLE ── */
+.sidebar-divider {
+  position: relative;
+  width: 12px;
+  border: 0;
+  padding: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+  border-left: 1px solid color-mix(in srgb, var(--accent) 8%, var(--border));
+  border-right: 1px solid rgba(255,255,255,0.02);
+  cursor: col-resize;
+  touch-action: none;
+  transition: background .18s, border-color .18s;
+}
+.sidebar-divider::before {
+  content: '';
+  position: absolute;
+  inset: 50% 50% auto auto;
+  transform: translate(50%, -50%);
+  width: 4px;
+  height: 68px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--accent) 70%, var(--fg)) 0 1px, transparent 1.5px) center 6px / 4px 12px repeat-y;
+  opacity: 0.45;
+  transition: opacity .18s, transform .18s;
+}
+.sidebar-divider:hover,
+.sidebar-divider:focus-visible,
+body.sidebar-resizing .sidebar-divider {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, rgba(255,255,255,0.03)), rgba(255,255,255,0));
+  border-left-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+}
+.sidebar-divider:hover::before,
+.sidebar-divider:focus-visible::before,
+body.sidebar-resizing .sidebar-divider::before {
+  opacity: 0.95;
+  transform: translate(50%, -50%) scale(1.04);
+}
+.sidebar-divider:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+}
 .search-wrap { padding: 8px 10px 8px 17px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .search-box {
   display: flex; align-items: center; gap: 7px;
@@ -725,7 +778,9 @@ body.fullscreen-active .layout { display: block; }
 .fn-close:hover { color: #ff9999; }
 
 @media (max-width: 820px) {
+  #examAlert { left: 0; }
   .layout { grid-template-columns: 1fr; }
+  .sidebar-divider,
   .viewer { display: none; }
 }
 </style>
@@ -835,6 +890,8 @@ body.fullscreen-active .layout { display: block; }
     <div id="folders"><div class="msg">Loading…</div></div>
   </aside>
 
+  <button class="sidebar-divider" id="sidebarDivider" type="button" aria-label="Resize the resources sidebar" title="Drag to resize the resources sidebar"></button>
+
   <section class="viewer" id="viewerPanel">
     <div class="viewer-infobar" id="viewerInfobar">
       <div class="vi-breadcrumb" id="vBreadcrumb">Select a file to preview</div>
@@ -916,6 +973,10 @@ const GRAD_PRESETS = [
 const DEFAULT_ACCENT = '#7ab86a';
 const STORE_KEY      = 'isc-accent';
 const GRAD_KEY       = 'isc-gradient';
+const SIDEBAR_WIDTH_KEY = 'isc-resource-sidebar-width';
+const DEFAULT_SIDEBAR_WIDTH = 300;
+const MIN_SIDEBAR_WIDTH = 240;
+const MAX_SIDEBAR_WIDTH = 440;
 
 let currentAccent = localStorage.getItem(STORE_KEY) || DEFAULT_ACCENT;
 let currentGrad   = JSON.parse(localStorage.getItem(GRAD_KEY) || 'null');
@@ -1036,6 +1097,80 @@ function applyGradient(a, b, save) {
   if (save) localStorage.setItem(GRAD_KEY, JSON.stringify({ a, b }));
 }
 
+function clampSidebarWidth(value) {
+  return Math.min(MAX_SIDEBAR_WIDTH, Math.max(MIN_SIDEBAR_WIDTH, value));
+}
+
+function applySidebarWidth(width, save = false) {
+  const safeWidth = clampSidebarWidth(Number(width) || DEFAULT_SIDEBAR_WIDTH);
+  document.documentElement.style.setProperty('--sidebar-width', `${safeWidth}px`);
+  if (save) localStorage.setItem(SIDEBAR_WIDTH_KEY, String(safeWidth));
+}
+
+function initSidebarWidthControl() {
+  const divider = document.getElementById('sidebarDivider');
+  const layout = document.getElementById('mainLayout');
+  if (!divider || !layout) return;
+
+  const savedWidth = clampSidebarWidth(Number(localStorage.getItem(SIDEBAR_WIDTH_KEY)) || DEFAULT_SIDEBAR_WIDTH);
+  applySidebarWidth(savedWidth, false);
+
+  const startResize = clientX => {
+    const bounds = layout.getBoundingClientRect();
+    applySidebarWidth(clientX - bounds.left, true);
+  };
+
+  const stopDragging = () => {
+    document.body.classList.remove('sidebar-resizing');
+  };
+
+  divider.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    divider.setPointerCapture(e.pointerId);
+    document.body.classList.add('sidebar-resizing');
+    startResize(e.clientX);
+  });
+
+  divider.addEventListener('pointermove', e => {
+    if (!divider.hasPointerCapture(e.pointerId)) return;
+    startResize(e.clientX);
+  });
+
+  divider.addEventListener('pointerup', e => {
+    if (divider.hasPointerCapture(e.pointerId)) divider.releasePointerCapture(e.pointerId);
+    stopDragging();
+  });
+
+  divider.addEventListener('pointercancel', e => {
+    if (divider.hasPointerCapture(e.pointerId)) divider.releasePointerCapture(e.pointerId);
+    stopDragging();
+  });
+
+  divider.addEventListener('keydown', e => {
+    const step = e.shiftKey ? 24 : 12;
+    const currentWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sidebar-width')) || DEFAULT_SIDEBAR_WIDTH;
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      applySidebarWidth(currentWidth - step, true);
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      applySidebarWidth(currentWidth + step, true);
+    }
+    if (e.key === 'Home') {
+      e.preventDefault();
+      applySidebarWidth(MIN_SIDEBAR_WIDTH, true);
+    }
+    if (e.key === 'End') {
+      e.preventDefault();
+      applySidebarWidth(MAX_SIDEBAR_WIDTH, true);
+    }
+  });
+
+  window.addEventListener('blur', stopDragging);
+}
+
 function buildPresets() {
   const grid = document.getElementById('presetsGrid'); grid.innerHTML = '';
   PRESETS.forEach((p) => {
@@ -1102,6 +1237,7 @@ document.addEventListener('click', e => { if (pickerOpen && !document.getElement
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && pickerOpen) closePicker(); });
 
 document.addEventListener('DOMContentLoaded', () => {
+  initSidebarWidthControl();
   buildPresets();
   buildGradPresets();
   const savedGrad = localStorage.getItem(GRAD_KEY);
