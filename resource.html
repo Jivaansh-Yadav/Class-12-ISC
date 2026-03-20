@@ -1570,44 +1570,76 @@ function render() {
   attachCredsCallout();
 }
 
-function anySubfolderOpen() {
-  return [...csDetails.querySelectorAll('details.sub-folder')].some(d => d.open);
-}
+/* ── FLOATING CREDITS CALLOUT ── */
+let _calloutEl = null;
 
-function updateVisibility() {
-  if (csDetails.open && !anySubfolderOpen()) {
-    positionCallout();
-    callout.classList.add('visible');
-  } else {
-    callout.classList.remove('visible');
+function getOrCreateCallout() {
+  if (!_calloutEl) {
+    _calloutEl = document.createElement('div');
+    _calloutEl.className = 'creds-callout';
+    _calloutEl.innerHTML = `
+      <div class="creds-callout-inner">
+        <span class="creds-callout-tag"><span class="creds-prefix">creds-</span>u/Active-Judgment-250</span>
+      </div>`;
+    document.body.appendChild(_calloutEl);
   }
+  return _calloutEl;
 }
+function attachCredsCallout() {
+  const folders = document.getElementById('folders');
+  const csDetails = [...folders.querySelectorAll('details.subject')].find(d => {
+    const sname = d.querySelector('.s-name');
+    return sname && sname.textContent.trim() === 'Computer Science';
+  });
+  if (!csDetails) return;
 
-// remove old listener if any
-if (csDetails._credsToggle) {
-  csDetails.removeEventListener('toggle', csDetails._credsToggle);
-}
-csDetails._credsToggle = updateVisibility;
-csDetails.addEventListener('toggle', updateVisibility);
+  const callout = getOrCreateCallout();
 
-// listen for subfolder toggles inside CS (capture phase catches child toggles)
-if (csDetails._subToggle) {
-  csDetails.removeEventListener('toggle', csDetails._subToggle, true);
-}
-csDetails._subToggle = e => {
-  if (e.target !== csDetails && e.target.closest('details.subject') === csDetails) {
-    updateVisibility();
+  function getOpenSubFolder() {
+    if (!csDetails.open) return null;
+    return csDetails.querySelector('details.sub-folder[open]') || null;
   }
-};
-csDetails.addEventListener('toggle', csDetails._subToggle, true);
 
-// show immediately if already open
-updateVisibility();
+  function positionCallout(summaryEl) {
+    const rect = summaryEl.getBoundingClientRect();
+    const sidebarWidth = document.querySelector('.sidebar').getBoundingClientRect().right;
+    callout.style.left = (sidebarWidth + 14) + 'px';
+    callout.style.top  = (rect.top + rect.height / 2 - 22) + 'px';
+  }
 
-// reposition on scroll/resize
-folders.addEventListener('scroll', () => { if (csDetails.open && !anySubfolderOpen()) positionCallout(); }, { passive: true });
-window.addEventListener('resize',  () => { if (csDetails.open && !anySubfolderOpen()) positionCallout(); }, { passive: true });
+  function updateVisibility() {
+    const openSF = getOpenSubFolder();
+    if (openSF) {
+      positionCallout(openSF.querySelector('summary'));
+      callout.classList.add('visible');
+    } else {
+      callout.classList.remove('visible');
+    }
+  }
 
+  if (csDetails._credsToggle) {
+    csDetails.removeEventListener('toggle', csDetails._credsToggle);
+    delete csDetails._credsToggle;
+  }
+  csDetails.addEventListener('toggle', () => {
+    if (!csDetails.open) callout.classList.remove('visible');
+  });
+
+  function attachSubFolderListeners() {
+    csDetails.querySelectorAll('details.sub-folder').forEach(sf => {
+      if (sf._credsSubToggle) return;
+      sf._credsSubToggle = updateVisibility;
+      sf.addEventListener('toggle', sf._credsSubToggle);
+    });
+  }
+
+  if (csDetails._credsObserver) csDetails._credsObserver.disconnect();
+  const obs = new MutationObserver(() => { attachSubFolderListeners(); updateVisibility(); });
+  obs.observe(csDetails, { childList: true, subtree: true });
+  csDetails._credsObserver = obs;
+
+  attachSubFolderListeners();
+  updateVisibility();
 
   folders.addEventListener('scroll', () => {
     const openSF = getOpenSubFolder();
