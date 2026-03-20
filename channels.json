@@ -268,7 +268,7 @@
       "icon": "📖",
       "channels": [
         {
-          "id": "aryan_eng_sci",
+          "id": "aryan_eng",
           "name": "Aryan Tutorials",
           "handle": "@AryanTutorials",
           "av": "✍️",
@@ -281,7 +281,7 @@
           "bannerUrl": "https://yt3.googleusercontent.com/vtlCXEYv8qOemvLLx8UXJ5q3PpcfyvTumfIl15hAa5R08Z6uZz5O9qqkH5OdLe-2GDO4jxU3=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
         },
         {
-          "id": "sudhir_eng_sci",
+          "id": "sudhir_eng",
           "name": "Study with Sudhir",
           "handle": "@StudywithSudhir",
           "av": "📝",
