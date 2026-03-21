@@ -282,6 +282,34 @@ body.grad-mode .picker-panel {
 }
 .nav-sep { width: 1px; height: 18px; background: var(--border2); margin: 0 2px; flex-shrink: 0; }
 
+/* ── DMCA PILL ── */
+.dmca-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 13px 5px 9px;
+  background: rgba(224, 55, 55, 0.13);
+  border: 1px solid rgba(224, 55, 55, 0.5);
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  white-space: nowrap;
+  animation: dmcaPulse 3s ease-in-out infinite;
+  cursor: default; user-select: none; flex-shrink: 0;
+}
+@keyframes dmcaPulse {
+  0%,100% { border-color: rgba(224,55,55,0.5); box-shadow: 0 0 0 0 rgba(224,55,55,0); }
+  50%      { border-color: rgba(224,55,55,0.85); box-shadow: 0 0 10px rgba(224,55,55,0.18); }
+}
+.dmca-tag {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase;
+  color: #000; background: #e03737; padding: 2px 6px; border-radius: 3px; flex-shrink: 0;
+}
+.dmca-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #e03737; flex-shrink: 0;
+  animation: dmcaDot 1.5s ease-in-out infinite;
+}
+@keyframes dmcaDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+.dmca-text { font-size: 11px; color: rgba(255,185,185,0.9); letter-spacing: 0.2px; }
+.dmca-text strong { color: #ff9999; font-weight: 600; }
+
 /* ── THEME PICKER ── */
 .picker-wrap { position: relative; }
 .color-trigger {
@@ -843,22 +871,6 @@ body.fullscreen-active .layout { display: block; }
 }
 @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
 
-.file-notice {
-  display: none; align-items: center; gap: 8px;
-  padding: 5px 14px;
-  background: rgba(50, 10, 10, 0.95);
-  border: 1px solid rgba(220, 80, 80, 0.4);
-  border-radius: 6px;
-  width: fit-content; margin: 0 20px 0 32px; flex-shrink: 1;
-}
-.file-notice.visible { display: flex; }
-.fn-icon { font-size: 12px; flex-shrink: 0; }
-.fn-tag { font-family: 'DM Mono', monospace; font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #000; background: #e05555; padding: 2px 6px; border-radius: 2px; flex-shrink: 0; }
-.fn-text { font-family: 'DM Mono', monospace; font-size: 10.5px; color: rgba(255, 200, 200, 0.9); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.fn-kbd { display: inline-flex; align-items: center; justify-content: center; background: rgba(224, 85, 85, 0.25); border: 1px solid rgba(224, 85, 85, 0.5); border-radius: 3px; padding: 0px 5px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700; color: #ff9999; margin: 0 2px; }
-.fn-close { background: none; border: none; color: rgba(220,150,150,0.6); cursor: pointer; font-size: 12px; padding: 1px 3px; border-radius: 3px; transition: color .15s; flex-shrink: 0; }
-.fn-close:hover { color: #ff9999; }
-
 @media (max-width: 820px) {
   #examAlert { left: 0; }
   .layout { grid-template-columns: 1fr; }
@@ -892,11 +904,11 @@ body.fullscreen-active .layout { display: block; }
       </a>
       <a class="nav-link" href="/channels">📺 Channels</a>
     </div>
-  </div>
-
-  <div class="file-notice visible" id="fileNotice">
-    <span class="fn-text">If files are not loading press <span class="fn-kbd">R</span> to reload.</span>
-    <button class="fn-close" onclick="document.getElementById('fileNotice').classList.remove('visible')" title="Dismiss">✕</button>
+    <div class="dmca-pill">
+      <span class="dmca-dot"></span>
+      <span class="dmca-tag">DMCA</span>
+      <span class="dmca-text">Some files are temporarily unavailable — <strong>working on a fix</strong></span>
+    </div>
   </div>
 
   <div class="nav-right">
@@ -1750,7 +1762,6 @@ function preview(entry) {
     frame.style.display = 'block';
     frame.onload = () => {
       loaderOverlay.classList.add('hidden');
-      document.getElementById('fileNotice').classList.remove('visible');
     };
     setTimeout(() => loaderOverlay.classList.add('hidden'), 8000);
   }, 80);
