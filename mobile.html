@@ -412,7 +412,15 @@ body::before{
   transition:transform .2s;
 }
 .folder-row.open .fr-chev{transform:rotate(90deg);}
-/* Remove accent border from sub-subfolders (folders inside folders) */
+/* Remove accent border from sub-subfolders (folders inside folders) */.folder-files .folder-row{
+  border-left:1px solid var(--border2);
+  background:var(--surface);
+  --subj-color: var(--border2);
+}
+.folder-files .folder-row.open{
+  background:var(--surface2);
+  border-color:var(--border2);
+}
 .folder-files .folder-row {
   border-left: 1px solid var(--border2);
   background: var(--surface);
