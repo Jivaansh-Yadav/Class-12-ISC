@@ -399,106 +399,190 @@ body::before{
 .mob-msg{padding:16px 12px;color:var(--fg2);font-family:'DM Mono',monospace;font-size:11px;}
 
 /* ── VIEWER PANE ── */
-.viewer-pane{background:var(--bg);display:flex;flex-direction:column;}
+.viewer-pane{background:var(--bg);display:flex;flex-direction:column;height:100%;}
 
+/* Top nav bar: breadcrumb + back */
 .viewer-topbar{
-  flex-shrink:0;
-  padding:10px 14px 8px;
-  background:var(--bg2);
+  flex-shrink:0;height:50px;
+  padding:0 14px;
+  background:rgba(11,13,11,0.97);
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;gap:10px;
+  backdrop-filter:blur(16px);
 }
 .viewer-back-btn{
-  width:36px;height:36px;border-radius:10px;
+  width:34px;height:34px;border-radius:9px;
   background:var(--surface);border:1px solid var(--border2);
   color:var(--fg2);display:flex;align-items:center;justify-content:center;
-  font-size:16px;cursor:pointer;flex-shrink:0;
+  font-size:18px;cursor:pointer;flex-shrink:0;
   transition:all .15s;
 }
-.viewer-back-btn:active{background:var(--surface2);transform:scale(.92);}
-.viewer-file-info{flex:1;min-width:0;}
-.viewer-fname{
-  font-size:13px;font-weight:500;color:var(--fg);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.viewer-fpath{
+.viewer-back-btn:active{background:var(--surface2);transform:scale(.91);}
+.viewer-breadcrumb{flex:1;min-width:0;}
+.vb-subject{
   font-family:'DM Mono',monospace;font-size:9px;
-  color:var(--fg3);margin-top:1px;
+  color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;
+  display:flex;align-items:center;gap:4px;margin-bottom:1px;
+}
+.vb-subject svg{opacity:.6;}
+.vb-fname{
+  font-size:12.5px;font-weight:500;color:var(--fg);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 
-.viewer-toolbar{
-  display:flex;align-items:center;gap:6px;
-  padding:8px 14px;
-  background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;overflow-x:auto;
-  scrollbar-width:none;
-}
-.viewer-toolbar::-webkit-scrollbar{display:none;}
-.vtbtn{
-  display:inline-flex;align-items:center;gap:5px;
-  font-family:'DM Mono',monospace;font-size:9.5px;
-  color:var(--fg2);padding:6px 11px;
-  border:1px solid var(--border2);border-radius:7px;
-  background:transparent;cursor:pointer;
-  white-space:nowrap;letter-spacing:.2px;flex-shrink:0;
-  transition:all .15s;
-}
-.vtbtn:active{transform:scale(.94);background:var(--surface2);}
-.vtbtn.primary{
-  color:var(--accent);
-  border-color:rgba(122,184,106,.35);
-  background:var(--accent-lo);
-}
-.vtbtn.primary:active{background:var(--accent-md);}
-.vtbtn svg{width:13px;height:13px;flex-shrink:0;}
-
-.viewer-badge{
-  font-family:'DM Mono',monospace;font-size:8.5px;
-  padding:3px 8px;border-radius:5px;
-  background:var(--surface);border:1px solid var(--border2);
-  color:var(--fg3);text-transform:uppercase;letter-spacing:.5px;
+/* Action buttons row */
+.viewer-actions{
+  display:flex;gap:8px;padding:12px 14px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
   flex-shrink:0;
 }
-.vb-sep{flex:1;min-width:0;}
-
-.viewer-body{
-  flex:1;position:relative;overflow:hidden;
-  background:#0a0c0a;
+.vact-primary{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:10px 0;border-radius:10px;
+  background:var(--accent);color:#000;
+  font-family:'DM Mono',monospace;font-size:10.5px;font-weight:700;
+  letter-spacing:.4px;text-decoration:none;border:none;cursor:pointer;
+  transition:all .18s;
 }
-.viewer-frame{width:100%;height:100%;border:0;background:#181a17;}
+.vact-primary:active{transform:scale(.96);filter:brightness(.9);}
+.vact-primary svg{width:14px;height:14px;flex-shrink:0;}
+.vact-secondary{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 14px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--border2);
+  color:var(--fg2);font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.3px;text-decoration:none;cursor:pointer;
+  transition:all .15s;
+}
+.vact-secondary:active{transform:scale(.95);background:var(--surface2);}
+.vact-secondary svg{width:13px;height:13px;flex-shrink:0;}
+
+/* Scrollable detail area */
+.viewer-scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;overscroll-behavior-y:contain;
+}
+.viewer-scroll::-webkit-scrollbar{display:none;}
+
+/* Preview card */
+.preview-card{
+  margin:14px 14px 0;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;overflow:hidden;position:relative;
+}
+.preview-frame-wrap{
+  width:100%;aspect-ratio:3/4;
+  background:#0a0c0a;position:relative;
+  overflow:hidden;border-radius:16px 16px 0 0;
+}
+.viewer-frame{width:100%;height:100%;border:0;background:#0a0c0a;}
 .viewer-loader{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:14px;background:var(--bg);
-  transition:opacity .3s;
+  transition:opacity .3s;z-index:2;
 }
 .viewer-loader.hidden{opacity:0;pointer-events:none;}
 .loader-ring{
-  width:36px;height:36px;
-  border:2px solid var(--border2);
-  border-top-color:var(--accent);
-  border-radius:50%;
+  width:32px;height:32px;border:2px solid var(--border2);
+  border-top-color:var(--accent);border-radius:50%;
   animation:spin .7s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-txt{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg2);}
+.loader-txt{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);}
 
-/* Fullscreen iframe */
-.viewer-body.fs-mode{position:fixed;inset:0;z-index:9000;}
-.viewer-body.fs-mode .viewer-frame{height:100%;}
+/* Preview footer: source badge */
+.preview-footer{
+  padding:8px 12px;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg2);
+}
+.pf-badge{
+  font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:1.2px;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+}
+.pf-badge.repo{color:var(--accent);background:var(--accent-lo);border:1px solid rgba(122,184,106,.25);}
+.pf-badge.drive{color:#7aabcc;background:rgba(122,171,204,.10);border:1px solid rgba(122,171,204,.22);}
+.pf-reload{
+  margin-left:auto;background:none;border:none;
+  color:var(--fg3);font-size:14px;cursor:pointer;padding:4px;
+  transition:color .15s,transform .3s;
+}
+.pf-reload:active{color:var(--accent);transform:rotate(180deg);}
+
+/* Overview card */
+.overview-card{
+  margin:10px 14px 0;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;padding:16px;
+  animation:up .35s ease both;
+}
+.ov-label{
+  font-family:'DM Mono',monospace;font-size:8.5px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--fg3);margin-bottom:10px;
+}
+.ov-title{
+  font-family:'Newsreader',serif;font-size:18px;
+  font-style:italic;font-weight:600;color:var(--fg);
+  line-height:1.25;margin-bottom:8px;
+}
+.ov-path{
+  font-family:'DM Mono',monospace;font-size:10px;
+  color:var(--fg3);line-height:1.6;
+  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
+}
+.ov-path-sep{opacity:.4;}
+.ov-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.ov-tag{
+  font-family:'DM Mono',monospace;font-size:8.5px;
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;
+}
+.tag-subject{color:var(--accent);background:var(--accent-lo);border:1px solid rgba(122,184,106,.22);}
+.tag-folder{color:var(--fg2);background:var(--surface2);border:1px solid var(--border2);}
+.tag-type{color:#7aabcc;background:rgba(122,171,204,.09);border:1px solid rgba(122,171,204,.2);}
+
+/* Details card */
+.details-card{
+  margin:10px 14px 20px;
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;overflow:hidden;
+  animation:up .4s .05s ease both;
+}
+.details-head{
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  font-family:'DM Mono',monospace;font-size:8.5px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--fg3);
+  background:var(--bg2);
+}
+.detail-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;border-bottom:1px solid var(--border);
+}
+.detail-row:last-child{border-bottom:none;}
+.dr-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);}
+.dr-value{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg);font-weight:500;}
+.dr-value.accent{color:var(--accent);}
 
 /* Empty viewer state */
 .viewer-empty{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   height:100%;gap:12px;color:var(--fg2);user-select:none;
-  padding:20px;text-align:center;
+  padding:40px 20px;text-align:center;
 }
 .ve-ico{font-size:40px;opacity:.2;animation:bob 3.5s ease-in-out infinite;}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 .ve-title{font-family:'Newsreader',serif;font-style:italic;font-size:20px;color:var(--fg2);}
 .ve-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);letter-spacing:.5px;}
+
+/* Fullscreen */
+.viewer-pane.fs-mode .preview-frame-wrap{
+  position:fixed;inset:0;z-index:9000;aspect-ratio:unset;border-radius:0;
+}
+.viewer-pane.fs-mode .viewer-frame{height:100%;}
 
 /* ═══ PAGE: TIMETABLE ═══ */
 .tt-page{padding:0 0 16px;}
@@ -795,51 +879,90 @@ body::before{
           </div>
           <!-- VIEWER PANE -->
           <div class="res-pane hidden" id="res-viewer-pane">
-            <div class="viewer-pane" style="height:100%;display:flex;flex-direction:column;">
-              <!-- Topbar -->
+            <div class="viewer-pane" id="viewer-pane-root">
+
+              <!-- Top nav: back + breadcrumb -->
               <div class="viewer-topbar">
-                <button class="viewer-back-btn" onclick="closeViewer()" aria-label="Back">←</button>
-                <div class="viewer-file-info">
-                  <div class="viewer-fname" id="v-fname">—</div>
-                  <div class="viewer-fpath" id="v-fpath">—</div>
+                <button class="viewer-back-btn" onclick="closeViewer()" aria-label="Back">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                </button>
+                <div class="viewer-breadcrumb">
+                  <div class="vb-subject" id="v-subject">
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    <span id="v-subject-text">—</span>
+                  </div>
+                  <div class="vb-fname" id="v-fname">—</div>
                 </div>
               </div>
-              <!-- Toolbar -->
-              <div class="viewer-toolbar">
-                <a id="v-open" class="vtbtn primary" target="_blank" rel="noopener">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Open
+
+              <!-- Action buttons -->
+              <div class="viewer-actions">
+                <a id="v-open" class="vact-primary" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                  Open Fullscreen
                 </a>
-                <a id="v-dl" class="vtbtn" download>
+                <a id="v-dl" class="vact-secondary" download>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                   Download
                 </a>
-                <button class="vtbtn" onclick="copyShareLink()">
+                <button class="vact-secondary" onclick="copyShareLink()">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                  Share
                 </button>
-                <div class="vb-sep"></div>
-                <button class="vtbtn" onclick="reloadViewer()">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-                  Reload
-                </button>
-                <span class="viewer-badge" id="v-type">PDF</span>
               </div>
-              <!-- Body -->
-              <div class="viewer-body" id="v-body">
-                <div class="viewer-empty" id="v-empty">
-                  <div class="ve-ico">📖</div>
-                  <div class="ve-title">Nothing open yet</div>
-                  <div class="ve-sub">Select a file from the list</div>
+
+              <!-- Scrollable body -->
+              <div class="viewer-scroll">
+
+                <!-- Preview card -->
+                <div class="preview-card">
+                  <div class="preview-frame-wrap" id="v-frame-wrap">
+                    <div class="viewer-loader" id="v-loader">
+                      <div class="loader-ring"></div>
+                      <div class="loader-txt">Loading preview…</div>
+                    </div>
+                    <iframe id="v-frame" class="viewer-frame" style="display:none;"
+                      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                      title="File preview"></iframe>
+                  </div>
+                  <div class="preview-footer">
+                    <span class="pf-badge repo" id="v-src-badge">GitHub</span>
+                    <span id="v-type-badge" style="font-family:'DM Mono',monospace;font-size:9px;color:var(--fg3);letter-spacing:.8px;text-transform:uppercase;">PDF</span>
+                    <button class="pf-reload" onclick="reloadViewer()" title="Reload">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    </button>
+                  </div>
                 </div>
-                <div class="viewer-loader hidden" id="v-loader">
-                  <div class="loader-ring"></div>
-                  <div class="loader-txt">Loading preview…</div>
+
+                <!-- Resource overview -->
+                <div class="overview-card">
+                  <div class="ov-label">Resource Overview</div>
+                  <div class="ov-title" id="v-ov-title">—</div>
+                  <div class="ov-path" id="v-ov-path">—</div>
+                  <div class="ov-tags" id="v-ov-tags"></div>
                 </div>
-                <iframe id="v-frame" class="viewer-frame" style="display:none;"
-                  sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-                  title="File preview"></iframe>
-              </div>
+
+                <!-- File details -->
+                <div class="details-card">
+                  <div class="details-head">File Details</div>
+                  <div class="detail-row">
+                    <span class="dr-label">Format</span>
+                    <span class="dr-value accent" id="vd-format">—</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="dr-label">Subject</span>
+                    <span class="dr-value" id="vd-subject">—</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="dr-label">Folder</span>
+                    <span class="dr-value" id="vd-folder">—</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="dr-label">Source</span>
+                    <span class="dr-value" id="vd-source">—</span>
+                  </div>
+                </div>
+
+              </div><!-- /viewer-scroll -->
             </div>
           </div>
         </div>
@@ -1146,36 +1269,71 @@ function resRender() {
 
 function openViewer(entry) {
   currentEntry = entry;
-  const parts = entry.path.split('/');
-  const fname = parts[parts.length-1];
-  const ext = fname.split('.').pop().toLowerCase();
-  const pathDisplay = parts.slice(0,-1).join(' / ');
+  const parts   = entry.path.split('/');
+  const fname   = parts[parts.length - 1];
+  const ext     = fname.split('.').pop().toLowerCase();
+  const subject = parts[0];
+  const folder  = parts.length > 2 ? parts[parts.length - 2] : subject;
 
-  document.getElementById('v-fname').textContent = fname;
-  document.getElementById('v-fpath').textContent = pathDisplay;
+  const typeMap   = {pdf:'PDF',docx:'Word Doc',doc:'Word Doc',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Spreadsheet',xls:'Spreadsheet'};
+  const typeFull  = typeMap[ext] || ext.toUpperCase();
+  const isDrive   = entry.source === 'gdrive';
+
+  // Top nav
+  document.getElementById('v-subject-text').textContent = subject;
+  document.getElementById('v-fname').textContent = fname.replace(/\.[^.]+$/, '');
+
+  // Action buttons
   document.getElementById('v-open').href = entry.url;
   const dl = document.getElementById('v-dl'); dl.href = entry.url; dl.setAttribute('download', fname);
 
-  const typeMap = {pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Sheet'};
-  document.getElementById('v-type').textContent = typeMap[ext] || ext.toUpperCase();
+  // Source badge
+  const srcBadge = document.getElementById('v-src-badge');
+  srcBadge.textContent = isDrive ? '⬡ Drive' : '⎔ GitHub';
+  srcBadge.className = 'pf-badge ' + (isDrive ? 'drive' : 'repo');
+  document.getElementById('v-type-badge').textContent = typeFull;
 
-  const empty = document.getElementById('v-empty');
+  // Overview card
+  document.getElementById('v-ov-title').textContent = fname.replace(/\.[^.]+$/, '');
+  // Build path trail
+  const pathParts = parts.slice(0, -1);
+  document.getElementById('v-ov-path').innerHTML = pathParts
+    .map(p => `<span>${p}</span>`)
+    .join('<span class="ov-path-sep"> › </span>');
+  // Tags
+  const tagsEl = document.getElementById('v-ov-tags');
+  tagsEl.innerHTML = `
+    <span class="ov-tag tag-subject">${subject}</span>
+    ${folder !== subject ? `<span class="ov-tag tag-folder">${folder}</span>` : ''}
+    <span class="ov-tag tag-type">${typeFull}</span>
+  `;
+
+  // Details card
+  document.getElementById('vd-format').textContent  = typeFull;
+  document.getElementById('vd-subject').textContent = subject;
+  document.getElementById('vd-folder').textContent  = folder !== subject ? folder : '—';
+  document.getElementById('vd-source').textContent  = isDrive ? 'Google Drive' : 'GitHub Repo';
+
+  // Reset frame
   const loader = document.getElementById('v-loader');
-  const frame = document.getElementById('v-frame');
-  empty.style.display = 'none';
+  const frame  = document.getElementById('v-frame');
   loader.classList.remove('hidden');
   frame.style.display = 'none';
   frame.src = '';
 
-  // Show viewer pane
+  // Show viewer pane, scroll to top
   document.getElementById('res-tree-pane').classList.add('hidden');
   document.getElementById('res-viewer-pane').classList.remove('hidden');
+  requestAnimationFrame(() => {
+    const scroll = document.querySelector('.viewer-scroll');
+    if (scroll) scroll.scrollTop = 0;
+  });
 
-  setTimeout(()=>{
+  setTimeout(() => {
     frame.src = entry.preview;
     frame.style.display = 'block';
-    frame.onload = ()=>loader.classList.add('hidden');
-    setTimeout(()=>loader.classList.add('hidden'), 9000);
+    frame.onload = () => loader.classList.add('hidden');
+    setTimeout(() => loader.classList.add('hidden'), 9000);
   }, 100);
 }
 
@@ -1184,7 +1342,6 @@ function closeViewer() {
   document.getElementById('res-tree-pane').classList.remove('hidden');
   const frame = document.getElementById('v-frame');
   frame.src = ''; frame.style.display = 'none';
-  document.getElementById('v-empty').style.display = '';
   document.getElementById('v-loader').classList.add('hidden');
   currentEntry = null;
 }
