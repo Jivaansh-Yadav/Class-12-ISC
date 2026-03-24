@@ -1679,19 +1679,16 @@ function chRender() {
 /* ══════════════════════════
    INIT
 ══════════════════════════ */
-// Auto-redirect to desktop on non-mobile
-if (window.innerWidth > 900 && !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-  window.location.replace('/');
-}
-
-// Load resources on startup (if URL has resource path)
-window.addEventListener('DOMContentLoaded', ()=>{
-  const path = window.location.pathname;
-  if (path.startsWith('/resource')) {
-    // switchPage will call resLoad() lazily; just navigate to the page
-    switchPage('resources');
-    // resLoad returns a promise; deep-link resolve happens after load
+// Auto-redirect desktop browsers away from mobile.html
+(function () {
+  var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (!isMobile) {
+    var params = new URLSearchParams(window.location.search);
+    var r = params.get('r');
+    window.location.replace(r ? decodeURIComponent(r) : '/');
   }
+})();
+})();
 });
 </script>
 </body>
