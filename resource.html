@@ -282,33 +282,39 @@ body.grad-mode .picker-panel {
 }
 .nav-sep { width: 1px; height: 18px; background: var(--border2); margin: 0 2px; flex-shrink: 0; }
 
-/* ── DMCA PILL ── */
-.dmca-pill {
+/* ── FILES NOT LOADING PILL ── */
+.reload-pill {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 5px 13px 5px 9px;
-  background: rgba(224, 55, 55, 0.13);
-  border: 1px solid rgba(224, 55, 55, 0.5);
+  background: rgba(224,55,55,0.08);
+  border: 1px solid rgba(224,55,55,0.35);
   border-radius: 6px;
   font-family: 'DM Mono', monospace;
   white-space: nowrap;
-  animation: dmcaPulse 3s ease-in-out infinite;
   cursor: default; user-select: none; flex-shrink: 0;
+  transition: border-color .2s, background .2s;
 }
-@keyframes dmcaPulse {
-  0%,100% { border-color: rgba(224,55,55,0.5); box-shadow: 0 0 0 0 rgba(224,55,55,0); }
-  50%      { border-color: rgba(224,55,55,0.85); box-shadow: 0 0 10px rgba(224,55,55,0.18); }
+.reload-pill:hover {
+  background: rgba(224,55,55,0.14);
+  border-color: rgba(224,55,55,0.6);
 }
-.dmca-tag {
-  font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase;
-  color: #000; background: #e03737; padding: 2px 6px; border-radius: 3px; flex-shrink: 0;
-}
-.dmca-dot {
+.reload-pill-dot {
   width: 6px; height: 6px; border-radius: 50%; background: #e03737; flex-shrink: 0;
-  animation: dmcaDot 1.5s ease-in-out infinite;
+  animation: breathe 2s ease-in-out infinite;
 }
-@keyframes dmcaDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
-.dmca-text { font-size: 11px; color: rgba(255,185,185,0.9); letter-spacing: 0.2px; }
-.dmca-text strong { color: #ff9999; font-weight: 600; }
+.reload-pill-text { font-size: 11px; color: rgba(255,185,185,0.85); letter-spacing: 0.2px; }
+.reload-pill-text strong { color: #ff6b6b; font-weight: 600; }
+.reload-pill-key {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(224,55,55,0.15);
+  border: 1px solid rgba(224,55,55,0.45);
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: #ff6b6b;
+  padding: 1px 6px;
+  line-height: 1.4;
+}
 
 /* ── THEME PICKER ── */
 .picker-wrap { position: relative; }
@@ -904,10 +910,10 @@ body.fullscreen-active .layout { display: block; }
       </a>
       <a class="nav-link" href="/channels">📺 Channels</a>
     </div>
-    <div class="dmca-pill">
-      <span class="dmca-dot"></span>
-      <span class="dmca-tag">DMCA</span>
-      <span class="dmca-text">Some files are temporarily unavailable — <strong>working on a fix</strong></span>
+    <div class="reload-pill">
+      <span class="reload-pill-dot"></span>
+      <span class="reload-pill-text">Files not loading? Press <strong>R</strong></span>
+      <span class="reload-pill-key">R</span>
     </div>
   </div>
 
@@ -1368,18 +1374,18 @@ const REPO   = 'Class-12-ISC';
 const BRANCH = 'main';
 
 const STREAMS = {
-  commerce: ['English', 'Economics', 'Accounts', 'Business Studies', 'Commerce', 'Maths'],
-  science:  ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'Computer Science', 'Biotechnology', 'Environmental Science']
+  commerce: ['Economics','Accounts','Business Studies','Commerce','Maths'],
+  science:  ['Physics','Chemistry','Biology','Maths','Computer Science','Biotechnology','Environmental Science']
 };
-const ALL_SUBJECT_FOLDERS = ['English', 'Economics', 'Accounts', 'Business Studies', 'Commerce',
-  'Physics', 'Chemistry', 'Biology', 'Maths', 'Computer Science', 'Biotechnology', 'Environmental Science'];
+const ALL_SUBJECT_FOLDERS = ['Economics','Accounts','Business Studies','Commerce',
+  'Physics','Chemistry','Biology','Maths','Computer Science','Biotechnology','Environmental Science'];
 const ICONS = {
-  English:'📝', Economics:'📈', Accounts:'🧾', 'Business Studies':'🏢', Commerce:'💹',
+  Economics:'📈', Accounts:'🧾', 'Business Studies':'🏢', Commerce:'💹',
   Physics:'⚛️', Chemistry:'🧪', Biology:'🌿', 'Computer Science':'💻',
   'Maths':'📐', Biotechnology:'🔬', 'Environmental Science':'🌍'
 };
 const COLORS = {
-  English:'#e8a87c', Economics:'#639922', Accounts:'#378add', 'Business Studies':'#ba7517',
+  Economics:'#639922', Accounts:'#378add', 'Business Studies':'#ba7517',
   Commerce:'#d4537e', Maths:'#7f77dd', Physics:'#5fd4e8',
   Chemistry:'#5fffa0', Biology:'#7ab86a', 'Computer Science':'#60b3ff',
   Biotechnology:'#bf5fff', 'Environmental Science':'#ffbe3f'
@@ -1489,9 +1495,9 @@ function shareFolderLink(folderPath) {
 async function load() {
   const el = document.getElementById('folders');
   el.innerHTML = `<div style="padding:12px 8px;display:flex;flex-direction:column;gap:6px;">${
-    ['English','Economics','Accounts','Business Studies','Commerce','Maths'].map(n => `
+    ['Economics','Accounts','Business Studies','Commerce','Maths'].map(n => `
       <div style="display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:9px;background:var(--surface);opacity:0.55;border:1px solid var(--border2);">
-        <span style="font-size:15px">${{English:'📝',Economics:'📈',Accounts:'🧾','Business Studies':'🏢',Commerce:'💹',Maths:'📐'}[n]||'📁'}</span>
+        <span style="font-size:15px">${{Economics:'📈',Accounts:'🧾','Business Studies':'🏢',Commerce:'💹',Maths:'📐'}[n]||'📁'}</span>
         <span style="flex:1;font-size:13px;color:var(--fg2)">${n}</span>
         <span style="width:26px;height:16px;background:var(--surface2);border-radius:8px;display:inline-block"></span>
       </div>`).join('')
