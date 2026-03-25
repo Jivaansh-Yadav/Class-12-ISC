@@ -37,7 +37,7 @@
 <title>ISC.exe | Resources</title>
 <script>window.va = window.va || function(){(window.vaq = window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;500&family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg:        #111210;
@@ -67,7 +67,7 @@ html, body { height: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', 'DM Sans', sans-serif;
   font-size: 13.5px;
   line-height: 1.55;
   overflow: hidden;
@@ -440,8 +440,31 @@ body.grad-mode .picker-panel {
   transition: background .35s, border-color .35s;
 }
 .sidebar-head { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.sidebar-heading { font-family: 'Lora', serif; font-size: 22px; font-weight: 400; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
+.sidebar-heading { font-family: 'Merriweather', 'Lora', serif; font-size: 22px; font-weight: 500; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
 .sidebar-sub { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--fg2); letter-spacing: .4px; }
+.sidebar-tools {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+}
+.side-tool-btn {
+  flex: 1;
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--fg2);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 7px 8px;
+  cursor: pointer;
+  transition: all .18s;
+}
+.side-tool-btn:hover {
+  color: var(--fg);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border2));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
 
 .tabs {
   display: flex; padding: 8px 10px; border-bottom: 1px solid var(--border);
@@ -989,6 +1012,10 @@ body.fullscreen-active .layout { display: block; }
         <span class="search-ico">◎</span>
         <input id="search" type="search" placeholder="Search files…" />
       </div>
+    </div>
+    <div class="sidebar-tools">
+      <button class="side-tool-btn" type="button" onclick="clearFavorites()">Clear favourites</button>
+      <button class="side-tool-btn" type="button" onclick="clearRecentlyOpened()">Clear recent</button>
     </div>
     <div id="folders"><div class="msg">Loading…</div></div>
   </aside>
@@ -1727,7 +1754,6 @@ function preview(entry) {
 
   const parts    = entry.path.split('/');
   const fname    = parts[parts.length-1];
-  const ext      = fname.split('.').pop().toLowerCase();
   const subjName = parts[0];
   const subjDisp = subjName.replace(/-(creds-.+)$/i,'');
 
@@ -1735,13 +1761,11 @@ function preview(entry) {
     parts.slice(0,-1).map(p=>`<span style="color:var(--fg2)">${p.replace(/-(creds-.+)$/i,'')} <span class="vb-sep">/</span></span>`).join(' ') +
     ` <span class="vb-file">${fname}</span>`;
 
-  const typeMap = {pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Spreadsheet'};
   const srcCls  = entry.source === 'gdrive' ? 'src-drive' : 'src-repo';
   const srcLbl  = entry.source === 'gdrive' ? '⬡ Drive' : '⎔ GitHub';
 
   document.getElementById('vChips').innerHTML =
-    `<span class="vi-chip">${typeMap[ext]||ext.toUpperCase()}</span>
-     <span class="vi-chip ${srcCls}">${srcLbl}</span>
+    `<span class="vi-chip ${srcCls}">${srcLbl}</span>
      <span class="vi-chip">${subjDisp}</span>`;
 
   document.getElementById('btnOpen').href = entry.url;
@@ -1765,6 +1789,29 @@ function preview(entry) {
     };
     setTimeout(() => loaderOverlay.classList.add('hidden'), 8000);
   }, 80);
+}
+
+function clearFavorites() {
+  const favKeys = ['isc-favourites', 'isc-favorites', 'isc-favs', 'favorites', 'favourites'];
+  favKeys.forEach(k => localStorage.removeItem(k));
+  showTransientMsg('Favourites removed');
+}
+
+function clearRecentlyOpened() {
+  const recentKeys = ['isc-recent', 'isc-recently-opened', 'recently-opened', 'recentFiles'];
+  recentKeys.forEach(k => localStorage.removeItem(k));
+  showTransientMsg('Recently opened removed');
+}
+
+function showTransientMsg(text) {
+  const wrap = document.getElementById('folders');
+  if (!wrap) return;
+  const note = document.createElement('div');
+  note.className = 'msg';
+  note.textContent = `✓ ${text}`;
+  note.style.paddingTop = '10px';
+  wrap.prepend(note);
+  setTimeout(() => note.remove(), 2200);
 }
 
 function reloadViewer() {
