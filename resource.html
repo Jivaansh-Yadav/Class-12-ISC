@@ -37,7 +37,7 @@
 <title>ISC.exe | Resources</title>
 <script>window.va = window.va || function(){(window.vaq = window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;500&family=DM+Mono:wght@300;400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
   --bg:        #111210;
@@ -67,7 +67,7 @@ html, body { height: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', 'DM Sans', sans-serif;
   font-size: 13.5px;
   line-height: 1.55;
   overflow: hidden;
@@ -440,8 +440,38 @@ body.grad-mode .picker-panel {
   transition: background .35s, border-color .35s;
 }
 .sidebar-head { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.sidebar-heading { font-family: 'Lora', serif; font-size: 22px; font-weight: 400; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
+.sidebar-heading { font-family: 'Merriweather', 'Lora', serif; font-size: 22px; font-weight: 500; color: var(--fg); line-height: 1.1; margin-bottom: 4px; }
 .sidebar-sub { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--fg2); letter-spacing: .4px; }
+.favorites-access {
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--border);
+}
+.fav-toggle-btn {
+  width: 100%;
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--fg2);
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: all .18s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.fav-toggle-btn:hover {
+  color: var(--fg);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border2));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+.fav-toggle-btn.active {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: var(--accent-lo);
+}
 
 .tabs {
   display: flex; padding: 8px 10px; border-bottom: 1px solid var(--border);
@@ -652,6 +682,29 @@ body.sidebar-resizing .sidebar-divider::before {
 .badge-def  { background: var(--surface2); color: var(--fg2); border: 1px solid var(--border2); }
 .f-name { flex: 1; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; color: var(--fg2); }
 .file-link:hover .f-name, .file-link.active .f-name { color: var(--fg); }
+.f-fav-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg3);
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.f-fav-btn:hover {
+  color: #ffd66b;
+  border-color: rgba(255,214,107,0.35);
+  background: rgba(255,214,107,0.08);
+}
+.f-fav-btn.active {
+  color: #ffd66b;
+  border-color: rgba(255,214,107,0.48);
+  background: rgba(255,214,107,0.12);
+}
 .msg { padding: 16px 10px; color: var(--fg2); font-size: 12px; font-family: 'DM Mono', monospace; }
 
 /* ── VIEWER ── */
@@ -990,6 +1043,9 @@ body.fullscreen-active .layout { display: block; }
         <input id="search" type="search" placeholder="Search files…" />
       </div>
     </div>
+    <div class="favorites-access">
+      <button class="fav-toggle-btn" id="favToggleBtn" type="button" onclick="toggleFavoritesView()">★ Favourites <span id="favCount">(0)</span></button>
+    </div>
     <div id="folders"><div class="msg">Loading…</div></div>
   </aside>
 
@@ -1077,12 +1133,15 @@ const DEFAULT_ACCENT = '#7ab86a';
 const STORE_KEY      = 'isc-accent';
 const GRAD_KEY       = 'isc-gradient';
 const SIDEBAR_WIDTH_KEY = 'isc-resource-sidebar-width';
+const FAVOURITES_KEY = 'isc-resource-favourites';
 const DEFAULT_SIDEBAR_WIDTH = 300;
 const MIN_SIDEBAR_WIDTH = 240;
 const MAX_SIDEBAR_WIDTH = 440;
 
 let currentAccent = localStorage.getItem(STORE_KEY) || DEFAULT_ACCENT;
 let currentGrad   = JSON.parse(localStorage.getItem(GRAD_KEY) || 'null');
+let favourites    = new Set(JSON.parse(localStorage.getItem(FAVOURITES_KEY) || '[]'));
+let favouritesOnly = false;
 let pickerOpen    = false;
 let pickerMode    = 'solid';
 
@@ -1528,6 +1587,7 @@ async function load() {
 
   allFiles = [...merged.values()];
   if (!allFiles.length) { el.innerHTML = '<div class="msg">⚠ No resources found.</div>'; return; }
+  updateFavouriteAccessUI();
   render();
   setTimeout(resolveDeepLink, 150);
 }
@@ -1550,7 +1610,8 @@ function render() {
   const q    = document.getElementById('search').value.trim().toLowerCase();
   const subs = STREAMS[stream] || [];
   const wrap = document.getElementById('folders'); wrap.innerHTML = '';
-  const streamFiles = allFiles.filter(f => inSubjects(f.path, subs));
+  let streamFiles = allFiles.filter(f => inSubjects(f.path, subs));
+  if (favouritesOnly) streamFiles = streamFiles.filter(f => favourites.has(key(f)));
 
   subs.forEach(subj => {
     const filtered = streamFiles.filter(f => f.path.startsWith(subj+'/') && f.path.toLowerCase().includes(q));
@@ -1577,7 +1638,11 @@ function render() {
     }
     wrap.appendChild(det);
   });
-  if (!wrap.children.length) wrap.innerHTML = `<div class="msg">No results for "${q}"</div>`;
+  if (!wrap.children.length) {
+    if (favouritesOnly && !favourites.size) wrap.innerHTML = `<div class="msg">No favourites yet. Tap ☆ beside any file to add it.</div>`;
+    else if (favouritesOnly) wrap.innerHTML = `<div class="msg">No favourite files match "${q}"</div>`;
+    else wrap.innerHTML = `<div class="msg">No results for "${q}"</div>`;
+  }
 
   attachCredsCallout();
 }
@@ -1699,8 +1764,17 @@ function fileLi(entry, label) {
   const li = document.createElement('li');
   const a  = document.createElement('a');
   a.href = entry.url; a.className = 'file-link'; a.dataset.key = key(entry);
-  a.innerHTML = `${badge(entry.path, entry.source)}<span class="f-name">${label}</span>`;
+  const favActive = favourites.has(key(entry));
+  a.innerHTML = `${badge(entry.path, entry.source)}<span class="f-name">${label}</span><button class="f-fav-btn ${favActive ? 'active' : ''}" data-role="fav-toggle" title="${favActive ? 'Remove from favourites' : 'Add to favourites'}">${favActive ? '★' : '☆'}</button>`;
   a.onclick = e => { e.preventDefault(); preview(entry); };
+  const favBtn = a.querySelector('[data-role="fav-toggle"]');
+  if (favBtn) {
+    favBtn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleFavourite(entry);
+    });
+  }
   li.appendChild(a); return li;
 }
 
@@ -1727,7 +1801,6 @@ function preview(entry) {
 
   const parts    = entry.path.split('/');
   const fname    = parts[parts.length-1];
-  const ext      = fname.split('.').pop().toLowerCase();
   const subjName = parts[0];
   const subjDisp = subjName.replace(/-(creds-.+)$/i,'');
 
@@ -1735,13 +1808,11 @@ function preview(entry) {
     parts.slice(0,-1).map(p=>`<span style="color:var(--fg2)">${p.replace(/-(creds-.+)$/i,'')} <span class="vb-sep">/</span></span>`).join(' ') +
     ` <span class="vb-file">${fname}</span>`;
 
-  const typeMap = {pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Spreadsheet'};
   const srcCls  = entry.source === 'gdrive' ? 'src-drive' : 'src-repo';
   const srcLbl  = entry.source === 'gdrive' ? '⬡ Drive' : '⎔ GitHub';
 
   document.getElementById('vChips').innerHTML =
-    `<span class="vi-chip">${typeMap[ext]||ext.toUpperCase()}</span>
-     <span class="vi-chip ${srcCls}">${srcLbl}</span>
+    `<span class="vi-chip ${srcCls}">${srcLbl}</span>
      <span class="vi-chip">${subjDisp}</span>`;
 
   document.getElementById('btnOpen').href = entry.url;
@@ -1765,6 +1836,32 @@ function preview(entry) {
     };
     setTimeout(() => loaderOverlay.classList.add('hidden'), 8000);
   }, 80);
+}
+
+function saveFavourites() {
+  localStorage.setItem(FAVOURITES_KEY, JSON.stringify([...favourites]));
+}
+
+function updateFavouriteAccessUI() {
+  const countEl = document.getElementById('favCount');
+  if (countEl) countEl.textContent = `(${favourites.size})`;
+  const btn = document.getElementById('favToggleBtn');
+  if (btn) btn.classList.toggle('active', favouritesOnly);
+}
+
+function toggleFavourite(entry) {
+  const entryKey = key(entry);
+  if (favourites.has(entryKey)) favourites.delete(entryKey);
+  else favourites.add(entryKey);
+  saveFavourites();
+  updateFavouriteAccessUI();
+  render();
+}
+
+function toggleFavoritesView() {
+  favouritesOnly = !favouritesOnly;
+  updateFavouriteAccessUI();
+  render();
 }
 
 function reloadViewer() {
