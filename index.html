@@ -189,7 +189,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .eyebrow-line{width:28px;height:1px;background:var(--accent);transition:background .3s;}
 .eyebrow em{color:var(--accent);font-style:normal;transition:color .3s;}
 
-.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3.4rem,8.3vw,7.4rem);font-weight:600;line-height:.93;letter-spacing:-1px;margin-bottom:16px;margin-top:0;opacity:0;animation:up .7s .22s ease forwards;position:relative;z-index:1;text-align:left;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.2vw,4.6rem);font-weight:600;line-height:.96;letter-spacing:-.5px;margin-bottom:14px;margin-top:0;opacity:0;animation:up .7s .22s ease forwards;position:relative;z-index:1;text-align:left;}
 .hero-title .l1{color:#f3f6f1;display:block;font-weight:600;transition:filter .3s;padding-bottom:6px;background:none;-webkit-text-fill-color:initial;}
 .hero-title .l1 em{font-style:italic;font-weight:400;}
 .hero-title .l2{color:var(--accent);font-style:italic;font-weight:700;display:block;font-size:.82em;letter-spacing:.3px;margin-top:8px;transition:color .3s;}
@@ -206,7 +206,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .nav-cards{
   display:grid;grid-template-columns:1fr 1fr;gap:14px;
   width:100%;max-width:640px;
-  opacity:0;animation:up .7s .7s ease forwards;
   position:relative;z-index:1;
 }
 .row-card{
@@ -241,21 +240,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .row-card:hover::after{opacity:1;}
 .row-card:active{transform:translateY(-1px);}
 
-/* Icon */
-.rc-icon{
-  width:36px;height:36px;border-radius:9px;
-  display:flex;align-items:center;justify-content:center;
-  background:color-mix(in srgb,var(--card-color,var(--accent)) 10%,var(--surface2));
-  border:1px solid color-mix(in srgb,var(--card-color,var(--accent)) 20%,var(--border2));
-  margin-bottom:10px;flex-shrink:0;font-size:16px;
-  transition:background .2s,border-color .2s,transform .2s;
-  position:relative;z-index:1;
-}
-.row-card:hover .rc-icon{
-  background:color-mix(in srgb,var(--card-color,var(--accent)) 16%,var(--surface2));
-  border-color:color-mix(in srgb,var(--card-color,var(--accent)) 44%,transparent);
-  transform:scale(1.07);
-}
+/* rc-icon now defined below with SVG support */
 
 /* Card body — reduced font sizes */
 .rc-body{flex:1;min-width:0;position:relative;z-index:1;}
@@ -288,13 +273,84 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .metric-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;line-height:1;color:#f3f5ef;display:block;}
 .metric-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.2px;color:#94a28f;text-transform:uppercase;display:block;margin-top:4px;}
 
+/* ── INLINE DISCLAIMER (T&C style) ── */
+.hero-disclaimer{
+  opacity:0;animation:up .6s .56s ease forwards;
+  margin-top:10px;margin-bottom:22px;
+  font-family:'DM Mono',monospace;font-size:9.5px;
+  color:rgba(212,168,75,.5);letter-spacing:.3px;line-height:1.65;
+  max-width:520px;
+  border-left:2px solid rgba(212,168,75,.25);
+  padding-left:10px;
+}
+.hero-disclaimer a{color:rgba(212,168,75,.7);text-decoration:none;border-bottom:1px solid rgba(212,168,75,.3);}
+.hero-disclaimer a:hover{color:#d4a84b;}
+
+/* ── CARD SVG ICONS ── */
+.rc-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--card-color,var(--accent)) 10%,var(--surface2));
+  border:1px solid color-mix(in srgb,var(--card-color,var(--accent)) 22%,var(--border2));
+  margin-bottom:10px;flex-shrink:0;
+  transition:background .2s,border-color .2s,transform .25s cubic-bezier(.34,1.56,.64,1);
+  position:relative;z-index:1;
+}
+.rc-icon svg{width:18px;height:18px;stroke:var(--card-color,var(--accent));fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s;}
+.row-card:hover .rc-icon{
+  background:color-mix(in srgb,var(--card-color,var(--accent)) 18%,var(--surface2));
+  border-color:color-mix(in srgb,var(--card-color,var(--accent)) 44%,transparent);
+  transform:scale(1.1) rotate(-3deg);
+}
+
+/* ── CARD ANIMATED SHIMMER BORDERS ── */
+@keyframes borderShimmer{
+  0%,100%{opacity:.18;}
+  50%{opacity:.55;}
+}
+@keyframes cardPulse1{
+  0%,100%{box-shadow:0 0 0 0 transparent,0 4px 18px rgba(0,0,0,.3);}
+  50%{box-shadow:0 0 18px color-mix(in srgb,var(--card-color) 14%,transparent),0 4px 18px rgba(0,0,0,.3);}
+}
+@keyframes cardPulse2{
+  0%,100%{box-shadow:0 0 0 0 transparent,0 4px 18px rgba(0,0,0,.3);}
+  50%{box-shadow:0 0 18px color-mix(in srgb,var(--card-color) 14%,transparent),0 4px 18px rgba(0,0,0,.3);}
+}
+.row-card:nth-child(1){animation:cardPulse1 4s ease-in-out infinite .0s,up .7s .7s ease both;}
+.row-card:nth-child(2){animation:cardPulse2 4s ease-in-out infinite .8s,up .7s .76s ease both;}
+.row-card:nth-child(3){animation:cardPulse1 4s ease-in-out infinite 1.6s,up .7s .82s ease both;}
+.row-card:nth-child(4){animation:cardPulse2 4s ease-in-out infinite 2.4s,up .7s .88s ease both;}
+
+/* Unique per-card accent strip animation */
+.row-card::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--card-color,var(--accent)),transparent);
+  opacity:0;
+  transition:opacity .3s;
+}
+.row-card:hover::after{opacity:.6;}
+
+/* Moving gradient shimmer on card top border */
+@keyframes topShimmer{
+  0%{background-position:0% 50%;}
+  100%{background-position:200% 50%;}
+}
+.row-card{
+  background-size:200% auto;
+}
+.row-card::before{
+  background-size:200% auto;
+  animation:topShimmer 3s linear infinite;
+}
+
 @media(max-width:700px){
   .nav-main-links{display:none;}
   .focus-pill{display:none;}
   .disc-wrap{display:none;}
   .hero{padding:88px 18px 96px;}
   .hero-shell{grid-template-columns:1fr;gap:28px;}
-  .hero-title{font-size:clamp(2.4rem,14.5vw,4.6rem);}
+  .hero-title{font-size:clamp(2rem,12vw,3.6rem);}
   .hero-actions{flex-direction:column;}
   .hero-btn{width:100%;}
   .nav-cards{grid-template-columns:1fr;max-width:100%;}
@@ -395,6 +451,9 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
       </h1>
 
       <p class="hero-sub" id="heroSub">Commerce &amp; Science</p>
+
+      <p class="hero-disclaimer">* Unofficial platform — not affiliated with ISC (CISCE). All resources are publicly available study material. We hold no copyright over any content. For removal requests: <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a></p>
+
       <p class="hero-desc">All your Class 12 ISC resources — PDFs, notes, exam schedule and study tools — organized, searchable, and viewable in one place.</p>
 
       <div class="hero-actions">
@@ -412,9 +471,11 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 
     <div class="hero-right">
       <div class="nav-cards">
-        <!-- Resources -->
-        <a class="row-card" href="resource.html" style="--card-color:var(--accent)">
-          <div class="rc-icon">📚</div>
+        <!-- Resources — green, book/file icon -->
+        <a class="row-card" href="resource.html" style="--card-color:#6fcf97">
+          <div class="rc-icon">
+            <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
           <div class="rc-body">
             <div class="rc-label">Study Files</div>
             <div class="rc-title">Resources &amp; Notes</div>
@@ -426,44 +487,50 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
           </div>
         </a>
 
-        <!-- Channels -->
-        <a class="row-card" href="channels.html" style="--card-color:#8ebf85">
-          <div class="rc-icon">✳️</div>
+        <!-- Channels — red/coral, play icon -->
+        <a class="row-card" href="channels.html" style="--card-color:#ff6b6b">
+          <div class="rc-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          </div>
           <div class="rc-body">
             <div class="rc-label">Handpicked</div>
             <div class="rc-title">YouTube Channels</div>
             <div class="rc-desc">Community-rated ISC channel picks, ranked by subject.</div>
           </div>
           <div class="rc-right">
-            <span class="rc-badge" style="--card-color:#8ebf85">Explore</span>
+            <span class="rc-badge" style="--card-color:#ff6b6b">Explore</span>
             <span class="rc-arrow">↗</span>
           </div>
         </a>
 
-        <!-- GitHub (was Guide) -->
-        <a class="row-card" href="https://github.com/HJexe/Class-12-ISC" target="_blank" rel="noopener" style="--card-color:#b8a77a">
-          <div class="rc-icon">🐙</div>
+        <!-- GitHub — amber/gold, code icon -->
+        <a class="row-card" href="https://github.com/HJexe/Class-12-ISC" target="_blank" rel="noopener" style="--card-color:#f5c842">
+          <div class="rc-icon">
+            <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
           <div class="rc-body">
             <div class="rc-label">Open Source</div>
             <div class="rc-title">GitHub Repo</div>
             <div class="rc-desc">Browse the source, contribute files, or fork the project.</div>
           </div>
           <div class="rc-right">
-            <span class="rc-badge" style="--card-color:#b8a77a">View</span>
+            <span class="rc-badge" style="--card-color:#f5c842">View</span>
             <span class="rc-arrow">↗</span>
           </div>
         </a>
 
-        <!-- Timetable -->
-        <a class="row-card" href="timetable.html" style="--card-color:#95b986">
-          <div class="rc-icon">🕒</div>
+        <!-- Timetable — cyan/blue, calendar icon -->
+        <a class="row-card" href="timetable.html" style="--card-color:#5fd4e8">
+          <div class="rc-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
           <div class="rc-body">
             <div class="rc-label">2026 Board</div>
             <div class="rc-title">Exam Timetable</div>
             <div class="rc-desc">Full ISC 2026 schedule with live countdowns to every paper.</div>
           </div>
           <div class="rc-right">
-            <span class="rc-badge" style="--card-color:#95b986">View</span>
+            <span class="rc-badge" style="--card-color:#5fd4e8">View</span>
             <span class="rc-arrow">↗</span>
           </div>
         </a>
