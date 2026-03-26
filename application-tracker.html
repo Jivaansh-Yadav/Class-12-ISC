@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ISC.exe Application Tracker — Deadlines, Dates & Links</title>
+<meta name="description" content="Track ISC and entrance application deadlines, exam dates, links, and form status in one place with optional Supabase sync."/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://class-12-isc.vercel.app/application-tracker"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://class-12-isc.vercel.app/application-tracker"/>
+<meta property="og:site_name" content="ISC.exe"/>
+<meta property="og:title" content="ISC.exe Application Tracker — Deadlines, Dates & Links"/>
+<meta property="og:description" content="Track application windows, deadlines, exam dates, and form links in a clean dashboard."/>
+<meta property="og:image" content="https://class-12-isc.vercel.app/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="ISC.exe Application Tracker — Deadlines, Dates & Links"/>
+<meta name="twitter:description" content="Track application windows, deadlines, exam dates, and form links in a clean dashboard."/>
+<meta name="twitter:image" content="https://class-12-isc.vercel.app/og-image.png"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"ISC.exe Application Tracker","url":"https://class-12-isc.vercel.app/application-tracker","description":"Track application deadlines, exam dates, and links in one place."}</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#0a100c;--surface:#111a14;--surface2:#18231b;--border:#2a362b;--border2:#334336;
+  --fg:#edf3ed;--fg2:#b2c1b4;--fg3:#6d7d70;--accent:#8dcf7f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;min-height:100vh}
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(200,141,183,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(110,182,255,0.02) 1px,transparent 1px);background-size:52px 52px;}
+.nav{position:sticky;top:0;z-index:30;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(10,16,12,.88);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(10px)}
+.nav-left{display:flex;align-items:center;gap:12px}
+.nav-brand{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.8px;color:var(--fg2);text-decoration:none;border:1px solid var(--border);padding:7px 10px;border-radius:8px}
+.nav-brand:hover{color:var(--fg);border-color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-link{text-decoration:none;color:var(--fg3);font-family:'DM Mono',monospace;font-size:11px;padding:6px 11px;border:1px solid var(--border);border-radius:8px;transition:.2s}
+.nav-link:hover,.nav-link.active{color:var(--fg);border-color:var(--accent);background:rgba(141,207,127,.08)}
+.wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:26px 18px 70px}
+.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.h-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--fg3);text-transform:uppercase;margin-bottom:8px}
+h1{font-size:2rem;line-height:1.1}
+.sub{color:var(--fg2);margin-top:7px}
+.actions{display:flex;gap:8px}
+.btn{border:1px solid var(--border2);border-radius:10px;background:var(--surface2);color:var(--fg);padding:9px 12px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.card{background:rgba(17,26,20,.92);border:1px solid var(--border);border-radius:14px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:940px}
+th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;vertical-align:middle}
+th{font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:1px}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.p-open{background:rgba(79,162,95,.18);color:#8dd598}.p-closing{background:rgba(216,132,73,.2);color:#f0be87}.p-closed{background:rgba(181,77,77,.2);color:#da9d9d}
+.apply{display:inline-block;text-decoration:none;font-family:'DM Mono',monospace;font-size:11px;padding:8px 12px;border-radius:8px;border:1px solid rgba(141,207,127,.35);color:var(--fg);background:rgba(141,207,127,.08)}
+.apply:hover{background:rgba(141,207,127,.16)}
+.form-empty{color:var(--fg3)}
+.row-actions{display:flex;gap:8px}
+.row-actions button{border:1px solid var(--border2);background:transparent;color:var(--fg2);padding:6px 10px;border-radius:7px;font-family:'DM Mono',monospace;font-size:10px;cursor:pointer}
+.row-actions button:hover{color:var(--fg);border-color:var(--accent)}
+.note{margin-top:12px;color:var(--fg3);font-size:13px}
+code{font-family:'DM Mono',monospace;font-size:12px;color:var(--fg2)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:60}
+.modal.show{display:flex}
+.panel{width:min(640px,100%);background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px}
+.field{display:grid;gap:6px;margin-bottom:10px}
+label{font-family:'DM Mono',monospace;font-size:10px;color:var(--fg3);letter-spacing:1px;text-transform:uppercase}
+input,select{background:#0f1711;border:1px solid var(--border2);border-radius:9px;color:var(--fg);padding:10px 11px;font-size:14px}
+@media(max-width:760px){.nav-links{display:none}h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<nav class="nav">
+  <div class="nav-left">
+    <a class="nav-brand" href="index.html">ISC.exe</a>
+    <div class="nav-links">
+      <a class="nav-link" href="resource.html">Resources</a>
+      <a class="nav-link" href="timetable.html">Timetable</a>
+      <a class="nav-link" href="channels.html">Channels</a>
+      <a class="nav-link active" href="application-tracker.html">Application Tracker</a>
+    </div>
+  </div>
+  <a class="nav-link" href="index.html">← Home</a>
+</nav>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <div class="h-eyebrow">Class 12 · Utility</div>
+      <h1>Application Tracker</h1>
+      <p class="sub">Manage application dates, links, and statuses from one place.</p>
+    </div>
+    <div class="actions">
+      <button class="btn" id="addBtn">+ Add Row</button>
+      <button class="btn" id="refreshBtn">Refresh</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Test</th><th>Exam Date</th><th>Deadline</th><th>Link</th><th>Form Filling</th><th>Status</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </section>
+
+  <p class="note">Edit tracker content in <code>application-tracker-content.js</code>. If Supabase keys are added there, this page will sync with the configured table.</p>
+</main>
+
+<div class="modal" id="entryModal">
+  <div class="panel">
+    <h3 style="margin-bottom:12px">Add / Edit Row</h3>
+    <div class="field"><label>Test Name</label><input id="f_test"/></div>
+    <div class="field"><label>Exam Date</label><input id="f_exam"/></div>
+    <div class="field"><label>Deadline</label><input id="f_deadline"/></div>
+    <div class="field"><label>Apply Link</label><input id="f_link"/></div>
+    <div class="field"><label>Form Filling Link</label><input id="f_form"/></div>
+    <div class="field"><label>Status</label><select id="f_status"><option value="open">Open</option><option value="closing_soon">Closing Soon</option><option value="closed">Closed</option></select></div>
+    <div class="actions"><button class="btn" onclick="closeEntry()">Cancel</button><button class="btn" onclick="saveEntry()">Save</button></div>
+  </div>
+</div>
+
+<script src="application-tracker-content.js"></script>
+<script>
+let db = null;
+let editingId = null;
+let localData = Array.isArray(window.APP_TRACKER_ITEMS) ? [...window.APP_TRACKER_ITEMS] : [];
+const cfg = window.APP_TRACKER_CONFIG || {};
+const rowsEl = document.getElementById('rows');
+
+if (cfg.supabaseUrl && cfg.supabaseAnonKey && window.supabase) {
+  db = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
+}
+
+function pill(status){
+  if (status === 'closed') return '<span class="pill p-closed">Closed</span>';
+  if (status === 'closing_soon') return '<span class="pill p-closing">Closing Soon</span>';
+  return '<span class="pill p-open">Open</span>';
+}
+
+function draw(data){
+  rowsEl.innerHTML = '';
+  if (!data.length) {
+    rowsEl.innerHTML = '<tr><td colspan="7" class="form-empty">No rows available.</td></tr>';
+    return;
+  }
+  data.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${item.test_name || ''}</td>
+      <td>${item.exam_date || ''}</td>
+      <td>${item.deadline || ''}</td>
+      <td><a class="apply" href="${item.apply_link || '#'}" target="_blank" rel="noopener">Apply Now</a></td>
+      <td>${item.form_link ? `<a class="apply" href="${item.form_link}" target="_blank" rel="noopener">Form Guide</a>` : '<span class="form-empty">—</span>'}</td>
+      <td>${pill(item.status)}</td>
+      <td><div class="row-actions"><button onclick="openEntry(${item.id})">Edit</button><button onclick="removeEntry(${item.id})">Delete</button></div></td>`;
+    rowsEl.appendChild(tr);
+  });
+}
+
+async function loadData(){
+  if (!db) return draw(localData);
+  const { data } = await db.from(cfg.table || 'applications').select('*').order('id', { ascending: true });
+  draw(data || []);
+}
+
+function openEntry(id = null){
+  editingId = id;
+  const m = document.getElementById('entryModal');
+  if (id) {
+    const row = [...rowsEl.querySelectorAll('tr')].find(x => x.querySelector('button')?.getAttribute('onclick') === `openEntry(${id})`);
+    const t = row?.querySelectorAll('td');
+    document.getElementById('f_test').value = t?.[0]?.innerText || '';
+    document.getElementById('f_exam').value = t?.[1]?.innerText || '';
+    document.getElementById('f_deadline').value = t?.[2]?.innerText || '';
+    document.getElementById('f_link').value = t?.[3]?.querySelector('a')?.href || '';
+    document.getElementById('f_form').value = t?.[4]?.querySelector('a')?.href || '';
+    const tx = (t?.[5]?.innerText || '').toLowerCase();
+    document.getElementById('f_status').value = tx.includes('closing') ? 'closing_soon' : tx;
+  } else {
+    ['f_test','f_exam','f_deadline','f_link','f_form'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('f_status').value = 'open';
+  }
+  m.classList.add('show');
+}
+function closeEntry(){ document.getElementById('entryModal').classList.remove('show'); }
+
+async function saveEntry(){
+  const payload = {
+    test_name: document.getElementById('f_test').value.trim(),
+    exam_date: document.getElementById('f_exam').value.trim(),
+    deadline: document.getElementById('f_deadline').value.trim(),
+    apply_link: document.getElementById('f_link').value.trim(),
+    form_link: document.getElementById('f_form').value.trim(),
+    status: document.getElementById('f_status').value
+  };
+
+  if (db) {
+    if (editingId) await db.from(cfg.table || 'applications').update(payload).eq('id', editingId);
+    else await db.from(cfg.table || 'applications').insert(payload);
+  } else {
+    if (editingId) {
+      const i = localData.findIndex(x => x.id === editingId);
+      if (i > -1) localData[i] = { ...localData[i], ...payload };
+    } else {
+      localData.push({ id: Date.now(), ...payload });
+    }
+  }
+
+  closeEntry();
+  await loadData();
+}
+
+async function removeEntry(id){
+  if (!confirm('Delete this row?')) return;
+  if (db) await db.from(cfg.table || 'applications').delete().eq('id', id);
+  else localData = localData.filter(x => x.id !== id);
+  await loadData();
+}
+
+document.getElementById('addBtn').addEventListener('click', () => openEntry());
+document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+loadData();
+</script>
+</body>
+</html>
