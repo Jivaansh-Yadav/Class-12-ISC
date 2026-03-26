@@ -656,6 +656,10 @@ body.fullscreen-active .layout{display:block;}
   cursor:default;user-select:none;white-space:nowrap;flex-shrink:0;
   animation:credsPop .4s cubic-bezier(.34,1.56,.64,1) both;
 }
+
+body .creds-bubble{
+  display: none !important;
+}
 @keyframes credsPop{0%{opacity:0;transform:scale(0.6) translateX(8px)}60%{transform:scale(1.05) translateX(-2px)}100%{opacity:1;transform:scale(1) translateX(0)}}
 .creds-avatar{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,#60b3ff,#3bff6c);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(96,179,255,.4);font-size:8px;color:#0a0f0a;font-weight:700;}
 .creds-inner{display:flex;align-items:center;gap:4px;}
