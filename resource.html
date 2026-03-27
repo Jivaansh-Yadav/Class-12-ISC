@@ -133,28 +133,10 @@ body.grad-mode .trigger-swatch { background: linear-gradient(135deg,var(--grad-a
   text-decoration:none;color:#ffffff;
   font-family:var(--font-mono);font-size:12px;font-weight:500;
   padding:6px 14px;border:1px solid var(--border2);border-radius:5px;
-  transition:color .18s,border-color .18s;
-  display:flex;align-items:center;gap:6px;
+  transition:all .18s;display:flex;align-items:center;gap:6px;
   letter-spacing:.3px;
-  position:relative;
-  isolation:isolate;
-  overflow:hidden;
-  background:transparent;
 }
-.nav-link::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(100deg,transparent 0%,var(--accent-lo) 45%,var(--accent-md) 52%,var(--accent-lo) 59%,transparent 100%);
-  transform:translateX(-120%);
-  transition:transform .35s ease;
-  z-index:-1;
-}
-.nav-link:hover{
-  color:var(--fg);
-  border-color:var(--accent);
-}
-.nav-link:hover::before{transform:translateX(120%);}
+.nav-link:hover{color:var(--fg);border-color:var(--accent);background:var(--accent-lo);}
 .nav-link-pip{
   width:5px;height:5px;border-radius:50%;
   background:var(--accent);
