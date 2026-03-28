@@ -68,6 +68,8 @@ body{animation:pgIn .4s ease both;}
 .nav-brand{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--fg);display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
 .nav-brand-mark{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);transition:background .3s,box-shadow .3s;}
 .nav-main{display:flex;align-items:center;gap:26px;}
+
+/* ── SLIDE TABS — fixed size ── */
 .nav-main-links{
   position:relative;display:flex;align-items:center;gap:2px;padding:2px;
   border-radius:999px;border:1px solid color-mix(in srgb,var(--border2) 72%,transparent);
@@ -75,14 +77,21 @@ body{animation:pgIn .4s ease both;}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 0 12px rgba(0,0,0,.22);
 }
 .nav-main-links a{
-  position:relative;z-index:2;display:block;padding:6px 12px;border-radius:999px;
-  font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;
-  text-decoration:none;color:color-mix(in srgb,var(--fg) 68%,var(--fg3));
-  transition:color .2s ease,text-shadow .25s ease;
+  position:relative;z-index:2;display:block;
+  padding:6px 14px;
+  border-radius:999px;
+  font-family:'DM Mono',monospace;
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  text-decoration:none;
+  color:color-mix(in srgb,var(--fg) 60%,var(--fg3));
+  transition:color .2s ease;
+  white-space:nowrap;
 }
 .nav-main-links a:hover,.nav-main-links a.active{
   color:color-mix(in srgb,var(--fg) 92%,#fff);
-  text-shadow:0 0 14px color-mix(in srgb,var(--accent) 28%,transparent);
 }
 .nav-slide-cursor{
   position:absolute;top:2px;left:0;z-index:1;height:calc(100% - 4px);
@@ -196,7 +205,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 @keyframes star-orbit { 0% { offset-distance:0%; } 100% { offset-distance:100%; } }
 @keyframes rim-spin   { to { --rim-angle:360deg; } }
 
-/* ── BUTTON GLOW KEYFRAME ── */
 @keyframes btn-glow-pulse {
   0%,100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 18px var(--btn-glow-color, rgba(141,207,127,0.22)), 0 0 40px var(--btn-glow-spread, rgba(141,207,127,0.08)); }
   50%      { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 28px var(--btn-glow-color, rgba(141,207,127,0.34)), 0 0 60px var(--btn-glow-spread, rgba(141,207,127,0.13)); }
@@ -221,7 +229,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
-  /* ── THEME GLOW (always on, pulsing) ── */
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.04) inset,
     0 2px 24px rgba(0,0,0,0.4),
@@ -233,7 +240,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .star-btn:hover {
   background: rgba(255,255,255,0.07);
   border-color: color-mix(in srgb, var(--accent) 55%, rgba(255,255,255,0.32));
-  /* stronger glow on hover */
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.08) inset,
     0 4px 32px rgba(0,0,0,0.5),
@@ -320,7 +326,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   font-weight: 700;
   color: rgba(200,210,200,0.5);
   text-decoration: none;
-  /* ── SUBTLE THEME GLOW ── */
   box-shadow:
     0 0 10px var(--btn-glow-color, rgba(141,207,127,0.10)),
     0 0 22px var(--btn-glow-spread, rgba(141,207,127,0.04));
@@ -331,7 +336,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   border-color: color-mix(in srgb, var(--accent) 50%, rgba(255,255,255,0.2));
   color: color-mix(in srgb, var(--accent) 85%, rgba(200,210,200,0.9));
   background: color-mix(in srgb, var(--accent) 6%, rgba(255,255,255,0.03));
-  /* stronger glow on hover */
   box-shadow:
     0 0 20px var(--btn-glow-color, rgba(141,207,127,0.28)),
     0 0 50px var(--btn-glow-spread, rgba(141,207,127,0.12)),
@@ -373,7 +377,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .rc-arrow{font-size:14px;color:var(--fg3);line-height:1;transition:color .18s,transform .22s cubic-bezier(.34,1.56,.64,1);}
 .row-card:hover .rc-arrow{color:var(--card-color,var(--accent));transform:translate(3px,-3px);}
 
-/* card animations */
 @keyframes cardPulse1{0%,100%{box-shadow:0 0 0 0 transparent,0 4px 18px rgba(0,0,0,.3);}50%{box-shadow:0 0 18px color-mix(in srgb,var(--card-color) 14%,transparent),0 4px 18px rgba(0,0,0,.3);}}
 @keyframes cardPulse2{0%,100%{box-shadow:0 0 0 0 transparent,0 4px 18px rgba(0,0,0,.3);}50%{box-shadow:0 0 18px color-mix(in srgb,var(--card-color) 14%,transparent),0 4px 18px rgba(0,0,0,.3);}}
 .row-card:nth-child(1){animation:cardPulse1 4s ease-in-out infinite .0s,up .7s .7s ease both;}
@@ -488,7 +491,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
       <p class="hero-desc">All your Class 12 ISC resources — PDFs, notes, exam schedule and study tools — organized, searchable, and viewable in one place.</p>
 
       <div class="hero-actions">
-        <!-- ✦ STAR BUTTON -->
         <a class="star-btn" id="heroStarBtn" href="resource.html">
           <div class="star-btn-light" id="heroStarLight"></div>
           <div class="star-btn-trail" id="heroStarTrail"></div>
@@ -644,7 +646,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 
 /* ── BUTTON GLOW HELPER ── */
 function updateButtonGlow(hex) {
-  // Parse hex → rgba components
   const r = parseInt(hex.slice(1,3),16);
   const g = parseInt(hex.slice(3,5),16);
   const b = parseInt(hex.slice(5,7),16);
@@ -659,28 +660,18 @@ function updateButtonGlow(hex) {
 
 /* ── THEME PRESETS ── */
 const PRESETS = [
-  {name:'Forest Green', hex:'#7ab86a'},
-  {name:'Neon Lime',    hex:'#a8ff3e'},
-  {name:'Electric Cyan',hex:'#00e5ff'},
-  {name:'Sky Blue',     hex:'#48aff7'},
-  {name:'Royal Indigo', hex:'#7c6fff'},
-  {name:'Violet',       hex:'#bf5fff'},
-  {name:'Hot Pink',     hex:'#ff5fa0'},
-  {name:'Crimson',      hex:'#ff4f4f'},
-  {name:'Amber',        hex:'#ffbe3f'},
-  {name:'Gold',         hex:'#f5c842'},
-  {name:'Coral',        hex:'#ff7a5a'},
-  {name:'Teal',         hex:'#3ecfb0'},
+  {name:'Forest Green', hex:'#7ab86a'},{name:'Neon Lime',    hex:'#a8ff3e'},
+  {name:'Electric Cyan',hex:'#00e5ff'},{name:'Sky Blue',     hex:'#48aff7'},
+  {name:'Royal Indigo', hex:'#7c6fff'},{name:'Violet',       hex:'#bf5fff'},
+  {name:'Hot Pink',     hex:'#ff5fa0'},{name:'Crimson',      hex:'#ff4f4f'},
+  {name:'Amber',        hex:'#ffbe3f'},{name:'Gold',         hex:'#f5c842'},
+  {name:'Coral',        hex:'#ff7a5a'},{name:'Teal',         hex:'#3ecfb0'},
 ];
 const GRAD_PRESETS = [
-  {name:'Aurora',     a:'#7af5a0', b:'#5fd4e8'},
-  {name:'Neon Dusk',  a:'#bf5fff', b:'#ff5fa0'},
-  {name:'Sunset',     a:'#ff7a5a', b:'#ffbe3f'},
-  {name:'Ocean',      a:'#5fd4e8', b:'#48aff7'},
-  {name:'Galaxy',     a:'#7c6fff', b:'#bf5fff'},
-  {name:'Jade',       a:'#3ecfb0', b:'#7ab86a'},
-  {name:'Lava',       a:'#ff4f4f', b:'#bf5fff'},
-  {name:'Gold Rush',  a:'#f5c842', b:'#ff7a5a'},
+  {name:'Aurora',     a:'#7af5a0', b:'#5fd4e8'},{name:'Neon Dusk',  a:'#bf5fff', b:'#ff5fa0'},
+  {name:'Sunset',     a:'#ff7a5a', b:'#ffbe3f'},{name:'Ocean',      a:'#5fd4e8', b:'#48aff7'},
+  {name:'Galaxy',     a:'#7c6fff', b:'#bf5fff'},{name:'Jade',       a:'#3ecfb0', b:'#7ab86a'},
+  {name:'Lava',       a:'#ff4f4f', b:'#bf5fff'},{name:'Gold Rush',  a:'#f5c842', b:'#ff7a5a'},
 ];
 const DEFAULT_ACCENT = '#8dcf7f';
 const DEFAULT_GRAD   = {a:'#8dcf7f', b:'#7fc8a4'};
@@ -714,7 +705,6 @@ function applyAccent(hex, save) {
   const em=document.getElementById('eyeEm'); if(em){em.style.color=hex;em.style.background='';em.style.webkitBackgroundClip='';em.style.webkitTextFillColor='';}
   const l2 = document.querySelector('.hero-title .l2'); if(l2) l2.style.color = hex;
   const fpDot = document.querySelector('.fp-dot'); if(fpDot){fpDot.style.background=hex;fpDot.style.boxShadow=`0 0 6px ${hex}`;}
-  /* ── update button glow to match theme ── */
   updateButtonGlow(hex);
   document.querySelectorAll('.preset').forEach((el,i)=>{
     el.classList.toggle('active', PRESETS[i]?.hex.toLowerCase()===hex.toLowerCase());
@@ -739,7 +729,6 @@ function applyGradient(a, b, save) {
   const mark = document.getElementById('navMark'); if(mark)mark.style.background=`linear-gradient(135deg,${a},${b})`;
   const saveDot = document.getElementById('autosaveDot'); if(saveDot)saveDot.style.background=`linear-gradient(135deg,${a},${b})`;
   const l2 = document.querySelector('.hero-title .l2'); if(l2){l2.style.background=`linear-gradient(135deg,${a},${b})`;l2.style.webkitBackgroundClip='text';l2.style.webkitTextFillColor='transparent';l2.style.backgroundClip='text';}
-  /* ── update button glow using gradient start color ── */
   updateButtonGlow(a);
   document.querySelectorAll('.grad-preset').forEach(el=>{el.classList.toggle('active',el.dataset.a===a&&el.dataset.b===b);});
   document.querySelectorAll('.preset').forEach(el=>el.classList.remove('active'));
