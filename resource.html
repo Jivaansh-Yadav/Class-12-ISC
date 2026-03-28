@@ -317,32 +317,56 @@ body.grad-mode .trigger-swatch { background: linear-gradient(135deg,var(--grad-a
 .sidebar-sub{font-family:var(--font-mono);font-size:10px;color:var(--fg3);letter-spacing:.3px;}
 
 /* TABS */
-.tabs{
-  display:flex;padding:8px 10px;border-bottom:1px solid var(--border);
-  gap:5px;flex-shrink:0;background:var(--bg2);
+.tabs {
+  display: flex; padding: 8px 10px; border-bottom: 1px solid var(--border);
+  gap: 8px; flex-shrink: 0; background: var(--bg2);
 }
-.tab{
-  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
-  padding:9px 0;font-family:var(--font-mono);font-size:11px;
-  letter-spacing:.8px;text-transform:uppercase;
-  border:1px solid var(--border2);border-radius:6px;
-  background:transparent;color:var(--fg3);cursor:pointer;
-  transition:all .2s;font-weight:500;position:relative;overflow:hidden;
+
+.tab {
+  flex: 1;
+  align-items: center;
+  background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1em;
+  padding: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
 }
-.tab::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;transform:scaleX(0);transition:transform .2s;border-radius:2px 2px 0 0;}
-.tab:hover{color:var(--fg2);background:var(--surface);border-color:var(--border2);}
 
-#tab-commerce::after{background:var(--amber);}
-#tab-commerce:hover{border-color:rgba(255,184,48,.35);background:rgba(255,184,48,.05);}
-#tab-commerce:not(.active){color:rgba(255,184,48,.65);background:rgba(255,184,48,.03);border-color:rgba(255,184,48,.14);}
-#tab-commerce.active{color:var(--amber);background:rgba(255,184,48,.07);border-color:rgba(255,184,48,.32);}
-#tab-commerce.active::after{transform:scaleX(1);}
+.tab:active { transform: scale(0.9); }
 
-#tab-science::after{background:#5fd4e8;}
-#tab-science:hover{border-color:rgba(95,212,232,.35);background:rgba(95,212,232,.06);}
-#tab-science:not(.active){color:rgba(95,212,232,.6);background:rgba(95,212,232,.03);border-color:rgba(95,212,232,.14);}
-#tab-science.active{color:#5fd4e8;background:rgba(95,212,232,.07);border-color:rgba(95,212,232,.28);}
-#tab-science.active::after{transform:scaleX(1);}
+.tab > span {
+  background-color: rgb(5, 6, 45);
+  padding: 10px 18px;
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: 300ms;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tab:hover > span { background: none; color: #fff; }
+
+/* remove the old active state overrides — gradient handles it */
+#tab-commerce.active > span,
+#tab-science.active > span { background: none; color: #fff; }
 
 /* SIDEBAR CLUSTER SECTION LABEL */
 .cluster-label{
@@ -1138,20 +1162,13 @@ async function load(){
   render();
   setTimeout(resolveDeepLink,150);
 }
-
-function switchStream(s){
-  stream=s;
-  const tc=document.getElementById('tab-commerce');
-  const ts=document.getElementById('tab-science');
-  tc.classList.toggle('active',s==='commerce');
-  ts.classList.toggle('active',s==='science');
-  const dc=tc.querySelector('span');const ds=ts.querySelector('span');
-  if(dc){dc.style.opacity=s==='commerce'?'1':'0.5';dc.style.boxShadow=s==='commerce'?'0 0 6px var(--amber)':'0 0 2px var(--amber)';}
-  if(ds){ds.style.opacity=s==='science'?'1':'0.5';ds.style.boxShadow=s==='science'?'0 0 6px #5fd4e8':'0 0 2px #5fd4e8';}
+function switchStream(s) {
+  stream = s;
+  document.getElementById('tab-commerce').classList.toggle('active', s === 'commerce');
+  document.getElementById('tab-science').classList.toggle('active', s === 'science');
   render();
   showExamAlert(s);
 }
-
 function render(){
   const q=document.getElementById('search').value.trim().toLowerCase();
   const subs=STREAMS[stream]||[];
