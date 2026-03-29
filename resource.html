@@ -80,9 +80,11 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .disc-inner{width:300px;background:rgba(12,14,11,.98);border:1px solid rgba(255,184,48,.22);border-top:2px solid rgba(255,184,48,.7);backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,.7);border-radius:10px;overflow:hidden;}
 .disc-head{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid rgba(255,184,48,.1);background:rgba(255,184,48,.05);}
 .disc-title{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,184,48,.9);flex:1;}
-.disc-body{padding:10px 14px;font-size:11.5px;color:rgba(237,242,234,.6);line-height:1.7;}
+.disc-body{padding:10px 14px;font-size:11.5px;color:rgba(237,242,234,.65);line-height:1.7;}
 .disc-body strong{color:#fff;}
-.disc-body a{color:rgba(255,184,48,.8);text-decoration:none;border-bottom:1px solid rgba(255,184,48,.3);}
+/* FIX 3: disclaimer email now clearly visible */
+.disc-body a{color:#ffd060;text-decoration:none;border-bottom:1px solid rgba(255,208,96,.6);font-weight:600;letter-spacing:.1px;}
+.disc-body a:hover{color:#ffe899;border-bottom-color:rgba(255,232,153,.8);}
 .nav-sep{width:1px;height:18px;background:var(--border2);margin:0 2px;flex-shrink:0;}
 .community-links{display:flex;align-items:center;gap:3px;}
 .community-link{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12px;font-weight:500;text-decoration:none;padding:6px 12px;border:1px solid var(--border2);border-radius:5px;transition:all .18s;white-space:nowrap;}
@@ -185,7 +187,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 2px 16px rgba(0,0,0,.55);
   transition:border-color .25s,box-shadow .25s;
 }
-/* left accent bar */
 .stream-trigger::after{
   content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
   background:var(--stream-color,var(--accent));
@@ -194,9 +195,7 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   z-index:2;pointer-events:none;
 }
 .stream-trigger:hover{border-color:rgba(255,255,255,.18);}
-.stream-trigger.open{border-color:rgba(255,255,255,.16);}
-
-/* sliding fill decor — Button component pattern */
+.stream-trigger.open{border-color:rgba(255,255,255,.22);}
 .stream-trigger-decor{
   position:absolute;inset:0;border-radius:inherit;
   background:var(--stream-color,var(--accent));
@@ -206,8 +205,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 }
 .stream-trigger:hover .stream-trigger-decor,
 .stream-trigger.open .stream-trigger-decor{transform:translateX(0);}
-
-/* solid icon panel */
 .stream-trigger-icon-panel{
   width:46px;height:46px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
@@ -217,7 +214,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   transition:background .3s;
 }
 .stream-trigger-icon-panel svg{display:block;color:rgba(0,0,0,.65);transition:color .2s;}
-
 .stream-trigger-text{
   flex:1;padding:10px 12px;
   position:relative;z-index:1;text-align:left;
@@ -232,15 +228,17 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 }
 .stream-trigger:hover .stream-trigger-name{color:#fff;}
 
-/* animated chevron */
+/* FIX 2: stream caret — now clearly visible white, with subtle separator */
 .stream-caret{
-  width:34px;height:46px;flex-shrink:0;
+  width:38px;height:46px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.3);
+  color:rgba(255,255,255,.80);
   position:relative;z-index:1;
-  transition:color .2s,transform .3s cubic-bezier(.34,1.56,.64,1);
+  border-left:1px solid rgba(255,255,255,.08);
+  transition:color .2s,transform .3s cubic-bezier(.34,1.56,.64,1),background .2s;
 }
-.stream-trigger.open .stream-caret{transform:rotate(180deg);color:rgba(255,255,255,.65);}
+.stream-trigger:hover .stream-caret{color:#fff;background:rgba(255,255,255,.05);}
+.stream-trigger.open .stream-caret{transform:rotate(180deg);color:#fff;background:rgba(255,255,255,.07);}
 
 /* ── DROPDOWN PANEL ── */
 .stream-dropdown{
@@ -263,7 +261,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   z-index:10;pointer-events:none;
 }
 .stream-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
-
 .sd-header{
   padding:10px 14px 9px;border-bottom:1px solid rgba(255,255,255,.06);
   background:rgba(255,255,255,.02);
@@ -271,10 +268,7 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 }
 .sd-header-label{font-family:var(--font-mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);}
 .sd-header-count{font-family:var(--font-mono);font-size:8px;color:rgba(255,255,255,.2);}
-
 .sd-items{padding:6px;position:relative;}
-
-/* sliding highlight pill */
 .sd-highlight{
   position:absolute;left:6px;right:6px;
   border-radius:9px;
@@ -283,8 +277,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   transition:top .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1);
   pointer-events:none;z-index:0;
 }
-
-/* each item — with its own decor sweep */
 .sd-item{
   position:relative;overflow:hidden;
   display:flex;align-items:center;gap:12px;
@@ -302,8 +294,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 }
 .sd-item:hover .sd-item-decor,
 .sd-item.active .sd-item-decor{transform:translateX(0);}
-
-/* icon box */
 .sd-item-icon-wrap{
   width:34px;height:34px;border-radius:9px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
@@ -319,16 +309,12 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .sd-item-icon{display:block;color:rgba(255,255,255,.38);transition:color .18s;}
 .sd-item:hover .sd-item-icon,
 .sd-item.active .sd-item-icon{color:var(--item-color,var(--accent));}
-
-/* text */
 .sd-item-info{flex:1;min-width:0;position:relative;z-index:1;}
 .sd-item-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);display:block;letter-spacing:.1px;transition:color .15s;}
 .sd-item:hover .sd-item-name,
 .sd-item.active .sd-item-name{color:#fff;font-weight:600;}
 .sd-item-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.22);display:block;margin-top:2px;transition:color .15s;}
 .sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 70%,rgba(255,255,255,.35));}
-
-/* check circle */
 .sd-item-check{
   width:20px;height:20px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
@@ -340,7 +326,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 }
 .sd-item-check svg{display:block;color:inherit;}
 .sd-item.active .sd-item-check{opacity:1;}
-
 .sd-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);margin:4px 8px;}
 .sd-footer{padding:9px 14px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.015);font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.25);letter-spacing:.3px;}
 
@@ -378,13 +363,15 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .subject[open] .s-count{color:#fff;background:color-mix(in srgb,var(--subj-color) 25%,var(--surface));border-color:color-mix(in srgb,var(--subj-color) 70%,transparent);}
 .s-arr{font-size:5px;color:color-mix(in srgb,var(--subj-color) 65%,var(--fg3));transition:transform .2s,color .18s;flex-shrink:0;opacity:0.9;}
 .subject[open] .s-arr{transform:rotate(90deg);color:var(--subj-color);opacity:1;}
+
+/* FIX 1: sub-folder text and icon — much brighter/whiter */
 .sub-folder{margin:2px 0 2px 8px;border-radius:6px;}
-.sub-folder>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:6px;font-size:13px;color:var(--fg2);transition:background .14s,color .14s;user-select:none;min-width:0;}
+.sub-folder>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:6px;font-size:13px;color:rgba(255,255,255,0.82);transition:background .14s,color .14s;user-select:none;min-width:0;}
 .sub-folder>summary::-webkit-details-marker{display:none;}
-.sub-folder>summary:hover{background:var(--surface2);color:var(--fg);}
-.sub-folder[open]>summary{color:var(--fg);}
-.sf-arr{font-size:6px;margin-left:auto;transition:transform .2s;color:var(--fg3);}
-.sub-folder[open]>summary .sf-arr{transform:rotate(90deg);color:var(--fg2);}
+.sub-folder>summary:hover{background:var(--surface2);color:#fff;}
+.sub-folder[open]>summary{color:#fff;}
+.sf-arr{font-size:6px;margin-left:auto;transition:transform .2s;color:rgba(255,255,255,0.45);}
+.sub-folder[open]>summary .sf-arr{transform:rotate(90deg);color:rgba(255,255,255,0.75);}
 .sub-folder>.file-list{padding:2px 6px 4px;}
 .file-list{list-style:none;padding:2px 3px 3px;}
 .file-list li+li{margin-top:1px;}
@@ -578,12 +565,15 @@ body .creds-bubble{display:none !important;}
           <span class="stream-trigger-label">Active stream</span>
           <span class="stream-trigger-name" id="streamTriggerName">Commerce</span>
         </span>
+        <!-- FIX 2: caret now uses explicit white stroke, not currentColor -->
         <span class="stream-caret" id="streamCaret">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </span>
       </button>
+      <!-- FIX 2b: hint text below trigger so users know it's clickable -->
+      <div style="text-align:center;padding:5px 0 2px;font-family:var(--font-mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.30);cursor:pointer;user-select:none;" onclick="toggleStreamDropdown()">▲ tap to change stream ▲</div>
 
       <div class="stream-dropdown" id="streamDropdown">
         <div class="sd-header">
@@ -1043,7 +1033,8 @@ function subtree(node,subj,fmap,prefix=''){
   [...node.dirs.keys()].sort((a,b)=>a.localeCompare(b)).forEach(name=>{
     const li=document.createElement('li');const d=document.createElement('details');d.className='sub-folder';const fp=`${subj}/${prefix?prefix+'/':''}${name}`;d.dataset.folder=fp;
     const s=document.createElement('summary');s.title='Shift+click to copy folder link';
-    s.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span style="flex:1;font-size:12px;color:var(--fg2)">${name}</span><span class="sf-arr">▶</span>`;
+    /* FIX 1: folder icon now white stroke (0.65 opacity) and name text bright white */
+    s.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span style="flex:1;font-size:13px;color:rgba(255,255,255,0.82)">${name}</span><span class="sf-arr">▶</span>`;
     s.addEventListener('click',e=>{if(e.shiftKey){e.preventDefault();shareFolderLink(fp);}});
     d.appendChild(s);d.appendChild(subtree(node.dirs.get(name),subj,fmap,prefix?`${prefix}/${name}`:name));li.appendChild(d);ul.appendChild(li);
   });
