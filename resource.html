@@ -69,7 +69,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .nav-link:hover{color:var(--fg);border-color:var(--accent);background:var(--accent-lo);}
 .nav-link-pip{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:breathe 2.8s ease-in-out infinite;transition:background .3s;}
 @keyframes breathe{0%,100%{opacity:.45}50%{opacity:.95}}
-
 .disc-wrap{position:relative;}
 .disc-btn{display:flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:5px;background:rgba(255,184,48,.1);border:1px solid rgba(255,184,48,.4);color:#ffb830;cursor:pointer;transition:all .18s;}
 .disc-btn:hover{background:rgba(255,184,48,.18);border-color:rgba(255,184,48,.7);}
@@ -162,243 +161,178 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .sidebar-heading{font-family:var(--font-brand);font-size:16px;font-weight:700;color:var(--fg);line-height:1.1;margin-bottom:2px;letter-spacing:.3px;}
 .sidebar-sub{font-family:var(--font-mono);font-size:10px;color:var(--fg3);letter-spacing:.3px;}
 
-/* ── PREMIUM STREAM DROPDOWN ── */
+/* ══ PREMIUM STREAM DROPDOWN ══ */
 .stream-dropdown-wrap{
-  padding:10px 10px 8px;
+  padding:10px;
   border-bottom:1px solid var(--border);
   flex-shrink:0;
   background:var(--bg2);
   position:relative;
   z-index:50;
 }
-/* Caret pulse uses inline style on trigger, so inherit works */
-.stream-trigger:not(.open) .stream-caret{
-  animation:caretBounce 2s ease-in-out infinite;
-}
-@keyframes caretBounce{
-  0%,100%{transform:translateY(0); box-shadow:0 0 8px rgba(255,184,48,.2);}
-  50%{transform:translateY(2px); box-shadow:0 0 18px rgba(255,184,48,.5);}
-}
 
-/* Trigger button */
+/* Trigger */
 .stream-trigger{
   width:100%;
-  display:flex;align-items:center;gap:10px;
-  padding:10px 13px;
-  border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;gap:0;
+  padding:0;
   border-radius:10px;
-  background:linear-gradient(145deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.02) 100%);
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.025);
   cursor:pointer;
-  transition:border-color .25s,background .25s,box-shadow .25s;
-  position:relative;
   overflow:hidden;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.05) inset,
-    0 2px 12px rgba(0,0,0,.4),
-    0 0 0 1px rgba(var(--stream-glow-rgb,255,184,48), 0.08),
-    0 0 18px rgba(var(--stream-glow-rgb,255,184,48), 0.10);
+  position:relative;
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 2px 16px rgba(0,0,0,.55);
+  transition:border-color .25s,box-shadow .25s;
 }
+/* left accent bar */
 .stream-trigger::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);
-  background-size:200% 100%;
-  background-position:200% 0;
-  pointer-events:none;
-  animation:shimmerSweep 3.5s ease-in-out infinite 1s;
-}
-@keyframes shimmerSweep{
-  0%,100%{background-position:200% 0;}
-  50%{background-position:-200% 0;}
-}
-.stream-trigger::before{
   content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
   background:var(--stream-color,var(--accent));
-  border-radius:10px 0 0 10px;
-  transition:background .25s,box-shadow .25s;
-  box-shadow:0 0 10px var(--stream-color,var(--accent)), 0 0 20px var(--stream-color,var(--accent));
+  box-shadow:0 0 12px var(--stream-color,var(--accent));
+  transition:background .3s,box-shadow .3s;
+  z-index:2;pointer-events:none;
 }
-.stream-trigger:hover{
-  border-color:rgba(255,255,255,.16);
-  background:linear-gradient(145deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,.03) 100%);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.07) inset,
-    0 4px 20px rgba(0,0,0,.5),
-    0 0 0 1px rgba(var(--stream-glow-rgb,255,184,48), 0.14),
-    0 0 28px rgba(var(--stream-glow-rgb,255,184,48), 0.18),
-    0 0 48px rgba(var(--stream-glow-rgb,255,184,48), 0.07);
-}
-.stream-trigger.open{
-  border-color:rgba(255,255,255,.14);
-  background:linear-gradient(145deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.02) 100%);
-  box-shadow:
-    0 1px 0 rgba(255,255,255,.06) inset,
-    0 4px 20px rgba(0,0,0,.5),
-    0 0 0 1px rgba(var(--stream-glow-rgb,255,184,48), 0.18),
-    0 0 32px rgba(var(--stream-glow-rgb,255,184,48), 0.22),
-    0 0 60px rgba(var(--stream-glow-rgb,255,184,48), 0.08);
-}
+.stream-trigger:hover{border-color:rgba(255,255,255,.18);}
+.stream-trigger.open{border-color:rgba(255,255,255,.16);}
 
-/* Icon circle */
-.stream-trigger-icon-wrap{
-  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+/* sliding fill decor — Button component pattern */
+.stream-trigger-decor{
+  position:absolute;inset:0;border-radius:inherit;
+  background:var(--stream-color,var(--accent));
+  transform:translateX(-100%);
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+  z-index:0;opacity:.07;pointer-events:none;
+}
+.stream-trigger:hover .stream-trigger-decor,
+.stream-trigger.open .stream-trigger-decor{transform:translateX(0);}
+
+/* solid icon panel */
+.stream-trigger-icon-panel{
+  width:46px;height:46px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.08);
-  transition:background .2s,border-color .2s;
-  font-size:15px;line-height:1;
+  background:var(--stream-color,var(--accent));
+  border-radius:9px 0 0 9px;
+  position:relative;z-index:1;
+  transition:background .3s;
 }
-.stream-trigger:hover .stream-trigger-icon-wrap,.stream-trigger.open .stream-trigger-icon-wrap{
-  background:rgba(255,255,255,.09);
-  border-color:rgba(255,255,255,.12);
-}
-.stream-trigger-icon{font-size:15px;flex-shrink:0;line-height:1;width:20px;text-align:center;}
-.stream-trigger-text{flex:1;text-align:left;}
-.stream-trigger-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);display:block;margin-bottom:2px;}
-.stream-trigger-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.85);display:block;letter-spacing:.1px;}
+.stream-trigger-icon-panel svg{display:block;color:rgba(0,0,0,.65);transition:color .2s;}
 
-/* Chevron */
+.stream-trigger-text{
+  flex:1;padding:10px 12px;
+  position:relative;z-index:1;text-align:left;
+}
+.stream-trigger-label{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.25);display:block;margin-bottom:2px;
+}
+.stream-trigger-name{
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.82);
+  display:block;letter-spacing:.1px;transition:color .2s;
+}
+.stream-trigger:hover .stream-trigger-name{color:#fff;}
+
+/* animated chevron */
 .stream-caret{
-  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  width:34px;height:46px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(var(--stream-glow-rgb,255,184,48), 0.15);
-  border:1px solid rgba(var(--stream-glow-rgb,255,184,48), 0.35);
-  color:var(--stream-color,#ffb830);
-  font-size:13px;font-weight:900;line-height:1;
-  transition:transform .3s cubic-bezier(.34,1.56,.64,1),color .18s,background .18s,border-color .18s,box-shadow .18s;
-  box-shadow:0 0 10px rgba(var(--stream-glow-rgb,255,184,48),0.25);
-  animation:caretPulse 2.5s ease-in-out infinite;
+  color:rgba(255,255,255,.3);
+  position:relative;z-index:1;
+  transition:color .2s,transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-@keyframes caretPulse{
-  0%,100%{box-shadow:0 0 8px rgba(var(--stream-glow-rgb,255,184,48),0.20);transform:translateY(0);}
-  50%{box-shadow:0 0 16px rgba(var(--stream-glow-rgb,255,184,48),0.45);transform:translateY(1px);}
-}
-.stream-trigger.open .stream-caret{
-  transform:rotate(180deg);
-  color:#fff;
-  background:rgba(var(--stream-glow-rgb,255,184,48), 0.25);
-  border-color:rgba(var(--stream-glow-rgb,255,184,48), 0.6);
-  box-shadow:0 0 18px rgba(var(--stream-glow-rgb,255,184,48),0.5);
-  animation:none;
-}
+.stream-trigger.open .stream-caret{transform:rotate(180deg);color:rgba(255,255,255,.65);}
 
-/* ── PREMIUM DROPDOWN PANEL ── */
+/* ── DROPDOWN PANEL ── */
 .stream-dropdown{
   position:fixed;
-  background:rgba(20,24,20,.98);
-  border:1px solid rgba(255,255,255,.13);
+  background:rgba(12,15,12,.98);
+  border:1px solid rgba(255,255,255,.10);
   border-radius:14px;
   overflow:hidden;
   backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.05) inset,
-    0 20px 56px rgba(0,0,0,.75),
-    0 6px 18px rgba(0,0,0,.45);
-  width:268px;
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(-8px) scale(0.97);
-  transform-origin:top center;
-  transition:
-    opacity .2s ease,
-    transform .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 24px 64px rgba(0,0,0,.85);
+  opacity:0;pointer-events:none;
+  transform:translateY(-6px) scale(.97);
+  transform-origin:top;
+  transition:opacity .22s ease,transform .28s cubic-bezier(.34,1.56,.64,1);
   z-index:9000;
 }
-.stream-dropdown.open{
-  opacity:1;
-  pointer-events:all;
-  transform:translateY(0) scale(1);
-}
-
-/* Top shine */
 .stream-dropdown::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
   z-index:10;pointer-events:none;
 }
+.stream-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
 
-/* Header */
 .sd-header{
-  padding:11px 14px 9px;
-  border-bottom:1px solid rgba(255,255,255,.07);
+  padding:10px 14px 9px;border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.02);
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.025);
 }
-.sd-header-label{font-family:var(--font-mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.45);}
-.sd-header-count{font-family:var(--font-mono);font-size:8px;color:rgba(255,255,255,.28);letter-spacing:.5px;}
+.sd-header-label{font-family:var(--font-mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);}
+.sd-header-count{font-family:var(--font-mono);font-size:8px;color:rgba(255,255,255,.2);}
 
-.sd-items{padding:7px;position:relative;}
+.sd-items{padding:6px;position:relative;}
 
-/* Sliding highlight pill */
+/* sliding highlight pill */
 .sd-highlight{
-  position:absolute;left:7px;right:7px;
+  position:absolute;left:6px;right:6px;
   border-radius:9px;
-  background:rgba(255,255,255,.05);
+  background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.08);
-  transition:top .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s;
-  pointer-events:none;
-  z-index:0;
+  transition:top .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1);
+  pointer-events:none;z-index:0;
 }
 
+/* each item — with its own decor sweep */
 .sd-item{
-  position:relative;z-index:1;
+  position:relative;overflow:hidden;
   display:flex;align-items:center;gap:12px;
-  padding:10px 12px;
-  border-radius:9px;
-  cursor:pointer;
-  transition:background .15s;
-  border:none;background:transparent;width:100%;text-align:left;
+  padding:10px 11px;border-radius:9px;
+  cursor:pointer;border:none;background:transparent;
+  width:100%;text-align:left;
+  transition:background .15s;z-index:1;
 }
-.sd-item:hover{background:rgba(255,255,255,.06);}
-.sd-item.active{background:rgba(255,255,255,.04);}
+.sd-item-decor{
+  position:absolute;inset:0;border-radius:9px;
+  background:var(--item-color,var(--accent));
+  transform:translateX(-100%);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);
+  z-index:0;opacity:.07;pointer-events:none;
+}
+.sd-item:hover .sd-item-decor,
+.sd-item.active .sd-item-decor{transform:translateX(0);}
 
-/* Item icon box — SVG-aware */
+/* icon box */
 .sd-item-icon-wrap{
-  width:36px;height:36px;border-radius:9px;flex-shrink:0;
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  position:relative;z-index:1;
   transition:background .18s,border-color .18s;
 }
-.sd-item-icon-wrap svg{
-  display:block;
-  color:rgba(255,255,255,.45);
-  transition:color .18s;
-}
-.sd-item:hover .sd-item-icon-wrap{
-  background:rgba(255,255,255,.10);
-  border-color:rgba(255,255,255,.14);
-}
-.sd-item:hover .sd-item-icon-wrap svg{color:rgba(255,255,255,.7);}
+.sd-item:hover .sd-item-icon-wrap,
 .sd-item.active .sd-item-icon-wrap{
   background:color-mix(in srgb,var(--item-color,var(--accent)) 16%,rgba(255,255,255,.03));
   border-color:color-mix(in srgb,var(--item-color,var(--accent)) 40%,transparent);
 }
-.sd-item.active .sd-item-icon-wrap svg{
-  color:var(--item-color,var(--accent));
-}
+.sd-item-icon{display:block;color:rgba(255,255,255,.38);transition:color .18s;}
+.sd-item:hover .sd-item-icon,
+.sd-item.active .sd-item-icon{color:var(--item-color,var(--accent));}
 
-/* Trigger icon SVG */
-.stream-trigger-icon svg{
-  display:block;
-  color:var(--stream-color,var(--accent));
-}
-
-.sd-item-icon{display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sd-item-info{flex:1;min-width:0;}
-.sd-item-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.7);transition:color .15s;display:block;line-height:1.25;letter-spacing:.1px;}
-.sd-item:hover .sd-item-name{color:rgba(255,255,255,.92);}
+/* text */
+.sd-item-info{flex:1;min-width:0;position:relative;z-index:1;}
+.sd-item-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);display:block;letter-spacing:.1px;transition:color .15s;}
+.sd-item:hover .sd-item-name,
 .sd-item.active .sd-item-name{color:#fff;font-weight:600;}
-.sd-item-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.3);display:block;margin-top:2px;transition:color .15s;}
-.sd-item:hover .sd-item-label{color:rgba(255,255,255,.5);}
-.sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 75%,rgba(255,255,255,.4));}
+.sd-item-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.22);display:block;margin-top:2px;transition:color .15s;}
+.sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 70%,rgba(255,255,255,.35));}
 
-/* Active SVG tick */
+/* check circle */
 .sd-item-check{
   width:20px;height:20px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  opacity:0;
+  opacity:0;position:relative;z-index:1;
   background:color-mix(in srgb,var(--item-color,var(--accent)) 16%,rgba(0,0,0,.25));
   border:1.5px solid color-mix(in srgb,var(--item-color,var(--accent)) 55%,transparent);
   color:var(--item-color,var(--accent));
@@ -407,20 +341,8 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .sd-item-check svg{display:block;color:inherit;}
 .sd-item.active .sd-item-check{opacity:1;}
 
-.sd-divider{
-  height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
-  margin:5px 10px;
-}
-
-/* Footer */
-.sd-footer{
-  padding:9px 14px;
-  border-top:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.02);
-  font-family:var(--font-mono);font-size:8.5px;
-  color:rgba(255,255,255,.3);letter-spacing:.3px;
-}
+.sd-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);margin:4px 8px;}
+.sd-footer{padding:9px 14px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.015);font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.25);letter-spacing:.3px;}
 
 /* CLUSTER LABEL */
 .cluster-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--fg3);padding:10px 14px 4px;opacity:.7;flex-shrink:0;}
@@ -570,14 +492,14 @@ body .creds-bubble{display:none !important;}
       <div class="disc-popup">
         <div class="disc-inner">
           <div class="disc-head"><span>⚠️</span><span class="disc-title">Disclaimer</span></div>
-          <p class="disc-body">ISC.exe is a <strong>free aggregator</strong> of study notes and resources found publicly online. This is an <strong>unofficial platform</strong> and is <strong>not affiliated with or connected to ISC (CISCE)</strong> in any way. We hold <strong>no copyrights, licences, or ownership</strong> over any material.<br/><br/>Rightful owners may write to <a href="/cdn-cgi/l/email-protection#254d574a4a564d4c654150464e0b464a48"><span class="__cf_email__" data-cfemail="ed859f82829e8584ad89988e86c38e8280">[email&#160;protected]</span></a> for removal.</p>
+          <p class="disc-body">ISC.exe is a <strong>free aggregator</strong> of study notes and resources found publicly online. This is an <strong>unofficial platform</strong> and is <strong>not affiliated with or connected to ISC (CISCE)</strong> in any way. We hold <strong>no copyrights, licences, or ownership</strong> over any material.<br/><br/>Rightful owners may write to <a href="mailto:hrooshi@duck.com">hrooshi@duck.com</a> for removal.</p>
         </div>
       </div>
     </div>
     <div class="nav-links">
       <a class="nav-link" href="/">← Home</a>
       <a class="nav-link" href="/timetable"><span class="nav-link-pip" id="navPip"></span>Timetable</a>
-      <a class="nav-link" href="/channels">📺 Channels</a>
+      <a class="nav-link" href="/channels">Channels</a>
     </div>
     <div style="display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border:1px solid var(--border2);border-radius:5px;font-family:var(--font-mono);font-size:11px;color:var(--fg3);letter-spacing:.4px;white-space:nowrap;">
       <span style="font-size:12px;opacity:.6;">⌨</span>
@@ -605,8 +527,8 @@ body .creds-bubble{display:none !important;}
       <div class="picker-panel" id="pickerPanel">
         <div class="picker-head"><span class="picker-head-title">Accent Theme</span><button class="picker-head-close" onclick="togglePicker()">✕</button></div>
         <div class="picker-mode-toggle">
-          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('solid')">⬛ Solid</button>
-          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('gradient')">🌈 Gradient</button>
+          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('solid')">Solid</button>
+          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('gradient')">Gradient</button>
         </div>
         <div id="solidPanel">
           <div class="picker-row-label">Presets</div>
@@ -642,77 +564,93 @@ body .creds-bubble{display:none !important;}
       <div class="sidebar-sub">browse · search · preview</div>
     </div>
 
-    <!-- ── FLUID STREAM DROPDOWN ── -->
+    <!-- ══ PREMIUM STREAM DROPDOWN ══ -->
     <div class="stream-dropdown-wrap" id="streamDropdownWrap">
       <button class="stream-trigger" id="streamTrigger" onclick="toggleStreamDropdown()">
-        <div class="stream-trigger-icon-wrap">
-          <span class="stream-trigger-icon" id="streamTriggerIcon">
-            <!-- commerce default -->
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-          </span>
-        </div>
+        <span class="stream-trigger-decor"></span>
+        <span class="stream-trigger-icon-panel" id="streamTriggerIconPanel">
+          <svg id="streamTriggerIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </span>
         <span class="stream-trigger-text">
-          <span class="stream-trigger-label">Active Stream</span>
+          <span class="stream-trigger-label">Active stream</span>
           <span class="stream-trigger-name" id="streamTriggerName">Commerce</span>
         </span>
         <span class="stream-caret" id="streamCaret">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </span>
       </button>
 
       <div class="stream-dropdown" id="streamDropdown">
         <div class="sd-header">
-          <span class="sd-header-label">Select Stream</span>
+          <span class="sd-header-label">Select stream</span>
           <span class="sd-header-count">3 available</span>
         </div>
         <div class="sd-items" id="sdItems">
           <div class="sd-highlight" id="sdHighlight"></div>
 
           <button class="sd-item active" data-stream="commerce" style="--item-color:#ffb830" onclick="selectStream('commerce',this)">
+            <span class="sd-item-decor"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Commerce</span>
               <span class="sd-item-label">Accounts · Eco · BSt</span>
             </span>
             <span class="sd-item-check">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
 
           <button class="sd-item" data-stream="science" style="--item-color:#5fd4e8" onclick="selectStream('science',this)">
+            <span class="sd-item-decor"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>
+              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/>
+                <path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/>
+                <path d="M3 9h18"/>
+              </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Science</span>
               <span class="sd-item-label">Physics · Chem · Bio</span>
             </span>
             <span class="sd-item-check">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
 
           <div class="sd-divider"></div>
 
           <button class="sd-item" data-stream="humanities" style="--item-color:#bf5fff" onclick="selectStream('humanities',this)">
+            <span class="sd-item-decor"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Humanities &amp; Arts</span>
               <span class="sd-item-label">History · Pol Sci · Geo</span>
             </span>
             <span class="sd-item-check">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
         </div>
         <div class="sd-footer">ISC Class XII · 2025–26</div>
       </div>
     </div>
-    <!-- ── END DROPDOWN ── -->
+    <!-- ══ END PREMIUM STREAM DROPDOWN ══ -->
 
     <div class="search-wrap">
       <div class="search-box">
@@ -789,7 +727,7 @@ body .creds-bubble{display:none !important;}
   </section>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ══ THEME PICKER ══ */
 const PRESETS=[
   {name:'Neon Green',hex:'#3bff6c'},{name:'Lime',hex:'#7ab86a'},
@@ -813,7 +751,6 @@ let currentGrad=JSON.parse(localStorage.getItem(GRAD_KEY)||'null');
 let pickerOpen=false;let pickerMode='solid';
 
 function hexAlpha(hex,alpha){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return `rgba(${r},${g},${b},${alpha})`;}
-
 function applyAccent(hex,save){
   document.body.classList.remove('grad-mode');currentGrad=null;if(save)localStorage.removeItem(GRAD_KEY);
   currentAccent=hex;const root=document.documentElement;
@@ -884,94 +821,72 @@ document.addEventListener('DOMContentLoaded',()=>{
   initStreamDropdown();
 });
 
-/* ══ FLUID STREAM DROPDOWN ══ */
+/* ══ PREMIUM STREAM DROPDOWN ══ */
 const STREAM_ICONS = {
-  commerce:   `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
-  science:    `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>`,
-  humanities: `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  commerce: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+  science:  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/><path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/><path d="M3 9h18"/></svg>`,
+  humanities:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
 };
 const STREAM_META = {
-  commerce:   { name:'Commerce',          color:'#ffb830', label:'Accounts · Eco · BSt' },
-  science:    { name:'Science',            color:'#5fd4e8', label:'Physics · Chem · Bio' },
-  humanities: { name:'Humanities & Arts',  color:'#bf5fff', label:'History · Pol Sci · Geo' },
+  commerce:   {name:'Commerce',         color:'#ffb830'},
+  science:    {name:'Science',           color:'#5fd4e8'},
+  humanities: {name:'Humanities & Arts', color:'#bf5fff'},
 };
+function hexToRgb(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`${r},${g},${b}`;}
 
-let dropdownOpen = false;
+let dropdownOpen=false;
 
 function initStreamDropdown(){
-  /* Move dropdown to body so it can never be clipped by sidebar overflow */
-  const dd = document.getElementById('streamDropdown');
+  const dd=document.getElementById('streamDropdown');
   document.body.appendChild(dd);
-
-  /* Set initial glow for Commerce */
-  const trig = document.getElementById('streamTrigger');
-  trig.style.setProperty('--stream-color', '#ffb830');
-  trig.style.setProperty('--stream-glow-rgb', '255,184,48');
-
+  const trig=document.getElementById('streamTrigger');
+  trig.style.setProperty('--stream-color','#ffb830');
   positionHighlight('commerce');
-
-  /* Reposition when open on scroll/resize */
   function reposition(){
-    if(!dropdownOpen) return;
-    const trig = document.getElementById('streamTrigger');
-    const r = trig.getBoundingClientRect();
-    dd.style.top = (r.bottom + 6) + 'px';
-    dd.style.left = r.left + 'px';
-    dd.style.width = r.width + 'px';
+    if(!dropdownOpen)return;
+    const r=document.getElementById('streamTrigger').getBoundingClientRect();
+    dd.style.top=(r.bottom+6)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
   }
-  window.addEventListener('resize', reposition, {passive:true});
-  document.querySelector('.sidebar').addEventListener('scroll', reposition, {passive:true});
-
-  document.addEventListener('click', e => {
-    if(dropdownOpen && !document.getElementById('streamDropdownWrap').contains(e.target) && !dd.contains(e.target))
-      closeStreamDropdown();
+  window.addEventListener('resize',reposition,{passive:true});
+  document.querySelector('.sidebar').addEventListener('scroll',reposition,{passive:true});
+  document.addEventListener('click',e=>{
+    if(dropdownOpen&&!document.getElementById('streamDropdownWrap').contains(e.target)&&!dd.contains(e.target))closeStreamDropdown();
   });
 }
-
 function toggleStreamDropdown(){
-  dropdownOpen = !dropdownOpen;
-  const dd = document.getElementById('streamDropdown');
-  const trig = document.getElementById('streamTrigger');
+  dropdownOpen=!dropdownOpen;
+  const dd=document.getElementById('streamDropdown');
+  const trig=document.getElementById('streamTrigger');
   if(dropdownOpen){
-    const r = trig.getBoundingClientRect();
-    dd.style.top = (r.bottom + 6) + 'px';
-    dd.style.left = r.left + 'px';
-    dd.style.width = r.width + 'px';
+    const r=trig.getBoundingClientRect();
+    dd.style.top=(r.bottom+6)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
     positionHighlight(stream);
   }
-  dd.classList.toggle('open', dropdownOpen);
-  trig.classList.toggle('open', dropdownOpen);
+  dd.classList.toggle('open',dropdownOpen);
+  trig.classList.toggle('open',dropdownOpen);
 }
 function closeStreamDropdown(){
-  dropdownOpen = false;
+  dropdownOpen=false;
   document.getElementById('streamDropdown').classList.remove('open');
   document.getElementById('streamTrigger').classList.remove('open');
 }
-
 function positionHighlight(activeStream){
-  const items = [...document.querySelectorAll('.sd-item')];
-  const idx = items.findIndex(i => i.dataset.stream === activeStream);
-  if(idx < 0) return;
-  const hl = document.getElementById('sdHighlight');
-  const item = items[idx];
-  hl.style.top = (item.offsetTop) + 'px';
-  hl.style.height = item.offsetHeight + 'px';
-  const meta = STREAM_META[activeStream];
-  hl.style.background = `rgba(255,255,255,0.055)`;
-  hl.style.borderColor = `color-mix(in srgb,${meta.color} 30%,rgba(255,255,255,0.06))`;
+  const items=[...document.querySelectorAll('.sd-item')];
+  const idx=items.findIndex(i=>i.dataset.stream===activeStream);
+  if(idx<0)return;
+  const hl=document.getElementById('sdHighlight');
+  const item=items[idx];
+  hl.style.top=item.offsetTop+'px';
+  hl.style.height=item.offsetHeight+'px';
 }
-
-function hexToRgb(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return `${r},${g},${b}`;}
-
-function selectStream(s, btn){
+function selectStream(s,btn){
   closeStreamDropdown();
-  const meta = STREAM_META[s];
-  const trig = document.getElementById('streamTrigger');
-  trig.style.setProperty('--stream-color', meta.color);
-  trig.style.setProperty('--stream-glow-rgb', hexToRgb(meta.color));
-  document.getElementById('streamTriggerIcon').innerHTML = STREAM_ICONS[s];
-  document.getElementById('streamTriggerName').textContent = meta.name;
-  document.querySelectorAll('.sd-item').forEach(i => i.classList.toggle('active', i.dataset.stream === s));
+  const meta=STREAM_META[s];
+  const trig=document.getElementById('streamTrigger');
+  trig.style.setProperty('--stream-color',meta.color);
+  document.getElementById('streamTriggerIconPanel').innerHTML=STREAM_ICONS[s];
+  document.getElementById('streamTriggerName').textContent=meta.name;
+  document.querySelectorAll('.sd-item').forEach(i=>i.classList.toggle('active',i.dataset.stream===s));
   switchStream(s);
 }
 
@@ -1027,8 +942,7 @@ function badge(path,source){
 }
 function showToast(msg,duration=2200){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),320);},duration);}
 function pushHash(entry){history.pushState(null,'','/resource/'+entry.path.split('/').map(encodeURIComponent).join('/'));}
-function copyShareLink(){if(!currentEntry){showToast('Open a file first, then share');return;}navigator.clipboard.writeText(location.href).then(()=>showToast('🔗 Link copied — paste to share')).catch(()=>{const i=document.createElement('input');i.value=location.href;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();showToast('🔗 Link copied!');});}
-
+function copyShareLink(){if(!currentEntry){showToast('Open a file first, then share');return;}navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied — paste to share')).catch(()=>{const i=document.createElement('input');i.value=location.href;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();showToast('Link copied!');});}
 function resolveDeepLink(){
   const path=decodeURIComponent(window.location.pathname.replace('/resource/','').replace('/resource',''));if(!path)return;
   const ms=Object.entries(STREAMS).find(([,subs])=>subs.some(s=>path.startsWith(s+'/')||path===s));
@@ -1037,8 +951,7 @@ function resolveDeepLink(){
   if(entry){preview(entry);setTimeout(()=>{const a=document.querySelector('.file-link.active');if(!a)return;let n=a.parentElement;while(n&&n.id!=='folders'){if(n.tagName==='DETAILS')n.open=true;n=n.parentElement;}a.scrollIntoView({block:'nearest'});},150);return;}
   setTimeout(()=>{let st=null;document.querySelectorAll('details[data-folder]').forEach(det=>{const f=det.dataset.folder;if(path.startsWith(f+'/')||f===path){det.open=true;if(f===path)st=det;}});if(st)st.scrollIntoView({block:'start',behavior:'smooth'});},150);
 }
-
-function shareFolderLink(folderPath){history.replaceState(null,'','/resource/'+folderPath.split('/').map(encodeURIComponent).join('/'));navigator.clipboard.writeText(location.href).then(()=>showToast('🔗 Folder link copied!')).catch(()=>showToast('🔗 Folder link copied!'));}
+function shareFolderLink(folderPath){history.replaceState(null,'','/resource/'+folderPath.split('/').map(encodeURIComponent).join('/'));navigator.clipboard.writeText(location.href).then(()=>showToast('Folder link copied!')).catch(()=>showToast('Folder link copied!'));}
 
 async function load(){
   const el=document.getElementById('folders');
@@ -1069,32 +982,23 @@ async function load(){
     }
   }catch(e){}
   allFiles=[...merged.values()];
-  if(!allFiles.length){el.innerHTML='<div class="msg">⚠ No resources found.</div>';return;}
+  if(!allFiles.length){el.innerHTML='<div class="msg">No resources found.</div>';return;}
   render();setTimeout(resolveDeepLink,150);
 }
 
-function switchStream(s){
-  stream=s;render();showExamAlert(s);
-}
+function switchStream(s){stream=s;render();showExamAlert(s);}
 
 function render(){
   const q=document.getElementById('search').value.trim().toLowerCase();
   const subs=STREAMS[stream]||[];
   const wrap=document.getElementById('folders');wrap.innerHTML='';
   const sf=allFiles.filter(f=>inSubjects(f.path,subs));
-  const streamMeta = STREAM_META[stream];
-
-  /* Show empty-state hint for streams with no files yet */
-  const hasAny = subs.some(subj=>sf.some(f=>f.path.startsWith(subj+'/')));
+  const streamMeta=STREAM_META[stream];
+  const hasAny=subs.some(subj=>sf.some(f=>f.path.startsWith(subj+'/')));
   if(!hasAny){
-    wrap.innerHTML=`<div class="msg" style="text-align:center;padding:24px 14px;">
-      <div style="font-size:28px;opacity:.3;margin-bottom:10px;">${streamMeta.icon}</div>
-      <div style="color:var(--fg2);font-weight:500;margin-bottom:4px;">${streamMeta.name}</div>
-      <div style="color:var(--fg3);font-size:11px;line-height:1.7;">No files yet for this stream.<br/>Add folders to your repo to see them here.</div>
-    </div>`;
+    wrap.innerHTML=`<div class="msg" style="text-align:center;padding:24px 14px;"><div style="color:var(--fg2);font-weight:500;margin-bottom:4px;">${streamMeta.name}</div><div style="color:var(--fg3);font-size:11px;line-height:1.7;">No files yet for this stream.<br/>Add folders to your repo to see them here.</div></div>`;
     return;
   }
-
   subs.forEach(subj=>{
     const filtered=sf.filter(f=>f.path.startsWith(subj+'/')&&f.path.toLowerCase().includes(q));
     if(!filtered.length)return;
@@ -1138,7 +1042,8 @@ function subtree(node,subj,fmap,prefix=''){
   const ul=document.createElement('ul');ul.className='file-list';
   [...node.dirs.keys()].sort((a,b)=>a.localeCompare(b)).forEach(name=>{
     const li=document.createElement('li');const d=document.createElement('details');d.className='sub-folder';const fp=`${subj}/${prefix?prefix+'/':''}${name}`;d.dataset.folder=fp;
-    const s=document.createElement('summary');s.title='Shift+click to copy folder link';s.innerHTML=`<span>📁</span><span style="flex:1;font-size:12px;color:var(--fg2)">${name}</span><span class="sf-arr">▶</span>`;
+    const s=document.createElement('summary');s.title='Shift+click to copy folder link';
+    s.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span style="flex:1;font-size:12px;color:var(--fg2)">${name}</span><span class="sf-arr">▶</span>`;
     s.addEventListener('click',e=>{if(e.shiftKey){e.preventDefault();shareFolderLink(fp);}});
     d.appendChild(s);d.appendChild(subtree(node.dirs.get(name),subj,fmap,prefix?`${prefix}/${name}`:name));li.appendChild(d);ul.appendChild(li);
   });
@@ -1164,7 +1069,7 @@ function preview(entry){
   const el=document.querySelector(`.file-link[data-key="${CSS.escape(key(entry))}"]`);if(el){el.classList.add('active');el.scrollIntoView({block:'nearest'});}
   const parts=entry.path.split('/');const fname=parts[parts.length-1];const ext=fname.split('.').pop().toLowerCase();const sn=parts[0];
   document.getElementById('vBreadcrumb').innerHTML=parts.slice(0,-1).map(p=>`<span style="color:var(--fg3)">${p} <span class="vb-sep">/</span></span>`).join(' ')+` <span class="vb-file">${fname}</span>`;
-  const typeMap={pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Sheet'};const srcCls=entry.source==='gdrive'?'src-drive':'src-repo';const srcLbl=entry.source==='gdrive'?'⬡ Drive':'⎔ GitHub';
+  const typeMap={pdf:'PDF',docx:'Word',doc:'Word',txt:'Text',pptx:'Slides',ppt:'Slides',xlsx:'Sheet'};const srcCls=entry.source==='gdrive'?'src-drive':'src-repo';const srcLbl=entry.source==='gdrive'?'Drive':'GitHub';
   document.getElementById('vChips').innerHTML=`<span class="vi-chip">${typeMap[ext]||ext.toUpperCase()}</span><span class="vi-chip ${srcCls}">${srcLbl}</span><span class="vi-chip">${sn}</span>`;
   const mt=document.getElementById('vModuleTag');if(mt)mt.textContent=getModuleTag(entry.path);
   document.getElementById('btnOpen').href=entry.url;document.getElementById('btnOpen').classList.add('file-loaded');
@@ -1175,9 +1080,7 @@ function preview(entry){
 }
 
 function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>lo.classList.add('hidden');setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
-
 function toggleFullscreen(){const panel=document.getElementById('viewerPanel');isFullscreen=!isFullscreen;panel.classList.toggle('fullscreen',isFullscreen);document.body.classList.toggle('fullscreen-active',isFullscreen);document.getElementById('fsIconExpand').style.display=isFullscreen?'none':'';document.getElementById('fsIconCollapse').style.display=isFullscreen?'':'none';document.getElementById('fsLabel').textContent=isFullscreen?'Exit':'Fullscreen';}
-
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='f'||e.key==='F')toggleFullscreen();if(e.key==='r'||e.key==='R')reloadViewer();if(e.key==='s'||e.key==='S')copyShareLink();if(e.key==='Escape'&&isFullscreen)toggleFullscreen();});
 
 const ALL_EXAMS_ALERT=[
@@ -1195,7 +1098,6 @@ const ALL_EXAMS_ALERT=[
   {date:'2026-03-23',subject:'Biotechnology',stream:'science'},
   {date:'2026-03-27',subject:'Computer Science',stream:'science'},
 ];
-
 function showExamAlert(cs){
   const alertEl=document.getElementById('examAlert');
   if(cs==='humanities'){alertEl.innerHTML='';document.getElementById('viewerPanel').style.paddingTop='';return;}
