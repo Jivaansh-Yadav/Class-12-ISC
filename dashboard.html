@@ -268,32 +268,6 @@ body::after{
 /* ══ MAIN ══ */
 .main{flex:1;min-width:0;padding:26px 28px 48px;min-height:calc(100vh - var(--nav-h));}
 
-/* ── NAV BETA PILL ── */
-.nav-beta-pill{
-  font-family:'JetBrains Mono',monospace;
-  font-size:9px;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;
-  color:#60a5fa;
-  padding:3px 9px;
-  border:1px solid rgba(96,165,250,.3);
-  border-radius:20px;
-  background:rgba(96,165,250,.08);
-  display:flex;align-items:center;gap:5px;
-  white-space:nowrap;flex-shrink:0;
-  animation:betaPillPulse 3s ease-in-out infinite;
-  cursor:default;
-}
-.nav-beta-pill-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:#60a5fa;
-  box-shadow:0 0 6px rgba(96,165,250,.6);
-  animation:dot-breathe 2s ease-in-out infinite;
-}
-@keyframes betaPillPulse{
-  0%,100%{border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.08);}
-  50%{border-color:rgba(96,165,250,.55);background:rgba(96,165,250,.14);}
-}
-
 /* ── RESET BUTTON ── */
 .reset-all-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -313,18 +287,6 @@ body::after{
 .topbar-greeting{font-family:'Outfit',sans-serif;font-size:28px;color:var(--fg);line-height:1.1;margin-bottom:3px;font-weight:600;}
 .topbar-greeting em{font-style:italic;color:var(--accent);transition:color .3s;text-shadow:none;}
 .topbar-date{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--fg3);letter-spacing:1.5px;text-transform:uppercase;}
-.topbar-beta-note{
-  margin-top:5px;
-  display:inline-flex;align-items:center;gap:5px;
-  font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:rgba(96,165,250,.55);letter-spacing:.3px;
-  padding:2px 0;
-}
-.topbar-beta-note-dot{
-  width:4px;height:4px;border-radius:50%;
-  background:rgba(96,165,250,.5);
-  animation:dot-breathe 2s ease-in-out infinite;
-}
 .topbar-right{display:flex;align-items:center;gap:8px;}
 .topbar-btn{
   display:flex;align-items:center;gap:7px;
@@ -723,8 +685,7 @@ body::after{
     <div class="nav-links">
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link active" href="dashboard.html">Dashboard</a>
-      <span class="nav-beta-pill"><span class="nav-beta-pill-dot"></span>BETA</span>
-      <a class="nav-link" href="/resource">Resources</a>
+      <a class="nav-link" href="resource.html">Resources</a>
       <a class="nav-link" href="timetable.html">Timetable</a>
     </div>
   </div>
@@ -790,7 +751,7 @@ body::after{
         <span class="sb-link-badge">9</span>
       </a>
       <div class="sb-section-label">Resources</div>
-      <a class="sb-link" href="/resource">
+      <a class="sb-link" href="resource.html">
         <div class="sb-link-icon">📚</div>Notes & PDFs
       </a>
       <a class="sb-link" href="channels.html">
@@ -830,7 +791,6 @@ body::after{
       <div>
         <div class="topbar-greeting">Good <em id="timeOfDay">evening</em>, <span id="greetName">Harsh</span></div>
         <div class="topbar-date" id="topbarDate">Loading…</div>
-        <div class="topbar-beta-note"><span class="topbar-beta-note-dot"></span>Beta version — some bugs may occur. Your data is saved locally.</div>
       </div>
       <div class="topbar-right">
         <button class="topbar-btn"><span>📋</span> <span>Today's Plan</span></button>
@@ -1022,35 +982,6 @@ function checkName() {
 
 /* ══ PERSISTED DATA ══ */
 function saveTodaySec(){localStorage.setItem('isc-today-sec',todayStudySec);}
-function saveTimerState(){
-  localStorage.setItem(TIMER_SAVE_KEY,JSON.stringify({
-    state:timerState,
-    seconds:timerSeconds,
-    subject:selectedSubject,
-    ts:Date.now()
-  }));
-}
-function clearTimerState(){localStorage.removeItem(TIMER_SAVE_KEY);}
-function restoreTimer(){
-  const raw=localStorage.getItem(TIMER_SAVE_KEY);
-  if(!raw)return;
-  try{
-    const d=JSON.parse(raw);
-    if(d.state!=='running'&&d.state!=='paused')return;
-    /* Calculate elapsed time since save */
-    const elapsed=Math.floor((Date.now()-d.ts)/1000);
-    timerSeconds=d.seconds+elapsed;
-    selectedSubject=d.subject||'Maths';
-    /* Highlight the correct subject chip */
-    document.querySelectorAll('.subject-chip').forEach(c=>{
-      if(c.dataset.subj===selectedSubject){c.classList.add('active');}
-    });
-    /* Restore to running state */
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();saveTimerState();},1000);
-    setTimerState('running');
-    showToast('▶ Restored session · '+selectedSubject+' · '+fmtTime(timerSeconds));
-  }catch(e){clearTimerState();}
-}
 function saveSessionCount(){localStorage.setItem('isc-saved-sessions',savedSessions);}
 let subjectTimeMap=JSON.parse(localStorage.getItem('isc-subject-times')||'{}');
 function saveSubjectTimes(){localStorage.setItem('isc-subject-times',JSON.stringify(subjectTimeMap));}
@@ -1306,11 +1237,6 @@ let timerInterval=null;
 let selectedSubject='Maths';
 let focusMode=true;
 const DAILY_GOAL_SEC=6*3600;
-const TIMER_SAVE_KEY='isc-timer-save';
-const TODAY_KEY='isc-today-date';
-const todayStr=new Date().toDateString();
-/* Reset today's seconds if it's a new day */
-if(localStorage.getItem(TODAY_KEY)!==todayStr){localStorage.setItem(TODAY_KEY,todayStr);localStorage.setItem('isc-today-sec','0');}
 let todayStudySec=parseInt(localStorage.getItem('isc-today-sec'))||0;
 let savedSessions=parseInt(localStorage.getItem('isc-saved-sessions'))||0;
 
@@ -1383,19 +1309,19 @@ function setTimerState(s){
 
 function toggleTimer(){
   if(timerState==='idle'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();saveTimerState();},1000);
+    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
     setTimerState('running');showToast('⏱ Session started · '+selectedSubject);
   } else if(timerState==='running'){
-    clearInterval(timerInterval);setTimerState('paused');saveTimerState();showToast('⏸ Session paused');
+    clearInterval(timerInterval);setTimerState('paused');showToast('⏸ Session paused');
   } else if(timerState==='paused'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();saveTimerState();},1000);
+    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
     setTimerState('running');showToast('▶ Resumed · '+selectedSubject);
   }
 }
-function resetTimer(){clearInterval(timerInterval);timerSeconds=0;setTimerState('idle');updateTimerUI();clearTimerState();}
+function resetTimer(){clearInterval(timerInterval);timerSeconds=0;setTimerState('idle');updateTimerUI();}
 function stopSession(){
   if(timerState==='idle'){showToast('⚠ No active session');return;}
-  clearInterval(timerInterval);clearTimerState();
+  clearInterval(timerInterval);
   const dur=fmtHM(timerSeconds);
   saveSession(selectedSubject,dur);
   showToast('✅ Session saved · '+selectedSubject+' · '+dur);
@@ -1453,14 +1379,14 @@ function toggleFocus(el){
 }
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&focusMode&&timerState==='running'){
-    clearInterval(timerInterval);timerState='paused';saveTimerState();
+    clearInterval(timerInterval);timerState='paused';
     document.getElementById('tabOverlay').classList.add('show');
   }
 });
 function resumeFromTab(){
   document.getElementById('tabOverlay').classList.remove('show');
   if(timerState==='paused'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();saveTimerState();},1000);
+    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
     setTimerState('running');showToast('▶ Session resumed');
   }
 }
@@ -1506,7 +1432,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('nativePicker').addEventListener('input',e=>{const v=e.target.value;document.getElementById('hexInput').value=v.toUpperCase();applyAccent(v,true);});
   document.getElementById('hexInput').addEventListener('keydown',e=>{if(e.key==='Enter')applyHex();});
   updateTimerUI();setTimerState('idle');
-  restoreTimer();
   /* Load streak from storage */
  const savedStreak=parseInt(localStorage.getItem('isc-streak'))||0;
  const streakEl=document.getElementById('streakVal');
