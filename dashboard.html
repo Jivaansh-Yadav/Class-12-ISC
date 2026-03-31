@@ -1637,28 +1637,23 @@ function toggleFocus(el){
   el.classList.toggle('off',!focusMode);
   showToast(focusMode?'🧠 Focus mode ON · Tab switch will pause timer':'😴 Focus mode OFF');
 }
+
+/* Track if user is clicking an internal navigation link (vs switching tabs) */
+let isNavigatingAway=false;
+document.querySelectorAll('a[href^="/"],a[href$=".html"]').forEach(a=>{
+  a.addEventListener('click',()=>{isNavigatingAway=true;},{once:true});
+});
+
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&focusMode&&timerState==='running'){
-    clearInterval(timerInterval);timerState='paused';saveTimerState();
-    document.getElementById('tabOverlay').classList.add('show');
-  }
-});
-/* Keep timer running when navigating away (e.g. to resource page).
-   beforeunload fires after visibilitychange, so it overrides the "paused" state. */
-window.addEventListener('beforeunload',()=>{
-  if(timerState==='running'||timerState==='paused'){
-    /* Recalculate and save as running so resource.html continues the timer */
-    const raw=localStorage.getItem(TIMER_SAVE_KEY);
-    try{
-      const d=JSON.parse(raw);
-      if(d.state==='paused'){
-        d.seconds=d.seconds+Math.floor((Date.now()-d.ts)/1000);
-      }
-      d.ts=Date.now();
-      d.state='running';
-      d.subject=selectedSubject;
-      localStorage.setItem(TIMER_SAVE_KEY,JSON.stringify(d));
-    }catch(e){}
+    if(isNavigatingAway){
+      /* User clicked a link to navigate — keep timer running, just save state */
+      saveTimerState();
+    }else{
+      /* User switched tabs — pause timer (focus mode) */
+      clearInterval(timerInterval);timerState='paused';saveTimerState();
+      document.getElementById('tabOverlay').classList.add('show');
+    }
   }
 });
 function resumeFromTab(){
