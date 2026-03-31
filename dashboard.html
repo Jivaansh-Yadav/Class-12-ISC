@@ -268,6 +268,32 @@ body::after{
 /* ══ MAIN ══ */
 .main{flex:1;min-width:0;padding:26px 28px 48px;min-height:calc(100vh - var(--nav-h));}
 
+/* ── NAV BETA PILL ── */
+.nav-beta-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:#60a5fa;
+  padding:3px 9px;
+  border:1px solid rgba(96,165,250,.3);
+  border-radius:20px;
+  background:rgba(96,165,250,.08);
+  display:flex;align-items:center;gap:5px;
+  white-space:nowrap;flex-shrink:0;
+  animation:betaPillPulse 3s ease-in-out infinite;
+  cursor:default;
+}
+.nav-beta-pill-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:#60a5fa;
+  box-shadow:0 0 6px rgba(96,165,250,.6);
+  animation:dot-breathe 2s ease-in-out infinite;
+}
+@keyframes betaPillPulse{
+  0%,100%{border-color:rgba(96,165,250,.3);background:rgba(96,165,250,.08);}
+  50%{border-color:rgba(96,165,250,.55);background:rgba(96,165,250,.14);}
+}
+
 /* ── RESET BUTTON ── */
 .reset-all-btn {
   display: inline-flex; align-items: center; gap: 6px;
@@ -287,6 +313,18 @@ body::after{
 .topbar-greeting{font-family:'Outfit',sans-serif;font-size:28px;color:var(--fg);line-height:1.1;margin-bottom:3px;font-weight:600;}
 .topbar-greeting em{font-style:italic;color:var(--accent);transition:color .3s;text-shadow:none;}
 .topbar-date{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--fg3);letter-spacing:1.5px;text-transform:uppercase;}
+.topbar-beta-note{
+  margin-top:5px;
+  display:inline-flex;align-items:center;gap:5px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(96,165,250,.55);letter-spacing:.3px;
+  padding:2px 0;
+}
+.topbar-beta-note-dot{
+  width:4px;height:4px;border-radius:50%;
+  background:rgba(96,165,250,.5);
+  animation:dot-breathe 2s ease-in-out infinite;
+}
 .topbar-right{display:flex;align-items:center;gap:8px;}
 .topbar-btn{
   display:flex;align-items:center;gap:7px;
@@ -637,6 +675,153 @@ body::after{
   backdrop-filter:blur(12px);
 }
 
+/* ── TODAY'S PLAN MODAL ── */
+.todo-overlay{
+  display:none;position:fixed;inset:0;z-index:10001;
+  background:rgba(8,12,8,.85);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+}
+.todo-overlay.show{display:flex;}
+.todo-modal{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:18px;width:440px;max-width:92vw;max-height:82vh;
+  display:flex;flex-direction:column;overflow:hidden;
+  animation:modal-in .35s ease both;
+  box-shadow:0 32px 80px rgba(0,0,0,.7);
+}
+.todo-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 22px 14px;border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
+.todo-head-left{display:flex;align-items:center;gap:10px;}
+.todo-head-icon{font-size:22px;}
+.todo-head-title{
+  font-family:'Outfit',sans-serif;font-size:18px;font-weight:600;color:var(--fg);
+}
+.todo-head-sub{
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--fg3);
+  letter-spacing:1px;text-transform:uppercase;margin-top:2px;
+}
+.todo-close{
+  background:none;border:none;cursor:pointer;
+  color:var(--fg3);font-size:16px;padding:4px 8px;
+  border-radius:6px;transition:all .15s;
+}
+.todo-close:hover{color:var(--fg);background:var(--surface2);}
+
+.todo-body{flex:1;overflow-y:auto;padding:14px 18px 8px;display:flex;flex-direction:column;gap:8px;}
+.todo-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 0;gap:8px;
+}
+.todo-empty-icon{font-size:36px;opacity:.3;}
+.todo-empty-text{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--fg3);}
+
+.todo-item{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;border-radius:10px;
+  background:var(--bg2);border:1px solid var(--border);
+  transition:all .25s;animation:card-in .3s ease both;
+}
+.todo-item:hover{border-color:var(--border2);background:var(--surface2);}
+.todo-item.done{opacity:.5;}
+.todo-item.done .todo-item-text{text-decoration:line-through;color:var(--fg3);}
+.todo-item.goal-done{border-color:var(--accent-md);background:var(--accent-lo);}
+.todo-item.goal-done .todo-goal-badge{background:var(--accent);color:#000;}
+
+.todo-check{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  border:2px solid var(--border2);background:transparent;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;font-size:12px;color:transparent;
+}
+.todo-check:hover{border-color:var(--accent);}
+.todo-check.checked{border-color:var(--accent);background:var(--accent);color:#000;}
+
+.todo-item-content{flex:1;min-width:0;}
+.todo-item-text{font-size:13px;font-weight:500;color:var(--fg);line-height:1.3;}
+.todo-item-meta{
+  display:flex;align-items:center;gap:6px;margin-top:4px;
+}
+.todo-subject-tag{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:2px 7px;border-radius:4px;
+  background:var(--surface2);color:var(--fg2);
+  border:1px solid var(--border);
+}
+.todo-goal-badge{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:2px 7px;border-radius:4px;
+  background:var(--surface2);color:var(--fg3);
+  border:1px solid var(--border);
+  display:flex;align-items:center;gap:4px;
+  transition:all .3s;
+}
+.todo-goal-badge.satisfied{background:var(--accent);color:#000;border-color:var(--accent);}
+.todo-goal-progress{
+  width:50px;height:3px;background:var(--border2);border-radius:2px;overflow:hidden;
+}
+.todo-goal-progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .5s ease;}
+
+.todo-item-actions{display:flex;gap:4px;flex-shrink:0;}
+.todo-del-btn{
+  background:none;border:none;cursor:pointer;
+  color:var(--fg3);font-size:12px;padding:4px 6px;
+  border-radius:4px;transition:all .15s;
+}
+.todo-del-btn:hover{color:var(--red);background:rgba(255,138,138,.1);}
+
+.todo-footer{
+  padding:12px 18px 16px;border-top:1px solid var(--border);
+  flex-shrink:0;
+}
+.todo-add-form{display:flex;gap:8px;align-items:center;}
+.todo-add-input{
+  flex:1;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;color:var(--fg);
+  font-family:'Inter',sans-serif;font-size:13px;
+  padding:10px 14px;outline:none;transition:border-color .2s;
+}
+.todo-add-input:focus{border-color:var(--accent);}
+.todo-add-input::placeholder{color:var(--fg3);}
+.todo-add-goal-input{
+  width:72px;background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;color:var(--fg);
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:10px 8px;outline:none;text-align:center;
+  transition:border-color .2s;
+}
+.todo-add-goal-input:focus{border-color:var(--accent);}
+.todo-add-goal-input::placeholder{color:var(--fg3);font-size:9px;}
+.todo-add-goal-label{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  color:var(--fg3);letter-spacing:1px;text-transform:uppercase;
+  white-space:nowrap;
+}
+.todo-add-btn{
+  background:var(--accent);color:#000;border:none;
+  border-radius:8px;padding:10px 14px;cursor:pointer;
+  font-size:16px;font-weight:700;
+  transition:all .2s;flex-shrink:0;
+  box-shadow:0 0 16px var(--accent-lo);
+}
+.todo-add-btn:hover{filter:brightness(1.1);transform:scale(1.05);}
+.todo-add-row2{
+  display:flex;gap:8px;align-items:center;margin-top:8px;
+}
+.todo-add-subject-select{
+  flex:1;appearance:none;
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:500;
+  color:var(--fg);background:var(--surface2);
+  border:1px solid var(--border2);border-radius:8px;
+  padding:8px 32px 8px 12px;cursor:pointer;
+  outline:none;transition:border-color .2s;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23688065' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;
+}
+.todo-add-subject-select:focus{border-color:var(--accent);}
+
 /* RESPONSIVE */
 @media(max-width:1100px){
   .stats-grid{grid-template-columns:repeat(2,1fr);}
@@ -652,6 +837,45 @@ body::after{
 </style>
 </head>
 <body>
+
+<!-- TODAY'S PLAN MODAL -->
+<div class="todo-overlay" id="todoOverlay">
+  <div class="todo-modal">
+    <div class="todo-head">
+      <div class="todo-head-left">
+        <div class="todo-head-icon">📋</div>
+        <div>
+          <div class="todo-head-title">Today's Plan</div>
+          <div class="todo-head-sub" id="todoSubtitle">0 tasks · 0 goals</div>
+        </div>
+      </div>
+      <button class="todo-close" onclick="closeTodoModal()">✕</button>
+    </div>
+    <div class="todo-body" id="todoBody">
+      <div class="todo-empty" id="todoEmpty">
+        <div class="todo-empty-icon">📝</div>
+        <div class="todo-empty-text">No tasks yet. Add one below!</div>
+      </div>
+    </div>
+    <div class="todo-footer">
+      <div class="todo-add-form">
+        <input type="text" class="todo-add-input" id="todoInput" placeholder="What do you plan to study?" maxlength="80" />
+        <button class="todo-add-btn" onclick="addTodoItem()" title="Add task">+</button>
+      </div>
+      <div class="todo-add-row2">
+        <div style="display:flex;align-items:center;gap:6px;flex:1;">
+          <span class="todo-add-goal-label">Subject</span>
+          <select class="todo-add-subject-select" id="todoSubjectSelect">
+          </select>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="todo-add-goal-label">Timer Goal</span>
+          <input type="number" class="todo-add-goal-input" id="todoGoalInput" placeholder="min" min="1" max="600" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- TAB AWAY OVERLAY -->
 <div class="tab-away-overlay" id="tabOverlay">
@@ -685,7 +909,8 @@ body::after{
     <div class="nav-links">
       <a class="nav-link" href="index.html">Home</a>
       <a class="nav-link active" href="dashboard.html">Dashboard</a>
-      <a class="nav-link" href="resource.html">Resources</a>
+      <span class="nav-beta-pill"><span class="nav-beta-pill-dot"></span>BETA</span>
+      <a class="nav-link" href="/resource">Resources</a>
       <a class="nav-link" href="timetable.html">Timetable</a>
     </div>
   </div>
@@ -751,7 +976,7 @@ body::after{
         <span class="sb-link-badge">9</span>
       </a>
       <div class="sb-section-label">Resources</div>
-      <a class="sb-link" href="resource.html">
+      <a class="sb-link" href="/resource">
         <div class="sb-link-icon">📚</div>Notes & PDFs
       </a>
       <a class="sb-link" href="channels.html">
@@ -791,9 +1016,10 @@ body::after{
       <div>
         <div class="topbar-greeting">Good <em id="timeOfDay">evening</em>, <span id="greetName">Harsh</span></div>
         <div class="topbar-date" id="topbarDate">Loading…</div>
+        <div class="topbar-beta-note"><span class="topbar-beta-note-dot"></span>Beta version — some bugs may occur. Your data is saved locally.</div>
       </div>
       <div class="topbar-right">
-        <button class="topbar-btn"><span>📋</span> <span>Today's Plan</span></button>
+        <button class="topbar-btn" onclick="openTodoModal()"><span>📋</span> <span>Today's Plan</span></button>
         <button class="topbar-btn primary" onclick="quickStart()"><span>⚡</span> <span>Quick Start</span></button>
       </div>
     </div>
@@ -982,6 +1208,35 @@ function checkName() {
 
 /* ══ PERSISTED DATA ══ */
 function saveTodaySec(){localStorage.setItem('isc-today-sec',todayStudySec);}
+function saveTimerState(){
+  localStorage.setItem(TIMER_SAVE_KEY,JSON.stringify({
+    state:timerState,
+    seconds:timerSeconds,
+    subject:selectedSubject,
+    ts:Date.now()
+  }));
+}
+function clearTimerState(){localStorage.removeItem(TIMER_SAVE_KEY);}
+function restoreTimer(){
+  const raw=localStorage.getItem(TIMER_SAVE_KEY);
+  if(!raw)return;
+  try{
+    const d=JSON.parse(raw);
+    if(d.state!=='running'&&d.state!=='paused')return;
+    /* Calculate elapsed time since save */
+    const elapsed=Math.floor((Date.now()-d.ts)/1000);
+    timerSeconds=d.seconds+elapsed;
+    selectedSubject=d.subject||'Maths';
+    /* Highlight the correct subject chip */
+    document.querySelectorAll('.subject-chip').forEach(c=>{
+      if(c.dataset.subj===selectedSubject){c.classList.add('active');}
+    });
+    /* Restore to running state */
+    timerInterval=setInterval(_origIntervalFn,1000);
+    setTimerState('running');
+    showToast('▶ Restored session · '+selectedSubject+' · '+fmtTime(timerSeconds));
+  }catch(e){clearTimerState();}
+}
 function saveSessionCount(){localStorage.setItem('isc-saved-sessions',savedSessions);}
 let subjectTimeMap=JSON.parse(localStorage.getItem('isc-subject-times')||'{}');
 function saveSubjectTimes(){localStorage.setItem('isc-subject-times',JSON.stringify(subjectTimeMap));}
@@ -1237,6 +1492,11 @@ let timerInterval=null;
 let selectedSubject='Maths';
 let focusMode=true;
 const DAILY_GOAL_SEC=6*3600;
+const TIMER_SAVE_KEY='isc-timer-save';
+const TODAY_KEY='isc-today-date';
+const todayStr=new Date().toDateString();
+/* Reset today's seconds if it's a new day */
+if(localStorage.getItem(TODAY_KEY)!==todayStr){localStorage.setItem(TODAY_KEY,todayStr);localStorage.setItem('isc-today-sec','0');}
 let todayStudySec=parseInt(localStorage.getItem('isc-today-sec'))||0;
 let savedSessions=parseInt(localStorage.getItem('isc-saved-sessions'))||0;
 
@@ -1309,19 +1569,19 @@ function setTimerState(s){
 
 function toggleTimer(){
   if(timerState==='idle'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
+    timerInterval=setInterval(_origIntervalFn,1000);
     setTimerState('running');showToast('⏱ Session started · '+selectedSubject);
   } else if(timerState==='running'){
-    clearInterval(timerInterval);setTimerState('paused');showToast('⏸ Session paused');
+    clearInterval(timerInterval);setTimerState('paused');saveTimerState();showToast('⏸ Session paused');
   } else if(timerState==='paused'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
+    timerInterval=setInterval(_origIntervalFn,1000);
     setTimerState('running');showToast('▶ Resumed · '+selectedSubject);
   }
 }
-function resetTimer(){clearInterval(timerInterval);timerSeconds=0;setTimerState('idle');updateTimerUI();}
+function resetTimer(){clearInterval(timerInterval);timerSeconds=0;setTimerState('idle');updateTimerUI();clearTimerState();}
 function stopSession(){
   if(timerState==='idle'){showToast('⚠ No active session');return;}
-  clearInterval(timerInterval);
+  clearInterval(timerInterval);clearTimerState();
   const dur=fmtHM(timerSeconds);
   saveSession(selectedSubject,dur);
   showToast('✅ Session saved · '+selectedSubject+' · '+dur);
@@ -1379,14 +1639,14 @@ function toggleFocus(el){
 }
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&focusMode&&timerState==='running'){
-    clearInterval(timerInterval);timerState='paused';
+    clearInterval(timerInterval);timerState='paused';saveTimerState();
     document.getElementById('tabOverlay').classList.add('show');
   }
 });
 function resumeFromTab(){
   document.getElementById('tabOverlay').classList.remove('show');
   if(timerState==='paused'){
-    timerInterval=setInterval(()=>{timerSeconds++;todayStudySec++;updateTimerUI();saveTodaySec();},1000);
+    timerInterval=setInterval(_origIntervalFn,1000);
     setTimerState('running');showToast('▶ Session resumed');
   }
 }
@@ -1418,6 +1678,159 @@ function showToast(msg,dur=2400){
   setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(14px)';t.style.transition='all .3s';setTimeout(()=>{if(t.parentNode)t.remove();},320);},dur);
 }
 
+/* ══ TODAY'S PLAN (TODO LIST) ══ */
+const TODO_KEY='isc-todo-items';
+let todoItems=JSON.parse(localStorage.getItem(TODO_KEY)||'[]');
+
+function openTodoModal(){
+  document.getElementById('todoOverlay').classList.add('show');
+  renderTodoList();
+  populateTodoSubjectSelect();
+  document.getElementById('todoInput').focus();
+}
+function closeTodoModal(){
+  document.getElementById('todoOverlay').classList.remove('show');
+}
+
+function populateTodoSubjectSelect(){
+  const sel=document.getElementById('todoSubjectSelect');
+  const currentStream=document.getElementById('streamSelect').value;
+  const subjects=STREAM_SUBJECTS[currentStream]||STREAM_SUBJECTS.science;
+  sel.innerHTML=subjects.map(s=>`<option value="${s.name}">${s.emoji} ${s.name}</option>`).join('');
+}
+
+function addTodoItem(){
+  const input=document.getElementById('todoInput');
+  const text=input.value.trim();
+  if(!text){input.style.borderColor='var(--red)';setTimeout(()=>input.style.borderColor='',1500);return;}
+  const subject=document.getElementById('todoSubjectSelect').value;
+  const goalMin=parseInt(document.getElementById('todoGoalInput').value)||0;
+  const item={
+    id:Date.now(),
+    text:text,
+    subject:subject,
+    goalMin:goalMin,
+    elapsedSec:0,
+    done:false,
+    goalSatisfied:false,
+    createdAt:new Date().toISOString()
+  };
+  todoItems.unshift(item);
+  saveTodoItems();
+  input.value='';
+  document.getElementById('todoGoalInput').value='';
+  renderTodoList();
+  showToast('📋 Task added'+(goalMin?' · '+goalMin+'min goal':''));
+}
+
+function toggleTodoDone(id){
+  const item=todoItems.find(t=>t.id===id);
+  if(item){item.done=!item.done;saveTodoItems();renderTodoList();}
+}
+
+function deleteTodoItem(id){
+  todoItems=todoItems.filter(t=>t.id!==id);
+  saveTodoItems();
+  renderTodoList();
+}
+
+function saveTodoItems(){
+  /* Only keep today's items */
+  const today=new Date().toDateString();
+  todoItems=todoItems.filter(t=>new Date(t.createdAt).toDateString()===today);
+  localStorage.setItem(TODO_KEY,JSON.stringify(todoItems));
+}
+
+function renderTodoList(){
+  const body=document.getElementById('todoBody');
+  const empty=document.getElementById('todoEmpty');
+  /* Filter to today only */
+  const today=new Date().toDateString();
+  const todayItems=todoItems.filter(t=>new Date(t.createdAt).toDateString()===today);
+  todoItems=todayItems;
+
+  if(!todayItems.length){
+    body.innerHTML='';body.appendChild(createTodoEmpty());updateTodoSubtitle(0,0);return;
+  }
+  body.innerHTML='';
+  todayItems.forEach(item=>{
+    const el=document.createElement('div');
+    let classes='todo-item';
+    if(item.done)classes+=' done';
+    if(item.goalSatisfied&&!item.done)classes+=' goal-done';
+    el.className=classes;
+    el.style.animationDelay='0s';
+
+    let metaHtml=`<span class="todo-subject-tag">${item.subject}</span>`;
+    if(item.goalMin>0){
+      const pct=Math.min(Math.round((item.elapsedSec/(item.goalMin*60))*100),100);
+      const satisfied=pct>=100;
+      metaHtml+=`<span class="todo-goal-badge${satisfied?' satisfied':''}">${satisfied?'✓ ':''}${item.elapsedSec>=60?Math.floor(item.elapsedSec/60)+'m':''}${item.elapsedSec%60?item.elapsedSec%60+'s':''} / ${item.goalMin}m</span>`;
+      metaHtml+=`<div class="todo-goal-progress"><div class="todo-goal-progress-fill" style="width:${pct}%"></div></div>`;
+    }
+    el.innerHTML=`
+      <button class="todo-check${item.done?' checked':''}" onclick="toggleTodoDone(${item.id})">${item.done?'✓':''}</button>
+      <div class="todo-item-content">
+        <div class="todo-item-text">${escHtml(item.text)}</div>
+        <div class="todo-item-meta">${metaHtml}</div>
+      </div>
+      <div class="todo-item-actions">
+        <button class="todo-del-btn" onclick="deleteTodoItem(${item.id})" title="Delete">✕</button>
+      </div>
+    `;
+    body.appendChild(el);
+  });
+  const goalCount=todayItems.filter(t=>t.goalMin>0).length;
+  const satisfiedCount=todayItems.filter(t=>t.goalSatisfied).length;
+  updateTodoSubtitle(todayItems.length,goalCount,satisfiedCount);
+}
+
+function createTodoEmpty(){
+  const d=document.createElement('div');d.className='todo-empty';d.id='todoEmpty';
+  d.innerHTML='<div class="todo-empty-icon">📝</div><div class="todo-empty-text">No tasks yet. Add one below!</div>';
+  return d;
+}
+
+function updateTodoSubtitle(taskCount,goalCount,satisfiedCount=0){
+  const el=document.getElementById('todoSubtitle');
+  if(!el)return;
+  let txt=taskCount+' task'+(taskCount!==1?'s':'');
+  if(goalCount>0)txt+=' · '+satisfiedCount+'/'+goalCount+' goals done';
+  el.textContent=txt;
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* Update todo goal progress when timer ticks */
+function updateTodoGoals(){
+  if(!todoItems.length)return;
+  const today=new Date().toDateString();
+  const todayItems=todoItems.filter(t=>new Date(t.createdAt).toDateString()===today);
+  let changed=false;
+  todayItems.forEach(item=>{
+    if(item.subject===selectedSubject&&timerState==='running'&&item.goalMin>0&&!item.goalSatisfied){
+      item.elapsedSec++;
+      if(item.elapsedSec>=item.goalMin*60){
+        item.goalSatisfied=true;
+        showToast('🎯 Goal reached! '+item.text+' ('+item.goalMin+'min '+item.subject+')');
+      }
+      changed=true;
+    }
+  });
+  if(changed){
+    saveTodoItems();
+    /* Only re-render if modal is open */
+    if(document.getElementById('todoOverlay').classList.contains('show')){
+      renderTodoList();
+    }
+  }
+}
+
+/* Hook into the timer interval */
+const origUpdateTimerUI=updateTimerUI;
+/* Override to also update todo goals */
+const _origIntervalFn=function(){timerSeconds++;todayStudySec++;origUpdateTimerUI();saveTodaySec();saveTimerState();updateTodoGoals();};
+
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded',()=>{
   /* Build initial subject grid from science stream */
@@ -1432,6 +1845,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('nativePicker').addEventListener('input',e=>{const v=e.target.value;document.getElementById('hexInput').value=v.toUpperCase();applyAccent(v,true);});
   document.getElementById('hexInput').addEventListener('keydown',e=>{if(e.key==='Enter')applyHex();});
   updateTimerUI();setTimerState('idle');
+  restoreTimer();
   /* Load streak from storage */
  const savedStreak=parseInt(localStorage.getItem('isc-streak'))||0;
  const streakEl=document.getElementById('streakVal');
@@ -1450,6 +1864,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   /* Name input listeners */
   document.getElementById('nameInput').addEventListener('keydown', e => { if(e.key === 'Enter') saveName(); });
   document.getElementById('nameInput').addEventListener('input', function() { this.style.borderColor = ''; });
+  /* Todo list keyboard listeners */
+  document.getElementById('todoInput').addEventListener('keydown',e=>{if(e.key==='Enter')addTodoItem();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('todoOverlay').classList.contains('show'))closeTodoModal();});
+  /* Close todo modal on overlay click */
+  document.getElementById('todoOverlay').addEventListener('click',e=>{if(e.target===document.getElementById('todoOverlay'))closeTodoModal();});
+
   /* Check name on first visit */
   checkName();
   setTimeout(()=>showToast('👋 Welcome'+(localStorage.getItem(STUDENT_NAME_KEY)?(' back, '+getStudentName().split(' ')[0]):'')+' · '+fmtHM(todayStudySec)+' studied today'),400);
