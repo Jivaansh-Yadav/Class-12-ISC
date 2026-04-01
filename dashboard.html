@@ -838,7 +838,6 @@ body::after{
 </head>
 <body>
 
-<!-- TODAY'S PLAN MODAL -->
 <div class="todo-overlay" id="todoOverlay">
   <div class="todo-modal">
     <div class="todo-head">
@@ -877,7 +876,6 @@ body::after{
   </div>
 </div>
 
-<!-- TAB AWAY OVERLAY -->
 <div class="tab-away-overlay" id="tabOverlay">
   <div class="tao-icon">⏸️</div>
   <div class="tao-title">Session paused</div>
@@ -887,7 +885,6 @@ body::after{
 
 <div class="toast-container" id="toastContainer"></div>
 
-<!-- NAME MODAL -->
 <div class="name-modal-overlay" id="nameModal">
   <div class="name-modal">
     <div class="name-modal-icon">🎓</div>
@@ -899,7 +896,6 @@ body::after{
   </div>
 </div>
 
-<!-- ══ NAV ══ -->
 <nav class="nav">
   <div style="display:flex;align-items:center;gap:10px;">
     <a class="nav-brand" href="index.html">
@@ -956,10 +952,8 @@ body::after{
   </div>
 </nav>
 
-<!-- ══ SHELL ══ -->
 <div class="shell">
 
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sb-user">
       <div class="sb-user-avatar" id="sbAvatar">🎓</div>
@@ -1003,7 +997,6 @@ body::after{
     </div>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -1011,7 +1004,6 @@ body::after{
       <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--fg3);letter-spacing:1.5px;text-transform:uppercase;">ISC.exe Dashboard</span>
     </div>
 
-    <!-- TOPBAR -->
     <div class="topbar">
       <div>
         <div class="topbar-greeting">Good <em id="timeOfDay">evening</em>, <span id="greetName">Harsh</span></div>
@@ -1024,7 +1016,6 @@ body::after{
       </div>
     </div>
 
-    <!-- EXAM BANNER -->
     <div class="exam-banner">
       <div class="eb-icon">⚡</div>
       <div>
@@ -1039,7 +1030,6 @@ body::after{
       <a class="eb-view-btn" href="timetable.html">View Schedule →</a>
     </div>
 
-    <!-- STAT CARDS -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Today's Study</div>
@@ -1063,10 +1053,8 @@ body::after{
       </div>
     </div>
 
-    <!-- MAIN GRID -->
     <div class="main-grid">
 
-      <!-- TIMER CARD -->
       <div class="timer-card">
         <div class="tc-header">
           <span class="tc-title">Study Timer</span>
@@ -1122,9 +1110,7 @@ body::after{
         </div>
       </div>
 
-      <!-- RIGHT PANEL -->
       <div class="right-panel">
-        <!-- Focus Mode -->
         <div class="focus-card">
           <div class="focus-icon">🧠</div>
           <div>
@@ -1134,7 +1120,6 @@ body::after{
           <div class="focus-toggle" id="focusToggle" onclick="toggleFocus(this)"></div>
         </div>
 
-        <!-- Today's Sessions -->
         <div class="sessions-card">
           <div class="card-header">
             <span class="card-title">Today's Sessions</span>
@@ -1147,9 +1132,7 @@ body::after{
       </div>
     </div>
 
-    <!-- BOTTOM GRID -->
     <div class="bottom-grid">
-      <!-- WEEKLY CHART -->
       <div class="chart-card">
         <div class="card-header">
           <span class="card-title">Weekly Study Hours</span>
@@ -1158,7 +1141,6 @@ body::after{
         <div class="chart-bars" id="chartBars"></div>
       </div>
 
-      <!-- SUBJECT BREAKDOWN -->
       <div class="breakdown-card">
         <div class="card-header">
           <span class="card-title">Subject Breakdown</span>
@@ -1223,18 +1205,28 @@ function restoreTimer(){
   try{
     const d=JSON.parse(raw);
     if(d.state!=='running'&&d.state!=='paused')return;
-    /* Calculate elapsed time since save */
-    const elapsed=Math.floor((Date.now()-d.ts)/1000);
+    /* Calculate elapsed time since save ONLY if running */
+    let elapsed = 0;
+    if (d.state === 'running') {
+      elapsed = Math.floor((Date.now()-d.ts)/1000);
+    }
     timerSeconds=d.seconds+elapsed;
     selectedSubject=d.subject||'Maths';
-    /* Highlight the correct subject chip */
+    
+    /* Highlight the correct subject chip and remove active from others */
     document.querySelectorAll('.subject-chip').forEach(c=>{
-      if(c.dataset.subj===selectedSubject){c.classList.add('active');}
+      c.classList.toggle('active', c.dataset.subj === selectedSubject);
     });
-    /* Restore to running state */
-    timerInterval=setInterval(_origIntervalFn,1000);
-    setTimerState('running');
-    showToast('▶ Restored session · '+selectedSubject+' · '+fmtTime(timerSeconds));
+    
+    /* Restore to correct running/paused state */
+    if (d.state === 'running') {
+      timerInterval=setInterval(_origIntervalFn,1000);
+      setTimerState('running');
+      showToast('▶ Restored session · '+selectedSubject+' · '+fmtTime(timerSeconds));
+    } else {
+      setTimerState('paused');
+      showToast('⏸ Restored paused session · '+selectedSubject);
+    }
   }catch(e){clearTimerState();}
 }
 function saveSessionCount(){localStorage.setItem('isc-saved-sessions',savedSessions);}
@@ -1335,6 +1327,7 @@ function changeStream(stream) {
   subjects.forEach((s, i) => {
     const chip = document.createElement('div');
     chip.className = 'subject-chip' + (i === 0 ? ' active' : '');
+    chip.dataset.subj = s.name; // BUG FIX: Set the dataset attribute so it can be restored correctly later
     chip.textContent = s.emoji + ' ' + s.name;
     chip.onclick = function() { selectSubject(this, s.name); };
     grid.appendChild(chip);
@@ -1380,7 +1373,8 @@ function applyAccent(hex,save){
   currentAccent=hex;
   applyAccentColor(hex);
   document.querySelectorAll('.preset').forEach((el,i)=>{
-    el.classList.toggle('active',PRESETS[i]?.hex.toLowerCase()===hex.toLowerCase());
+    // BUG FIX: Prevent error if elements outnumber defined presets
+    el.classList.toggle('active', PRESETS[i] && PRESETS[i].hex.toLowerCase() === hex.toLowerCase());
   });
   document.querySelectorAll('.grad-preset').forEach(el=>el.classList.remove('active'));
   if(save)localStorage.setItem(STORE_KEY,hex);
@@ -1473,11 +1467,18 @@ function updateExamCountdown(){
   const upcoming=exams
     .map(e=>({...e,d:new Date(e.date),days:Math.round((new Date(e.date)-today)/86400000)}))
     .filter(e=>e.days>=0).sort((a,b)=>a.days-b.days);
+    
+  const countdownLabel = document.querySelector('.eb-countdown-label');
+  
   if(!upcoming.length){
     document.getElementById('nextExamSubj').textContent='All exams done!';
     document.getElementById('nextExamCountdown').textContent='✓';
+    // BUG FIX: Hide the "remaining" label when all exams are finished
+    if (countdownLabel) countdownLabel.style.display = 'none'; 
     return;
   }
+  if (countdownLabel) countdownLabel.style.display = 'block';
+
   const next=upcoming[0];
   document.getElementById('nextExamSubj').textContent=next.subject;
   document.getElementById('nextExamDate').textContent=next.day;
@@ -1778,7 +1779,16 @@ function renderTodoList(){
     if(item.goalMin>0){
       const pct=Math.min(Math.round((item.elapsedSec/(item.goalMin*60))*100),100);
       const satisfied=pct>=100;
-      metaHtml+=`<span class="todo-goal-badge${satisfied?' satisfied':''}">${satisfied?'✓ ':''}${item.elapsedSec>=60?Math.floor(item.elapsedSec/60)+'m':''}${item.elapsedSec%60?item.elapsedSec%60+'s':''} / ${item.goalMin}m</span>`;
+      
+      // BUG FIX: Correctly output 0s when timer hasn't elapsed 1m
+      let timeText = '0s';
+      if (item.elapsedSec > 0) {
+        const m = Math.floor(item.elapsedSec / 60);
+        const s = item.elapsedSec % 60;
+        timeText = (m > 0 ? m + 'm' : '') + (s > 0 || m === 0 ? s + 's' : '');
+      }
+      
+      metaHtml+=`<span class="todo-goal-badge${satisfied?' satisfied':''}">${satisfied?'✓ ':''}${timeText} / ${item.goalMin}m</span>`;
       metaHtml+=`<div class="todo-goal-progress"><div class="todo-goal-progress-fill" style="width:${pct}%"></div></div>`;
     }
     el.innerHTML=`
