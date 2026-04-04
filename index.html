@@ -7,25 +7,9 @@
   if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     window.location.replace('mobile.html');
   }
-  (function(){
-    const s = localStorage.getItem('isc-accent');
-    const g = localStorage.getItem('isc-gradient');
-    if (g) {
-      const gr = JSON.parse(g);
-      const r=parseInt(gr.a.slice(1,3),16),gv=parseInt(gr.a.slice(3,5),16),b=parseInt(gr.a.slice(5,7),16);
-      document.documentElement.style.setProperty('--accent', gr.a);
-      document.documentElement.style.setProperty('--accent-lo', `rgba(${r},${gv},${b},0.09)`);
-      document.documentElement.style.setProperty('--accent-md', `rgba(${r},${gv},${b},0.15)`);
-      document.documentElement.style.setProperty('--grad-a', gr.a);
-      document.documentElement.style.setProperty('--grad-b', gr.b);
-    } else if (s) {
-      const r=parseInt(s.slice(1,3),16),gv=parseInt(s.slice(3,5),16),b=parseInt(s.slice(5,7),16);
-      document.documentElement.style.setProperty('--accent', s);
-      document.documentElement.style.setProperty('--accent-lo', `rgba(${r},${gv},${b},0.09)`);
-      document.documentElement.style.setProperty('--accent-md', `rgba(${r},${gv},${b},0.15)`);
-    }
-  })();
 </script>
+<script src="theme-color-system.js"></script>
+<script src="theme-picker.js" defer></script>
 <title>ISC.exe — Class 12 Resource Hub</title>
 <script>window.va = window.va || function(){(window.vaq = window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -49,8 +33,9 @@ html,body{height:100%;}
   --grad-a:#bf5fff;--grad-b:#ff5fa0;
 }
 body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;min-height:100vh;cursor:none;}
+body.light-mode { color: var(--fg); }
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.018;}
-.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(200,141,183,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(110,182,255,0.022) 1px,transparent 1px);background-size:52px 52px;}
+.grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--accent-subtle, rgba(200,141,183,0.022)) 1px,transparent 1px),linear-gradient(90deg,var(--accent-subtle, rgba(110,182,255,0.022)) 1px,transparent 1px);background-size:52px 52px;}
 
 /* CURSOR */
 #cur,#cur-ring{position:fixed;pointer-events:none;top:0;left:0;will-change:transform;}
@@ -73,7 +58,7 @@ body{animation:pgIn .4s ease both;}
 .nav-main-links{
   position:relative;display:flex;align-items:center;gap:2px;padding:2px;
   border-radius:999px;border:1px solid color-mix(in srgb,var(--border2) 72%,transparent);
-  background:rgba(10,16,13,.42);
+  background:color-mix(in srgb, var(--surface) 60%, transparent);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 0 12px rgba(0,0,0,.22);
 }
 .nav-main-links a{
@@ -126,7 +111,7 @@ body{animation:pgIn .4s ease both;}
 .disc-body a:hover{color:#d4a84b;}
 
 /* FOCUS PILL */
-.focus-pill{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1px solid rgba(148,199,128,.25);background:rgba(141,207,127,.07);color:color-mix(in srgb,var(--accent) 80%,var(--fg3));display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.focus-pill{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;padding:5px 12px;border-radius:999px;border:1px solid var(--accent-border);background:var(--accent-subtle);color:color-mix(in srgb,var(--accent) 80%,var(--fg3));display:flex;align-items:center;gap:7px;white-space:nowrap;}
 .fp-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:breathe 2s infinite;box-shadow:0 0 6px var(--accent);}
 
 /* GRADIENT MODE */
@@ -154,9 +139,9 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .trigger-swatch{width:16px;height:16px;border-radius:5px;background:var(--accent);box-shadow:0 0 6px var(--accent);flex-shrink:0;transition:background .25s,box-shadow .25s;}
 .trigger-caret{font-size:7px;color:var(--fg3);margin-left:1px;transition:transform .2s,color .18s;}
 .color-trigger.open .trigger-caret{transform:rotate(180deg);color:var(--accent);}
-.picker-panel{position:absolute;top:calc(100% + 10px);right:0;z-index:9000;width:320px;background:rgba(10,14,11,.98);border:1px solid var(--border2);border-top:2px solid var(--accent);border-radius:14px;backdrop-filter:blur(32px);box-shadow:0 32px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.03);opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;transition:opacity .22s ease,transform .22s ease,border-color .25s;overflow:hidden;}
+.picker-panel{position:absolute;top:calc(100% + 10px);right:0;z-index:9000;width:320px;background:var(--bg2);border:1px solid var(--border2);border-top:2px solid var(--accent);border-radius:14px;backdrop-filter:blur(32px);box-shadow:0 32px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.02),inset 0 1px 0 rgba(255,255,255,.03);opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;transition:opacity .22s ease,transform .22s ease,border-color .25s;overflow:hidden;}
 .picker-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:all;}
-.picker-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);}
+.picker-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;border-bottom:1px solid var(--border);background:var(--surface);}
 .picker-head-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--fg3);}
 .picker-head-close{background:none;border:none;cursor:pointer;color:var(--fg3);font-size:14px;line-height:1;padding:2px 6px;border-radius:4px;transition:color .15s,background .15s;}
 .picker-head-close:hover{color:var(--fg);background:var(--surface2);}
@@ -166,7 +151,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .preset:hover{transform:scale(1.15);}
 .preset.active{border-color:rgba(255,255,255,.7);box-shadow:0 0 14px var(--p-color,#7ab86a);}
 .preset.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(0,0,0,.65);font-weight:700;}
-.picker-sep{height:1px;background:rgba(255,255,255,.05);margin:0 14px;}
+.picker-sep{height:1px;background:var(--border);margin:0 14px;}
 .custom-row{display:flex;align-items:center;gap:7px;padding:10px 14px 12px;}
 .custom-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--fg3);flex-shrink:0;opacity:.65;}
 .native-picker{width:30px;height:28px;border:1px solid var(--border2);border-radius:6px;padding:2px;background:var(--surface2);flex-shrink:0;transition:border-color .15s;cursor:pointer;}
@@ -174,13 +159,22 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .hex-input{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--fg);font-family:'DM Mono',monospace;font-size:11px;padding:5px 8px;outline:none;transition:border-color .15s;text-transform:uppercase;letter-spacing:.5px;min-width:0;}
 .hex-input:focus{border-color:var(--accent);}
 .hex-input.err{border-color:#e05555;}
-.apply-btn{background:var(--accent);color:#000;border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;cursor:pointer;flex-shrink:0;transition:filter .15s;}
+.apply-btn{background:var(--accent);color:var(--accent-on, #000);border:none;border-radius:6px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;padding:5px 10px;cursor:pointer;flex-shrink:0;transition:filter .15s;}
 .apply-btn:hover{filter:brightness(1.12);}
 .picker-footer{display:flex;align-items:center;gap:8px;padding:0 14px 12px;}
 .reset-btn{background:none;border:1px solid var(--border2);border-radius:6px;font-family:'DM Mono',monospace;font-size:9px;color:var(--fg3);padding:4px 10px;cursor:pointer;transition:color .15s,border-color .15s;}
 .reset-btn:hover{color:var(--fg2);border-color:var(--fg3);}
 .autosave-note{margin-left:auto;font-family:'DM Mono',monospace;font-size:9px;color:var(--fg3);display:flex;align-items:center;gap:4px;opacity:.5;}
 .autosave-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:breathe 2.5s ease-in-out infinite;transition:background .3s;}
+
+.ui-theme-presets { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; padding: 0 14px 12px; }
+.ui-theme-swatch { aspect-ratio: 1; border-radius: 8px; border: 2px solid transparent; cursor: pointer; position: relative; transition: transform .14s; overflow: hidden; background: none; }
+.ui-theme-swatch:hover { transform: scale(1.15); }
+.ui-theme-swatch.active { border-color: rgba(255,255,255,.7); }
+.ui-theme-swatch.active::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: rgba(255,255,255,.8); font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,.6); }
+.ui-theme-swatch-inner { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.ui-swatch-band { flex: 1; }
+
 .nav-link{text-decoration:none;color:var(--fg3);font-family:'DM Mono',monospace;font-size:12.5px;padding:7px 14px;border:1px solid transparent;border-radius:8px;transition:all .18s;}
 .nav-link:hover{color:var(--fg2);border-color:var(--border2);background:var(--surface);}
 
@@ -188,16 +182,16 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .hero{position:relative;z-index:1;min-height:100vh;padding:108px 72px 68px;overflow:hidden;}
 .hero-shell{display:grid;grid-template-columns:minmax(520px,1.15fr) minmax(360px,.85fr);gap:56px;align-items:center;max-width:1400px;margin:0 auto;}
 .hero-left,.hero-right{position:relative;z-index:1;}
-.hero-glow{position:absolute;width:820px;height:820px;background:radial-gradient(circle,rgba(124,190,114,.13) 0%,rgba(124,190,114,.05) 42%,transparent 74%);top:52%;left:14%;transform:translate(-15%,-50%);pointer-events:none;z-index:0;transition:background .4s;}
-.eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:#7f9b79;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px;opacity:0;animation:up .6s .1s ease forwards;display:flex;align-items:center;gap:10px;justify-content:flex-start;position:relative;z-index:1;}
+.hero-glow{position:absolute;width:820px;height:820px;background:radial-gradient(circle,var(--accent-lo) 0%,transparent 74%);top:52%;left:14%;transform:translate(-15%,-50%);pointer-events:none;z-index:0;transition:background .4s;}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:14px;opacity:0;animation:up .6s .1s ease forwards;display:flex;align-items:center;gap:10px;justify-content:flex-start;position:relative;z-index:1;}
 .eyebrow-line{width:28px;height:1px;background:var(--accent);transition:background .3s;}
 .eyebrow em{color:var(--accent);font-style:normal;transition:color .3s;}
 .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.2vw,4.6rem);font-weight:600;line-height:.96;letter-spacing:-.5px;margin-bottom:14px;margin-top:0;opacity:0;animation:up .7s .22s ease forwards;position:relative;z-index:1;text-align:left;}
-.hero-title .l1{color:#f3f6f1;display:block;font-weight:600;transition:filter .3s;padding-bottom:6px;background:none;-webkit-text-fill-color:initial;}
+.hero-title .l1{color:var(--fg);display:block;font-weight:600;transition:filter .3s;padding-bottom:6px;background:none;-webkit-text-fill-color:initial;}
 .hero-title .l1 em{font-style:italic;font-weight:400;}
 .hero-title .l2{color:var(--accent);font-style:italic;font-weight:700;display:block;font-size:.82em;letter-spacing:.3px;margin-top:8px;transition:color .3s;}
-.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#95be87;background:none;-webkit-text-fill-color:initial;margin-bottom:14px;opacity:0;animation:up .7s .38s ease forwards;position:relative;z-index:1;text-align:left;}
-.hero-desc{font-size:17px;color:#a5b2a2;line-height:1.62;max-width:690px;margin-bottom:34px;opacity:0;animation:up .7s .5s ease forwards;position:relative;z-index:1;text-align:left;}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:var(--accent-text);background:none;-webkit-text-fill-color:initial;margin-bottom:14px;opacity:0;animation:up .7s .38s ease forwards;position:relative;z-index:1;text-align:left;}
+.hero-desc{font-size:17px;color:var(--fg2);line-height:1.62;max-width:690px;margin-bottom:34px;opacity:0;animation:up .7s .5s ease forwards;position:relative;z-index:1;text-align:left;}
 .hero-actions{display:flex;gap:14px;margin-bottom:26px;opacity:0;animation:up .7s .62s ease forwards;align-items:center;}
 
 /* ── STAR BUTTON ── */
@@ -206,8 +200,8 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 @keyframes rim-spin   { to { --rim-angle:360deg; } }
 
 @keyframes btn-glow-pulse {
-  0%,100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 18px var(--btn-glow-color, rgba(141,207,127,0.22)), 0 0 40px var(--btn-glow-spread, rgba(141,207,127,0.08)); }
-  50%      { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 28px var(--btn-glow-color, rgba(141,207,127,0.34)), 0 0 60px var(--btn-glow-spread, rgba(141,207,127,0.13)); }
+  0%,100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 18px var(--accent-glow), 0 0 40px var(--accent-subtle); }
+  50%      { box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset, 0 2px 24px rgba(0,0,0,0.4), 0 0 28px var(--accent-hi), 0 0 60px var(--accent-lo); }
 }
 
 .star-btn {
@@ -232,8 +226,8 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.04) inset,
     0 2px 24px rgba(0,0,0,0.4),
-    0 0 18px var(--btn-glow-color, rgba(141,207,127,0.25)),
-    0 0 42px var(--btn-glow-spread, rgba(141,207,127,0.10));
+    0 0 18px var(--accent-glow),
+    0 0 42px var(--accent-subtle);
   animation: btn-glow-pulse 2.8s ease-in-out infinite;
   transition: border-color .25s, background .25s, transform .18s;
 }
@@ -243,9 +237,9 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.08) inset,
     0 4px 32px rgba(0,0,0,0.5),
-    0 0 32px var(--btn-glow-color, rgba(141,207,127,0.50)),
-    0 0 70px var(--btn-glow-spread, rgba(141,207,127,0.22)),
-    0 0 120px var(--btn-glow-far, rgba(141,207,127,0.07));
+    0 0 32px var(--accent-hi),
+    0 0 70px var(--accent-md),
+    0 0 120px var(--accent-subtle);
   animation: none;
   transform: translateY(-2px);
 }
@@ -307,8 +301,8 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 
 /* ── SECONDARY BUTTON ── */
 @keyframes secondary-glow-pulse {
-  0%,100% { box-shadow: 0 0 10px var(--btn-glow-color, rgba(141,207,127,0.12)), 0 0 24px var(--btn-glow-spread, rgba(141,207,127,0.05)); }
-  50%      { box-shadow: 0 0 16px var(--btn-glow-color, rgba(141,207,127,0.20)), 0 0 36px var(--btn-glow-spread, rgba(141,207,127,0.08)); }
+  0%,100% { box-shadow: 0 0 10px var(--accent-subtle), 0 0 24px rgba(0,0,0,0.05); }
+  50%      { box-shadow: 0 0 16px var(--accent-lo), 0 0 36px var(--accent-subtle); }
 }
 
 .hero-btn.secondary {
@@ -324,22 +318,22 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   letter-spacing: 1.2px;
   text-transform: uppercase;
   font-weight: 700;
-  color: rgba(200,210,200,0.5);
+  color: var(--fg2);
   text-decoration: none;
   box-shadow:
-    0 0 10px var(--btn-glow-color, rgba(141,207,127,0.10)),
-    0 0 22px var(--btn-glow-spread, rgba(141,207,127,0.04));
+    0 0 10px var(--accent-subtle),
+    0 0 22px rgba(0,0,0,0.04);
   animation: secondary-glow-pulse 3.2s ease-in-out infinite 0.6s;
   transition: border-color .22s, color .22s, background .22s, transform .18s;
 }
 .hero-btn.secondary:hover {
   border-color: color-mix(in srgb, var(--accent) 50%, rgba(255,255,255,0.2));
-  color: color-mix(in srgb, var(--accent) 85%, rgba(200,210,200,0.9));
+  color: var(--fg);
   background: color-mix(in srgb, var(--accent) 6%, rgba(255,255,255,0.03));
   box-shadow:
-    0 0 20px var(--btn-glow-color, rgba(141,207,127,0.28)),
-    0 0 50px var(--btn-glow-spread, rgba(141,207,127,0.12)),
-    0 0 80px var(--btn-glow-far, rgba(141,207,127,0.05));
+    0 0 20px var(--accent-md),
+    0 0 50px var(--accent-lo),
+    0 0 80px var(--accent-subtle);
   animation: none;
   transform: translateY(-2px);
 }
@@ -347,18 +341,18 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 
 /* STATS */
 .hero-stats{display:grid;grid-template-columns:repeat(4,minmax(135px,1fr));gap:12px;max-width:760px;opacity:0;animation:up .7s .78s ease forwards;}
-.metric-card{border:1px solid rgba(126,151,119,.22);border-radius:10px;background:rgba(18,23,18,.58);padding:14px 14px 12px;}
-.metric-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;line-height:1;color:#f3f5ef;display:block;}
-.metric-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.2px;color:#94a28f;text-transform:uppercase;display:block;margin-top:4px;}
+.metric-card{border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:14px 14px 12px;}
+.metric-value{font-family:'Cormorant Garamond',serif;font-size:2.2rem;line-height:1;color:var(--fg);display:block;}
+.metric-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.2px;color:var(--fg2);text-transform:uppercase;display:block;margin-top:4px;}
 
 /* DISCLAIMER inline */
-.hero-disclaimer{opacity:0;animation:up .6s .56s ease forwards;margin-top:10px;margin-bottom:22px;font-family:'DM Mono',monospace;font-size:9.5px;color:rgba(212,168,75,.5);letter-spacing:.3px;line-height:1.65;max-width:520px;border-left:2px solid rgba(212,168,75,.25);padding-left:10px;}
-.hero-disclaimer a{color:rgba(212,168,75,.7);text-decoration:none;border-bottom:1px solid rgba(212,168,75,.3);}
-.hero-disclaimer a:hover{color:#d4a84b;}
+.hero-disclaimer{opacity:0;animation:up .6s .56s ease forwards;margin-top:10px;margin-bottom:22px;font-family:'DM Mono',monospace;font-size:9.5px;color:var(--fg3);letter-spacing:.3px;line-height:1.65;max-width:520px;border-left:2px solid var(--border2);padding-left:10px;}
+.hero-disclaimer a{color:var(--fg2);text-decoration:none;border-bottom:1px solid var(--border2);}
+.hero-disclaimer a:hover{color:var(--fg);}
 
 /* NAV CARDS */
 .nav-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:640px;position:relative;z-index:1;}
-.row-card{display:flex;flex-direction:column;padding:18px 18px 14px;border-radius:12px;text-decoration:none;color:inherit;position:relative;overflow:hidden;border:1px solid rgba(126,151,119,.20);border-top:2px solid var(--card-color,var(--accent));background:rgba(16,22,17,.6);transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s,background .2s;min-height:180px;}
+.row-card{display:flex;flex-direction:column;padding:18px 18px 14px;border-radius:12px;text-decoration:none;color:inherit;position:relative;overflow:hidden;border:1px solid var(--border);border-top:2px solid var(--card-color,var(--accent));background:var(--surface);transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s,background .2s;min-height:180px;}
 .row-card::before{content:'';position:absolute;top:0;left:0;right:0;height:50px;background:linear-gradient(180deg,color-mix(in srgb,var(--card-color,var(--accent)) 9%,transparent) 0%,transparent 100%);pointer-events:none;}
 .row-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--card-color,var(--accent)) 4%,transparent) 0%,transparent 55%);opacity:0;transition:opacity .2s;pointer-events:none;}
 .row-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--card-color,var(--accent)) 38%,var(--border2));border-top-color:var(--card-color,var(--accent));background:var(--surface2);box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 0 1px color-mix(in srgb,var(--card-color,var(--accent)) 12%,transparent),0 0 28px color-mix(in srgb,var(--card-color,var(--accent)) 8%,transparent);}
@@ -369,7 +363,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .row-card:hover .rc-icon{background:color-mix(in srgb,var(--card-color,var(--accent)) 18%,var(--surface2));border-color:color-mix(in srgb,var(--card-color,var(--accent)) 44%,transparent);transform:scale(1.1) rotate(-3deg);}
 .rc-body{flex:1;min-width:0;position:relative;z-index:1;}
 .rc-label{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--card-color,var(--fg3));opacity:.75;margin-bottom:3px;}
-.rc-title{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:600;color:#f3f6f1;line-height:1.15;margin-bottom:4px;}
+.rc-title{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:600;color:var(--fg);line-height:1.15;margin-bottom:4px;}
 .rc-desc{font-size:11px;color:var(--fg3);line-height:1.5;}
 .rc-right{display:flex;align-items:center;justify-content:space-between;margin-top:12px;position:relative;z-index:1;padding-top:9px;border-top:1px solid color-mix(in srgb,var(--card-color,var(--border2)) 15%,var(--border));}
 .rc-badge{font-family:'DM Mono',monospace;font-size:7.5px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:color-mix(in srgb,var(--card-color,var(--accent)) 10%,transparent);color:var(--card-color,var(--accent));border:1px solid color-mix(in srgb,var(--card-color,var(--accent)) 24%,transparent);transition:background .2s,border-color .2s;}
@@ -399,7 +393,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 /* ── CARD GLOW for Dashboard ── */
 .row-card--featured{
   border-color:color-mix(in srgb,var(--card-color,var(--accent)) 30%,var(--border2));
-  background:linear-gradient(160deg,color-mix(in srgb,var(--card-color,var(--accent)) 8%,rgba(16,22,17,.6)),rgba(16,22,17,.6) 60%);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--card-color,var(--accent)) 8%,var(--surface)),var(--surface) 60%);
   animation:cardGlow 4s cubic-bezier(0.45,0.05,0.55,0.95) infinite;
 }
 .row-card--featured::before{
@@ -472,6 +466,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
         </div>
       </div>
     </div>
+    
     <div class="picker-wrap" id="pickerWrap">
       <button class="color-trigger" id="colorTrigger" onclick="togglePicker()">
         <span class="trigger-swatch" id="triggerSwatch"></span>
@@ -479,29 +474,42 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
         <span class="trigger-caret">▾</span>
       </button>
       <div class="picker-panel" id="pickerPanel">
-        <div class="picker-head"><span class="picker-head-title">⬡ Accent Theme</span><button class="picker-head-close" onclick="togglePicker()">✕</button></div>
-        <div class="picker-mode-toggle">
-          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('solid')">⬛ Solid</button>
-          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('gradient')">🌈 Gradient</button>
+        <div class="picker-head">
+          <span class="picker-head-title">Theme</span>
+          <button class="picker-head-close" onclick="togglePicker()">✕</button>
         </div>
+        <div class="picker-mode-toggle">
+          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('ui-theme')">UI Theme</button>
+          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('accent')">Accent</button>
+        </div>
+        
         <div id="solidPanel">
-          <div class="picker-row-label">Solid Accents</div>
+          <div class="picker-row-label">Background Palette</div>
+          <div class="ui-theme-presets" id="uiThemeGrid"></div>
+          <div class="picker-sep"></div>
+          <div class="custom-row">
+            <span class="custom-label">Custom</span>
+            <input type="color" class="native-picker" id="uiThemePicker" title="Pick base hue" value="#0f1318"/>
+            <input type="text" class="hex-input" id="uiThemeHex" maxlength="7" placeholder="#0F1318"/>
+            <button class="apply-btn" onclick="applyCustomUITheme()">OK</button>
+          </div>
+        </div>
+        
+        <div id="gradPanel" style="display:none;">
+          <div class="picker-row-label">Accent Color</div>
           <div class="presets" id="presetsGrid"></div>
           <div class="picker-sep"></div>
           <div class="custom-row">
             <span class="custom-label">Custom</span>
-            <input type="color" class="native-picker" id="nativePicker"/>
-            <input type="text" class="hex-input" id="hexInput" maxlength="7" placeholder="#7AB86A"/>
+            <input type="color" class="native-picker" id="nativePicker" title="Color wheel"/>
+            <input type="text" class="hex-input" id="hexInput" maxlength="7" placeholder="#3BFF6C"/>
             <button class="apply-btn" onclick="applyHex()">OK</button>
           </div>
         </div>
-        <div id="gradPanel" style="display:none;">
-          <div class="picker-row-label">Gradient Presets</div>
-          <div class="grad-presets" id="gradPresetsGrid"></div>
-        </div>
+        
         <div class="picker-footer">
-          <button class="reset-btn" onclick="resetAccent()">↺ Reset</button>
-          <span class="autosave-note"><span class="autosave-dot" id="autosaveDot"></span>Auto-saved</span>
+          <button class="reset-btn" onclick="resetAll()">↺ Reset All</button>
+          <span class="autosave-note"><span class="autosave-dot" id="autosaveDot"></span>Saved</span>
         </div>
       </div>
     </div>
@@ -685,164 +693,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   }
 })();
 
-/* ── BUTTON GLOW HELPER ── */
-function updateButtonGlow(hex) {
-  const r = parseInt(hex.slice(1,3),16);
-  const g = parseInt(hex.slice(3,5),16);
-  const b = parseInt(hex.slice(5,7),16);
-  const glowColor  = `rgba(${r},${g},${b},0.30)`;
-  const glowSpread = `rgba(${r},${g},${b},0.12)`;
-  const glowFar    = `rgba(${r},${g},${b},0.05)`;
-  const root = document.documentElement;
-  root.style.setProperty('--btn-glow-color',  glowColor);
-  root.style.setProperty('--btn-glow-spread', glowSpread);
-  root.style.setProperty('--btn-glow-far',    glowFar);
-}
-
-/* ── THEME PRESETS ── */
-const PRESETS = [
-  {name:'Forest Green', hex:'#7ab86a'},{name:'Neon Lime',    hex:'#a8ff3e'},
-  {name:'Electric Cyan',hex:'#00e5ff'},{name:'Sky Blue',     hex:'#48aff7'},
-  {name:'Royal Indigo', hex:'#7c6fff'},{name:'Violet',       hex:'#bf5fff'},
-  {name:'Hot Pink',     hex:'#ff5fa0'},{name:'Crimson',      hex:'#ff4f4f'},
-  {name:'Amber',        hex:'#ffbe3f'},{name:'Gold',         hex:'#f5c842'},
-  {name:'Coral',        hex:'#ff7a5a'},{name:'Teal',         hex:'#3ecfb0'},
-];
-const GRAD_PRESETS = [
-  {name:'Aurora',     a:'#7af5a0', b:'#5fd4e8'},{name:'Neon Dusk',  a:'#bf5fff', b:'#ff5fa0'},
-  {name:'Sunset',     a:'#ff7a5a', b:'#ffbe3f'},{name:'Ocean',      a:'#5fd4e8', b:'#48aff7'},
-  {name:'Galaxy',     a:'#7c6fff', b:'#bf5fff'},{name:'Jade',       a:'#3ecfb0', b:'#7ab86a'},
-  {name:'Lava',       a:'#ff4f4f', b:'#bf5fff'},{name:'Gold Rush',  a:'#f5c842', b:'#ff7a5a'},
-];
-const DEFAULT_ACCENT = '#bf5fff';
-const DEFAULT_GRAD   = {a:'#bf5fff', b:'#ff5fa0'};
-const STORE_KEY = 'isc-accent', GRAD_KEY = 'isc-gradient';
-let currentAccent = localStorage.getItem(STORE_KEY) || DEFAULT_ACCENT;
-let currentGrad   = JSON.parse(localStorage.getItem(GRAD_KEY) || 'null');
-let pickerOpen = false, pickerMode = 'solid';
-
-function hexAlpha(h,a){const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);return `rgba(${r},${g},${b},${a})`;}
-
-function applyAccent(hex, save) {
-  document.body.classList.remove('grad-mode'); currentGrad = null;
-  if (save) localStorage.removeItem(GRAD_KEY);
-  currentAccent = hex;
-  const root = document.documentElement;
-  root.style.setProperty('--accent', hex);
-  root.style.setProperty('--accent-lo', hexAlpha(hex,.09));
-  root.style.setProperty('--accent-md', hexAlpha(hex,.15));
-  root.style.setProperty('--grad-a', hex);
-  root.style.setProperty('--grad-b', hex);
-  const gc = hexAlpha(hex,.022);
-  document.querySelector('.grid-bg').style.backgroundImage = `linear-gradient(${gc} 1px,transparent 1px),linear-gradient(90deg,${gc} 1px,transparent 1px)`;
-  const sw = document.getElementById('triggerSwatch'); if(sw){sw.style.background=hex;sw.style.boxShadow=`0 0 6px ${hex}`;}
-  ['navMark','autosaveDot'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=hex;});
-  const panel=document.getElementById('pickerPanel'); if(panel)panel.style.borderTopColor=hex;
-  const ab=document.querySelector('.apply-btn'); if(ab){ab.style.background=hex;ab.style.color='#000';}
-  const hl=document.getElementById('heroL1'); if(hl){hl.style.color=hex;hl.style.background='';hl.style.webkitBackgroundClip='';hl.style.webkitTextFillColor='';hl.style.backgroundClip='';}
-  const hs=document.getElementById('heroSub'); if(hs){hs.style.color=hex;hs.style.background='';hs.style.webkitBackgroundClip='';hs.style.webkitTextFillColor='';hs.style.backgroundClip='';}
-  const glow=document.getElementById('heroGlow'); if(glow)glow.style.background=`radial-gradient(circle,${hexAlpha(hex,.065)} 0%,transparent 65%)`;
-  ['eyeLine1','eyeLine2'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.background=hex;});
-  const em=document.getElementById('eyeEm'); if(em){em.style.color=hex;em.style.background='';em.style.webkitBackgroundClip='';em.style.webkitTextFillColor='';}
-  const l2 = document.querySelector('.hero-title .l2'); if(l2) l2.style.color = hex;
-  const fpDot = document.querySelector('.fp-dot'); if(fpDot){fpDot.style.background=hex;fpDot.style.boxShadow=`0 0 6px ${hex}`;}
-  updateButtonGlow(hex);
-  document.querySelectorAll('.preset').forEach((el,i)=>{
-    el.classList.toggle('active', PRESETS[i]?.hex.toLowerCase()===hex.toLowerCase());
-    if(PRESETS[i]) el.style.setProperty('--p-color', PRESETS[i].hex);
-  });
-  document.querySelectorAll('.grad-preset').forEach(el=>el.classList.remove('active'));
-  if (save) localStorage.setItem(STORE_KEY, hex);
-}
-
-function applyGradient(a, b, save) {
-  currentGrad = {a,b}; document.body.classList.add('grad-mode');
-  const root = document.documentElement;
-  root.style.setProperty('--grad-a', a); root.style.setProperty('--grad-b', b);
-  root.style.setProperty('--accent', a);
-  root.style.setProperty('--accent-lo', hexAlpha(a,.09));
-  root.style.setProperty('--accent-md', hexAlpha(a,.15));
-  const gc = hexAlpha(a,.018);
-  document.querySelector('.grid-bg').style.backgroundImage = `linear-gradient(${gc} 1px,transparent 1px),linear-gradient(90deg,${gc} 1px,transparent 1px)`;
-  const sw = document.getElementById('triggerSwatch'); if(sw){sw.style.background=`linear-gradient(135deg,${a},${b})`;sw.style.boxShadow=`0 0 6px ${a}`;}
-  const panel = document.getElementById('pickerPanel'); if(panel)panel.style.borderTopColor=a;
-  const glow = document.getElementById('heroGlow'); if(glow)glow.style.background=`radial-gradient(circle,${hexAlpha(a,.06)} 0%,${hexAlpha(b,.04)} 50%,transparent 70%)`;
-  const mark = document.getElementById('navMark'); if(mark)mark.style.background=`linear-gradient(135deg,${a},${b})`;
-  const saveDot = document.getElementById('autosaveDot'); if(saveDot)saveDot.style.background=`linear-gradient(135deg,${a},${b})`;
-  const l2 = document.querySelector('.hero-title .l2'); if(l2){l2.style.background=`linear-gradient(135deg,${a},${b})`;l2.style.webkitBackgroundClip='text';l2.style.webkitTextFillColor='transparent';l2.style.backgroundClip='text';}
-  updateButtonGlow(a);
-  document.querySelectorAll('.grad-preset').forEach(el=>{el.classList.toggle('active',el.dataset.a===a&&el.dataset.b===b);});
-  document.querySelectorAll('.preset').forEach(el=>el.classList.remove('active'));
-  if (save) localStorage.setItem(GRAD_KEY, JSON.stringify({a,b}));
-}
-
-function buildPresets() {
-  const grid = document.getElementById('presetsGrid'); grid.innerHTML = '';
-  PRESETS.forEach(p => {
-    const btn = document.createElement('button');
-    btn.className = 'preset'; btn.style.background = p.hex;
-    btn.style.boxShadow = `0 2px 10px ${p.hex}55`;
-    btn.style.setProperty('--p-color', p.hex); btn.title = p.name;
-    btn.onclick = () => { applyAccent(p.hex, true); closePicker(); };
-    if (!currentGrad && p.hex.toLowerCase() === currentAccent.toLowerCase()) btn.classList.add('active');
-    grid.appendChild(btn);
-  });
-}
-
-function buildGradPresets() {
-  const grid = document.getElementById('gradPresetsGrid'); grid.innerHTML = '';
-  GRAD_PRESETS.forEach(g => {
-    const btn = document.createElement('button');
-    btn.className = 'grad-preset';
-    btn.style.background = `linear-gradient(135deg, ${g.a}, ${g.b})`;
-    btn.style.boxShadow = `0 2px 12px ${g.a}55`;
-    btn.dataset.a = g.a; btn.dataset.b = g.b; btn.title = g.name;
-    btn.onclick = () => { applyGradient(g.a, g.b, true); closePicker(); };
-    if (currentGrad && currentGrad.a === g.a && currentGrad.b === g.b) btn.classList.add('active');
-    grid.appendChild(btn);
-  });
-}
-
-function switchPickerMode(mode) {
-  pickerMode = mode;
-  document.getElementById('solidPanel').style.display = mode === 'solid' ? '' : 'none';
-  document.getElementById('gradPanel').style.display  = mode === 'gradient' ? '' : 'none';
-  document.getElementById('pmtSolid').classList.toggle('active', mode === 'solid');
-  document.getElementById('pmtGrad').classList.toggle('active', mode === 'gradient');
-}
-
-function applyHex() {
-  const inp = document.getElementById('hexInput'); let v = inp.value.trim();
-  if (!v.startsWith('#')) v = '#' + v;
-  if (!/^#[0-9a-fA-F]{6}$/.test(v)) { inp.classList.add('err'); return; }
-  inp.classList.remove('err'); document.getElementById('nativePicker').value = v;
-  applyAccent(v, true); closePicker();
-}
-
-function resetAccent() {
-  document.body.classList.remove('grad-mode'); currentGrad = null; localStorage.removeItem(GRAD_KEY);
-  applyGradient(DEFAULT_GRAD.a, DEFAULT_GRAD.b, false);
-  switchPickerMode('gradient');
-  localStorage.setItem(STORE_KEY, DEFAULT_ACCENT);
-  document.getElementById('hexInput').value = DEFAULT_ACCENT.toUpperCase();
-  document.getElementById('nativePicker').value = DEFAULT_ACCENT;
-  buildGradPresets();
-}
-
-function togglePicker() {
-  pickerOpen = !pickerOpen;
-  document.getElementById('pickerPanel').classList.toggle('open', pickerOpen);
-  document.getElementById('colorTrigger').classList.toggle('open', pickerOpen);
-  if (pickerOpen) { buildPresets(); buildGradPresets(); }
-}
-function closePicker() {
-  pickerOpen = false;
-  document.getElementById('pickerPanel').classList.remove('open');
-  document.getElementById('colorTrigger').classList.remove('open');
-}
-document.addEventListener('click', e => { if (pickerOpen && !document.getElementById('pickerWrap').contains(e.target)) closePicker(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && pickerOpen) closePicker(); });
-
 function initNavSlideTabs() {
   const container = document.getElementById('navSlideTabs');
   const cursor = document.getElementById('navSlideCursor');
@@ -865,20 +715,7 @@ function initNavSlideTabs() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  buildPresets(); buildGradPresets();
   initNavSlideTabs();
-  const savedGrad = localStorage.getItem(GRAD_KEY);
-  if (savedGrad) {
-    const g = JSON.parse(savedGrad); applyGradient(g.a, g.b, false); switchPickerMode('gradient');
-  } else {
-    applyGradient(DEFAULT_GRAD.a, DEFAULT_GRAD.b, false); switchPickerMode('gradient');
-  }
-  document.getElementById('hexInput').value = currentAccent.toUpperCase();
-  document.getElementById('nativePicker').value = currentAccent;
-  document.getElementById('nativePicker').addEventListener('input', e => {
-    const v = e.target.value; document.getElementById('hexInput').value = v.toUpperCase(); applyAccent(v, true);
-  });
-  document.getElementById('hexInput').addEventListener('keydown', e => { if (e.key === 'Enter') applyHex(); });
 });
 </script>
 </body>
