@@ -270,161 +270,253 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   z-index:50;
 }
 
-/* Trigger */
+/* Trigger — glass + glow */
 .stream-trigger{
   width:100%;
   display:flex;align-items:center;gap:0;
   padding:0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(255,255,255,.025);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
   cursor:pointer;
   overflow:hidden;
   position:relative;
-  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 2px 16px rgba(0,0,0,.55);
-  transition:border-color .25s,box-shadow .25s;
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 4px 24px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.3);
+  transition:border-color .35s,box-shadow .35s,transform .3s cubic-bezier(.34,1.56,.64,1);
+  will-change:border-color,box-shadow,transform;
 }
 .stream-trigger::after{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
   background:var(--stream-color,var(--accent));
-  box-shadow:0 0 12px var(--stream-color,var(--accent));
-  transition:background .3s,box-shadow .3s;
-  z-index:2;pointer-events:none;
+  box-shadow:0 0 16px var(--stream-color,var(--accent)),0 0 40px color-mix(in srgb,var(--stream-color,var(--accent)) 40%,transparent);
+  transition:background .5s,box-shadow .5s;
+  z-index:3;pointer-events:none;
 }
-.stream-trigger:hover{border-color:rgba(255,255,255,.18);}
-.stream-trigger.open{border-color:rgba(255,255,255,.22);}
-.stream-trigger-decor{
+.stream-trigger:hover{border-color:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 8px 40px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);transform:translateY(-1px);}
+.stream-trigger.open{border-color:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 12px 48px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.3);transform:translateY(-2px);}
+
+/* Trigger — hover gradient fill */
+.stream-trigger-fill{
   position:absolute;inset:0;border-radius:inherit;
-  background:var(--stream-color,var(--accent));
-  transform:translateX(-100%);
-  transition:transform .38s cubic-bezier(.4,0,.2,1);
-  z-index:0;opacity:.07;pointer-events:none;
+  background:linear-gradient(135deg,var(--stream-color,var(--accent)),color-mix(in srgb,var(--stream-color,var(--accent)) 60%,#fff));
+  transform:translateX(-105%);
+  transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s ease;
+  z-index:0;opacity:0;pointer-events:none;
+  filter:blur(30px) saturate(200%);
 }
-.stream-trigger:hover .stream-trigger-decor,
-.stream-trigger.open .stream-trigger-decor{transform:translateX(0);}
+.stream-trigger:hover .stream-trigger-fill,
+.stream-trigger.open .stream-trigger-fill{transform:translateX(-30%);opacity:.08;}
+
+/* Trigger — inner glow line */
+.stream-trigger-glow{
+  position:absolute;top:-1px;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--stream-color,var(--accent)),transparent);
+  opacity:0;transition:opacity .4s ease;z-index:4;pointer-events:none;filter:blur(.5px);
+}
+.stream-trigger:hover .stream-trigger-glow,
+.stream-trigger.open .stream-trigger-glow{opacity:.6;animation:glowLineShimmer 3s ease-in-out infinite;}
+@keyframes glowLineShimmer{0%,100%{opacity:.4;}50%{opacity:.8;}}
+
+/* Trigger — icon panel */
 .stream-trigger-icon-panel{
-  width:46px;height:46px;flex-shrink:0;
+  width:50px;height:50px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:var(--stream-color,var(--accent));
-  border-radius:9px 0 0 9px;
-  position:relative;z-index:1;
-  transition:background .3s;
+  position:relative;z-index:2;overflow:hidden;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-.stream-trigger-icon-panel svg{display:block;color:rgba(0,0,0,.65);transition:color .2s;}
+.stream-trigger:hover .stream-trigger-icon-panel{transform:scale(1.03);}
+.stream-trigger-icon-bg{
+  position:absolute;inset:4px;border-radius:10px;
+  background:var(--stream-color,var(--accent));
+  opacity:.12;transition:opacity .3s ease,background .5s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.stream-trigger:hover .stream-trigger-icon-bg,
+.stream-trigger.open .stream-trigger-icon-bg{opacity:.22;transform:scale(1.05);}
+.stream-trigger-icon-panel svg{
+  position:relative;z-index:1;display:block;width:20px;height:20px;
+  color:var(--stream-color,var(--accent));
+  transition:color .5s ease,filter .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--stream-color,var(--accent)) 50%,transparent));
+}
+.stream-trigger:hover .stream-trigger-icon-panel svg{transform:scale(1.08);filter:drop-shadow(0 0 12px color-mix(in srgb,var(--stream-color,var(--accent)) 70%,transparent));}
+
+/* Trigger — text */
 .stream-trigger-text{
-  flex:1;padding:10px 12px;
-  position:relative;z-index:1;text-align:left;
+  flex:1;padding:12px 13px;
+  position:relative;z-index:2;text-align:left;min-width:0;
 }
 .stream-trigger-label{
-  font-family:var(--font-mono);font-size:8px;letter-spacing:2px;
-  text-transform:uppercase;color:rgba(255,255,255,.25);display:block;margin-bottom:2px;
+  font-family:var(--font-mono);font-size:7.5px;letter-spacing:2.5px;
+  text-transform:uppercase;color:rgba(255,255,255,.22);display:block;margin-bottom:2px;
+  transition:color .3s ease;
 }
+.stream-trigger:hover .stream-trigger-label{color:rgba(255,255,255,.35);}
 .stream-trigger-name{
-  font-size:13px;font-weight:600;color:rgba(255,255,255,.82);
-  display:block;letter-spacing:.1px;transition:color .2s;
+  font-family:var(--font-brand);font-size:14px;font-weight:600;color:rgba(255,255,255,.88);
+  display:block;letter-spacing:.3px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.stream-trigger:hover .stream-trigger-name{color:#fff;}
+.stream-trigger:hover .stream-trigger-name{color:#fff;transform:translateX(2px);}
 
-/* FIX 2: stream caret — now clearly visible white, with subtle separator */
+/* Trigger — caret */
 .stream-caret{
-  width:38px;height:46px;flex-shrink:0;
+  width:42px;height:50px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.80);
-  position:relative;z-index:1;
-  border-left:1px solid rgba(255,255,255,.08);
-  transition:color .2s,transform .3s cubic-bezier(.34,1.56,.64,1),background .2s;
+  color:rgba(255,255,255,.45);
+  position:relative;z-index:2;
+  border-left:1px solid rgba(255,255,255,.06);
+  transition:color .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1),background .2s ease;
 }
-.stream-trigger:hover .stream-caret{color:#fff;background:rgba(255,255,255,.05);}
-.stream-trigger.open .stream-caret{transform:rotate(180deg);color:#fff;background:rgba(255,255,255,.07);}
+.stream-caret svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s ease;filter:drop-shadow(0 0 2px rgba(0,0,0,.5));}
+.stream-trigger:hover .stream-caret{color:rgba(255,255,255,.75);background:rgba(255,255,255,.04);}
+.stream-trigger:hover .stream-caret svg{transform:translateY(1px);}
+.stream-trigger.open .stream-caret{color:#fff;background:rgba(255,255,255,.06);}
+.stream-trigger.open .stream-caret svg{transform:rotate(180deg);}
+
+/* Trigger — particle canvas */
+.stream-particles{position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;overflow:hidden;opacity:0;transition:opacity .5s ease;}
+.stream-trigger:hover .stream-particles,
+.stream-trigger.open .stream-particles{opacity:1;}
 
 /* ── DROPDOWN PANEL ── */
 .stream-dropdown{
   position:fixed;
-  background:rgba(12,15,12,.98);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
+  background:rgba(10,13,10,.96);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
   overflow:hidden;
-  backdrop-filter:blur(40px) saturate(180%);
-  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 24px 64px rgba(0,0,0,.85);
+  backdrop-filter:blur(50px) saturate(200%);
+  -webkit-backdrop-filter:blur(50px) saturate(200%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 32px 80px rgba(0,0,0,.85),0 8px 24px rgba(0,0,0,.5);
   opacity:0;pointer-events:none;
-  transform:translateY(-6px) scale(.97);
-  transform-origin:top;
-  transition:opacity .22s ease,transform .28s cubic-bezier(.34,1.56,.64,1);
+  transform:translateY(-12px) scale(.96);
+  transform-origin:top center;
+  transition:opacity .3s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1);
   z-index:9000;
 }
 .stream-dropdown::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
   z-index:10;pointer-events:none;
+}
+.stream-dropdown::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:120px;
+  background:linear-gradient(180deg,var(--stream-color,var(--accent)),transparent);
+  opacity:.03;pointer-events:none;transition:background .5s ease;filter:blur(40px);z-index:0;
 }
 .stream-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
 .sd-header{
-  padding:10px 14px 9px;border-bottom:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.02);
+  padding:12px 16px 10px;border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.015);
   display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
 }
-.sd-header-label{font-family:var(--font-mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.35);}
-.sd-header-count{font-family:var(--font-mono);font-size:8px;color:rgba(255,255,255,.2);}
-.sd-items{padding:6px;position:relative;}
+.sd-header-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.sd-header-count{font-family:var(--font-mono);font-size:8px;color:rgba(255,255,255,.15);background:rgba(255,255,255,.04);padding:2px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.06);}
+.sd-items{padding:6px;position:relative;z-index:1;}
 .sd-highlight{
   position:absolute;left:6px;right:6px;
-  border-radius:9px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.08);
-  transition:top .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1);
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  transition:top .35s cubic-bezier(.22,1,.36,1),height .35s cubic-bezier(.22,1,.36,1);
   pointer-events:none;z-index:0;
 }
+.sd-highlight::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--highlight-color,var(--accent));opacity:.04;
+  filter:blur(15px);transition:background .4s ease;
+}
+
+/* Stream item — premium */
 .sd-item{
   position:relative;overflow:hidden;
-  display:flex;align-items:center;gap:12px;
-  padding:10px 11px;border-radius:9px;
-  cursor:pointer;border:none;background:transparent;
+  display:flex;align-items:center;gap:13px;
+  padding:12px 13px;border-radius:14px;
+  cursor:pointer;border:1px solid transparent;background:transparent;
   width:100%;text-align:left;
-  transition:background .15s;z-index:1;
+  transition:border-color .25s ease,background .25s ease;
+  z-index:1;
 }
-.sd-item-decor{
-  position:absolute;inset:0;border-radius:9px;
-  background:var(--item-color,var(--accent));
-  transform:translateX(-100%);
-  transition:transform .32s cubic-bezier(.4,0,.2,1);
-  z-index:0;opacity:.07;pointer-events:none;
+.sd-item-fill{
+  position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,var(--item-color,var(--accent)),color-mix(in srgb,var(--item-color,var(--accent)) 50%,#fff));
+  transform:translateX(-110%);transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .45s ease;
+  z-index:0;opacity:0;pointer-events:none;filter:blur(25px) saturate(180%);
 }
-.sd-item:hover .sd-item-decor,
-.sd-item.active .sd-item-decor{transform:translateX(0);}
+.sd-item:hover .sd-item-fill,
+.sd-item.active .sd-item-fill{transform:translateX(-20%);opacity:.1;}
+.sd-item:hover{border-color:rgba(255,255,255,.08);}
+.sd-item.active{border-color:color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent);}
 .sd-item-icon-wrap{
-  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
-  position:relative;z-index:1;
-  transition:background .18s,border-color .18s;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  position:relative;z-index:1;transition:all .3s cubic-bezier(.22,1,.36,1);overflow:hidden;
 }
-.sd-item:hover .sd-item-icon-wrap,
+.sd-item-icon-wrap::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--item-color,var(--accent));opacity:0;transition:opacity .3s ease;
+}
+.sd-item:hover .sd-item-icon-wrap{background:rgba(255,255,255,.06);border-color:color-mix(in srgb,var(--item-color,var(--accent)) 30%,rgba(255,255,255,.08));transform:scale(1.05);}
+.sd-item:hover .sd-item-icon-wrap::before{opacity:.08;}
 .sd-item.active .sd-item-icon-wrap{
-  background:color-mix(in srgb,var(--item-color,var(--accent)) 16%,rgba(255,255,255,.03));
-  border-color:color-mix(in srgb,var(--item-color,var(--accent)) 40%,transparent);
+  background:color-mix(in srgb,var(--item-color,var(--accent)) 14%,rgba(255,255,255,.04));
+  border-color:color-mix(in srgb,var(--item-color,var(--accent)) 45%,transparent);
+  box-shadow:0 0 20px color-mix(in srgb,var(--item-color,var(--accent)) 15%,transparent),0 0 6px color-mix(in srgb,var(--item-color,var(--accent)) 20%,transparent) inset;
 }
-.sd-item-icon{display:block;color:rgba(255,255,255,.38);transition:color .18s;}
-.sd-item:hover .sd-item-icon,
-.sd-item.active .sd-item-icon{color:var(--item-color,var(--accent));}
+.sd-item.active .sd-item-icon-wrap::before{opacity:.12;}
+.sd-item-icon{display:block;width:18px;height:18px;color:rgba(255,255,255,.3);position:relative;z-index:1;transition:color .3s ease,filter .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);}
+.sd-item:hover .sd-item-icon{color:var(--item-color,var(--accent));filter:drop-shadow(0 0 6px color-mix(in srgb,var(--item-color,var(--accent)) 50%,transparent));transform:scale(1.05);}
+.sd-item.active .sd-item-icon{color:var(--item-color,var(--accent));filter:drop-shadow(0 0 8px color-mix(in srgb,var(--item-color,var(--accent)) 60%,transparent));}
 .sd-item-info{flex:1;min-width:0;position:relative;z-index:1;}
-.sd-item-name{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);display:block;letter-spacing:.1px;transition:color .15s;}
-.sd-item:hover .sd-item-name,
-.sd-item.active .sd-item-name{color:#fff;font-weight:600;}
-.sd-item-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.22);display:block;margin-top:2px;transition:color .15s;}
-.sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 70%,rgba(255,255,255,.35));}
+.sd-item-name{font-family:var(--font-brand);font-size:13.5px;font-weight:600;color:rgba(255,255,255,.55);display:block;letter-spacing:.2px;transition:color .25s ease,transform .25s cubic-bezier(.34,1.56,.64,1);}
+.sd-item:hover .sd-item-name{color:rgba(255,255,255,.92);transform:translateX(2px);}
+.sd-item.active .sd-item-name{color:#fff;text-shadow:0 0 20px color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent);}
+.sd-item-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.18);display:block;margin-top:3px;transition:color .25s ease;}
+.sd-item:hover .sd-item-label{color:rgba(255,255,255,.3);}
+.sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 65%,rgba(255,255,255,.3));}
+.sd-item-chips{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;}
+.sd-item-chip{
+  font-family:var(--font-mono);font-size:7.5px;padding:2px 6px;border-radius:4px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  color:rgba(255,255,255,.2);letter-spacing:.3px;text-transform:uppercase;transition:all .25s ease;
+}
+.sd-item:hover .sd-item-chip{background:color-mix(in srgb,var(--item-color,var(--accent)) 8%,rgba(255,255,255,.03));border-color:color-mix(in srgb,var(--item-color,var(--accent)) 18%,transparent);color:color-mix(in srgb,var(--item-color,var(--accent)) 55%,rgba(255,255,255,.25));}
+.sd-item.active .sd-item-chip{background:color-mix(in srgb,var(--item-color,var(--accent)) 10%,rgba(255,255,255,.03));border-color:color-mix(in srgb,var(--item-color,var(--accent)) 22%,transparent);color:color-mix(in srgb,var(--item-color,var(--accent)) 60%,rgba(255,255,255,.3));}
 .sd-item-check{
-  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
   opacity:0;position:relative;z-index:1;
-  background:color-mix(in srgb,var(--item-color,var(--accent)) 16%,rgba(0,0,0,.25));
-  border:1.5px solid color-mix(in srgb,var(--item-color,var(--accent)) 55%,transparent);
+  background:color-mix(in srgb,var(--item-color,var(--accent)) 12%,rgba(0,0,0,.2));
+  border:1.5px solid color-mix(in srgb,var(--item-color,var(--accent)) 45%,transparent);
   color:var(--item-color,var(--accent));
-  transition:opacity .2s;
+  transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;
+  transform:scale(.5);
 }
-.sd-item-check svg{display:block;color:inherit;}
-.sd-item.active .sd-item-check{opacity:1;}
-.sd-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);margin:4px 8px;}
-.sd-footer{padding:9px 14px;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.015);font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.25);letter-spacing:.3px;}
+.sd-item-check svg{display:block;color:inherit;width:11px;height:11px;}
+.sd-item.active .sd-item-check{opacity:1;transform:scale(1);box-shadow:0 0 12px color-mix(in srgb,var(--item-color,var(--accent)) 20%,transparent);}
+.sd-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:5px 10px;}
+.sd-footer{padding:10px 16px;border-top:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.01);font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.18);letter-spacing:.4px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;}
+.sd-footer-dot{width:4px;height:4px;border-radius:50%;background:var(--accent,#3bff6c);animation:footerBreathe 3s ease-in-out infinite;box-shadow:0 0 6px var(--accent,#3bff6c);}
+@keyframes footerBreathe{0%,100%{opacity:.4;}50%{opacity:1;}}
+.stream-hint{text-align:center;padding:5px 0 1px;font-family:var(--font-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.18);cursor:pointer;user-select:none;transition:color .3s ease;}
+.stream-hint:hover{color:rgba(255,255,255,.35);}
+.stream-hint::before,.stream-hint::after{content:'';display:inline-block;width:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);vertical-align:middle;margin:0 6px;}
+
+/* Transition flash */
+.stream-transition-flash{position:fixed;inset:0;z-index:9998;pointer-events:none;background:var(--stream-color,var(--accent));opacity:0;filter:blur(100px) saturate(200%);transition:opacity .15s ease;}
+.stream-transition-flash.active{animation:flashPulse .6s ease-out forwards;}
+@keyframes flashPulse{0%{opacity:.08;}100%{opacity:0;}}
+
+/* Confetti burst */
+.confetti-particle{position:absolute;width:4px;height:4px;border-radius:50%;pointer-events:none;z-index:100;animation:confettiBurst .7s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes confettiBurst{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
+
+/* Stagger slide-in */
+@keyframes itemSlideIn{from{opacity:0;transform:translateY(8px) scale(.97);filter:blur(4px);}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}}
 
 /* CLUSTER LABEL */
 .cluster-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--fg3);padding:10px 14px 4px;opacity:.7;flex-shrink:0;}
@@ -453,8 +545,19 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .subject>summary::-webkit-details-marker{display:none;}
 .subject>summary:hover{color:color-mix(in srgb,var(--subj-color) 85%,var(--fg));background:color-mix(in srgb,var(--subj-color) 12%,rgba(255,255,255,0.03));border-left-color:var(--subj-color);border-color:color-mix(in srgb,var(--subj-color) 30%,transparent);}
 .subject[open]>summary{color:var(--subj-color);background:color-mix(in srgb,var(--subj-color) 10%,rgba(255,255,255,0.02));border-color:color-mix(in srgb,var(--subj-color) 35%,transparent);border-left-color:var(--subj-color);}
-.s-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.s-icon{width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;}
+.s-icon::before{content:'';position:absolute;inset:-3px;border-radius:8px;background:radial-gradient(circle,color-mix(in srgb,var(--subj-color) 18%,transparent) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none;}
+.subject>summary:hover .s-icon::before,.subject[open]>summary .s-icon::before{opacity:1;}
+.s-icon::after{content:'';position:absolute;inset:0;border-radius:6px;border:1px solid color-mix(in srgb,var(--subj-color) 20%,transparent);background:color-mix(in srgb,var(--subj-color) 8%,transparent);opacity:0;transition:opacity .25s,border-color .25s,background .25s;pointer-events:none;}
+.subject>summary:hover .s-icon::after{opacity:1;border-color:color-mix(in srgb,var(--subj-color) 30%,transparent);background:color-mix(in srgb,var(--subj-color) 12%,transparent);}
+.subject[open]>summary .s-icon::after{opacity:1;border-color:color-mix(in srgb,var(--subj-color) 35%,transparent);background:color-mix(in srgb,var(--subj-color) 14%,transparent);}
 .twemoji-icon{width:16px;height:16px;object-fit:contain;display:block;flex-shrink:0;}
+/* ── PREMIUM SUBJECT ICON ── */
+.s-icon svg{display:block;width:100%;height:100%;color:var(--subj-color);transition:filter .3s cubic-bezier(.34,1.56,.64,1),transform .3s cubic-bezier(.34,1.56,.64,1);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--subj-color) 55%,transparent));position:relative;z-index:1;}
+.subject>summary:hover .s-icon svg{filter:drop-shadow(0 0 8px color-mix(in srgb,var(--subj-color) 80%,transparent)) drop-shadow(0 0 18px color-mix(in srgb,var(--subj-color) 35%,transparent));transform:scale(1.08);}
+.subject[open]>summary .s-icon svg{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--subj-color) 85%,transparent)) drop-shadow(0 0 22px color-mix(in srgb,var(--subj-color) 45%,transparent));transform:scale(1.05);}
+@keyframes iconPop{0%{transform:scale(0.6);opacity:0;}60%{transform:scale(1.12);opacity:1;}100%{transform:scale(1);opacity:1;}}
+.s-icon svg{animation:iconPop .45s cubic-bezier(.34,1.56,.64,1) both;}
 .s-name{flex:1;font-family:var(--font-ui);font-weight:400;letter-spacing:0.15px;}
 .s-count{font-family:var(--font-mono);font-size:9px;color:color-mix(in srgb,var(--subj-color) 90%,var(--fg));background:color-mix(in srgb,var(--subj-color) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--subj-color) 40%,var(--border2));padding:2px 7px;border-radius:10px;transition:all .18s;}
 .subject[open] .s-count{color:#fff;background:color-mix(in srgb,var(--subj-color) 25%,var(--surface));border-color:color-mix(in srgb,var(--subj-color) 70%,transparent);}
@@ -656,9 +759,21 @@ body .creds-bubble{display:none !important;}
   .layout{grid-template-columns:1fr;}
   .sidebar-divider,.viewer{display:none;}
 }
+
+/* ══ AMBIENT BOTTOM PARTICLES ══ */
+.ambient-dots{position:fixed;bottom:0;left:0;right:0;height:40vh;z-index:1;pointer-events:none;overflow:hidden;}
+.ambient-dot{position:absolute;border-radius:50%;opacity:0;animation:dotFloat linear infinite;will-change:opacity,transform;}
+@keyframes dotFloat{
+  0%{opacity:0;transform:translateY(0) scale(0);}
+  6%{opacity:var(--dot-alpha,0.5);transform:translateY(-6vh) scale(1);}
+  80%{opacity:var(--dot-alpha,0.5);transform:translateY(-34vh) scale(1);}
+  100%{opacity:0;transform:translateY(-40vh) scale(0.3);}
+}
 </style>
 </head>
 <body>
+
+<div class="ambient-dots" id="ambientDots"></div>
 
 <nav class="nav">
   <div class="nav-left">
@@ -734,7 +849,6 @@ body .creds-bubble{display:none !important;}
   </div>
 </nav>
 
-<!-- FLOATING MINI TIMER (PiP) -->
 <div class="pip-timer" id="pipTimer">
   <div class="pip-head">
     <div class="pip-head-left">
@@ -774,97 +888,116 @@ body .creds-bubble{display:none !important;}
       <div class="sidebar-sub">browse · search · preview</div>
     </div>
 
-    <!-- ══ PREMIUM STREAM DROPDOWN ══ -->
     <div class="stream-dropdown-wrap" id="streamDropdownWrap">
       <button class="stream-trigger" id="streamTrigger" onclick="toggleStreamDropdown()">
-        <span class="stream-trigger-decor"></span>
+        <span class="stream-trigger-fill"></span>
+        <span class="stream-trigger-glow"></span>
+        <canvas class="stream-particles" id="triggerParticles"></canvas>
         <span class="stream-trigger-icon-panel" id="streamTriggerIconPanel">
-          <svg id="streamTriggerIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="1" x2="12" y2="23"/>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          <span class="stream-trigger-icon-bg" id="streamTriggerIconBg"></span>
+          <svg id="streamTriggerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="4" stroke-width="1.5" opacity="0.4"/>
+            <path d="M7 15l4-4 3 3 5-5" stroke-width="2"/>
+            <circle cx="19" cy="9" r="1.5" fill="currentColor"/>
           </svg>
         </span>
         <span class="stream-trigger-text">
-          <span class="stream-trigger-label">Active stream</span>
+          <span class="stream-trigger-label">Active Stream</span>
           <span class="stream-trigger-name" id="streamTriggerName">Commerce</span>
         </span>
-        <!-- FIX 2: caret now uses explicit white stroke, not currentColor -->
-        <span class="stream-caret" id="streamCaret">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <span class="stream-caret">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </span>
       </button>
-      <!-- FIX 2b: hint text below trigger so users know it's clickable -->
-      <div style="text-align:center;padding:5px 0 2px;font-family:var(--font-mono);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.30);cursor:pointer;user-select:none;" onclick="toggleStreamDropdown()">▲ tap to change stream ▲</div>
+      <div class="stream-hint" onclick="toggleStreamDropdown()">tap to switch</div>
 
       <div class="stream-dropdown" id="streamDropdown">
         <div class="sd-header">
-          <span class="sd-header-label">Select stream</span>
+          <span class="sd-header-label">Select Stream</span>
           <span class="sd-header-count">3 available</span>
         </div>
         <div class="sd-items" id="sdItems">
           <div class="sd-highlight" id="sdHighlight"></div>
 
           <button class="sd-item active" data-stream="commerce" style="--item-color:#ffb830" onclick="selectStream('commerce',this)">
-            <span class="sd-item-decor"></span>
+            <span class="sd-item-fill"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="1" x2="12" y2="23"/>
-                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="4" stroke-width="1.5" opacity="0.4"/>
+                <path d="M7 15l4-4 3 3 5-5" stroke-width="2"/>
+                <circle cx="19" cy="9" r="1.5" fill="currentColor"/>
               </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Commerce</span>
-              <span class="sd-item-label">Accounts · Eco · BSt</span>
+              <span class="sd-item-label">Accounts · Economics · BSt</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">6 Subjects</span>
+                <span class="sd-item-chip">Popular</span>
+              </span>
             </span>
             <span class="sd-item-check">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
 
           <button class="sd-item" data-stream="science" style="--item-color:#5fd4e8" onclick="selectStream('science',this)">
-            <span class="sd-item-decor"></span>
+            <span class="sd-item-fill"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/>
-                <path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/>
-                <path d="M3 9h18"/>
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" stroke-width="1.5" opacity="0.7"/>
+                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)" stroke-width="1.5" opacity="0.7"/>
+                <circle cx="12" cy="12" r="2" fill="currentColor"/>
               </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Science</span>
-              <span class="sd-item-label">Physics · Chem · Bio</span>
+              <span class="sd-item-label">Physics · Chemistry · Biology</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">8 Subjects</span>
+                <span class="sd-item-chip">Trending</span>
+              </span>
             </span>
             <span class="sd-item-check">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
 
           <div class="sd-divider"></div>
 
           <button class="sd-item" data-stream="humanities" style="--item-color:#bf5fff" onclick="selectStream('humanities',this)">
-            <span class="sd-item-decor"></span>
+            <span class="sd-item-fill"></span>
             <div class="sd-item-icon-wrap">
-              <svg class="sd-item-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 20h16" stroke-width="2"/>
+                <path d="M4 4h16" stroke-width="2"/>
+                <rect x="6" y="4" width="12" height="16" opacity="0.2"/>
+                <path d="M9 4v16M15 4v16"/>
+                <path d="M6 6h12" opacity="0.5"/>
+                <path d="M6 18h12" opacity="0.5"/>
               </svg>
             </div>
             <span class="sd-item-info">
               <span class="sd-item-name">Humanities &amp; Arts</span>
-              <span class="sd-item-label">History · Pol Sci · Geo</span>
+              <span class="sd-item-label">History · Pol Sci · Geography</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">8 Subjects</span>
+                <span class="sd-item-chip">Creative</span>
+              </span>
             </span>
             <span class="sd-item-check">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </span>
           </button>
         </div>
-        <div class="sd-footer">ISC Class XII · 2025–26</div>
+        <div class="sd-footer">
+          <span class="sd-footer-dot"></span>
+          ISC Class XII &middot; 2025&ndash;26
+        </div>
       </div>
     </div>
-    <!-- ══ END PREMIUM STREAM DROPDOWN ══ -->
-
     <div class="search-wrap">
       <div class="search-box">
         <span class="search-ico">⌕</span>
@@ -1032,13 +1165,32 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('nativePicker').addEventListener('input',e=>{const v=e.target.value;document.getElementById('hexInput').value=v.toUpperCase();applyAccent(v,true);});
   document.getElementById('hexInput').addEventListener('keydown',e=>{if(e.key==='Enter')applyHex();});
   initStreamDropdown();
+  createAmbientDots();
 });
+
+/* ══ AMBIENT DOTS INIT ══ */
+function createAmbientDots(){
+  const c=document.getElementById('ambientDots');
+  const colors=['#3bff6c','#ffb830','#5fd4e8','#bf5fff','#60b3ff','#ff6b9d'];
+  for(let i=0;i<35;i++){
+    const d=document.createElement('div');
+    d.className='ambient-dot';
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    const size=2+Math.random()*3;
+    const dur=8+Math.random()*16;
+    const delay=Math.random()*dur;
+    const alpha=0.25+Math.random()*0.4;
+    const glow=size*4;
+    d.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*8}%;width:${size}px;height:${size}px;background:${col};box-shadow:0 0 ${glow}px ${col},0 0 ${glow*0.4}px ${col};animation-duration:${dur}s;animation-delay:-${delay}s;--dot-alpha:${alpha};`;
+    c.appendChild(d);
+  }
+}
 
 /* ══ PREMIUM STREAM DROPDOWN ══ */
 const STREAM_ICONS = {
-  commerce: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
-  science:  `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/><path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/><path d="M3 9h18"/></svg>`,
-  humanities:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  commerce: `<svg id="streamTriggerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4" stroke-width="1.5" opacity="0.4"/><path d="M7 15l4-4 3 3 5-5" stroke-width="2"/><circle cx="19" cy="9" r="1.5" fill="currentColor"/></svg>`,
+  science: `<svg id="streamTriggerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)" stroke-width="1.5" opacity="0.7"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(150 12 12)" stroke-width="1.5" opacity="0.7"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>`,
+  humanities: `<svg id="streamTriggerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16" stroke-width="2"/><path d="M4 4h16" stroke-width="2"/><rect x="6" y="4" width="12" height="16" opacity="0.2"/><path d="M9 4v16M15 4v16"/><path d="M6 6h12" opacity="0.5"/><path d="M6 18h12" opacity="0.5"/></svg>`,
 };
 const STREAM_META = {
   commerce:   {name:'Commerce',         color:'#ffb830'},
@@ -1048,32 +1200,47 @@ const STREAM_META = {
 function hexToRgb(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`${r},${g},${b}`;}
 
 let dropdownOpen=false;
+let particleAnimId=null;
+const particleCanvas=document.getElementById('triggerParticles');
+const pCtx=particleCanvas.getContext('2d');
+let particles=[];
 
+/* ── INIT STREAM DROPDOWN ── */
 function initStreamDropdown(){
   const dd=document.getElementById('streamDropdown');
   document.body.appendChild(dd);
   const trig=document.getElementById('streamTrigger');
   trig.style.setProperty('--stream-color','#ffb830');
-  positionHighlight('commerce');
+  requestAnimationFrame(()=>positionHighlight(stream));
   function reposition(){
     if(!dropdownOpen)return;
-    const r=document.getElementById('streamTrigger').getBoundingClientRect();
-    dd.style.top=(r.bottom+6)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
+    const r=trig.getBoundingClientRect();
+    dd.style.top=(r.bottom+8)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
   }
   window.addEventListener('resize',reposition,{passive:true});
   document.querySelector('.sidebar').addEventListener('scroll',reposition,{passive:true});
   document.addEventListener('click',e=>{
     if(dropdownOpen&&!document.getElementById('streamDropdownWrap').contains(e.target)&&!dd.contains(e.target))closeStreamDropdown();
   });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dropdownOpen)closeStreamDropdown();});
 }
+
+/* ── TOGGLE ── */
 function toggleStreamDropdown(){
   dropdownOpen=!dropdownOpen;
   const dd=document.getElementById('streamDropdown');
   const trig=document.getElementById('streamTrigger');
   if(dropdownOpen){
     const r=trig.getBoundingClientRect();
-    dd.style.top=(r.bottom+6)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
+    dd.style.top=(r.bottom+8)+'px';dd.style.left=r.left+'px';dd.style.width=r.width+'px';
     positionHighlight(stream);
+    startTriggerParticles();
+    document.querySelectorAll('.sd-item').forEach((item,i)=>{
+      item.style.animation='none';item.offsetHeight;
+      item.style.animation=`itemSlideIn .45s cubic-bezier(.22,1,.36,1) ${i*.04}s both`;
+    });
+  } else {
+    stopTriggerParticles();
   }
   dd.classList.toggle('open',dropdownOpen);
   trig.classList.toggle('open',dropdownOpen);
@@ -1082,25 +1249,121 @@ function closeStreamDropdown(){
   dropdownOpen=false;
   document.getElementById('streamDropdown').classList.remove('open');
   document.getElementById('streamTrigger').classList.remove('open');
+  stopTriggerParticles();
 }
+
+/* ── HIGHLIGHT TRACKER ── */
 function positionHighlight(activeStream){
   const items=[...document.querySelectorAll('.sd-item')];
   const idx=items.findIndex(i=>i.dataset.stream===activeStream);
   if(idx<0)return;
   const hl=document.getElementById('sdHighlight');
   const item=items[idx];
+  const color=STREAM_META[activeStream]?.color||'#3bff6c';
+  hl.style.setProperty('--highlight-color',color);
   hl.style.top=item.offsetTop+'px';
   hl.style.height=item.offsetHeight+'px';
 }
+
+/* ── SELECT STREAM ── */
 function selectStream(s,btn){
-  closeStreamDropdown();
   const meta=STREAM_META[s];
+  if(!meta)return;
+  const prevColor=STREAM_META[stream]?.color||'#ffb830';
+  stream=s;
+  // Transition flash
+  const flash=document.createElement('div');
+  flash.className='stream-transition-flash';
+  flash.style.background=meta.color;
+  document.body.appendChild(flash);
+  requestAnimationFrame(()=>flash.classList.add('active'));
+  setTimeout(()=>flash.remove(),700);
+  // Confetti
+  if(btn)spawnConfetti(btn,meta.color);
+  // Update trigger
   const trig=document.getElementById('streamTrigger');
   trig.style.setProperty('--stream-color',meta.color);
-  document.getElementById('streamTriggerIconPanel').innerHTML=STREAM_ICONS[s];
+  trig.querySelector('.stream-trigger-icon-bg').style.background=meta.color;
+  trig.querySelector('#streamTriggerIcon').outerHTML=STREAM_ICONS[s];
+  document.getElementById('streamTriggerIcon').style.color=meta.color;
   document.getElementById('streamTriggerName').textContent=meta.name;
+  // Update dropdown items
   document.querySelectorAll('.sd-item').forEach(i=>i.classList.toggle('active',i.dataset.stream===s));
+  positionHighlight(s);
+  // Recolor ambient dots
+  recolorAmbientDots(meta.color);
+  closeStreamDropdown();
   switchStream(s);
+}
+
+/* ── CONFETTI BURST ── */
+function spawnConfetti(fromEl,color){
+  const rect=fromEl.getBoundingClientRect();
+  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');p.className='confetti-particle';
+    const angle=(Math.PI*2/12)*i+(Math.random()-.5)*.5;
+    const dist=30+Math.random()*50;
+    p.style.cssText=`left:${cx}px;top:${cy}px;background:${color};box-shadow:0 0 6px ${color};--tx:${Math.cos(angle)*dist}px;--ty:${Math.sin(angle)*dist}px;width:${3+Math.random()*4}px;height:${3+Math.random()*4}px;`;
+    document.body.appendChild(p);setTimeout(()=>p.remove(),750);
+  }
+}
+
+/* ── TRIGGER PARTICLE SYSTEM ── */
+function resizeParticleCanvas(){
+  const trig=document.getElementById('streamTrigger');
+  const rect=trig.getBoundingClientRect();
+  particleCanvas.width=rect.width*devicePixelRatio;
+  particleCanvas.height=rect.height*devicePixelRatio;
+  particleCanvas.style.width=rect.width+'px';
+  particleCanvas.style.height=rect.height+'px';
+  pCtx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+class TriggerParticle{
+  constructor(w,h,color){this.reset(w,h,color);}
+  reset(w,h,color){
+    this.x=Math.random()*w;this.y=h+Math.random()*10;this.size=.5+Math.random()*1.5;
+    this.speedY=-(.2+Math.random()*.6);this.speedX=(Math.random()-.5)*.3;
+    this.opacity=0;this.maxOpacity=.15+Math.random()*.35;this.life=0;this.maxLife=60+Math.random()*80;this.color=color;
+  }
+  update(w,h){
+    this.y+=this.speedY;this.x+=this.speedX;this.life++;
+    const p=this.life/this.maxLife;
+    this.opacity=p<.2?(p/.2)*this.maxOpacity:p>.7?((1-p)/.3)*this.maxOpacity:this.maxOpacity;
+    if(this.life>=this.maxLife)this.reset(w,h,this.color);
+  }
+  draw(ctx){
+    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fillStyle=this.color;ctx.globalAlpha=this.opacity;ctx.fill();ctx.globalAlpha=1;
+  }
+}
+function startTriggerParticles(){
+  resizeParticleCanvas();
+  const trig=document.getElementById('streamTrigger');
+  const rect=trig.getBoundingClientRect();const w=rect.width,h=rect.height;
+  const color=STREAM_META[stream]?.color||'#ffb830';
+  if(!particles.length){
+    for(let i=0;i<18;i++){const p=new TriggerParticle(w,h,color);p.life=Math.random()*p.maxLife;particles.push(p);}
+  }
+  function animate(){
+    const r2=trig.getBoundingClientRect();const w2=r2.width,h2=r2.height;
+    pCtx.clearRect(0,0,w2,h2);
+    const c=STREAM_META[stream]?.color||'#ffb830';
+    particles.forEach(p=>{p.color=c;p.update(w2,h2);p.draw(pCtx);});
+    particleAnimId=requestAnimationFrame(animate);
+  }
+  if(!particleAnimId)animate();
+}
+function stopTriggerParticles(){
+  if(particleAnimId){cancelAnimationFrame(particleAnimId);particleAnimId=null;}
+  pCtx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
+}
+
+/* ── RECOLOR AMBIENT DOTS ── */
+function recolorAmbientDots(targetColor){
+  const dots=document.querySelectorAll('.ambient-dot');
+  const idx=[...Array(dots.length).keys()].sort(()=>Math.random()-.5).slice(0,Math.ceil(dots.length*.4));
+  idx.forEach(i=>{const d=dots[i];if(!d)return;const s=parseFloat(d.style.width);d.style.background=targetColor;d.style.boxShadow=`0 0 ${s*4}px ${targetColor},0 0 ${s*1.6}px ${targetColor}`;});
 }
 
 /* ══ RESOURCE HUB LOGIC ══ */
@@ -1113,18 +1376,32 @@ const STREAMS={
 const ALL_SUBJECT_FOLDERS=['English','Economics','Accounts','Business Studies','Commerce',
   'Physics','Chemistry','Biology','Maths','Computer Science','Biotechnology','Environmental Science',
   'History','Political Science','Geography','Sociology','Psychology','Fine Arts','Home Science'];
-const TWEMOJI_BASE='https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/';
-const ICONS_CP={
-  'English':'1f4d6','Economics':'1f4c8','Accounts':'1f4ca','Business Studies':'1f4bc',
-  'Commerce':'1fa99','Maths':'1f9ee','Physics':'26a1','Chemistry':'1f9ea','Biology':'1f9ec',
-  'Computer Science':'1f4bb','Biotechnology':'1f52c','Environmental Science':'1f30d',
-  'History':'1f3f0','Political Science':'1f5f3','Geography':'1f5fa','Sociology':'1fac2',
-  'Psychology':'1f9e0','Fine Arts':'1f3a8','Home Science':'1f3e0',
+/* ══ PREMIUM SVG ICON LIBRARY ══ */
+const SUBJECT_ICONS = {
+  'English': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-en" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" stroke="url(#g-en)" stroke-width="1.8"/><path d="M8 7h6" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><path d="M8 11h8" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><path d="M8 15h5" stroke="currentColor" stroke-width="1.5" opacity="0.6"/></svg>`,
+  'Economics': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ec" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="4" stroke="url(#g-ec)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M7 16l4-4 3 3 4-4" stroke="url(#g-ec)" stroke-width="2"/><circle cx="18" cy="11" r="1.5" fill="currentColor"/><path d="M7 21v-5M11 21v-9M15 21v-5M19 21v-10" stroke="currentColor" stroke-width="1.5" opacity="0.3"/></svg>`,
+  'Accounts': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ac" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><rect x="4" y="3" width="16" height="18" rx="2" stroke="url(#g-ac)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><line x1="9" y1="3" x2="9" y2="21" stroke="url(#g-ac)" stroke-width="1.8" opacity="0.6"/><line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><line x1="4" y1="13" x2="20" y2="13" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><line x1="4" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>`,
+  'Business Studies': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-bs" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><rect x="2" y="7" width="20" height="14" rx="2" stroke="url(#g-bs)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke="url(#g-bs)" stroke-width="1.8"/><path d="M2 12h20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M12 12v9" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>`,
+  'Commerce': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-co" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="18" cy="20" r="1.5" fill="currentColor"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" stroke="url(#g-co)" stroke-width="1.8"/><path d="M16 11H8" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>`,
+  'Maths': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ma" x1="0" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="12" cy="12" r="10" stroke="url(#g-ma)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M9 9h6v6H9z" stroke="currentColor" stroke-width="1.5" transform="rotate(45 12 12)" opacity="0.6"/><path d="M14.5 9.5L9.5 14.5" stroke="url(#g-ma)" stroke-width="2"/><circle cx="9.5" cy="9.5" r="1" fill="currentColor"/><circle cx="14.5" cy="14.5" r="1" fill="currentColor"/></svg>`,
+  'Physics': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ph" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><ellipse cx="12" cy="12" rx="10" ry="4" stroke="url(#g-ph)" stroke-width="1.5" opacity="0.8" transform="rotate(30 12 12)" fill="none"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="url(#g-ph)" stroke-width="1.5" opacity="0.8" transform="rotate(150 12 12)" fill="none"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><circle cx="19.5" cy="7.5" r="1" fill="currentColor" opacity="0.6"/><circle cx="4.5" cy="16.5" r="1" fill="currentColor" opacity="0.6"/></svg>`,
+  'Chemistry': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ch" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M9 3v5.5L4 18.5A2.5 2.5 0 0 0 6 22h12a2.5 2.5 0 0 0 2-3.5L15 8.5V3" stroke="url(#g-ch)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M9 3h6" stroke="currentColor" stroke-width="1.8"/><path d="M6 14h12" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><circle cx="12" cy="18" r="1.5" fill="currentColor"/><circle cx="10" cy="16" r="0.8" fill="currentColor" opacity="0.7"/></svg>`,
+  'Biology': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-bi" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M12 2C7 2 3 7 3 12c0 8 9 10 9 10s9-2 9-10c0-5-4-10-9-10z" stroke="url(#g-bi)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M12 2v20" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><path d="M12 10c-2.5 1-4.5 4-4.5 4" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><path d="M12 14c2.5 1 4.5 4 4.5 4" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><path d="M12 6c2.5 1 4.5 4 4.5 4" stroke="currentColor" stroke-width="1.5" opacity="0.6"/></svg>`,
+  'Computer Science': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-cs" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><rect x="2" y="3" width="20" height="14" rx="2" stroke="url(#g-cs)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M8 21h8" stroke="url(#g-cs)" stroke-width="2"/><path d="M12 17v4" stroke="url(#g-cs)" stroke-width="2"/><path d="M7 8l-2 2 2 2" stroke="currentColor" stroke-width="1.5" opacity="0.7"/><path d="M17 8l2 2-2 2" stroke="currentColor" stroke-width="1.5" opacity="0.7"/><path d="M13 6l-2 8" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>`,
+  'Biotechnology': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-bt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M18 3h-3v5.5a2 2 0 0 0 1.5 1.9l2 0.5a2 2 0 0 1 1.5 1.9V18M6 3h3v5.5a2 2 0 0 1-1.5 1.9l-2 0.5A2 2 0 0 0 4 12.8V18" stroke="url(#g-bt)" stroke-width="1.8" opacity="0.7"/><circle cx="12" cy="18" r="4" stroke="url(#g-bt)" stroke-width="1.8" fill="currentColor" fill-opacity="0.1"/><circle cx="12" cy="18" r="1.5" fill="currentColor"/></svg>`,
+  'Environmental Science': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-es" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="12" cy="12" r="10" stroke="url(#g-es)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M2 12A10 10 0 0 1 12 2" stroke="url(#g-es)" stroke-width="1.8" opacity="0.5"/><path d="M12 22A10 10 0 0 1 2 12" stroke="currentColor" stroke-width="1.5" opacity="0.4"/><path d="M12 12c-3-3-4-7-4-7s4 1 7 4" stroke="currentColor" stroke-width="1.5" fill="currentColor" fill-opacity="0.2"/><path d="M12 12c3 3 4 7 4 7s-4-1-7-4" stroke="currentColor" stroke-width="1.5" opacity="0.6"/></svg>`,
+  'History': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-hi" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="12" cy="12" r="10" stroke="url(#g-hi)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><polyline points="12 6 12 12 16.5 15.5" stroke="url(#g-hi)" stroke-width="1.8"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M3 12h1M20 12h1M12 3v1M12 20v1M6.5 6.5l.5.5M17 17l.5.5M6.5 17.5l.5-.5M17 6.5l.5.5" stroke="currentColor" stroke-width="1.5" opacity="0.4"/></svg>`,
+  'Political Science': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ps" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M12 2L2 7l10 5 10-5-10-5z" stroke="url(#g-ps)" stroke-width="1.8" fill="currentColor" fill-opacity="0.1"/><path d="M2 17l10 5 10-5" stroke="url(#g-ps)" stroke-width="1.8"/><path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" opacity="0.6"/><line x1="12" y1="12" x2="12" y2="22" stroke="currentColor" stroke-width="1.5" opacity="0.6"/></svg>`,
+  'Geography': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-ge" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="12" cy="12" r="10" stroke="url(#g-ge)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M12 2v20" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`,
+  'Sociology': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-so" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><circle cx="12" cy="7" r="3" stroke="url(#g-so)" stroke-width="1.8" fill="currentColor" fill-opacity="0.1"/><path d="M12 10c-4 0-7 3-7 7v1h14v-1c0-4-3-7-7-7z" stroke="url(#g-so)" stroke-width="1.8"/><circle cx="5" cy="12" r="2" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M2 19v-1c0-2 2-3.5 4-4" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><circle cx="19" cy="12" r="2" stroke="currentColor" stroke-width="1.5" opacity="0.5"/><path d="M22 19v-1c0-2-2-3.5-4-4" stroke="currentColor" stroke-width="1.5" opacity="0.5"/></svg>`,
+  'Psychology': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-py" x1="0" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M12 2c-4.5 0-8 3.5-8 8s2.5 6.5 6 9.5c.5.5 1.5.5 2 0 3.5-3 6-5 6-9.5s-3.5-8-8-8z" stroke="url(#g-py)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="1.5" opacity="0.7"/><path d="M12 13v6" stroke="currentColor" stroke-width="1.5" opacity="0.7"/><path d="M9 10h6" stroke="currentColor" stroke-width="1.5" opacity="0.7"/></svg>`,
+  'Fine Arts': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-fa" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M12 22a10 10 0 1 0-10-10c0 2 1 3 3 3h1a2 2 0 0 1 2 2v2a3 3 0 0 0 4 3z" stroke="url(#g-fa)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><circle cx="7.5" cy="10.5" r="1.5" fill="currentColor"/><circle cx="10.5" cy="6.5" r="1.5" fill="currentColor"/><circle cx="15.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="12.5" r="1.5" fill="currentColor" opacity="0.6"/></svg>`,
+  'Home Science': `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="g-hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.95"/><stop offset="100%" stop-color="currentColor" stop-opacity="0.4"/></linearGradient></defs><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="url(#g-hs)" stroke-width="1.8" fill="currentColor" fill-opacity="0.05"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="1.5" opacity="0.7"/><path d="M15 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" stroke="currentColor" stroke-width="1.5" fill="currentColor" opacity="0.5"/><path d="M9 16h6" stroke="currentColor" stroke-width="1.5" opacity="0.4"/></svg>`,
 };
 function subjectSVG(subj){
-  const cp=ICONS_CP[subj];
-  if(!cp)return`<span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>`;
-  return`<span class="s-icon"><img src="${TWEMOJI_BASE}${cp}.svg" alt="${subj}" class="twemoji-icon" draggable="false"/></span>`;
+  const icon=SUBJECT_ICONS[subj];
+  if(!icon)return`<span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></span>`;
+  return`<span class="s-icon">${icon}</span>`;
 }
 const COLORS={
   English:'#e8a87c',Economics:'#3bff6c',Accounts:'#60b3ff','Business Studies':'#ffb830',
@@ -1168,7 +1445,7 @@ function shareFolderLink(folderPath){history.replaceState(null,'','/resource/'+f
 
 async function load(){
   const el=document.getElementById('folders');
-  el.innerHTML=`<div style="padding:10px 6px;display:flex;flex-direction:column;gap:3px;">${STREAMS.commerce.map(n=>`<div style="display:flex;align-items:center;gap:9px;padding:9px 12px 9px 10px;border-radius:8px;background:rgba(255,255,255,0.015);opacity:0.4;border:1px solid transparent;border-left:2px solid ${COLORS[n]||'var(--accent)'}"><span style="width:16px;height:16px;border-radius:4px;background:color-mix(in srgb,${COLORS[n]||'var(--accent)'} 15%,transparent);flex-shrink:0;display:inline-block;"></span><span style="flex:1;font-size:13px;color:var(--fg2)">${n}</span><span style="width:26px;height:14px;background:var(--surface2);border-radius:8px;display:inline-block"></span></div>`).join('')}</div>`;
+  el.innerHTML=`<div style="padding:10px 6px;display:flex;flex-direction:column;gap:3px;">${STREAMS.commerce.map(n=>`<div style="--subj-color:${COLORS[n]||'var(--accent)'};display:flex;align-items:center;gap:9px;padding:9px 12px 9px 10px;border-radius:8px;background:color-mix(in srgb,${COLORS[n]||'var(--accent)'} 6%,rgba(255,255,255,0.018));opacity:0.45;border:1px solid color-mix(in srgb,${COLORS[n]||'var(--accent)'} 20%,transparent);border-left:2px solid color-mix(in srgb,${COLORS[n]||'var(--accent)'} 80%,transparent)"><span class="s-icon" style="opacity:0.6">${SUBJECT_ICONS[n]||''}</span><span style="flex:1;font-size:13px;color:var(--fg2)">${n}</span><span style="width:26px;height:14px;background:var(--surface2);border-radius:8px;display:inline-block"></span></div>`).join('')}</div>`;
   const merged=new Map();
   try{const r=await fetch('files.json');if(r.ok)(await r.json()).map(normalize).filter(Boolean).forEach(f=>merged.set(key(f),f));}catch(e){}
   try{
