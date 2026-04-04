@@ -472,42 +472,52 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
         </div>
       </div>
     </div>
-    <div class="picker-wrap" id="pickerWrap">
-      <button class="color-trigger" id="colorTrigger" onclick="togglePicker()">
-        <span class="trigger-swatch" id="triggerSwatch"></span>
-        <span>Theme</span>
-        <span class="trigger-caret">▾</span>
-      </button>
-      <div class="picker-panel" id="pickerPanel">
-        <div class="picker-head"><span class="picker-head-title">⬡ Accent Theme</span><button class="picker-head-close" onclick="togglePicker()">✕</button></div>
-        <div class="picker-mode-toggle">
-          <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('solid')">⬛ Solid</button>
-          <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('gradient')">🌈 Gradient</button>
-        </div>
-        <div id="solidPanel">
-          <div class="picker-row-label">Solid Accents</div>
-          <div class="presets" id="presetsGrid"></div>
-          <div class="picker-sep"></div>
-          <div class="custom-row">
-            <span class="custom-label">Custom</span>
-            <input type="color" class="native-picker" id="nativePicker"/>
-            <input type="text" class="hex-input" id="hexInput" maxlength="7" placeholder="#7AB86A"/>
-            <button class="apply-btn" onclick="applyHex()">OK</button>
-          </div>
-        </div>
-        <div id="gradPanel" style="display:none;">
-          <div class="picker-row-label">Gradient Presets</div>
-          <div class="grad-presets" id="gradPresetsGrid"></div>
-        </div>
-        <div class="picker-footer">
-          <button class="reset-btn" onclick="resetAccent()">↺ Reset</button>
-          <span class="autosave-note"><span class="autosave-dot" id="autosaveDot"></span>Auto-saved</span>
-        </div>
+<div class="picker-wrap" id="pickerWrap">
+  <button class="color-trigger" id="colorTrigger" onclick="togglePicker()">
+    <span class="trigger-swatch" id="triggerSwatch"></span>
+    <span>Theme</span>
+    <span class="trigger-caret">▾</span>
+  </button>
+  <div class="picker-panel" id="pickerPanel">
+    <div class="picker-head">
+      <span class="picker-head-title">Theme</span>
+      <button class="picker-head-close" onclick="togglePicker()">✕</button>
+    </div>
+    <div class="picker-mode-toggle">
+      <button class="pmt-btn active" id="pmtSolid" onclick="switchPickerMode('ui-theme')">UI Theme</button>
+      <button class="pmt-btn" id="pmtGrad" onclick="switchPickerMode('accent')">Accent</button>
+    </div>
+    
+    <div id="solidPanel">
+      <div class="picker-row-label">Background Palette</div>
+      <div class="ui-theme-presets" id="uiThemeGrid"></div>
+      <div class="picker-sep"></div>
+      <div class="custom-row">
+        <span class="custom-label">Custom</span>
+        <input type="color" class="native-picker" id="uiThemePicker" title="Pick base hue" value="#0f1318"/>
+        <input type="text" class="hex-input" id="uiThemeHex" maxlength="7" placeholder="#0F1318"/>
+        <button class="apply-btn" onclick="applyCustomUITheme()">OK</button>
       </div>
     </div>
-    <a class="nav-link" href="https://github.com/HJexe/Class-12-ISC" target="_blank" rel="noopener">GitHub</a>
+    
+    <div id="gradPanel" style="display:none;">
+      <div class="picker-row-label">Accent Color</div>
+      <div class="presets" id="presetsGrid"></div>
+      <div class="picker-sep"></div>
+      <div class="custom-row">
+        <span class="custom-label">Custom</span>
+        <input type="color" class="native-picker" id="nativePicker" title="Color wheel"/>
+        <input type="text" class="hex-input" id="hexInput" maxlength="7" placeholder="#3BFF6C"/>
+        <button class="apply-btn" onclick="applyHex()">OK</button>
+      </div>
+    </div>
+    
+    <div class="picker-footer">
+      <button class="reset-btn" onclick="resetAll()">↺ Reset All</button>
+      <span class="autosave-note"><span class="autosave-dot" id="autosaveDot"></span>Saved</span>
+    </div>
   </div>
-</nav>
+</div>
 
 <section class="hero">
   <div class="hero-glow" id="heroGlow"></div>
