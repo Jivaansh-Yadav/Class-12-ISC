@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ISC.exe | Premium Stream Selector</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════
+   PREMIUM STREAM SELECTOR — ULTRA CLASSY EDITION
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --bg:#080a08;--bg2:#0c0e0b;--surface:#111411;--surface2:#171b17;
+  --border:#1a201a;--border2:#222b22;
+  --fg:#edf2ea;--fg2:#a8b8a5;--fg3:#5a6e57;
+  --font-brand:'Unbounded',sans-serif;
+  --font-ui:'Space Grotesk',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --stream-commerce:#ffb830;
+  --stream-science:#5fd4e8;
+  --stream-humanities:#bf5fff;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── AMBIENT BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 100%, rgba(255,184,48,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(95,212,232,0.03) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(191,95,255,0.015) 0%, transparent 50%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.022;
+}
+
+/* ── DEMO CONTAINER ── */
+.demo-stage {
+  position: relative;
+  z-index: 1;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.demo-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fg3);
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════════════
+   STREAM SELECTOR WRAPPER
+   ═══════════════════════════════════════════════════ */
+.stream-selector {
+  position: relative;
+  z-index: 100;
+}
+
+/* ═══════════════════════════════════════════════════
+   TRIGGER BUTTON — PREMIUM GLASS
+   ═══════════════════════════════════════════════════ */
+.stream-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.02) inset,
+    0 4px 24px rgba(0,0,0,0.5),
+    0 1px 3px rgba(0,0,0,0.3);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  will-change: border-color, box-shadow, transform;
+}
+
+.stream-trigger:hover {
+  border-color: rgba(255,255,255,0.14);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 8px 40px rgba(0,0,0,0.6),
+    0 2px 8px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+
+.stream-trigger:active {
+  transform: translateY(0) scale(0.995);
+}
+
+.stream-trigger.open {
+  border-color: rgba(255,255,255,0.18);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05) inset,
+    0 12px 48px rgba(0,0,0,0.7),
+    0 2px 8px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+}
+
+/* ── TRIGGER — ANIMATED GRADIENT BAR ── */
+.stream-trigger::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--stream-color, var(--stream-commerce));
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 0 16px var(--stream-color, var(--stream-commerce)),
+              0 0 40px color-mix(in srgb, var(--stream-color, var(--stream-commerce)) 40%, transparent);
+}
+
+/* ── TRIGGER — HOVER FILL ── */
+.stream-trigger-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--stream-color, var(--stream-commerce)), color-mix(in srgb, var(--stream-color, var(--stream-commerce)) 60%, #fff));
+  transform: translateX(-105%);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(30px) saturate(200%);
+}
+
+.stream-trigger:hover .stream-trigger-fill,
+.stream-trigger.open .stream-trigger-fill {
+  transform: translateX(-30%);
+  opacity: 0.08;
+}
+
+/* ── TRIGGER — INNER GLOW LINE ── */
+.stream-trigger-glow {
+  position: absolute;
+  top: -1px;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--stream-color, var(--stream-commerce)), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 4;
+  pointer-events: none;
+  filter: blur(0.5px);
+}
+
+.stream-trigger:hover .stream-trigger-glow,
+.stream-trigger.open .stream-trigger-glow {
+  opacity: 0.6;
+  animation: glowLineShimmer 3s ease-in-out infinite;
+}
+
+@keyframes glowLineShimmer {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+/* ── TRIGGER — ICON PANEL ── */
+.stream-trigger-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.stream-trigger-icon-bg {
+  position: absolute;
+  inset: 4px;
+  border-radius: 10px;
+  background: var(--stream-color, var(--stream-commerce));
+  opacity: 0.15;
+  transition: opacity 0.3s ease, background 0.5s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.stream-trigger:hover .stream-trigger-icon-bg,
+.stream-trigger.open .stream-trigger-icon-bg {
+  opacity: 0.25;
+  transform: scale(1.05);
+}
+
+.stream-trigger-icon svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 22px;
+  height: 22px;
+  color: var(--stream-color, var(--stream-commerce));
+  transition: color 0.5s ease, filter 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--stream-color, var(--stream-commerce)) 50%, transparent));
+}
+
+.stream-trigger:hover .stream-trigger-icon svg {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--stream-color, var(--stream-commerce)) 70%, transparent));
+}
+
+/* ── TRIGGER — TEXT ── */
+.stream-trigger-text {
+  flex: 1;
+  padding: 12px 14px;
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  min-width: 0;
+}
+
+.stream-trigger-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.22);
+  display: block;
+  margin-bottom: 3px;
+  transition: color 0.3s ease;
+}
+
+.stream-trigger:hover .stream-trigger-label { color: rgba(255,255,255,0.35); }
+
+.stream-trigger-name {
+  font-family: var(--font-brand);
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  display: block;
+  letter-spacing: 0.3px;
+  transition: color 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stream-trigger:hover .stream-trigger-name { color: #fff; transform: translateX(2px); }
+
+/* ── TRIGGER — CARET ── */
+.stream-trigger-caret {
+  width: 44px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.5);
+  position: relative;
+  z-index: 2;
+  border-left: 1px solid rgba(255,255,255,0.06);
+  transition: color 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.2s ease;
+}
+
+.stream-trigger-caret svg {
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), filter 0.3s ease;
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+}
+
+.stream-trigger:hover .stream-trigger-caret {
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.04);
+}
+
+.stream-trigger:hover .stream-trigger-caret svg {
+  transform: translateY(1px);
+}
+
+.stream-trigger.open .stream-trigger-caret {
+  color: #fff;
+  background: rgba(255,255,255,0.06);
+}
+
+.stream-trigger.open .stream-trigger-caret svg {
+  transform: rotate(180deg);
+}
+
+/* ── TRIGGER — RIPPLE EFFECT ── */
+.stream-trigger-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--stream-color, var(--stream-commerce));
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes rippleExpand {
+  0% { transform: scale(0); opacity: 0.2; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* ── TRIGGER — PARTICLE CANVAS ── */
+.stream-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.stream-trigger:hover .stream-particles,
+.stream-trigger.open .stream-particles {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════
+   HINT TEXT
+   ═══════════════════════════════════════════════════ */
+.stream-hint {
+  text-align: center;
+  padding: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.stream-hint:hover { color: rgba(255,255,255,0.35); }
+
+.stream-hint::before,
+.stream-hint::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  vertical-align: middle;
+  margin: 0 6px;
+}
+
+/* ═══════════════════════════════════════════════════
+   DROPDOWN PANEL — ULTRA PREMIUM
+   ═══════════════════════════════════════════════════ */
+.stream-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  right: 0;
+  background: rgba(10, 13, 10, 0.96);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
+  overflow: hidden;
+  backdrop-filter: blur(50px) saturate(200%);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    0 32px 80px rgba(0,0,0,0.85),
+    0 8px 24px rgba(0,0,0,0.5);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-12px) scale(0.96);
+  transform-origin: top center;
+  transition:
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1000;
+}
+
+.stream-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+/* ── DROPDOWN — TOP GLOW LINE ── */
+.stream-dropdown::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.stream-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(180deg, var(--stream-color, var(--stream-commerce)), transparent);
+  opacity: 0.03;
+  pointer-events: none;
+  transition: background 0.5s ease;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+/* ── DROPDOWN — HEADER ── */
+.sd-header {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.015);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.sd-header-label {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.sd-header-count {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ── DROPDOWN — ITEMS CONTAINER ── */
+.sd-items {
+  padding: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── DROPDOWN — ANIMATED HIGHLIGHT ── */
+.sd-highlight {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition:
+    top 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sd-highlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--highlight-color, var(--stream-commerce));
+  opacity: 0.04;
+  filter: blur(15px);
+  transition: background 0.4s ease;
+}
+
+/* ═══════════════════════════════════════════════════
+   STREAM ITEM — PREMIUM DESIGN
+   ═══════════════════════════════════════════════════ */
+.sd-item {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 13px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: border-color 0.25s ease, background 0.25s ease;
+  z-index: 1;
+  animation: itemSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sd-item:nth-child(2) { animation-delay: 0.04s; }
+.sd-item:nth-child(3) { animation-delay: 0.08s; }
+.sd-item:nth-child(4) { animation-delay: 0.12s; }
+.sd-item:nth-child(5) { animation-delay: 0.16s; }
+
+@keyframes itemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* ── ITEM — HOVER FILL ── */
+.sd-item-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--item-color, var(--stream-commerce)), color-mix(in srgb, var(--item-color, var(--stream-commerce)) 50%, #fff));
+  transform: translateX(-110%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(25px) saturate(180%);
+}
+
+.sd-item:hover .sd-item-fill,
+.sd-item.active .sd-item-fill {
+  transform: translateX(-20%);
+  opacity: 0.1;
+}
+
+/* ── ITEM — HOVER BORDER ── */
+.sd-item:hover {
+  border-color: rgba(255,255,255,0.08);
+}
+
+.sd-item.active {
+  border-color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 30%, transparent);
+}
+
+/* ── ITEM — ICON WRAP ── */
+.sd-item-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.sd-item-icon-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--item-color, var(--stream-commerce));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.sd-item:hover .sd-item-icon-wrap {
+  background: rgba(255,255,255,0.06);
+  border-color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 30%, rgba(255,255,255,0.08));
+  transform: scale(1.05);
+}
+
+.sd-item:hover .sd-item-icon-wrap::before { opacity: 0.08; }
+
+.sd-item.active .sd-item-icon-wrap {
+  background: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 14%, rgba(255,255,255,0.04));
+  border-color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 45%, transparent);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 15%, transparent),
+              0 0 6px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 20%, transparent) inset;
+}
+
+.sd-item.active .sd-item-icon-wrap::before { opacity: 0.12; }
+
+/* ── ITEM — ICON ── */
+.sd-item-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  color: rgba(255,255,255,0.3);
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease, filter 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.sd-item:hover .sd-item-icon {
+  color: var(--item-color, var(--stream-commerce));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 50%, transparent));
+  transform: scale(1.05);
+}
+
+.sd-item.active .sd-item-icon {
+  color: var(--item-color, var(--stream-commerce));
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 60%, transparent));
+}
+
+/* ── ITEM — INFO ── */
+.sd-item-info {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.sd-item-name {
+  font-family: var(--font-brand);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  display: block;
+  letter-spacing: 0.2px;
+  transition: color 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+.sd-item:hover .sd-item-name {
+  color: rgba(255,255,255,0.92);
+  transform: translateX(2px);
+}
+
+.sd-item.active .sd-item-name {
+  color: #fff;
+  text-shadow: 0 0 20px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 30%, transparent);
+}
+
+.sd-item-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.18);
+  display: block;
+  margin-top: 3px;
+  transition: color 0.25s ease;
+}
+
+.sd-item:hover .sd-item-label { color: rgba(255,255,255,0.3); }
+
+.sd-item.active .sd-item-label {
+  color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 65%, rgba(255,255,255,0.3));
+}
+
+/* ── ITEM — CHECK MARK ── */
+.sd-item-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  position: relative;
+  z-index: 1;
+  background: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 12%, rgba(0,0,0,0.2));
+  border: 1.5px solid color-mix(in srgb, var(--item-color, var(--stream-commerce)) 45%, transparent);
+  color: var(--item-color, var(--stream-commerce));
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  transform: scale(0.5);
+}
+
+.sd-item.active .sd-item-check {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--item-color, var(--stream-commerce)) 20%, transparent);
+}
+
+.sd-item-check svg {
+  display: block;
+  color: inherit;
+  width: 11px;
+  height: 11px;
+}
+
+/* ── ITEM — SUBJECT PREVIEW CHIPS ── */
+.sd-item-chips {
+  display: flex;
+  gap: 4px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+
+.sd-item-chip {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+
+.sd-item:hover .sd-item-chip {
+  background: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 8%, rgba(255,255,255,0.03));
+  border-color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 18%, transparent);
+  color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 55%, rgba(255,255,255,0.25));
+}
+
+.sd-item.active .sd-item-chip {
+  background: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 10%, rgba(255,255,255,0.03));
+  border-color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 22%, transparent);
+  color: color-mix(in srgb, var(--item-color, var(--stream-commerce)) 60%, rgba(255,255,255,0.3));
+}
+
+/* ── DIVIDER ── */
+.sd-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  margin: 5px 10px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── FOOTER ── */
+.sd-footer {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.01);
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: rgba(255,255,255,0.18);
+  letter-spacing: 0.4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.sd-footer-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent, #3bff6c);
+  animation: footerBreathe 3s ease-in-out infinite;
+  box-shadow: 0 0 6px var(--accent, #3bff6c);
+}
+
+@keyframes footerBreathe {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════
+   STREAM TRANSITION OVERLAY
+   ═══════════════════════════════════════════════════ */
+.stream-transition-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: var(--stream-color, var(--stream-commerce));
+  opacity: 0;
+  filter: blur(100px) saturate(200%);
+  transition: opacity 0.15s ease;
+}
+
+.stream-transition-flash.active {
+  animation: flashPulse 0.6s ease-out forwards;
+}
+
+@keyframes flashPulse {
+  0% { opacity: 0.08; }
+  100% { opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════
+   FLOATING PARTICLES (background)
+   ═══════════════════════════════════════════════════ */
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(100vh) scale(0);
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10vh) scale(1);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   SELECTION CONFETTI BURST
+   ═══════════════════════════════════════════════════ */
+.confetti-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100;
+  animation: confettiBurst 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes confettiBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   COLOR TRANSITION ORB
+   ═══════════════════════════════════════════════════ */
+.color-orb {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--stream-color, var(--stream-commerce));
+  filter: blur(120px);
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.8s ease, opacity 0.8s ease;
+  top: 30%;
+  left: 35%;
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient floating particles -->
+<div class="ambient-particles" id="ambientParticles"></div>
+
+<!-- Color orb -->
+<div class="color-orb" id="colorOrb"></div>
+
+<!-- Transition flash -->
+<div class="stream-transition-flash" id="transitionFlash"></div>
+
+<!-- Demo Stage -->
+<div class="demo-stage">
+
+  <div class="demo-label">Stream Selector</div>
+
+  <div class="stream-selector" id="streamSelector">
+    <!-- TRIGGER -->
+    <button class="stream-trigger" id="streamTrigger" onclick="toggleDropdown(event)">
+      <span class="stream-trigger-fill" id="triggerFill"></span>
+      <span class="stream-trigger-glow"></span>
+      <canvas class="stream-particles" id="triggerParticles"></canvas>
+
+      <span class="stream-trigger-icon" id="triggerIconWrap">
+        <span class="stream-trigger-icon-bg" id="triggerIconBg"></span>
+        <svg id="triggerIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+      </span>
+
+      <span class="stream-trigger-text">
+        <span class="stream-trigger-label">Active Stream</span>
+        <span class="stream-trigger-name" id="triggerName">Commerce</span>
+      </span>
+
+      <span class="stream-trigger-caret">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </span>
+    </button>
+
+    <!-- HINT -->
+    <div class="stream-hint" onclick="toggleDropdown(event)">tap to switch</div>
+
+    <!-- DROPDOWN -->
+    <div class="stream-dropdown" id="streamDropdown">
+      <div class="sd-header">
+        <span class="sd-header-label">Select Stream</span>
+        <span class="sd-header-count">3 available</span>
+      </div>
+      <div class="sd-items" id="sdItems">
+        <div class="sd-highlight" id="sdHighlight"></div>
+
+        <!-- COMMERCE -->
+        <button class="sd-item active" data-stream="commerce" style="--item-color:#ffb830" onclick="selectStream('commerce', this, event)">
+          <span class="sd-item-fill"></span>
+          <div class="sd-item-icon-wrap">
+            <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <span class="sd-item-info">
+            <span class="sd-item-name">Commerce</span>
+            <span class="sd-item-label">Accounts · Economics · BSt</span>
+            <span class="sd-item-chips">
+              <span class="sd-item-chip">6 Subjects</span>
+              <span class="sd-item-chip">Popular</span>
+            </span>
+          </span>
+          <span class="sd-item-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+        </button>
+
+        <!-- SCIENCE -->
+        <button class="sd-item" data-stream="science" style="--item-color:#5fd4e8" onclick="selectStream('science', this, event)">
+          <span class="sd-item-fill"></span>
+          <div class="sd-item-icon-wrap">
+            <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/>
+              <path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/>
+              <path d="M3 9h18"/>
+            </svg>
+          </div>
+          <span class="sd-item-info">
+            <span class="sd-item-name">Science</span>
+            <span class="sd-item-label">Physics · Chemistry · Biology</span>
+            <span class="sd-item-chips">
+              <span class="sd-item-chip">8 Subjects</span>
+              <span class="sd-item-chip">Trending</span>
+            </span>
+          </span>
+          <span class="sd-item-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+        </button>
+
+        <div class="sd-divider"></div>
+
+        <!-- HUMANITIES -->
+        <button class="sd-item" data-stream="humanities" style="--item-color:#bf5fff" onclick="selectStream('humanities', this, event)">
+          <span class="sd-item-fill"></span>
+          <div class="sd-item-icon-wrap">
+            <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <span class="sd-item-info">
+            <span class="sd-item-name">Humanities &amp; Arts</span>
+            <span class="sd-item-label">History · Pol Sci · Geography</span>
+            <span class="sd-item-chips">
+              <span class="sd-item-chip">8 Subjects</span>
+              <span class="sd-item-chip">Creative</span>
+            </span>
+          </span>
+          <span class="sd-item-check">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+        </button>
+      </div>
+      <div class="sd-footer">
+        <span class="sd-footer-dot"></span>
+        ISC Class XII &middot; 2025&ndash;26
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   STREAM SELECTOR — PREMIUM INTERACTION ENGINE
+   ═══════════════════════════════════════════════════ */
+
+const STREAM_META = {
+  commerce:   { name: 'Commerce',         color: '#ffb830', icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>` },
+  science:    { name: 'Science',           color: '#5fd4e8', icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/><path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/><path d="M3 9h18"/></svg>` },
+  humanities: { name: 'Humanities & Arts', color: '#bf5fff', icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>` },
+};
+
+let currentStream = 'commerce';
+let dropdownOpen = false;
+let particleAnimId = null;
+
+/* ── TOGGLE DROPDOWN ── */
+function toggleDropdown(e) {
+  if (e) e.stopPropagation();
+  dropdownOpen = !dropdownOpen;
+  const dd = document.getElementById('streamDropdown');
+  const trig = document.getElementById('streamTrigger');
+
+  dd.classList.toggle('open', dropdownOpen);
+  trig.classList.toggle('open', dropdownOpen);
+
+  if (dropdownOpen) {
+    positionHighlight(currentStream);
+    startTriggerParticles();
+    // Re-trigger slide-in animations
+    document.querySelectorAll('.sd-item').forEach((item, i) => {
+      item.style.animation = 'none';
+      item.offsetHeight; // Force reflow
+      item.style.animation = `itemSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) ${i * 0.04}s both`;
+    });
+  } else {
+    stopTriggerParticles();
+  }
+}
+
+/* ── CLOSE DROPDOWN ── */
+function closeDropdown() {
+  dropdownOpen = false;
+  document.getElementById('streamDropdown').classList.remove('open');
+  document.getElementById('streamTrigger').classList.remove('open');
+  stopTriggerParticles();
+}
+
+/* ── POSITION HIGHLIGHT ── */
+function positionHighlight(streamKey) {
+  const items = [...document.querySelectorAll('.sd-item')];
+  const idx = items.findIndex(i => i.dataset.stream === streamKey);
+  if (idx < 0) return;
+  const hl = document.getElementById('sdHighlight');
+  const item = items[idx];
+  const color = STREAM_META[streamKey]?.color || '#3bff6c';
+  hl.style.setProperty('--highlight-color', color);
+  hl.style.top = item.offsetTop + 'px';
+  hl.style.height = item.offsetHeight + 'px';
+}
+
+/* ── SELECT STREAM ── */
+function selectStream(streamKey, btn, e) {
+  if (e) e.stopPropagation();
+  const meta = STREAM_META[streamKey];
+  if (!meta || streamKey === currentStream && !dropdownOpen) {
+    if (dropdownOpen) closeDropdown();
+    return;
+  }
+
+  const prevColor = STREAM_META[currentStream]?.color || '#ffb830';
+  currentStream = streamKey;
+
+  // Transition flash
+  const flash = document.getElementById('transitionFlash');
+  flash.style.background = meta.color;
+  flash.classList.remove('active');
+  flash.offsetHeight;
+  flash.classList.add('active');
+  setTimeout(() => flash.classList.remove('active'), 700);
+
+  // Confetti burst from clicked item
+  if (btn) spawnConfetti(btn, meta.color);
+
+  // Update trigger
+  const trig = document.getElementById('streamTrigger');
+  trig.style.setProperty('--stream-color', meta.color);
+  document.getElementById('triggerIcon').innerHTML = meta.icon;
+  document.getElementById('triggerIcon').style.color = meta.color;
+  document.getElementById('triggerName').textContent = meta.name;
+
+  // Update dropdown after effects
+  document.querySelectorAll('.sd-item').forEach(i => i.classList.toggle('active', i.dataset.stream === streamKey));
+  positionHighlight(streamKey);
+
+  // Update color orb
+  document.getElementById('colorOrb').style.background = meta.color;
+
+  // Re-color ambient particles
+  recolorAmbientParticles(meta.color);
+
+  // Close with delay for effect visibility
+  setTimeout(() => closeDropdown(), 180);
+}
+
+/* ── CONFETTI BURST ── */
+function spawnConfetti(fromEl, color) {
+  const rect = fromEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const count = 12;
+
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-particle';
+    const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.5;
+    const dist = 30 + Math.random() * 50;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    p.style.cssText = `
+      left: ${cx}px;
+      top: ${cy}px;
+      background: ${color};
+      box-shadow: 0 0 6px ${color};
+      --tx: ${tx}px;
+      --ty: ${ty}px;
+      width: ${3 + Math.random() * 4}px;
+      height: ${3 + Math.random() * 4}px;
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 750);
+  }
+}
+
+/* ── TRIGGER PARTICLE SYSTEM ── */
+const particleCanvas = document.getElementById('triggerParticles');
+const pCtx = particleCanvas.getContext('2d');
+let particles = [];
+
+function resizeParticleCanvas() {
+  const trig = document.getElementById('streamTrigger');
+  const rect = trig.getBoundingClientRect();
+  particleCanvas.width = rect.width * window.devicePixelRatio;
+  particleCanvas.height = rect.height * window.devicePixelRatio;
+  particleCanvas.style.width = rect.width + 'px';
+  particleCanvas.style.height = rect.height + 'px';
+  pCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+}
+
+class TriggerParticle {
+  constructor(w, h, color) {
+    this.reset(w, h, color);
+  }
+  reset(w, h, color) {
+    this.x = Math.random() * w;
+    this.y = h + Math.random() * 10;
+    this.size = 0.5 + Math.random() * 1.5;
+    this.speedY = -(0.2 + Math.random() * 0.6);
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.opacity = 0;
+    this.maxOpacity = 0.15 + Math.random() * 0.35;
+    this.life = 0;
+    this.maxLife = 60 + Math.random() * 80;
+    this.color = color;
+  }
+  update(w, h) {
+    this.y += this.speedY;
+    this.x += this.speedX;
+    this.life++;
+    const progress = this.life / this.maxLife;
+    if (progress < 0.2) {
+      this.opacity = (progress / 0.2) * this.maxOpacity;
+    } else if (progress > 0.7) {
+      this.opacity = ((1 - progress) / 0.3) * this.maxOpacity;
+    } else {
+      this.opacity = this.maxOpacity;
+    }
+    if (this.life >= this.maxLife) this.reset(w, h, this.color);
+  }
+  draw(ctx) {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.opacity;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+function startTriggerParticles() {
+  resizeParticleCanvas();
+  const trig = document.getElementById('streamTrigger');
+  const rect = trig.getBoundingClientRect();
+  const w = rect.width;
+  const h = rect.height;
+  const color = STREAM_META[currentStream]?.color || '#ffb830';
+
+  if (particles.length === 0) {
+    for (let i = 0; i < 18; i++) {
+      const p = new TriggerParticle(w, h, color);
+      p.life = Math.random() * p.maxLife; // Stagger start
+      particles.push(p);
+    }
+  }
+
+  function animate() {
+    const rect2 = trig.getBoundingClientRect();
+    const w2 = rect2.width;
+    const h2 = rect2.height;
+    pCtx.clearRect(0, 0, w2, h2);
+    const c = STREAM_META[currentStream]?.color || '#ffb830';
+    particles.forEach(p => {
+      p.color = c;
+      p.update(w2, h2);
+      p.draw(pCtx);
+    });
+    particleAnimId = requestAnimationFrame(animate);
+  }
+  if (!particleAnimId) animate();
+}
+
+function stopTriggerParticles() {
+  if (particleAnimId) {
+    cancelAnimationFrame(particleAnimId);
+    particleAnimId = null;
+  }
+  pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+}
+
+/* ── AMBIENT FLOATING PARTICLES ── */
+function createAmbientParticles() {
+  const container = document.getElementById('ambientParticles');
+  const colors = ['#ffb830', '#5fd4e8', '#bf5fff', '#3bff6c'];
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'ambient-particle';
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = 1 + Math.random() * 3;
+    const duration = 12 + Math.random() * 20;
+    const delay = Math.random() * duration;
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${size}px;
+      height: ${size}px;
+      background: ${color};
+      box-shadow: 0 0 ${size * 2}px ${color};
+      animation-duration: ${duration}s;
+      animation-delay: -${delay}s;
+    `;
+    container.appendChild(p);
+  }
+}
+
+function recolorAmbientParticles(targetColor) {
+  const particles = document.querySelectorAll('.ambient-particle');
+  // Randomly recolor ~40% of particles to the new stream color
+  const indices = [...Array(particles.length).keys()].sort(() => Math.random() - 0.5).slice(0, Math.ceil(particles.length * 0.4));
+  indices.forEach(i => {
+    const p = particles[i];
+    if (!p) return;
+    const size = parseFloat(p.style.width);
+    p.style.background = targetColor;
+    p.style.boxShadow = `0 0 ${size * 2}px ${targetColor}`;
+  });
+}
+
+/* ── CLICK OUTSIDE TO CLOSE ── */
+document.addEventListener('click', (e) => {
+  if (dropdownOpen && !document.getElementById('streamSelector').contains(e.target)) {
+    closeDropdown();
+  }
+});
+
+/* ── KEYBOARD SUPPORT ── */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && dropdownOpen) {
+    closeDropdown();
+  }
+});
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('streamTrigger').style.setProperty('--stream-color', '#ffb830');
+  createAmbientParticles();
+  // Initial highlight position
+  requestAnimationFrame(() => positionHighlight('commerce'));
+});
+
+// Also init immediately if DOM is ready
+if (document.readyState !== 'loading') {
+  document.getElementById('streamTrigger').style.setProperty('--stream-color', '#ffb830');
+  createAmbientParticles();
+  requestAnimationFrame(() => positionHighlight('commerce'));
+}
+</script>
+</body>
+</html>
