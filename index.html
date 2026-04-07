@@ -2,12 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<script>
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    window.location.replace('mobile.html');
-  }
-</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <script src="theme-color-system.js"></script>
 <script src="theme-picker.js" defer></script>
 <title>ISC.exe — Class 12 Resource Hub</title>
@@ -21,6 +16,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="description" content="All your Class 12 ISC resources — PDFs, notes, exam schedule and study tools — organized, searchable, free. No login required."/>
 <meta name="theme-color" content="#bf5ffa"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;cursor:none !important;}
@@ -418,18 +415,74 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .row-card:nth-child(3){animation:cardPulse1 4s ease-in-out infinite 1.6s,up .7s .82s ease both;}
 .row-card:nth-child(4){animation:cardPulse2 4s ease-in-out infinite 2.4s,up .7s .88s ease both;}
 
+/* Hide the bottom nav by default on desktop */
+.mobile-bottom-nav { display: none; }
+
 @media(max-width:700px){
-  .nav-main-links{display:none;}
-  .focus-pill{display:none;}
-  .disc-wrap{display:none;}
-  .hero{padding:88px 18px 96px;}
-  .hero-shell{grid-template-columns:1fr;gap:28px;}
-  .hero-title{font-size:clamp(2rem,12vw,3.6rem);}
-  .hero-actions{flex-direction:column;}
-  .star-btn,.hero-btn.secondary{width:100%;justify-content:center;}
-  .nav-cards{grid-template-columns:1fr;max-width:100%;}
-  .hero-stats{grid-template-columns:repeat(2,1fr);}
-  .row-card{min-height:auto;}
+  /* Hide desktop-specific nav elements */
+  .nav-main-links { display: none; }
+  .focus-pill { display: none; }
+  .disc-wrap { display: none; }
+  
+  /* Fix layout spacing for mobile */
+  .hero { padding: 88px 18px calc(80px + env(safe-area-inset-bottom)); }
+  .hero-shell { grid-template-columns: 1fr; gap: 28px; }
+  .hero-title { font-size: clamp(2.2rem, 12vw, 3.6rem); }
+  .hero-actions { flex-direction: column; }
+  .star-btn, .hero-btn.secondary { width: 100%; justify-content: center; }
+  .nav-cards { grid-template-columns: 1fr; max-width: 100%; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .row-card { min-height: auto; }
+
+  /* Mobile Bottom Navigation Styling */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(65px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: rgba(11, 17, 13, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    z-index: 1000;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mobile-bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--fg3);
+    text-decoration: none;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .mobile-bottom-nav a .mbn-icon {
+    font-size: 20px;
+    margin-bottom: 2px;
+    filter: grayscale(100%) opacity(0.6);
+    transition: all 0.2s;
+  }
+
+  .mobile-bottom-nav a.active {
+    color: var(--accent);
+  }
+
+  .mobile-bottom-nav a.active .mbn-icon {
+    filter: none;
+    transform: translateY(-2px);
+  }
 }
 </style>
 </head>
@@ -652,6 +705,25 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
     </div>
   </div>
 </section>
+
+<nav class="mobile-bottom-nav">
+  <a href="index.html" class="active">
+    <span class="mbn-icon">🏠</span>
+    <span>Home</span>
+  </a>
+  <a href="resource.html">
+    <span class="mbn-icon">📚</span>
+    <span>Resources</span>
+  </a>
+  <a href="timetable.html">
+    <span class="mbn-icon">📅</span>
+    <span>Timetable</span>
+  </a>
+  <a href="channels.html">
+    <span class="mbn-icon">📺</span>
+    <span>Channels</span>
+  </a>
+</nav>
 
 <script>
 /* ── CURSOR ── */
