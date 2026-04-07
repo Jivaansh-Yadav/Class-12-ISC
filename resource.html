@@ -4,13 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <script>
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    const _p = window.location.pathname;
-    const _dest = (_p && _p !== '/' && _p !== '/resource' && !_p.endsWith('mobile.html'))
-      ? '/mobile.html?r=' + encodeURIComponent(_p)
-      : '/mobile.html';
-    window.location.replace(_dest);
-  }
   (function(){
     const s = localStorage.getItem('isc-accent');
     const g = localStorage.getItem('isc-gradient');
