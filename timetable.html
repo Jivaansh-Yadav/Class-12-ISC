@@ -260,15 +260,49 @@ td{padding:12px 18px;font-size:13px;vertical-align:middle;}
 
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18px 28px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);}
 
+/* ── MOBILE BOTTOM NAV ── */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(58px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(17,18,16,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border2);z-index:400;justify-content:space-around;align-items:center;}
+.mobile-bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--fg3);text-decoration:none;font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;padding:6px 0;transition:color .2s;}
+.mobile-bottom-nav a .mbn-icon{font-size:20px;filter:grayscale(100%) opacity(0.5);transition:all .2s;}
+.mobile-bottom-nav a.active{color:var(--accent);}
+.mobile-bottom-nav a.active .mbn-icon{filter:none;transform:translateY(-1px);}
+
 @media(max-width:640px){
-  nav,.hero,.next-exam-banner,.controls,.stats-row,.table-wrap,footer{padding-left:14px;padding-right:14px;}
-  th,td{padding:8px 12px;}
-  .td-date{min-width:80px;}
-  .neb-inner{flex-wrap:wrap;}
-  .countdown-ticker{margin-left:0;margin-top:8px;text-align:left;}
-  .stats-row{flex-wrap:wrap;}
-  h1{font-size:1.8rem;}
+  .mobile-bottom-nav{display:flex;}
+  body{padding-bottom:calc(60px + env(safe-area-inset-bottom,0px)) !important;}
+  nav{padding:0 12px;}
+  .nav-right{gap:3px;}
+  .color-trigger span:not(.trigger-swatch):not(.trigger-caret){display:none;}
+  .color-trigger{padding:5px 8px;}
+  .nav-link{font-size:10px;padding:4px 8px;}
+  .hero{padding:44px 16px 22px;}
+  h1{font-size:1.55rem;}
+  .hero-sub,.hero-eye{font-size:10px;}
+  .next-exam-banner{padding:0 14px 14px;}
+  .neb-inner{flex-wrap:wrap;gap:8px;}
+  .countdown-ticker{margin-left:0;text-align:left;width:100%;border-top:1px solid rgba(255,255,255,.06);padding-top:8px;}
+  .ticker-time{font-size:16px;}
+  .controls{padding:0 14px 12px;}
+  .stream-tabs{width:100%;display:flex;}
+  .stream-tab{font-size:10px;padding:6px 10px;flex:1;justify-content:center;}
+  .stats-row{padding:0 14px 12px;gap:5px;flex-wrap:wrap;}
+  .stat-chip{font-size:10px;padding:4px 9px;}
+  .table-wrap{padding:0 10px 24px;}
+  .table-topbar{padding:6px 10px;}
+  .table-topbar span:nth-child(2){font-size:8px;overflow:hidden;text-overflow:ellipsis;max-width:130px;}
+  thead th:nth-child(2),thead th:nth-child(4){display:none;}
+  tbody td:nth-child(2),tbody td:nth-child(4){display:none;}
+  .month-row td{font-size:8px;padding:4px 10px;}
+  td{padding:9px 10px;}
+  th{padding:7px 10px;}
+  .td-date{min-width:70px;}
+  .td-day{font-size:8px;}
+  .td-datenum{font-size:11px;}
+  .subj-name{font-size:12px;}
+  .subj-badge{font-size:7px;padding:1px 5px;}
+  footer{padding:12px 14px;flex-direction:column;gap:4px;text-align:center;font-size:10px;}
 }
+
 </style>
 </head>
 <body>
@@ -324,7 +358,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <svg class="hero-bg" viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
     <circle cx="380" cy="130" r="180" fill="none" stroke="rgba(122,184,106,0.055)" stroke-width="1"/>
@@ -356,7 +389,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
   </div>
 </div>
 
-<!-- NEXT EXAM BANNER -->
 <div class="next-exam-banner">
   <div class="neb-inner" id="nextExamBanner">
     <div class="neb-icon">⚡</div>
@@ -372,7 +404,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
   </div>
 </div>
 
-<!-- CONTROLS -->
 <div class="controls">
   <div class="stream-tabs">
     <button class="stream-tab active-commerce" id="btn-commerce" onclick="setStream('commerce')">
@@ -386,14 +417,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
   </div>
 </div>
 
-<!-- STATS -->
 <div class="stats-row">
   <div class="stat-chip">Total: <span id="statTotal">—</span></div>
   <div class="stat-chip">Remaining: <span id="statRemaining">—</span></div>
   <div class="stat-chip">Next: <span id="statNext">—</span></div>
 </div>
 
-<!-- TABLE -->
 <div class="table-wrap">
   <div class="table-shell">
     <div class="table-topbar">
@@ -421,6 +450,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
   <span>ISC.exe · © 2025 HJexe</span>
   <span>HJexe / Class-12-ISC</span>
 </footer>
+
+<nav class="mobile-bottom-nav">
+  <a href="index.html"><span class="mbn-icon">🏠</span><span>Home</span></a>
+  <a href="dashboard.html"><span class="mbn-icon">⏱️</span><span>Timer</span></a>
+  <a href="resource.html"><span class="mbn-icon">📚</span><span>Resources</span></a>
+  <a href="timetable.html" class="active"><span class="mbn-icon">📅</span><span>Timetable</span></a>
+  <a href="channels.html"><span class="mbn-icon">📺</span><span>Channels</span></a>
+</nav>
 
 <script>
 /* ══ THEME PICKER — SOLID + GRADIENT ══ */
