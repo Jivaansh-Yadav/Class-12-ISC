@@ -13,8 +13,8 @@
 <style>
 :root{--bg:#080b08;--bg2:#0e110e;--surface:#141714;--surface2:#1a1d1a;--border:#1e231e;--border2:#272d27;--accent:#7ab86a;--accent-lo:rgba(122,184,106,.10);--fg:#dde3da;--fg2:#96a492;--fg3:#505c4e;--amber:#d4a84b;--cyan:#5fd4e8;--nav-h:52px;--bot-h:60px;--safe-t:env(safe-area-inset-top,0px);--safe-b:env(safe-area-inset-bottom,0px);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;}
-body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-size:14px;overflow:hidden;position:fixed;width:100%;}
+html,body{height:100%;background:var(--bg);overscroll-behavior:none;}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-size:14px;overflow:hidden;position:fixed;width:100%;inset:0;}
 .nav{position:fixed;top:0;left:0;right:0;z-index:300;height:calc(var(--nav-h) + var(--safe-t));padding-top:var(--safe-t);display:flex;align-items:center;justify-content:space-between;padding-left:18px;padding-right:14px;background:rgba(8,11,8,.97);border-bottom:1px solid var(--border2);backdrop-filter:blur(20px);}
 .nav-brand{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:var(--fg);display:flex;align-items:center;gap:9px;}
 .brand-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:dpulse 2.5s ease-in-out infinite;}
@@ -24,6 +24,7 @@ body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-
 .bnav{position:fixed;bottom:0;left:0;right:0;z-index:300;height:calc(var(--bot-h) + var(--safe-b));padding-bottom:var(--safe-b);background:rgba(8,11,8,.97);border-top:1px solid var(--border2);backdrop-filter:blur(20px);display:flex;align-items:center;}
 .bi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--fg3);transition:color .18s;position:relative;background:none;border:none;cursor:pointer;padding:0;}
 .bi.active{color:var(--accent);}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .bi-icon{font-size:20px;line-height:1;}
 .bi-pip{position:absolute;top:6px;right:calc(50% - 16px);width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:dpulse 2s infinite;}
 .app{position:fixed;top:calc(var(--nav-h) + var(--safe-t));left:0;right:0;bottom:calc(var(--bot-h) + var(--safe-b));overflow:hidden;}
@@ -226,44 +227,7 @@ body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-
   <div style="display:flex;gap:6px;"><button class="nav-ibtn" onclick="showDisc()">⚠️</button></div>
 </header>
 <div class="app">
-  <div class="page active" id="page-home">
-    <div class="hscroll">
-      <p class="home-eye">Class 12 · <span>ISC</span> · 2025–26</p>
-      <h1 class="home-title">ISC experience,<br><em>made better.</em></h1>
-      <p class="home-sub">Commerce · Science · Humanities</p>
-      <div class="stats">
-        <div class="sc"><span class="sn">∞</span><span class="sl">PDFs</span></div>
-        <div class="sc"><span class="sn">11+</span><span class="sl">Subjects</span></div>
-        <div class="sc"><span class="sn">0</span><span class="sl">Login</span></div>
-        <div class="sc"><span class="sn">Free</span><span class="sl">Always</span></div>
-      </div>
-      <div class="hcards">
-        <div class="hcard" style="--cc:var(--accent)" onclick="switchPage('resources')">
-          <div class="hc-ico">📚</div>
-          <div class="hc-body"><div class="hc-meta">Study Files</div><div class="hc-title">Resources &amp; Notes</div><div class="hc-desc">PDFs, notes &amp; past papers</div></div>
-          <div class="hc-arr">›</div>
-        </div>
-        <div class="hcard" style="--cc:var(--amber)" onclick="switchPage('timetable')">
-          <div class="hc-ico">📅</div>
-          <div class="hc-body"><div class="hc-meta">2026 Board</div><div class="hc-title">Exam Timetable</div><div class="hc-desc">Full schedule with countdowns</div></div>
-          <div class="hc-arr">›</div>
-        </div>
-        <div class="hcard" style="--cc:var(--cyan)" onclick="switchPage('channels')">
-          <div class="hc-ico">📺</div>
-          <div class="hc-body"><div class="hc-meta">Handpicked</div><div class="hc-title">YouTube Channels</div><div class="hc-desc">Top ISC educators by subject</div></div>
-          <div class="hc-arr">›</div>
-        </div>
-      </div>
-      <div class="comm">
-        <div class="comm-lbl">Join the community</div>
-        <div class="comm-links">
-          <a class="cbtn cd" href="https://discord.gg/mA9ZqCQh8n" target="_blank" rel="noopener">💬 Discord</a>
-          <a class="cbtn cr" href="https://www.reddit.com/r/ISCNERDS/" target="_blank" rel="noopener">🏆 Reddit</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="page" id="page-resources">
+  <div class="page active" id="page-resources">
     <div class="rpg">
       <div class="sbar">
         <button class="sbtn" id="sBtn" onclick="openSD()">
@@ -311,19 +275,10 @@ body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-
       <div class="examlist" id="examlist"></div>
     </div>
   </div>
-  <div class="page" id="page-channels">
-    <div class="chscroll">
-      <div class="chhero"><div class="chtitle">YouTube <em>channels.</em></div><p class="chsub">Community-picked ISC educators</p></div>
-      <div class="chtabs"><button class="chtab aa" id="chAll" onclick="chSet('all')">All</button><button class="chtab" id="chC" onclick="chSet('commerce')">📊 Comm</button><button class="chtab" id="chS" onclick="chSet('science')">🔬 Sci</button></div>
-      <div id="chList"><div class="tload"><div class="spin"></div><p class="ltxt">Loading channels…</p></div></div>
-    </div>
-  </div>
 </div>
-<nav class="bnav">
-  <button class="bi active" id="bi-home" onclick="switchPage('home')"><span class="bi-icon">🏠</span><span>Home</span></button>
-  <button class="bi" id="bi-resources" onclick="switchPage('resources')"><span class="bi-icon">📚</span><span>Resources</span></button>
-  <button class="bi" id="bi-timetable" onclick="switchPage('timetable')"><div class="bi-pip"></div><span class="bi-icon">📅</span><span>Timetable</span></button>
-  <button class="bi" id="bi-channels" onclick="switchPage('channels')"><span class="bi-icon">📺</span><span>Channels</span></button>
+<nav class="bnav" aria-label="Primary navigation">
+  <button class="bi active" id="bi-resources" onclick="switchPage('resources')" aria-label="Open Notes and resources"><span class="bi-icon">📚</span><span>Notes &amp; Resources</span></button>
+  <button class="bi" id="bi-timetable" onclick="switchPage('timetable')" aria-label="Open timetable"><div class="bi-pip"></div><span class="bi-icon">📅</span><span>Timetable</span></button>
 </nav>
 <div class="sdrop" id="sdrop" onclick="closeSD()">
   <div class="sdrop-sheet" onclick="event.stopPropagation()">
@@ -334,10 +289,10 @@ body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;font-
   </div>
 </div>
 <script>
-var activePage='home',inited={};
-function switchPage(id){if(id===activePage)return;document.getElementById('page-'+activePage).classList.remove('active');document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.bi').forEach(function(b){b.classList.remove('active');});document.getElementById('bi-'+id).classList.add('active');activePage=id;if(!inited[id]){inited[id]=true;if(id==='resources')resLoad();if(id==='timetable')ttInit();if(id==='channels')chLoad();}}
+var activePage='resources',inited={resources:true};
+function switchPage(id){if(id===activePage)return;document.getElementById('page-'+activePage).classList.remove('active');document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.bi').forEach(function(b){b.classList.remove('active');});document.getElementById('bi-'+id).classList.add('active');activePage=id;if(!inited[id]){inited[id]=true;if(id==='resources')resLoad();if(id==='timetable')ttInit();}}
 function toast(msg,dur){document.querySelectorAll('.toast').forEach(function(t){t.remove();});var t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(function(){t.remove();},350);},dur||2200);}
-function showDisc(){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;backdrop-filter:blur(4px);';d.innerHTML='<div style="width:100%;background:#151714;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));border-top:1px solid #272d27;"><div style="width:36px;height:4px;background:#272d27;border-radius:2px;margin:0 auto 16px;"></div><p style="font-family:monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,168,75,.9);margin-bottom:10px;">Disclaimer</p><p style="font-size:13px;color:rgba(221,227,218,.65);line-height:1.75;">ISC.exe is a <strong style="color:#fff">free aggregator</strong> of publicly available study notes. <strong style="color:#fff">Not affiliated with ISC (CISCE)</strong>. No copyrights over any material.<br><br>Removal: <a href="mailto:hrooshi@duck.com" style="color:#d4a84b;text-decoration:none;">hrooshi@duck.com</a></p><button onclick="this.closest(\'[style]\').remove()" style="margin-top:16px;width:100%;padding:13px;background:#1a1d1a;border:1px solid #272d27;border-radius:12px;color:#96a492;font-family:monospace;font-size:11px;cursor:pointer;">Close</button></div>';d.onclick=function(e){if(e.target===d)d.remove();};document.body.appendChild(d);}
+function showDisc(){var d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.8);display:flex;align-items:flex-end;backdrop-filter:blur(4px);';d.innerHTML='<div style="width:100%;background:#151714;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));border-top:1px solid #272d27;"><div style="width:36px;height:4px;background:#272d27;border-radius:2px;margin:0 auto 16px;"></div><p style="font-family:monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(212,168,75,.9);margin-bottom:10px;">Disclaimer</p><p style="font-size:13px;color:rgba(221,227,218,.65);line-height:1.75;">ISC.exe is a <strong style="color:#fff">free aggregator</strong> of publicly available study notes. <strong style="color:#fff">Not affiliated with ISC (CISCE)</strong>. No copyrights over any material.<br><br>Removal: <a href="mailto:hrooshi@duck.com" style="color:#d4a84b;text-decoration:none;">hrooshi@duck.com</a></p><button aria-label="Close disclaimer" onclick="this.closest(\'div[style*=position\\:fixed]\').remove()" style="margin-top:16px;width:100%;padding:13px;background:#1a1d1a;border:1px solid #272d27;border-radius:12px;color:#96a492;font-family:monospace;font-size:11px;cursor:pointer;">Close</button></div>';d.onclick=function(e){if(e.target===d)d.remove();};document.body.appendChild(d);}
 var SM={commerce:{name:'Commerce',icon:'💰',bg:'rgba(212,168,75,.06)',br:'rgba(212,168,75,.28)'},science:{name:'Science',icon:'⚗️',bg:'rgba(95,212,232,.06)',br:'rgba(95,212,232,.28)'},humanities:{name:'Humanities',icon:'📜',bg:'rgba(191,95,255,.06)',br:'rgba(191,95,255,.28)'}};
 var rStream='commerce';
 function openSD(){document.getElementById('sdrop').classList.add('open');}
@@ -371,10 +326,9 @@ var ttStr='commerce';
 function dUntil(ds){var t=new Date();t.setHours(0,0,0,0);var d=new Date(ds);d.setHours(0,0,0,0);return Math.round((d-t)/86400000);}
 function ttInit(){ttSet('commerce');}
 function ttSet(s){ttStr=s;document.getElementById('ttC').className='tttab'+(s==='commerce'?' ac':'');document.getElementById('ttS').className='tttab'+(s==='science'?' as':'');var today=new Date();today.setHours(0,0,0,0);var up=EXMS.filter(function(e){return e.stream==='both'||e.stream===s;}).map(function(e){var d=new Date(e.date);d.setHours(0,0,0,0);return Object.assign({},e,{days:Math.round((d-today)/86400000)});}).filter(function(e){return e.days>=0;}).sort(function(a,b){return a.days-b.days;});if(up.length){var nx=up[0];document.getElementById('nebSubj').textContent=nx.subject.split('—')[0].trim();document.getElementById('nebDate').textContent=new Date(nx.date).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});document.getElementById('nebDays').textContent=nx.days===0?'Today!':nx.days===1?'Tomorrow':nx.days+' days';}else{document.getElementById('nebSubj').textContent='All done!';document.getElementById('nebDays').textContent='—';}var fl=EXMS.filter(function(e){return e.stream==='both'||e.stream===s;}).sort(function(a,b){return a.date.localeCompare(b.date);});var list=document.getElementById('examlist');list.innerHTML='';var lm=null;fl.forEach(function(ex,i){var ed=new Date(ex.date);ed.setHours(0,0,0,0);var ip=ed<today,it=ed.getTime()===today.getTime(),days=dUntil(ex.date),is=days>0&&days<=5;var mo=ed.toLocaleString('en-US',{month:'long',year:'numeric'});if(mo!==lm){lm=mo;var md=document.createElement('div');md.className='mdiv';md.textContent=mo.toUpperCase();list.appendChild(md);}var bc=ex.stream==='commerce'?'bc':ex.stream==='science'?'bs':'ba';var bl=ex.stream==='both'?'ALL':ex.stream.toUpperCase();var rc='erow'+(it?' et':ip?' ep':is?' es':'');var dH=ip?'<span style="color:var(--fg3)">done</span>':it?'<span style="color:var(--accent)">Today</span>':'<span class="er-dn2">'+days+'</span><span class="er-dl">days</span>';var row=document.createElement('div');row.className=rc;row.style.animationDelay=(i*18)+'ms';row.innerHTML='<div class="er-date"><span class="er-day">'+ex.day+'</span><span class="er-dnum">'+ed.getDate()+'</span></div><div class="er-body"><div class="er-subj">'+ex.subject+'</div><span class="er-badge '+bc+'">'+bl+'</span></div><div class="er-days">'+dH+'</div>';list.appendChild(row);});}
-var chData={commerce:[],science:[]};var chSt='all';
-async function chLoad(){try{var r=await fetch('channels.json',{cache:'no-cache'});if(r.ok){chData=await r.json();chData.commerce=chData.commerce||[];chData.science=chData.science||[];}}catch(e){}chRender();}
-function chSet(s){chSt=s;document.getElementById('chAll').className='chtab'+(s==='all'?' aa':'');document.getElementById('chC').className='chtab'+(s==='commerce'?' ac':'');document.getElementById('chS').className='chtab'+(s==='science'?' as':'');chRender();}
-function chRender(){var list=document.getElementById('chList');list.innerHTML='';var streams=chSt==='all'?['commerce','science']:[chSt];var LB={commerce:'COMMERCE',science:'SCIENCE'};var any=false;streams.forEach(function(s){(chData[s]||[]).forEach(function(g){if(!g.channels||!g.channels.length)return;any=true;var lbl=document.createElement('div');lbl.className='cglbl';lbl.textContent=(LB[s]||s.toUpperCase())+' · '+(g.subject||'').toUpperCase();list.appendChild(lbl);g.channels.forEach(function(ch){var a=document.createElement('a');a.className='chcard';a.href=ch.url||'#';a.target='_blank';a.rel='noopener noreferrer';a.style.setProperty('--cc',g.color||'var(--accent)');var ti=ch.avatarUrl?'<img src="'+ch.avatarUrl+'" alt="" loading="lazy" onerror="this.parentNode.textContent=\''+(ch.av||'📺')+'\'">':(ch.av||'📺');var tb=ch.isTop?'<span class="chbdg chtop">★ TOP</span>':'';a.innerHTML='<div class="chthumb">'+ti+'</div><div class="chinfo"><div class="chname">'+(ch.name||'')+'</div><div class="chmeta">'+tb+'</div></div><div class="charr">↗</div>';list.appendChild(a);});});});if(!any)list.innerHTML='<div class="tempty">No channels found.</div>';}
+
+resLoad();
+(function(){var h=(location.hash||'').toLowerCase();if(h==='#timetable'){switchPage('timetable');}else{switchPage('resources');}})();
 </script>
 </body>
 </html>
