@@ -371,7 +371,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .disc-title{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,184,48,.9);flex:1;}
 .disc-body{padding:10px 14px;font-size:11.5px;color:rgba(237,242,234,.65);line-height:1.7;}
 .disc-body strong{color:#fff;}
-/* FIX 3: disclaimer email now clearly visible */
 .disc-body a{color:#ffd060;text-decoration:none;border-bottom:1px solid rgba(255,208,96,.6);font-weight:600;letter-spacing:.1px;}
 .disc-body a:hover{color:#ffe899;border-bottom-color:rgba(255,232,153,.8);}
 .nav-sep{width:1px;height:18px;background:var(--border2);margin:0 2px;flex-shrink:0;}
@@ -774,7 +773,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .s-arr{font-size:5px;color:color-mix(in srgb,var(--subj-color) 65%,var(--fg3));transition:transform .2s,color .18s;flex-shrink:0;opacity:0.9;}
 .subject[open] .s-arr{transform:rotate(90deg);color:var(--subj-color);opacity:1;}
 
-/* FIX 1: sub-folder text and icon — much brighter/whiter */
 .sub-folder{margin:2px 0 2px 8px;border-radius:6px;}
 .sub-folder>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:6px;font-size:13px;color:rgba(255,255,255,0.82);transition:background .14s,color .14s;user-select:none;min-width:0;}
 .sub-folder>summary::-webkit-details-marker{display:none;}
@@ -964,12 +962,40 @@ body .creds-bubble{display:none !important;}
 }
 .pip-link:hover{background:var(--accent-lo);}
 
+/* ─── MOBILE RESPONSIVENESS OVERRIDES ─── */
 @media(max-width:820px){
   #examAlert{left:0;}
-  .layout{grid-template-columns:1fr;}
-  .sidebar-divider,.viewer{display:none;}
+  .layout{
+    display:block; 
+    padding-bottom: calc(65px + env(safe-area-inset-bottom));
+  }
+  .sidebar{
+    height:calc(100vh - var(--nav-h) - 65px - env(safe-area-inset-bottom)); 
+    border-right:none;
+  }
+  .sidebar-divider{display:none;}
+  
+  /* Make the viewer a full-screen overlay that slides in */
+  .viewer{
+    position:fixed; 
+    top:var(--nav-h); 
+    left:0; right:0; bottom:calc(65px + env(safe-area-inset-bottom));
+    z-index:9000; 
+    transform:translateX(100%); 
+    transition:transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    background:var(--bg); 
+    display:flex;
+  }
+  .viewer.mobile-open {
+    transform:translateX(0);
+  }
+  
+  /* Show the mobile back button */
+  .mobile-back-btn { display:inline-flex !important; }
+  
+  /* Hide the fullscreen button on mobile since it's already full screen */
+  #btnFullscreen { display:none !important; }
 }
-
 </style>
 </head>
 <body>
@@ -1055,7 +1081,6 @@ body .creds-bubble{display:none !important;}
   </div>
 </nav>
 
-<!-- FLOATING MINI TIMER (PiP) -->
 <div class="pip-timer" id="pipTimer">
   <div class="pip-head">
     <div class="pip-head-left">
@@ -1095,7 +1120,6 @@ body .creds-bubble{display:none !important;}
       <div class="sidebar-sub">browse · search · preview</div>
     </div>
 
-    <!-- ══ PREMIUM STREAM DROPDOWN ══ -->
     <div class="stream-dropdown-wrap" id="streamDropdownWrap">
       <button class="stream-trigger" id="streamTrigger" onclick="toggleStreamDropdown()">
         <span class="stream-trigger-fill"></span>
@@ -1199,8 +1223,6 @@ body .creds-bubble{display:none !important;}
         </div>
       </div>
     </div>
-    <!-- ══ END PREMIUM STREAM DROPDOWN ══ -->
-
     <div class="search-wrap">
       <div class="search-box">
         <span class="search-ico">⌕</span>
@@ -1230,6 +1252,10 @@ body .creds-bubble{display:none !important;}
     </div>
     <div class="viewer-toolbar" id="viewerToolbar">
       <div class="tb-group">
+        <button class="tbtn mobile-back-btn" onclick="closeMobileViewer()" style="display:none; color:var(--accent); border-color:color-mix(in srgb, var(--accent) 38%, transparent); background:var(--accent-lo);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px; height:14px; margin-right:2px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Back
+        </button>
         <a id="btnOpen" class="tbtn" target="_blank" rel="noopener noreferrer" title="Open in new tab">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Open
@@ -1681,8 +1707,6 @@ function stopTriggerParticles(){
   pCtx.clearRect(0,0,particleCanvas.width,particleCanvas.height);
 }
 
-
-
 /* ══ RESOURCE HUB LOGIC ══ */
 const OWNER='HJexe';const REPO='Class-12-ISC';const BRANCH='main';
 const STREAMS={
@@ -1871,8 +1895,16 @@ function getModuleTag(path){
   return sub?`MODULE: ${code}-${num}`:'';
 }
 
+function closeMobileViewer() {
+  document.getElementById('viewerPanel').classList.remove('mobile-open');
+}
+
 function preview(entry){
   currentEntry=entry;pushHash(entry);
+  
+  // Slide open the mobile viewer panel
+  document.getElementById('viewerPanel').classList.add('mobile-open');
+
   document.querySelectorAll('.file-link.active').forEach(e=>e.classList.remove('active'));
   const el=document.querySelector(`.file-link[data-key="${CSS.escape(key(entry))}"]`);if(el){el.classList.add('active');el.scrollIntoView({block:'nearest'});}
   const parts=entry.path.split('/');const fname=parts[parts.length-1];const ext=fname.split('.').pop().toLowerCase();const sn=parts[0];
