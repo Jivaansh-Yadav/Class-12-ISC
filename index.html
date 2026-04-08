@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script>
+// Redirect mobile users to the clean mobile page
+if (window.innerWidth <= 820 && !/mobile/.test(window.location.pathname)) {
+  window.location.replace('/mobile');
+}
+</script>
 <script src="theme-color-system.js"></script>
 <script src="theme-picker.js" defer></script>
 <title>ISC.exe — Class 12 Resource Hub</title>
