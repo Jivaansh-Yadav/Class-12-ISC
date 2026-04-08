@@ -244,8 +244,8 @@ td{padding:12px 18px;font-size:13px;vertical-align:middle;}
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18px 28px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:11px;color:var(--fg3);}
 
 /* ── MOBILE BOTTOM NAV ── */
-.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(58px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(17,18,16,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border2);z-index:400;justify-content:space-around;align-items:center;}
-.mobile-bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--fg3);text-decoration:none;font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;padding:6px 0;transition:color .2s;}
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:calc(58px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:rgba(17,18,16,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border2);z-index:10000;justify-content:space-around;align-items:center;}
+.mobile-bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--fg3);text-decoration:none;font-size:9px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px;padding:6px 0;transition:color .2s;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
 .mobile-bottom-nav a .mbn-icon{font-size:20px;filter:grayscale(100%) opacity(0.5);transition:all .2s;}
 .mobile-bottom-nav a.active{color:var(--accent);}
 .mobile-bottom-nav a.active .mbn-icon{filter:none;transform:translateY(-1px);}
@@ -435,10 +435,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:18
 
 <nav class="mobile-bottom-nav">
   <a href="index.html"><span class="mbn-icon">🏠</span><span>Home</span></a>
-  <a href="dashboard.html"><span class="mbn-icon">⏱️</span><span>Timer</span></a>
   <a href="resource.html"><span class="mbn-icon">📚</span><span>Resources</span></a>
   <a href="timetable.html" class="active"><span class="mbn-icon">📅</span><span>Timetable</span></a>
-  <a href="channels.html"><span class="mbn-icon">📺</span><span>Channels</span></a>
 </nav>
 
 <script>

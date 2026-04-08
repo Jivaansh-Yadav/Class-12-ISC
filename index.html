@@ -18,7 +18,8 @@
 <meta name="theme-color" content="#bf5ffa"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;cursor:none !important;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+@media(min-width:701px){*,*::before,*::after{cursor:none !important;}}
 html,body{height:100%;}
 :root{
   --bg:#0b110d;--bg2:#111a14;--surface:#131c16;--surface2:#18231b;
@@ -29,14 +30,14 @@ html,body{height:100%;}
 }
 body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;min-height:100vh;cursor:none;}
 body.light-mode { color: var(--fg); }
-body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.018;}
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.018;}
 .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--accent-subtle, rgba(200,141,183,0.022)) 1px,transparent 1px),linear-gradient(90deg,var(--accent-subtle, rgba(110,182,255,0.022)) 1px,transparent 1px);background-size:52px 52px;}
 
 /* CURSOR */
 #cur,#cur-ring{position:fixed;pointer-events:none;top:0;left:0;will-change:transform;}
 #cur{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 65%,transparent);z-index:10001;opacity:0;transition:width .18s cubic-bezier(.34,1.56,.64,1),height .18s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,opacity .2s;}
 #cur-ring{width:22px;height:22px;border:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:50%;z-index:10000;opacity:0;transition:width .25s cubic-bezier(.34,1.56,.64,1),height .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,border-radius .25s,box-shadow .25s,opacity .3s;}
-.cur-trail{position:fixed;pointer-events:none;z-index:9999;top:0;left:0;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0;will-change:transform;}
+.cur-trail{position:fixed;pointer-events:none;z-index:9998;top:0;left:0;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0;will-change:transform;}
 
 body{animation:pgIn .4s ease both;}
 @keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -434,7 +435,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   .picker-panel{right:0;left:auto;max-width:calc(100vw - 24px);}
 
   /* Fix layout spacing for mobile */
-  .hero{padding:88px 18px calc(80px + env(safe-area-inset-bottom));}
+  .hero{padding:88px 18px calc(80px + env(safe-area-inset-bottom));overflow:hidden;}
   .hero-shell{grid-template-columns:1fr;gap:28px;}
   .hero-title{font-size:clamp(2.2rem,12vw,3.6rem);}
   .hero-actions{flex-direction:column;}
@@ -442,6 +443,10 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
   .nav-cards{grid-template-columns:1fr;max-width:100%;}
   .hero-stats{grid-template-columns:repeat(2,1fr);}
   .row-card{min-height:auto;}
+
+  /* Ensure hero elements don't escape and block the bottom nav */
+  .hero-glow{z-index:0;}
+  .hero section,.hero-left,.hero-right{position:relative;z-index:2;}
 
   /* Mobile Bottom Navigation Styling */
   .mobile-bottom-nav {
@@ -452,11 +457,11 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
     right: 0;
     height: calc(65px + env(safe-area-inset-bottom));
     padding-bottom: env(safe-area-inset-bottom);
-    background: rgba(11, 17, 13, 0.85);
+    background: rgba(11, 17, 13, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1px solid var(--border);
-    z-index: 1000;
+    z-index: 10000;
     justify-content: space-around;
     align-items: center;
   }
@@ -475,6 +480,8 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: color 0.2s, transform 0.2s;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    touch-action: manipulation;
   }
 
   .mobile-bottom-nav a .mbn-icon {
@@ -717,10 +724,8 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 
 <nav class="mobile-bottom-nav">
   <a href="index.html" class="active"><span class="mbn-icon">🏠</span><span>Home</span></a>
-  <a href="dashboard.html"><span class="mbn-icon">⏱️</span><span>Dashboard</span></a>
   <a href="resource.html"><span class="mbn-icon">📚</span><span>Resources</span></a>
   <a href="timetable.html"><span class="mbn-icon">📅</span><span>Timetable</span></a>
-  <a href="channels.html"><span class="mbn-icon">📺</span><span>Channels</span></a>
 </nav>
 
 <script>
