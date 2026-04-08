@@ -1,21 +1,9 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "headers": [
-    {
-      "source": "/mobile.html",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
-        { "key": "Pragma", "value": "no-cache" },
-        { "key": "Expires", "value": "0" }
-      ]
-    },
-    {
-      "source": "/mobile",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-      ]
-    }
+  "redirects": [
+    { "source": "/mobile", "destination": "/", "permanent": true },
+    { "source": "/mobile.html", "destination": "/", "permanent": true }
   ],
   "rewrites": [
     { "source": "/resource/:path*", "destination": "/resource" },
