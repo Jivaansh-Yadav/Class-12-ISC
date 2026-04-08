@@ -1,9 +1,13 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    { "source": "/mobile", "destination": "/", "permanent": true },
-    { "source": "/mobile.html", "destination": "/", "permanent": true }
+  "headers": [
+    {
+      "source": "/mobile",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+      ]
+    }
   ],
   "rewrites": [
     { "source": "/resource/:path*", "destination": "/resource" },
