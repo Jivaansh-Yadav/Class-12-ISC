@@ -1797,7 +1797,6 @@ const COLORS={
 const ALLOWED=new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 let allFiles=[];let stream='commerce';let currentEntry=null;let isFullscreen=false;
 let dictPopover=null;let dictReqId=0;
-let viewerSelectionHooks=null;
 
 function raw(p){return p.split('/').map(encodeURIComponent).join('/');}
 function previewUrl(p){const u=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(p)}`;return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;}
@@ -1879,41 +1878,6 @@ function handleWordSelection(x,y){
   const word=normalizeSelectedWord(sel.toString());
   if(!word)return;
   showSelectionMeaning(word,x,y);
-}
-function attachViewerSelectionHooks(){
-  const frame=document.getElementById('viewerFrame');
-  if(viewerSelectionHooks){
-    try{viewerSelectionHooks.doc.removeEventListener('mouseup',viewerSelectionHooks.onMouseUp);}catch(e){}
-    try{viewerSelectionHooks.doc.removeEventListener('touchend',viewerSelectionHooks.onTouchEnd);}catch(e){}
-    viewerSelectionHooks=null;
-  }
-  try{
-    const win=frame.contentWindow;
-    const doc=win.document;
-    const onMouseUp=(e)=>{
-      const r=frame.getBoundingClientRect();
-      setTimeout(()=>{
-        const sel=win.getSelection();
-        const word=normalizeSelectedWord(sel?sel.toString():'');
-        if(!word)return;
-        showSelectionMeaning(word,r.left+e.clientX,r.top+e.clientY);
-      },0);
-    };
-    const onTouchEnd=(e)=>{
-      const t=e.changedTouches&&e.changedTouches[0];
-      if(!t)return;
-      const r=frame.getBoundingClientRect();
-      setTimeout(()=>{
-        const sel=win.getSelection();
-        const word=normalizeSelectedWord(sel?sel.toString():'');
-        if(!word)return;
-        showSelectionMeaning(word,r.left+t.clientX,r.top+t.clientY);
-      },0);
-    };
-    doc.addEventListener('mouseup',onMouseUp);
-    doc.addEventListener('touchend',onTouchEnd,{passive:true});
-    viewerSelectionHooks={doc,onMouseUp,onTouchEnd};
-  }catch(e){}
 }
 function pushHash(entry){history.pushState(null,'','/resource/'+entry.path.split('/').map(encodeURIComponent).join('/'));}
 function copyShareLink(){if(!currentEntry){showToast('Open a file first, then share');return;}navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied — paste to share')).catch(()=>{const i=document.createElement('input');i.value=location.href;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();showToast('Link copied!');});}
