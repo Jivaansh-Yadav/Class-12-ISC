@@ -1830,19 +1830,19 @@ async function getMeaning(word){
     example:d.example||''
   };
 }
-function normalizeSelectedWord(text){
-  const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
-  if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
-  return cleaned;
-}
 function ensureDictPopover(){
   if(dictPopover)return dictPopover;
   dictPopover=document.createElement('div');
   dictPopover.className='dict-popover';
-  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select any word to see meaning.</div>`;
+  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select a word to see meaning.</div>`;
   dictPopover.querySelector('.dict-popover-close').addEventListener('click',()=>dictPopover.classList.remove('visible'));
   document.body.appendChild(dictPopover);
   return dictPopover;
+}
+function normalizeSelectedWord(text){
+  const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
+  if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
+  return cleaned;
 }
 function placeDictPopover(x,y){
   const pop=ensureDictPopover();
@@ -1872,18 +1872,10 @@ async function showSelectionMeaning(word,x,y){
   }
   placeDictPopover(x,y);
 }
-function getSelectedWord(){
-  const pageSelection=normalizeSelectedWord(window.getSelection?.().toString()||'');
-  if(pageSelection)return pageSelection;
-  const frame=document.getElementById('viewerFrame');
-  try{
-    const frameSelection=normalizeSelectedWord(frame?.contentWindow?.getSelection?.().toString()||'');
-    if(frameSelection)return frameSelection;
-  }catch(e){}
-  return'';
-}
 function handleWordSelection(x,y){
-  const word=getSelectedWord();
+  const sel=window.getSelection();
+  if(!sel||sel.rangeCount===0)return;
+  const word=normalizeSelectedWord(sel.toString());
   if(!word)return;
   showSelectionMeaning(word,x,y);
 }
@@ -2032,10 +2024,10 @@ function preview(entry){
   const emptyState=document.getElementById('emptyState');const loaderOverlay=document.getElementById('loaderOverlay');const frame=document.getElementById('viewerFrame');
   emptyState.style.display='none';loaderOverlay.classList.remove('hidden');frame.style.display='none';frame.src='';
 
-  setTimeout(()=>{frame.src=entry.preview;frame.style.display='block';frame.onload=()=>{loaderOverlay.classList.add('hidden');};setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);},80);
+  setTimeout(()=>{frame.src=entry.preview;frame.style.display='block';frame.onload=()=>{loaderOverlay.classList.add('hidden');attachViewerSelectionHooks();};setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);},80);
 }
 
-function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>{lo.classList.add('hidden');};setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
+function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>{lo.classList.add('hidden');attachViewerSelectionHooks();};setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
 function toggleFullscreen(){const panel=document.getElementById('viewerPanel');isFullscreen=!isFullscreen;panel.classList.toggle('fullscreen',isFullscreen);document.body.classList.toggle('fullscreen-active',isFullscreen);document.getElementById('fsIconExpand').style.display=isFullscreen?'none':'';document.getElementById('fsIconCollapse').style.display=isFullscreen?'':'none';document.getElementById('fsLabel').textContent=isFullscreen?'Exit':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='f'||e.key==='F')toggleFullscreen();if(e.key==='r'||e.key==='R')reloadViewer();if(e.key==='s'||e.key==='S')copyShareLink();if(e.key==='Escape'&&isFullscreen)toggleFullscreen();});
 
@@ -2066,7 +2058,7 @@ function showExamAlert(cs){
 }
 
 document.getElementById('search').addEventListener('input',render);
-document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn,.dict-popover'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
+document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
 document.addEventListener('touchend',e=>{const t=e.changedTouches&&e.changedTouches[0];if(!t)return;setTimeout(()=>handleWordSelection(t.clientX,t.clientY),0);},{passive:true});
 load();
 showExamAlert('commerce');
