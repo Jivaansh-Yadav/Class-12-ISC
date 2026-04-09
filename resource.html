@@ -1823,6 +1823,13 @@ let allFiles=[];let stream='commerce';let currentEntry=null;let isFullscreen=fal
 let dictPopover=null;let dictReqId=0;
 let pdfRenderId=0;
 
+if(typeof pdfjsLib !== 'undefined'){
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js';
+} else {
+  console.error('PDF.js failed to load from CDN');
+}
+
 function raw(p){return p.split('/').map(encodeURIComponent).join('/');}
 function previewUrl(p){const u=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(p)}`;return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;}
 function drivePreview(url){const m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);return m?`https://drive.google.com/file/d/${m[1]}/preview`:`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;}
@@ -2110,7 +2117,7 @@ async function renderPdfPreview(entry, loaderOverlay){
   pv.innerHTML = '';
   pv.style.display = 'block';
 
-  if(typeof pdfjsLib === 'undefined'){
+  if(!window.pdfjsLib){
     showToast('PDF viewer failed to load — trying fallback...');
     renderIframePreview(entry, loaderOverlay);
     return;
@@ -2120,10 +2127,10 @@ async function renderPdfPreview(entry, loaderOverlay){
 
   let pdf;
   try {
-    pdf = await pdfjsLib.getDocument({
+    pdf = await window.pdfjsLib.getDocument({
       url: sourceUrl,
       withCredentials: false,
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/cmaps/',
+      cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/cmaps/',
       cMapPacked: true,
       rangeChunkSize: 65536,
     }).promise;
@@ -2192,7 +2199,7 @@ async function renderPdfPreview(entry, loaderOverlay){
     }).promise;
 
     const textContent = await page.getTextContent();
-    await pdfjsLib.renderTextLayer({
+    await window.pdfjsLib.renderTextLayer({
       textContentSource: textContent,
       container: textLayerDiv,
       viewport,
