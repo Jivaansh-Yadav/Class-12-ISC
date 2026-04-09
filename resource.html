@@ -2101,7 +2101,7 @@ async function renderPdfPreview(entry, loaderOverlay){
   pv.innerHTML = '';
   pv.style.display = 'block';
 
-  if(typeof pdfjsLib === 'undefined'){
+  if(!window.pdfjsLib){
     showToast('PDF viewer failed to load — trying fallback...');
     renderIframePreview(entry, loaderOverlay);
     return;
@@ -2111,7 +2111,7 @@ async function renderPdfPreview(entry, loaderOverlay){
 
   let pdf;
   try {
-    pdf = await pdfjsLib.getDocument({
+    pdf = await window.pdfjsLib.getDocument({
       url: sourceUrl,
       withCredentials: false,
       cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/cmaps/',
@@ -2183,7 +2183,7 @@ async function renderPdfPreview(entry, loaderOverlay){
     }).promise;
 
     const textContent = await page.getTextContent();
-    await pdfjsLib.renderTextLayer({
+    await window.pdfjsLib.renderTextLayer({
       textContentSource: textContent,
       container: textLayerDiv,
       viewport,
