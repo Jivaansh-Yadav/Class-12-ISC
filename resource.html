@@ -48,7 +48,6 @@
 <title>ISC.exe | Resources</title>
 <script>window.va = window.va || function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -744,16 +743,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .search-ico{color:var(--fg3);font-size:11px;}
 #search{background:none;border:none;outline:none;color:var(--fg);font-family:var(--font-ui);font-size:14px;width:100%;}
 #search::placeholder{color:var(--fg3);opacity:.7;}
-.dict-popover{position:fixed;z-index:10050;max-width:320px;min-width:220px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.45);padding:10px 11px;display:none;}
-.dict-popover.visible{display:block;}
-.dict-popover-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--font-mono);font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.dict-popover-close{appearance:none;border:1px solid var(--border2);background:var(--bg2);color:var(--fg3);font-size:11px;line-height:1;border-radius:6px;padding:4px 6px;cursor:pointer;}
-.dict-popover-close:hover{color:var(--fg);}
-.dict-popover-body{font-size:12.5px;line-height:1.45;color:var(--fg2);}
-.dict-popover-body strong{color:var(--fg);}
-.dict-popover-body .meta{margin-top:4px;font-size:11px;color:var(--fg3);}
-.dict-popover.error .dict-popover-body{color:#ff9a9a;}
-
 /* FOLDERS */
 #folders{flex:1;overflow-y:auto;padding:4px 6px 20px;scrollbar-width:none;-ms-overflow-style:none;}
 #folders::-webkit-scrollbar{width:0 !important;display:none !important;}
@@ -1804,20 +1793,11 @@ const COLORS={
 };
 const ALLOWED=new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 let allFiles=[];let stream='commerce';let currentEntry=null;let isFullscreen=false;
-let dictPopover=null;let dictReqId=0;
-let pdfRenderId=0;
-
-if(window.pdfjsLib){
-  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js';
-}
 
 function raw(p){return p.split('/').map(encodeURIComponent).join('/');}
 function previewUrl(p){const u=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(p)}`;return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;}
 function drivePreview(url){const m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);return m?`https://drive.google.com/file/d/${m[1]}/preview`:`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;}
 function extractDriveFileId(url){const m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);return m?m[1]:'';}
-function driveDownloadUrl(url){const id=extractDriveFileId(url);return id?`https://drive.google.com/uc?export=download&id=${id}`:url;}
-function isPdfEntry(entry){return entry.path.toLowerCase().endsWith('.pdf');}
-function getPdfSourceUrl(entry){return entry.source==='gdrive'?driveDownloadUrl(entry.url):entry.url;}
 function allowed(p){const e=p.split('.').pop().toLowerCase();return ALLOWED.has(e)||/\/text\.?$/i.test(p);}
 function inSubjects(p,subs){return subs.some(s=>p.startsWith(s+'/'));}
 function key(e){return `${e.path}::${e.url}`;}
@@ -1833,74 +1813,6 @@ function badge(path,source){
   return `<span class="f-badge ${cls}">${ext}</span>`;
 }
 function showToast(msg,duration=2200){const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),320);},duration);}
-async function getMeaning(word){
-  const res=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-  if(!res.ok)throw new Error('Word not found');
-  const data=await res.json();
-  const root=data?.[0];
-  const d=root?.meanings?.[0]?.definitions?.[0];
-  if(!d?.definition)throw new Error('Meaning unavailable');
-  return{
-    word:root.word||word,
-    phonetic:root.phonetic||root.phonetics?.find(p=>p.text)?.text||'',
-    meaning:d.definition,
-    example:d.example||''
-  };
-}
-function ensureDictPopover(){
-  if(dictPopover)return dictPopover;
-  dictPopover=document.createElement('div');
-  dictPopover.className='dict-popover';
-  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select a word to see meaning.</div>`;
-  dictPopover.querySelector('.dict-popover-close').addEventListener('click',()=>dictPopover.classList.remove('visible'));
-  document.body.appendChild(dictPopover);
-  return dictPopover;
-}
-function normalizeSelectedWord(text){
-  const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
-  if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
-  return cleaned;
-}
-function placeDictPopover(x,y){
-  const pop=ensureDictPopover();
-  const margin=12;
-  const rect=pop.getBoundingClientRect();
-  const px=Math.min(Math.max(margin,x+12),window.innerWidth-rect.width-margin);
-  const py=Math.min(Math.max(margin,y+14),window.innerHeight-rect.height-margin);
-  pop.style.left=px+'px';
-  pop.style.top=py+'px';
-}
-async function showSelectionMeaning(word,x,y){
-  const pop=ensureDictPopover();
-  const body=pop.querySelector('.dict-popover-body');
-  pop.classList.remove('error');
-  body.textContent='Looking up meaning…';
-  pop.classList.add('visible');
-  placeDictPopover(x,y);
-  const reqId=++dictReqId;
-  try{
-    const result=await getMeaning(word);
-    if(reqId!==dictReqId)return;
-    body.innerHTML=`<strong>${result.word}</strong>${result.phonetic?` <span style="opacity:.75;">${result.phonetic}</span>`:''}<div class="meta">${result.meaning}</div>${result.example?`<div class="meta">Example: ${result.example}</div>`:''}`;
-  }catch(e){
-    if(reqId!==dictReqId)return;
-    pop.classList.add('error');
-    body.textContent=`No definition found for "${word}".`;
-  }
-  placeDictPopover(x,y);
-}
-function getSelectedWord(){
-  const pageSelection=normalizeSelectedWord(window.getSelection?.().toString()||'');
-  if(pageSelection)return pageSelection;
-  return'';
-}
-function handleWordSelection(x,y){
-  const sel=window.getSelection();
-  if(!sel||sel.rangeCount===0)return;
-  const word=normalizeSelectedWord(sel.toString());
-  if(!word)return;
-  showSelectionMeaning(word,x,y);
-}
 function pushHash(entry){history.pushState(null,'','/resource/'+entry.path.split('/').map(encodeURIComponent).join('/'));}
 function copyShareLink(){if(!currentEntry){showToast('Open a file first, then share');return;}navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied — paste to share')).catch(()=>{const i=document.createElement('input');i.value=location.href;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();showToast('Link copied!');});}
 function resolveDeepLink(){
@@ -2048,99 +1960,38 @@ function preview(entry){
   emptyState.style.display='none';
   loaderOverlay.classList.remove('hidden');
 
-  if(isPdfEntry(entry)){
-    renderPdfPreview(entry,loaderOverlay);
-    return;
-  }
   renderIframePreview(entry,loaderOverlay);
 }
 
-function clearPdfViewer(){
-  const pv=document.getElementById('pdfViewer');
-  pv.innerHTML='';
-  pv.style.display='none';
-}
-
-function renderIframePreview(entry,loaderOverlay){
-  pdfRenderId++;
-  clearPdfViewer();
-  const frame=document.getElementById('viewerFrame');
-  frame.style.display='none';
-  frame.src='';
+function renderIframePreview(entry, loaderOverlay){
+  const pv = document.getElementById('pdfViewer');
+  pv.innerHTML = '';
+  pv.style.display = 'none';
+  const frame = document.getElementById('viewerFrame');
+  frame.style.display = 'none';
+  frame.src = '';
+  let viewerUrl;
+  if(entry.source === 'gdrive'){
+    const id = extractDriveFileId(entry.url);
+    viewerUrl = id
+      ? `https://drive.google.com/file/d/${id}/preview`
+      : entry.preview;
+  } else {
+    viewerUrl = entry.preview;
+  }
   setTimeout(()=>{
-    frame.src=entry.preview;
-    frame.style.display='block';
-    frame.onload=()=>{loaderOverlay.classList.add('hidden');};
-    setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);
-  },80);
-}
-
-async function renderPdfPreview(entry,loaderOverlay){
-  const activeRender=++pdfRenderId;
-  const frame=document.getElementById('viewerFrame');
-  const pv=document.getElementById('pdfViewer');
-  frame.style.display='none';
-  frame.src='';
-  pv.innerHTML='';
-  pv.style.display='block';
-
-  if(!window.pdfjsLib){
-    showToast('PDF.js failed to load. Falling back to preview iframe.');
-    renderIframePreview(entry,loaderOverlay);
-    return;
-  }
-
-  try{
-    const pdf=await window.pdfjsLib.getDocument(getPdfSourceUrl(entry)).promise;
-    if(activeRender!==pdfRenderId)return;
-
-    for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
-      if(activeRender!==pdfRenderId)return;
-      const page=await pdf.getPage(pageNo);
-      const viewport=page.getViewport({scale:1.35});
-      const pageEl=document.createElement('div');
-      pageEl.className='pdf-page';
-      pageEl.style.width=`${viewport.width}px`;
-      pageEl.style.maxWidth='min(920px,calc(100% - 26px))';
-
-      const canvas=document.createElement('canvas');
-      const ctx=canvas.getContext('2d',{alpha:false});
-      const outputScale=window.devicePixelRatio||1;
-      canvas.width=Math.floor(viewport.width*outputScale);
-      canvas.height=Math.floor(viewport.height*outputScale);
-      canvas.style.width=`${viewport.width}px`;
-      canvas.style.height=`${viewport.height}px`;
-      pageEl.appendChild(canvas);
-
-      const textLayer=document.createElement('div');
-      textLayer.className='pdf-text-layer';
-      pageEl.appendChild(textLayer);
-      pv.appendChild(pageEl);
-
-      await page.render({canvasContext:ctx,viewport,transform:outputScale!==1?[outputScale,0,0,outputScale,0,0]:null}).promise;
-      const textContent=await page.getTextContent();
-      await window.pdfjsLib.renderTextLayer({
-        textContentSource:textContent,
-        container:textLayer,
-        viewport,
-        textDivs:[]
-      }).promise;
-    }
-
-    loaderOverlay.classList.add('hidden');
-  }catch(e){
-    console.error('PDF render failed:',e);
-    showToast('PDF render failed. Using standard preview.');
-    renderIframePreview(entry,loaderOverlay);
-  }
+    frame.src = viewerUrl;
+    frame.style.display = 'block';
+    frame.onload = () => loaderOverlay.classList.add('hidden');
+    setTimeout(() => loaderOverlay.classList.add('hidden'), 8000);
+  }, 80);
 }
 
 function reloadViewer(){
   if(!currentEntry){showToast('No file open');return;}
   const lo=document.getElementById('loaderOverlay');
   lo.classList.remove('hidden');
-  if(isPdfEntry(currentEntry)){renderPdfPreview(currentEntry,lo);}
-  else{renderIframePreview(currentEntry,lo);}
+  renderIframePreview(currentEntry,lo);
   showToast('Reloading preview…');
 }
 function toggleFullscreen(){const panel=document.getElementById('viewerPanel');isFullscreen=!isFullscreen;panel.classList.toggle('fullscreen',isFullscreen);document.body.classList.toggle('fullscreen-active',isFullscreen);document.getElementById('fsIconExpand').style.display=isFullscreen?'none':'';document.getElementById('fsIconCollapse').style.display=isFullscreen?'':'none';document.getElementById('fsLabel').textContent=isFullscreen?'Exit':'Fullscreen';}
@@ -2173,8 +2024,6 @@ function showExamAlert(cs){
 }
 
 document.getElementById('search').addEventListener('input',render);
-document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
-document.addEventListener('touchend',e=>{const t=e.changedTouches&&e.changedTouches[0];if(!t)return;setTimeout(()=>handleWordSelection(t.clientX,t.clientY),0);},{passive:true});
 load();
 showExamAlert('commerce');
 
