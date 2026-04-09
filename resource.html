@@ -743,15 +743,36 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .search-ico{color:var(--fg3);font-size:11px;}
 #search{background:none;border:none;outline:none;color:var(--fg);font-family:var(--font-ui);font-size:14px;width:100%;}
 #search::placeholder{color:var(--fg3);opacity:.7;}
-.dict-popover{position:fixed;z-index:10050;max-width:320px;min-width:220px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:0 12px 28px rgba(0,0,0,.45);padding:10px 11px;display:none;}
-.dict-popover.visible{display:block;}
-.dict-popover-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:var(--font-mono);font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.dict-popover-close{appearance:none;border:1px solid var(--border2);background:var(--bg2);color:var(--fg3);font-size:11px;line-height:1;border-radius:6px;padding:4px 6px;cursor:pointer;}
-.dict-popover-close:hover{color:var(--fg);}
-.dict-popover-body{font-size:12.5px;line-height:1.45;color:var(--fg2);}
-.dict-popover-body strong{color:var(--fg);}
-.dict-popover-body .meta{margin-top:4px;font-size:11px;color:var(--fg3);}
-.dict-popover.error .dict-popover-body{color:#ff9a9a;}
+.dictionary-overlay{
+  position:absolute;right:16px;bottom:16px;z-index:140;
+  width:min(360px,calc(100% - 32px));
+  background:color-mix(in srgb,var(--surface) 94%,transparent);
+  border:1px solid var(--border2);border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,.32),0 0 0 1px rgba(255,255,255,.02) inset;
+  backdrop-filter:blur(10px);
+  padding:12px;
+}
+.dictionary-title{font-family:var(--font-mono);font-size:11px;letter-spacing:.9px;text-transform:uppercase;color:var(--fg3);margin-bottom:8px;}
+.dictionary-controls{display:flex;gap:8px;margin-bottom:10px;}
+.dictionary-input{
+  flex:1;min-width:0;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--fg);padding:9px 10px;font-family:var(--font-ui);font-size:13px;outline:none;
+}
+.dictionary-input:focus{border-color:color-mix(in srgb,var(--accent) 45%,transparent);}
+.dictionary-btn{
+  appearance:none;border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+  background:var(--accent-lo);color:var(--accent);border-radius:8px;cursor:pointer;
+  padding:8px 10px;font-family:var(--font-mono);font-size:11.5px;
+}
+.dictionary-btn:hover{background:color-mix(in srgb,var(--accent) 16%,transparent);}
+.dictionary-btn--ghost{border-color:var(--border2);color:var(--fg2);background:var(--bg2);}
+.dictionary-btn--ghost:hover{background:var(--surface2);color:var(--fg);}
+.dictionary-result{font-size:12.5px;color:var(--fg2);line-height:1.45;display:grid;gap:8px;}
+.dictionary-word{font-size:13px;color:var(--fg);font-weight:600;}
+.dictionary-word .phonetic{font-weight:400;font-size:11.5px;color:var(--fg3);margin-left:6px;}
+.dictionary-block strong{display:block;color:var(--fg3);font-family:var(--font-mono);font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;margin-bottom:3px;}
+.dictionary-status{font-size:11px;color:var(--fg3);}
+.dictionary-status.error{color:#ff9a9a;}
 
 /* FOLDERS */
 #folders{flex:1;overflow-y:auto;padding:4px 6px 20px;scrollbar-width:none;-ms-overflow-style:none;}
@@ -1335,6 +1356,17 @@ body .creds-bubble{display:none !important;}
       </div>
       <iframe id="viewerFrame" title="File preview" style="display:none;"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+      <div class="dictionary-overlay" id="dictionaryOverlay" aria-live="polite">
+        <div class="dictionary-title">Dictionary Overlay</div>
+        <div class="dictionary-controls">
+          <input id="dictionaryInput" class="dictionary-input" type="text" placeholder="Enter word…" maxlength="40" />
+          <button id="dictionarySearchBtn" class="dictionary-btn" type="button">Search</button>
+          <button id="dictionaryClearBtn" class="dictionary-btn dictionary-btn--ghost" type="button">Clear</button>
+        </div>
+        <div class="dictionary-result" id="dictionaryResult">
+          <div class="dictionary-status">Type a word and press Enter.</div>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -1796,7 +1828,7 @@ const COLORS={
 };
 const ALLOWED=new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 let allFiles=[];let stream='commerce';let currentEntry=null;let isFullscreen=false;
-let dictPopover=null;let dictReqId=0;
+let dictReqId=0;
 
 function raw(p){return p.split('/').map(encodeURIComponent).join('/');}
 function previewUrl(p){const u=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(p)}`;return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;}
@@ -1830,54 +1862,50 @@ async function getMeaning(word){
     example:d.example||''
   };
 }
-function ensureDictPopover(){
-  if(dictPopover)return dictPopover;
-  dictPopover=document.createElement('div');
-  dictPopover.className='dict-popover';
-  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select a word to see meaning.</div>`;
-  dictPopover.querySelector('.dict-popover-close').addEventListener('click',()=>dictPopover.classList.remove('visible'));
-  document.body.appendChild(dictPopover);
-  return dictPopover;
-}
 function normalizeSelectedWord(text){
   const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
   if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
   return cleaned;
 }
-function placeDictPopover(x,y){
-  const pop=ensureDictPopover();
-  const margin=12;
-  const rect=pop.getBoundingClientRect();
-  const px=Math.min(Math.max(margin,x+12),window.innerWidth-rect.width-margin);
-  const py=Math.min(Math.max(margin,y+14),window.innerHeight-rect.height-margin);
-  pop.style.left=px+'px';
-  pop.style.top=py+'px';
+function renderDictionaryResult(result){
+  const root=document.getElementById('dictionaryResult');
+  if(!root)return;
+  root.innerHTML=`<div class="dictionary-word">${result.word}${result.phonetic?` <span class="phonetic">${result.phonetic}</span>`:''}</div>
+  <div class="dictionary-block"><strong>Meaning</strong><div>${result.meaning}</div></div>
+  <div class="dictionary-block"><strong>Example</strong><div>${result.example||'—'}</div></div>`;
 }
-async function showSelectionMeaning(word,x,y){
-  const pop=ensureDictPopover();
-  const body=pop.querySelector('.dict-popover-body');
-  pop.classList.remove('error');
-  body.textContent='Looking up meaning…';
-  pop.classList.add('visible');
-  placeDictPopover(x,y);
+function showDictionaryStatus(message,isError=false){
+  const root=document.getElementById('dictionaryResult');
+  if(!root)return;
+  root.innerHTML=`<div class="dictionary-status${isError?' error':''}">${message}</div>`;
+}
+async function lookupDictionaryWord(rawWord){
+  const word=normalizeSelectedWord(rawWord);
+  if(!word){showDictionaryStatus('Enter a valid single word (letters only).',true);return;}
+  showDictionaryStatus('Looking up meaning…');
   const reqId=++dictReqId;
   try{
     const result=await getMeaning(word);
     if(reqId!==dictReqId)return;
-    body.innerHTML=`<strong>${result.word}</strong>${result.phonetic?` <span style="opacity:.75;">${result.phonetic}</span>`:''}<div class="meta">${result.meaning}</div>${result.example?`<div class="meta">Example: ${result.example}</div>`:''}`;
+    renderDictionaryResult(result);
   }catch(e){
     if(reqId!==dictReqId)return;
-    pop.classList.add('error');
-    body.textContent=`No definition found for "${word}".`;
+    showDictionaryStatus(`Word not found: "${word}".`,true);
   }
-  placeDictPopover(x,y);
 }
-function handleWordSelection(x,y){
-  const sel=window.getSelection();
-  if(!sel||sel.rangeCount===0)return;
-  const word=normalizeSelectedWord(sel.toString());
-  if(!word)return;
-  showSelectionMeaning(word,x,y);
+function initDictionaryOverlay(){
+  const input=document.getElementById('dictionaryInput');
+  const searchBtn=document.getElementById('dictionarySearchBtn');
+  const clearBtn=document.getElementById('dictionaryClearBtn');
+  if(!input||!searchBtn||!clearBtn)return;
+  searchBtn.addEventListener('click',()=>lookupDictionaryWord(input.value));
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lookupDictionaryWord(input.value);}});
+  clearBtn.addEventListener('click',()=>{
+    dictReqId++;
+    input.value='';
+    showDictionaryStatus('Type a word and press Enter.');
+    input.focus();
+  });
 }
 function pushHash(entry){history.pushState(null,'','/resource/'+entry.path.split('/').map(encodeURIComponent).join('/'));}
 function copyShareLink(){if(!currentEntry){showToast('Open a file first, then share');return;}navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied — paste to share')).catch(()=>{const i=document.createElement('input');i.value=location.href;document.body.appendChild(i);i.select();document.execCommand('copy');i.remove();showToast('Link copied!');});}
@@ -2024,10 +2052,10 @@ function preview(entry){
   const emptyState=document.getElementById('emptyState');const loaderOverlay=document.getElementById('loaderOverlay');const frame=document.getElementById('viewerFrame');
   emptyState.style.display='none';loaderOverlay.classList.remove('hidden');frame.style.display='none';frame.src='';
 
-  setTimeout(()=>{frame.src=entry.preview;frame.style.display='block';frame.onload=()=>{loaderOverlay.classList.add('hidden');attachViewerSelectionHooks();};setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);},80);
+  setTimeout(()=>{frame.src=entry.preview;frame.style.display='block';frame.onload=()=>{loaderOverlay.classList.add('hidden');};setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);},80);
 }
 
-function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>{lo.classList.add('hidden');attachViewerSelectionHooks();};setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
+function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>{lo.classList.add('hidden');};setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
 function toggleFullscreen(){const panel=document.getElementById('viewerPanel');isFullscreen=!isFullscreen;panel.classList.toggle('fullscreen',isFullscreen);document.body.classList.toggle('fullscreen-active',isFullscreen);document.getElementById('fsIconExpand').style.display=isFullscreen?'none':'';document.getElementById('fsIconCollapse').style.display=isFullscreen?'':'none';document.getElementById('fsLabel').textContent=isFullscreen?'Exit':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='f'||e.key==='F')toggleFullscreen();if(e.key==='r'||e.key==='R')reloadViewer();if(e.key==='s'||e.key==='S')copyShareLink();if(e.key==='Escape'&&isFullscreen)toggleFullscreen();});
 
@@ -2058,8 +2086,7 @@ function showExamAlert(cs){
 }
 
 document.getElementById('search').addEventListener('input',render);
-document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
-document.addEventListener('touchend',e=>{const t=e.changedTouches&&e.changedTouches[0];if(!t)return;setTimeout(()=>handleWordSelection(t.clientX,t.clientY),0);},{passive:true});
+initDictionaryOverlay();
 load();
 showExamAlert('commerce');
 
