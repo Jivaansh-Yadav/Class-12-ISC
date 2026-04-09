@@ -1847,19 +1847,19 @@ async function getMeaning(word){
     example:d.example||''
   };
 }
-function normalizeSelectedWord(text){
-  const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
-  if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
-  return cleaned;
-}
 function ensureDictPopover(){
   if(dictPopover)return dictPopover;
   dictPopover=document.createElement('div');
   dictPopover.className='dict-popover';
-  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select any word to see meaning.</div>`;
+  dictPopover.innerHTML=`<div class="dict-popover-head"><span>Dictionary</span><button type="button" class="dict-popover-close" aria-label="Close">✕</button></div><div class="dict-popover-body">Select a word to see meaning.</div>`;
   dictPopover.querySelector('.dict-popover-close').addEventListener('click',()=>dictPopover.classList.remove('visible'));
   document.body.appendChild(dictPopover);
   return dictPopover;
+}
+function normalizeSelectedWord(text){
+  const cleaned=text.trim().replace(/^[^A-Za-z]+|[^A-Za-z]+$/g,'');
+  if(!cleaned||cleaned.includes(' ')||cleaned.length>40)return'';
+  return cleaned;
 }
 function placeDictPopover(x,y){
   const pop=ensureDictPopover();
@@ -1895,7 +1895,9 @@ function getSelectedWord(){
   return'';
 }
 function handleWordSelection(x,y){
-  const word=getSelectedWord();
+  const sel=window.getSelection();
+  if(!sel||sel.rangeCount===0)return;
+  const word=normalizeSelectedWord(sel.toString());
   if(!word)return;
   showSelectionMeaning(word,x,y);
 }
@@ -2171,7 +2173,7 @@ function showExamAlert(cs){
 }
 
 document.getElementById('search').addEventListener('input',render);
-document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn,.dict-popover'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
+document.addEventListener('mouseup',e=>{if(e.target.closest('input,textarea,button,.tbtn'))return;setTimeout(()=>handleWordSelection(e.clientX,e.clientY),0);});
 document.addEventListener('touchend',e=>{const t=e.changedTouches&&e.changedTouches[0];if(!t)return;setTimeout(()=>handleWordSelection(t.clientX,t.clientY),0);},{passive:true});
 load();
 showExamAlert('commerce');
