@@ -48,6 +48,7 @@
 <title>ISC.exe | Resources</title>
 <script>window.va = window.va || function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -845,6 +846,12 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .empty-hint-key{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:2px 7px;font-size:9px;color:var(--fg2);}
 .empty::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,var(--accent-lo) 0%,transparent 70%);pointer-events:none;}
 iframe#viewerFrame{width:100%;height:100%;border:0;background:#131921;transition:opacity .2s;}
+.pdf-viewer{width:100%;height:100%;overflow:auto;padding:18px 0;background:#131921;display:none;}
+.pdf-page{position:relative;width:min(920px,calc(100% - 26px));margin:0 auto 16px;background:#fff;border-radius:4px;box-shadow:0 10px 36px rgba(0,0,0,.38);overflow:hidden;}
+.pdf-page canvas{width:100%;height:auto;display:block;}
+.pdf-text-layer{position:absolute;inset:0;line-height:1;overflow:hidden;opacity:1;-webkit-text-size-adjust:none;text-size-adjust:none;transform-origin:0 0;z-index:2;}
+.pdf-text-layer span{position:absolute;white-space:pre;cursor:text;transform-origin:0 0;color:transparent;}
+.pdf-text-layer ::selection{background:rgba(59,255,108,.36);}
 .loader-overlay{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10;transition:opacity .3s;}
 .loader-overlay.hidden{opacity:0;pointer-events:none;}
 .loader-spinner{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
@@ -1333,6 +1340,7 @@ body .creds-bubble{display:none !important;}
         <div class="loader-spinner"></div>
         <div class="loader-text">Loading preview…</div>
       </div>
+      <div class="pdf-viewer" id="pdfViewer"></div>
       <iframe id="viewerFrame" title="File preview" style="display:none;"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
     </div>
@@ -1797,10 +1805,19 @@ const COLORS={
 const ALLOWED=new Set(['pdf','doc','docx','txt','ppt','pptx','xls','xlsx']);
 let allFiles=[];let stream='commerce';let currentEntry=null;let isFullscreen=false;
 let dictPopover=null;let dictReqId=0;
+let pdfRenderId=0;
+
+if(window.pdfjsLib){
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js';
+}
 
 function raw(p){return p.split('/').map(encodeURIComponent).join('/');}
 function previewUrl(p){const u=`https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${raw(p)}`;return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(u)}`;}
 function drivePreview(url){const m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);return m?`https://drive.google.com/file/d/${m[1]}/preview`:`https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;}
+function extractDriveFileId(url){const m=url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)||url.match(/[?&]id=([a-zA-Z0-9_-]+)/);return m?m[1]:'';}
+function driveDownloadUrl(url){const id=extractDriveFileId(url);return id?`https://drive.google.com/uc?export=download&id=${id}`:url;}
+function isPdfEntry(entry){return entry.path.toLowerCase().endsWith('.pdf');}
+function getPdfSourceUrl(entry){return entry.source==='gdrive'?driveDownloadUrl(entry.url):entry.url;}
 function allowed(p){const e=p.split('.').pop().toLowerCase();return ALLOWED.has(e)||/\/text\.?$/i.test(p);}
 function inSubjects(p,subs){return subs.some(s=>p.startsWith(s+'/'));}
 function key(e){return `${e.path}::${e.url}`;}
@@ -1875,11 +1892,6 @@ async function showSelectionMeaning(word,x,y){
 function getSelectedWord(){
   const pageSelection=normalizeSelectedWord(window.getSelection?.().toString()||'');
   if(pageSelection)return pageSelection;
-  const frame=document.getElementById('viewerFrame');
-  try{
-    const frameSelection=normalizeSelectedWord(frame?.contentWindow?.getSelection?.().toString()||'');
-    if(frameSelection)return frameSelection;
-  }catch(e){}
   return'';
 }
 function handleWordSelection(x,y){
@@ -2029,13 +2041,106 @@ function preview(entry){
   const mt=document.getElementById('vModuleTag');if(mt)mt.textContent=getModuleTag(entry.path);
   document.getElementById('btnOpen').href=entry.url;document.getElementById('btnOpen').classList.add('file-loaded');
   const dl=document.getElementById('btnDownload');dl.href=entry.url;dl.setAttribute('download',fname);
-  const emptyState=document.getElementById('emptyState');const loaderOverlay=document.getElementById('loaderOverlay');const frame=document.getElementById('viewerFrame');
-  emptyState.style.display='none';loaderOverlay.classList.remove('hidden');frame.style.display='none';frame.src='';
+  const emptyState=document.getElementById('emptyState');
+  const loaderOverlay=document.getElementById('loaderOverlay');
+  emptyState.style.display='none';
+  loaderOverlay.classList.remove('hidden');
 
-  setTimeout(()=>{frame.src=entry.preview;frame.style.display='block';frame.onload=()=>{loaderOverlay.classList.add('hidden');};setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);},80);
+  if(isPdfEntry(entry)){
+    renderPdfPreview(entry,loaderOverlay);
+    return;
+  }
+  renderIframePreview(entry,loaderOverlay);
 }
 
-function reloadViewer(){if(!currentEntry){showToast('No file open');return;}const lo=document.getElementById('loaderOverlay');const f=document.getElementById('viewerFrame');lo.classList.remove('hidden');f.src='';setTimeout(()=>{f.src=currentEntry.preview;f.onload=()=>{lo.classList.add('hidden');};setTimeout(()=>lo.classList.add('hidden'),8000);},100);showToast('Reloading preview…');}
+function clearPdfViewer(){
+  const pv=document.getElementById('pdfViewer');
+  pv.innerHTML='';
+  pv.style.display='none';
+}
+
+function renderIframePreview(entry,loaderOverlay){
+  pdfRenderId++;
+  clearPdfViewer();
+  const frame=document.getElementById('viewerFrame');
+  frame.style.display='none';
+  frame.src='';
+  setTimeout(()=>{
+    frame.src=entry.preview;
+    frame.style.display='block';
+    frame.onload=()=>{loaderOverlay.classList.add('hidden');};
+    setTimeout(()=>loaderOverlay.classList.add('hidden'),8000);
+  },80);
+}
+
+async function renderPdfPreview(entry,loaderOverlay){
+  const activeRender=++pdfRenderId;
+  const frame=document.getElementById('viewerFrame');
+  const pv=document.getElementById('pdfViewer');
+  frame.style.display='none';
+  frame.src='';
+  pv.innerHTML='';
+  pv.style.display='block';
+
+  if(!window.pdfjsLib){
+    showToast('PDF.js failed to load. Falling back to preview iframe.');
+    renderIframePreview(entry,loaderOverlay);
+    return;
+  }
+
+  try{
+    const pdf=await window.pdfjsLib.getDocument(getPdfSourceUrl(entry)).promise;
+    if(activeRender!==pdfRenderId)return;
+
+    for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+      if(activeRender!==pdfRenderId)return;
+      const page=await pdf.getPage(pageNo);
+      const viewport=page.getViewport({scale:1.35});
+      const pageEl=document.createElement('div');
+      pageEl.className='pdf-page';
+      pageEl.style.width=`${viewport.width}px`;
+      pageEl.style.maxWidth='min(920px,calc(100% - 26px))';
+
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d',{alpha:false});
+      const outputScale=window.devicePixelRatio||1;
+      canvas.width=Math.floor(viewport.width*outputScale);
+      canvas.height=Math.floor(viewport.height*outputScale);
+      canvas.style.width=`${viewport.width}px`;
+      canvas.style.height=`${viewport.height}px`;
+      pageEl.appendChild(canvas);
+
+      const textLayer=document.createElement('div');
+      textLayer.className='pdf-text-layer';
+      pageEl.appendChild(textLayer);
+      pv.appendChild(pageEl);
+
+      await page.render({canvasContext:ctx,viewport,transform:outputScale!==1?[outputScale,0,0,outputScale,0,0]:null}).promise;
+      const textContent=await page.getTextContent();
+      await window.pdfjsLib.renderTextLayer({
+        textContentSource:textContent,
+        container:textLayer,
+        viewport,
+        textDivs:[]
+      }).promise;
+    }
+
+    loaderOverlay.classList.add('hidden');
+  }catch(e){
+    console.error('PDF render failed:',e);
+    showToast('PDF render failed. Using standard preview.');
+    renderIframePreview(entry,loaderOverlay);
+  }
+}
+
+function reloadViewer(){
+  if(!currentEntry){showToast('No file open');return;}
+  const lo=document.getElementById('loaderOverlay');
+  lo.classList.remove('hidden');
+  if(isPdfEntry(currentEntry)){renderPdfPreview(currentEntry,lo);}
+  else{renderIframePreview(currentEntry,lo);}
+  showToast('Reloading preview…');
+}
 function toggleFullscreen(){const panel=document.getElementById('viewerPanel');isFullscreen=!isFullscreen;panel.classList.toggle('fullscreen',isFullscreen);document.body.classList.toggle('fullscreen-active',isFullscreen);document.getElementById('fsIconExpand').style.display=isFullscreen?'none':'';document.getElementById('fsIconCollapse').style.display=isFullscreen?'':'none';document.getElementById('fsLabel').textContent=isFullscreen?'Exit':'Fullscreen';}
 document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='f'||e.key==='F')toggleFullscreen();if(e.key==='r'||e.key==='R')reloadViewer();if(e.key==='s'||e.key==='S')copyShareLink();if(e.key==='Escape'&&isFullscreen)toggleFullscreen();});
 
