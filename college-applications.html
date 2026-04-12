@@ -366,6 +366,57 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 }
 @media(min-width:1024px){.app-mobile-bottom{display:none!important}}
 @media(max-width:1023px){.app-footer{display:none}}
+
+/* ─── College Deadlines Table (Screenshot Style) ─── */
+.cd-table-wrap{border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.cd-table{width:100%;border-collapse:collapse}
+.cd-table thead th{padding:13px 18px;font-size:.7rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--fg3);font-family:var(--font-mono);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--bg2)}
+.cd-table tbody tr{transition:background .15s;border-bottom:1px solid rgba(255,255,255,.03)}
+.cd-table tbody tr:nth-child(even){background:rgba(255,255,255,.012)}
+.cd-table tbody tr:hover{background:var(--surface2)}
+.cd-table tbody tr:last-child{border-bottom:none}
+.cd-table tbody td{padding:14px 18px;font-size:.82rem;vertical-align:middle;color:var(--fg2)}
+
+/* College Name Column */
+.cd-college{font-weight:600;color:var(--fg);font-size:.85rem}
+.cd-college .cd-program{font-weight:400;color:var(--fg3);font-size:.72rem;margin-top:3px;font-family:var(--font-mono);letter-spacing:.2px}
+
+/* Deadline Pill */
+.cd-deadline-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:8px;font-family:var(--font-mono);font-size:.74rem;font-weight:600;white-space:nowrap}
+.cd-deadline-pill.countdown{background:rgba(95,212,232,.08);color:var(--cyan);border:1px solid rgba(95,212,232,.15)}
+.cd-deadline-pill.urgent{background:rgba(255,107,107,.08);color:var(--red);border:1px solid rgba(255,107,107,.15)}
+.cd-deadline-pill.relaxed{background:rgba(59,255,108,.08);color:var(--accent);border:1px solid rgba(59,255,108,.15)}
+.cd-deadline-pill.closed{background:rgba(255,255,255,.03);color:var(--fg3);border:1px solid var(--border)}
+.cd-deadline-pill.nodate{background:rgba(255,107,107,.06);color:var(--red);border:1px solid rgba(255,107,107,.12);font-weight:500}
+.cd-deadline-pill .cd-clock{width:13px;height:13px;flex-shrink:0;opacity:.7}
+
+/* Apply Now Button */
+.cd-apply-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;border-radius:8px;font-size:.74rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.4px;background:#8b1a2b;color:#fff;border:none;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap}
+.cd-apply-btn:hover{background:#a5213a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(139,26,43,.35)}
+.cd-apply-btn svg{width:12px;height:12px;flex-shrink:0}
+
+/* Status Badge */
+.cd-status{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:8px;font-size:.72rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.4px;text-transform:uppercase}
+.cd-status .cd-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cd-status.open{background:rgba(59,255,108,.08);color:var(--accent);border:1px solid rgba(59,255,108,.15)}
+.cd-status.open .cd-dot{background:var(--accent);box-shadow:0 0 6px var(--accent);animation:breathe 2s infinite}
+.cd-status.upcoming{background:rgba(255,184,48,.08);color:var(--amber);border:1px solid rgba(255,184,48,.15)}
+.cd-status.upcoming .cd-dot{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:breathe 2.5s infinite}
+.cd-status.closed{background:rgba(255,255,255,.03);color:var(--fg3);border:1px solid var(--border)}
+.cd-status.closed .cd-dot{background:var(--fg3)}
+
+/* Page Title Banner */
+.cd-page-banner{text-align:center;margin-bottom:22px}
+.cd-page-banner h1{font-family:var(--font-brand);font-size:1.45rem;font-weight:700;color:var(--fg);letter-spacing:-.01em}
+.cd-page-banner p{font-size:.78rem;color:var(--fg3);margin-top:4px;font-family:var(--font-mono);letter-spacing:.3px}
+
+/* Responsive */
+@media(max-width:768px){
+  .cd-table thead{display:none}
+  .cd-table tbody tr{display:block;padding:14px;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface)}
+  .cd-table tbody td{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border:none;font-size:.8rem}
+  .cd-table tbody td::before{content:attr(data-label);font-weight:600;color:var(--fg3);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;font-family:var(--font-mono);margin-right:12px}
+}
 </style>
 </head>
 <body>
@@ -892,8 +943,80 @@ function renderTDRows() {
 }
 
 // ─── COLLEGE DEADLINES ───
+function getDeadlineCountdown(deadlineStr) {
+  if (!deadlineStr || deadlineStr.trim() === '' || deadlineStr.toLowerCase().includes('tba') || deadlineStr.toLowerCase().includes('not available') || deadlineStr.toLowerCase().includes('n/a')) {
+    return { text: 'Deadline not available', cls: 'nodate', hasDate: false };
+  }
+  // Try multiple date formats
+  let parsed = null;
+  const formats = [
+    /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/,      // DD/MM/YYYY or MM/DD/YYYY
+    /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/,        // YYYY-MM-DD
+    /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*,?\s*(\d{4})$/i,
+    /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{1,2})\s*,?\s*(\d{4})$/i
+  ];
+  const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+
+  // DD/MM/YYYY or MM/DD/YYYY
+  let m = deadlineStr.match(formats[0]);
+  if (m) {
+    const a = parseInt(m[1]), b = parseInt(m[2]), c = parseInt(m[3]);
+    // Assume DD/MM/YYYY if DD > 12, otherwise try both
+    if (a > 12) parsed = new Date(c, b - 1, a);
+    else if (b > 12) parsed = new Date(c, a - 1, b);
+    else parsed = new Date(c, b - 1, a); // default DD/MM/YYYY
+  }
+  // YYYY-MM-DD
+  if (!parsed) {
+    m = deadlineStr.match(formats[1]);
+    if (m) parsed = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+  }
+  // DD Mon YYYY
+  if (!parsed) {
+    m = deadlineStr.match(formats[2]);
+    if (m) parsed = new Date(parseInt(m[3]), months[m[2].toLowerCase().slice(0,3)], parseInt(m[1]));
+  }
+  // Mon DD, YYYY
+  if (!parsed) {
+    m = deadlineStr.match(formats[3]);
+    if (m) parsed = new Date(parseInt(m[3]), months[m[1].toLowerCase().slice(0,3)], parseInt(m[2]));
+  }
+
+  if (!parsed || isNaN(parsed.getTime())) return { text: deadlineStr, cls: 'countdown', hasDate: false };
+
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  parsed.setHours(0,0,0,0);
+  const diffMs = parsed - now;
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) return { text: 'Closed', cls: 'closed', hasDate: true };
+  if (diffDays === 0) return { text: 'Last Day', cls: 'urgent', hasDate: true };
+  if (diffDays === 1) return { text: '1 Day Left', cls: 'urgent', hasDate: true };
+  if (diffDays <= 7) return { text: `${diffDays} Days Left`, cls: 'urgent', hasDate: true };
+  if (diffDays <= 21) return { text: `${diffDays} Days Left`, cls: 'countdown', hasDate: true };
+  return { text: `${diffDays} Days Left`, cls: 'relaxed', hasDate: true };
+}
+
+function cdDeadlinePill(d) {
+  const countdown = getDeadlineCountdown(d.deadline);
+  const statusLower = (d.status || '').toLowerCase();
+  if (statusLower === 'closed') {
+    return `<span class="cd-deadline-pill closed"><svg class="cd-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Closed</span>`;
+  }
+  return `<span class="cd-deadline-pill ${countdown.cls}"><svg class="cd-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(countdown.text)}</span>`;
+}
+
+function cdStatusBadge(status) {
+  const cls = (status || '').toLowerCase();
+  const dot = '<span class="cd-dot"></span>';
+  if (cls === 'open') return `<span class="cd-status open">${dot}Open</span>`;
+  if (cls === 'upcoming') return `<span class="cd-status upcoming">${dot}Upcoming</span>`;
+  return `<span class="cd-status closed">${dot}${esc(status)}</span>`;
+}
+
 async function renderCollegeDeadlines(el) {
-  el.innerHTML = `<div class="page-header"><h1>College Deadlines</h1><p>Loading deadlines...</p></div><div class="card-grid">${skeletonCards(6)}</div>`;
+  el.innerHTML = `<div class="cd-page-banner"><h1>Application Open</h1><p>Loading deadlines...</p></div><div class="cd-table-wrap"><table class="cd-table"><thead><tr><th>College</th><th>Deadline</th><th>Apply to College</th><th>Status</th></tr></thead><tbody>${skeletonRows(8, 4)}</tbody></table></div>`;
 
   const rows = await fetchSheet('College Deadlines');
   const cds = rows.map(r => ({
@@ -921,29 +1044,25 @@ async function renderCollegeDeadlines(el) {
     const upcoming = cds.filter(d => d.status === 'Upcoming').length;
     const closed = cds.filter(d => d.status === 'Closed').length;
 
+    const applyArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+
     el.innerHTML = `
-      <div class="page-header"><h1>College Deadlines</h1><p>Application deadlines for colleges and programs</p></div>
-      <div class="stats-bar"><span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span></div>
-      <div class="filter-bar">
-        <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
+      <div class="cd-page-banner"><h1>Application Open</h1><p>Track college application deadlines and apply directly</p></div>
+      <div class="stats-bar" style="justify-content:center"><span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span></div>
+      <div class="filter-bar" style="justify-content:center">
+        <div class="search-input" style="max-width:360px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
         <div class="pill-group">${['all','open','upcoming','closed'].map(f => `<button class="pill${window._cdFilter === f ? ' active' : ''}" onclick="window._cdFilter='${f}';window._renderCDs()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`).join('')}</div>
       </div>
-      <div class="card-grid">${list.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3><p>No deadlines found</p></div>' :
-      list.map((d, i) => `<div class="card animate-in stagger-${Math.min(i, 5)}${d.status === 'Closed' ? ' dimmed' : ''}">
-        <div class="card-header">
-          <div class="card-info"><h3>${esc(d.collegeName)}</h3><div class="sub">${esc(d.program)}</div></div>
-          ${bookmarkIcon(d.id)}
-        </div>
-        <div class="card-meta">
-          ${d.round ? `<div class="card-meta-row"><span class="label">Round</span><span class="value">${esc(d.round)}</span></div>` : ''}
-          <div class="card-meta-row"><span class="label">Deadline</span><span class="value" style="color:${d.status === 'Open' ? 'var(--amber)' : d.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(d.deadline)}</span></div>
-          ${d.notes ? `<div class="card-meta-row"><span class="label">Notes</span><span class="value" style="color:var(--fg3);font-size:.68rem">${esc(d.notes)}</span></div>` : ''}
-        </div>
-        <div class="card-footer">
-          ${statusBadge(d.status)}
-          ${d.applyUrl && d.status !== 'Closed' ? `<a href="${esc(d.applyUrl)}" target="_blank" rel="noopener" class="btn-sm green" onclick="event.stopPropagation()">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}
-        </div>
-      </div>`).join('')}</div>
+      <div class="cd-table-wrap"><table class="cd-table">
+        <thead><tr><th>College</th><th>Deadline</th><th>Apply to College</th><th>Status</th></tr></thead>
+        <tbody>${list.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:48px 0"><div class="empty-state" style="padding:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3><p>Try adjusting your filters</p></div></td></tr>' :
+        list.map((d, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
+          <td data-label="College"><div class="cd-college">${esc(d.collegeName)}${d.program ? `<div class="cd-program">${esc(d.program)}</div>` : ''}</div></td>
+          <td data-label="Deadline">${cdDeadlinePill(d)}</td>
+          <td data-label="Apply">${d.applyUrl && d.status !== 'Closed' ? `<a href="${esc(d.applyUrl)}" target="_blank" rel="noopener" class="cd-apply-btn">${applyArrow} Apply Now</a>` : '<span style="color:var(--fg3);font-size:.74rem;font-family:var(--font-mono)">—</span>'}</td>
+          <td data-label="Status">${cdStatusBadge(d.status)}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
     `;
   }
 
