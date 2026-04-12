@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISC.exe — College Applications</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   ISC.exe College Applications — Restyled to match resource.html
+   Sheet ID: 1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc
+   ═══════════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1318;--bg2:#131921;--surface:#1a2230;--surface2:#1f2938;
+  --border:#253040;--border2:#2c3a4d;
+  --accent:#3bff6c;--accent-lo:rgba(59,255,108,0.10);--accent-md:rgba(59,255,108,0.20);
+  --accent-hi:rgba(59,255,108,0.35);--accent-glow:rgba(59,255,108,0.22);
+  --fg:#e8edf5;--fg2:#8b9cb5;--fg3:#4e6078;
+  --amber:#ffb830;--amber-lo:rgba(255,184,48,0.08);
+  --cyan:#5fd4e8;--cyan-lo:rgba(95,212,232,0.08);
+  --red:#ff6b6b;--red-lo:rgba(255,107,107,0.08);
+  --green:var(--accent);--green-lo:var(--accent-lo);
+  --purple:#bf5fff;--purple-lo:rgba(191,95,255,0.08);
+  --font:'Space Grotesk',system-ui,sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --font-brand:'Unbounded',sans-serif;
+  --sidebar-w:240px;--sidebar-collapsed:60px;--nav-h:52px;--tabbar-h:60px;
+  --radius:10px;--radius-sm:7px;--radius-xs:5px;
+}
+html{font-size:14px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);background:var(--bg);color:var(--fg);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--accent-lo) 1px,transparent 1px),linear-gradient(90deg,var(--accent-lo) 1px,transparent 1px);
+  background-size:52px 52px;opacity:.45;}
+body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity:0.022;}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+input{font-family:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--fg3)}
+
+/* ─── Animations ─── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes breathe{0%,100%{opacity:.4}50%{opacity:.95}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 8px var(--accent-lo)}50%{box-shadow:0 0 16px var(--accent-md)}}
+.animate-in{animation:fadeIn .3s ease both}
+.stagger-1{animation-delay:.04s}.stagger-2{animation-delay:.08s}.stagger-3{animation-delay:.12s}
+.stagger-4{animation-delay:.16s}.stagger-5{animation-delay:.20s}
+
+/* ─── Sidebar ─── */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(170deg,var(--surface) 0%,var(--bg2) 60%,var(--bg) 100%);border-right:1px solid var(--border2);display:flex;flex-direction:column;z-index:40;transition:width .22s ease;box-shadow:1px 0 20px rgba(0,0,0,.4)}
+.sidebar.collapsed{width:var(--sidebar-collapsed)}
+.sidebar-header{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--accent-lo),transparent);flex-shrink:0}
+.sidebar-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
+.sidebar-brand-mark{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);flex-shrink:0;animation:breathe 2.5s ease-in-out infinite}
+.sidebar-logo-text{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--fg);letter-spacing:.03em}
+.sidebar-logo-text span{color:var(--accent)}
+.sidebar.collapsed .sidebar-logo-text,.sidebar.collapsed .sidebar-search,.sidebar.collapsed .nav-label,.sidebar.collapsed .nav-text,.sidebar.collapsed .badge,.sidebar.collapsed .sidebar-footer-text{display:none}
+.sidebar-search{margin:10px 10px 4px;flex-shrink:0}
+.sidebar-search button{width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--fg3);font-size:.78rem;transition:all .15s;font-family:var(--font-mono);letter-spacing:.4px}
+.sidebar-search button:hover{border-color:var(--accent);color:var(--fg2);background:var(--accent-lo)}
+.sidebar-search kbd{margin-left:auto;font-size:.62rem;color:var(--fg3);padding:2px 5px;border-radius:3px;background:var(--bg);border:1px solid var(--border2);font-family:var(--font-mono)}
+.sidebar-nav{flex:1;overflow-y:auto;padding:6px 8px;scrollbar-width:none}
+.sidebar-nav::-webkit-scrollbar{width:0}
+.nav-label{padding:7px 10px;font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:var(--fg3);font-family:var(--font-mono)}
+.nav-item{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:500;color:var(--fg2);transition:all .14s;position:relative;margin-bottom:2px;border:1px solid transparent;letter-spacing:.2px}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item:hover{background:var(--surface);color:var(--fg);border-color:var(--border)}
+.nav-item.active{background:var(--accent-lo);color:var(--accent);border-color:var(--accent-md)}
+.nav-item.active svg{opacity:1}
+.nav-item.active::before{content:'';position:absolute;left:-1px;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.nav-item .badge{margin-left:auto;padding:2px 7px;border-radius:10px;font-size:.62rem;font-weight:700;background:var(--accent-lo);color:var(--accent);border:1px solid var(--accent-md);font-family:var(--font-mono)}
+.collapse-btn{padding:5px;border-radius:5px;color:var(--fg3);transition:all .15s}
+.collapse-btn:hover{color:var(--fg);background:var(--surface2)}
+.sidebar-footer{padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;background:var(--accent-lo)}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);animation:breathe 2s ease-in-out infinite;flex-shrink:0}
+.sidebar-footer-text{font-size:.62rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-mono)}
+
+/* ─── Main ─── */
+.main{margin-left:var(--sidebar-w);min-height:100vh;transition:margin .22s ease;position:relative;z-index:1}
+.sidebar.collapsed~.main{margin-left:var(--sidebar-collapsed)}
+.content{max-width:1180px;margin:0 auto;padding:26px 28px 60px}
+.tab-content{animation:fadeIn .25s ease both}
+
+/* ─── Page Header ─── */
+.page-header{margin-bottom:22px}
+.page-header h1{font-family:var(--font-brand);font-size:1.35rem;font-weight:600;color:var(--fg);letter-spacing:-.01em;line-height:1.2}
+.page-header p{font-size:.8rem;color:var(--fg3);margin-top:4px;font-family:var(--font-mono);letter-spacing:.3px}
+
+/* ─── Filter Bar ─── */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.search-input{position:relative;flex:1;min-width:200px}
+.search-input svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--fg3)}
+.search-input input{width:100%;padding:8px 11px 8px 33px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--fg);font-size:.8rem;outline:none;transition:all .15s;font-family:var(--font)}
+.search-input input:focus{border-color:var(--accent-md);background:var(--surface2)}
+.search-input input::placeholder{color:var(--fg3)}
+.pill-group{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:3px;flex-wrap:nowrap;overflow-x:auto}
+.pill{padding:5px 14px;border-radius:var(--radius-xs);font-size:.72rem;font-weight:600;color:var(--fg3);transition:all .14s;white-space:nowrap;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase}
+.pill:hover{color:var(--fg2)}
+.pill.active{background:var(--accent);color:#000;box-shadow:0 0 12px var(--accent-glow)}
+
+/* ─── Stats Bar ─── */
+.stats-bar{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap}
+.stat-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:.7rem;font-weight:600;border:1px solid var(--border);background:var(--surface);font-family:var(--font-mono);letter-spacing:.3px}
+.stat-chip .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.stat-chip.green{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo)}
+.stat-chip.green .dot{background:var(--accent);box-shadow:0 0 6px var(--accent);animation:breathe 2s infinite}
+.stat-chip.amber{color:var(--amber);border-color:rgba(255,184,48,.25);background:var(--amber-lo)}
+.stat-chip.amber .dot{background:var(--amber)}
+.stat-chip.gray{color:var(--fg3);border-color:var(--border2)}
+.stat-chip.gray .dot{background:var(--fg3)}
+
+/* ─── Table ─── */
+.table-wrap{border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--bg2)}
+th{padding:11px 14px;text-align:left;font-size:.68rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--fg3);cursor:pointer;white-space:nowrap;user-select:none;transition:color .12s;border-bottom:1px solid var(--border);font-family:var(--font-mono)}
+th:hover{color:var(--fg2)}
+.sort-icon{display:inline-block;margin-left:4px;opacity:.35}
+tr{border-bottom:1px solid rgba(255,255,255,.03)}
+tr:last-child{border-bottom:none}
+tr:nth-child(even){background:rgba(255,255,255,.01)}
+tr:hover{background:var(--surface2)}
+td{padding:10px 14px;font-size:.8rem;color:var(--fg2);vertical-align:middle}
+td.name{font-weight:600;color:var(--fg);max-width:300px}
+td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:280px;display:block}
+
+/* ─── Status Badge ─── */
+.status{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;border:1px solid;font-family:var(--font-mono);letter-spacing:.3px}
+.status .dot{width:5px;height:5px;border-radius:50%}
+.status.open{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo)}
+.status.open .dot{background:var(--accent);animation:breathe 2s infinite}
+.status.closed{color:var(--fg3);border-color:var(--border2);background:rgba(255,255,255,.02)}
+.status.closed .dot{background:var(--fg3)}
+.status.upcoming{color:var(--amber);border-color:rgba(255,184,48,.25);background:var(--amber-lo)}
+.status.upcoming .dot{background:var(--amber);animation:breathe 2s infinite}
+
+/* ─── Action Buttons ─── */
+.actions{display:flex;align-items:center;gap:5px}
+.btn-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-xs);color:var(--fg3);transition:all .14s;border:1px solid transparent}
+.btn-icon:hover{color:var(--accent);background:var(--accent-lo);border-color:var(--accent-md)}
+.btn-icon.saved{color:var(--accent)}
+.btn-sm{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:var(--radius-xs);font-size:.68rem;font-weight:600;border:1px solid;transition:all .14s;font-family:var(--font-mono);letter-spacing:.3px}
+.btn-sm.red{color:var(--red);border-color:rgba(255,107,107,.25);background:var(--red-lo)}
+.btn-sm.red:hover{background:rgba(255,107,107,.18);border-color:rgba(255,107,107,.5)}
+.btn-sm.purple{color:var(--purple);border-color:rgba(191,95,255,.25);background:var(--purple-lo)}
+.btn-sm.purple:hover{background:rgba(191,95,255,.18)}
+.btn-sm.green{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo)}
+.btn-sm.green:hover{background:var(--accent-md)}
+
+/* ─── Card Grid ─── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:11px}
+.card{border:1px solid var(--border);border-radius:var(--radius);padding:15px;background:var(--surface);transition:all .18s;animation:fadeIn .3s ease both;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-accent,var(--accent));opacity:0;transition:opacity .2s}
+.card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 20px rgba(59,255,108,.04)}
+.card:hover::before{opacity:.7}
+.card-header{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.card-avatar{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;border:1px solid;flex-shrink:0;letter-spacing:.02em;font-family:var(--font-mono)}
+.card-info{flex:1;min-width:0}
+.card-info h3{font-size:.84rem;font-weight:600;color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card-info .sub{font-size:.72rem;color:var(--fg3);margin-top:3px;display:flex;align-items:center;gap:4px;font-family:var(--font-mono)}
+.card-info .sub svg{width:11px;height:11px;flex-shrink:0}
+.type-badge{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:4px;font-size:.62rem;font-weight:600;border:1px solid;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase}
+.card-meta{margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.04);display:flex;flex-direction:column;gap:5px}
+.card-meta-row{display:flex;align-items:center;gap:8px;font-size:.72rem}
+.card-meta-row .label{color:var(--fg3);width:60px;flex-shrink:0;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.5px;text-transform:uppercase}
+.card-meta-row .value{color:var(--fg2);display:flex;align-items:center;gap:4px}
+.card-meta-row .value svg{width:11px;height:11px}
+.card-footer{margin-top:11px;padding-top:11px;border-top:1px solid rgba(255,255,255,.04);display:flex;align-items:center;justify-content:space-between}
+.card.dimmed{opacity:.5}
+
+/* ─── Courses Expand ─── */
+.courses-list{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);display:flex;flex-direction:column;gap:5px}
+.course-item{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:var(--radius-sm);background:var(--bg);font-size:.75rem;border:1px solid var(--border)}
+.course-item .cname{flex:1;font-weight:500;color:var(--fg)}
+.course-item .cdot{display:flex;gap:9px;color:var(--fg3);font-size:.68rem;font-family:var(--font-mono)}
+.course-item .cdot span{display:flex;align-items:center;gap:3px}
+.course-item .cdot svg{width:10px;height:10px}
+
+/* ─── Cutoffs ─── */
+.cutoff-high{color:var(--accent);font-weight:700;font-family:var(--font-mono)}
+.cutoff-mid{color:var(--amber);font-weight:700;font-family:var(--font-mono)}
+.cutoff-low{color:var(--red);font-weight:700;font-family:var(--font-mono)}
+.cutoff-none{color:var(--fg3);font-family:var(--font-mono)}
+.trend{display:inline-flex;align-items:center;gap:2px;margin-right:4px}
+.trend svg{width:11px;height:11px}
+.trend.up{color:var(--accent)}.trend.down{color:var(--red)}.trend.flat{color:var(--fg3)}
+.cat-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:500;background:var(--surface2);border:1px solid var(--border);color:var(--fg3);font-family:var(--font-mono);letter-spacing:.3px}
+
+/* ─── Legend ─── */
+.legend{display:flex;gap:12px;font-size:.7rem;color:var(--fg3);font-family:var(--font-mono)}
+.legend .leg{display:flex;align-items:center;gap:5px}
+.legend .leg .ldot{width:7px;height:7px;border-radius:50%}
+
+/* ─── Bookmarks ─── */
+.bookmark-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:7px}
+.bookmark-card{display:flex;align-items:start;gap:9px;padding:11px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);transition:all .14s;animation:slideIn .2s ease both}
+.bookmark-card:hover{border-color:var(--border2);background:var(--surface2)}
+.bookmark-card .b-icon{width:30px;height:30px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;border:1px solid;flex-shrink:0}
+.bookmark-card .b-info{flex:1;min-width:0;cursor:pointer}
+.bookmark-card .b-info .b-name{font-size:.78rem;font-weight:600;color:var(--fg)}
+.bookmark-card .b-info .b-meta{font-size:.68rem;color:var(--fg3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-mono)}
+.bookmark-card .b-del{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:var(--fg3);opacity:0;transition:all .12s;flex-shrink:0}
+.bookmark-card:hover .b-del{opacity:1}
+.bookmark-card .b-del:hover{color:var(--red);background:var(--red-lo)}
+.section-title{display:flex;align-items:center;gap:8px;font-size:.8rem;font-weight:600;color:var(--fg);margin-bottom:8px;margin-top:18px}
+.section-title:first-child{margin-top:0}
+.section-title .count{font-size:.65rem;color:var(--fg3);padding:2px 8px;border-radius:10px;background:var(--surface);border:1px solid var(--border);font-family:var(--font-mono)}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+.empty-state svg{width:44px;height:44px;color:var(--fg3);margin-bottom:14px;opacity:.35}
+.empty-state h3{font-size:.95rem;font-weight:600;color:var(--fg2)}
+.empty-state p{font-size:.78rem;color:var(--fg3);margin-top:5px;max-width:260px;line-height:1.6;font-family:var(--font-mono)}
+
+/* ─── Skeleton ─── */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
+.skel-row{height:48px;border-bottom:1px solid rgba(255,255,255,.03);display:flex;align-items:center;padding:0 14px;gap:14px}
+.skel-row .sk{height:12px;border-radius:4px}
+
+/* ─── Search Modal ─── */
+.search-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;opacity:0;pointer-events:none;transition:opacity .15s}
+.search-overlay.open{opacity:1;pointer-events:auto}
+.search-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(10px)}
+.search-modal{position:relative;width:100%;max-width:520px;margin:0 16px;border-radius:var(--radius);border:1px solid var(--border2);border-top:2px solid var(--accent);background:var(--bg2);box-shadow:0 32px 80px rgba(0,0,0,.8);overflow:hidden;transform:scale(.97);transition:transform .15s}
+.search-overlay.open .search-modal{transform:scale(1)}
+.search-input-modal{display:flex;align-items:center;gap:9px;padding:13px 15px;border-bottom:1px solid var(--border)}
+.search-input-modal svg{width:16px;height:16px;color:var(--fg3);flex-shrink:0}
+.search-input-modal input{flex:1;background:none;border:none;outline:none;color:var(--fg);font-size:.84rem;font-family:var(--font)}
+.search-input-modal input::placeholder{color:var(--fg3)}
+.search-input-modal .close-btn{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:var(--fg3);transition:all .12s}
+.search-input-modal .close-btn:hover{color:var(--fg);background:var(--surface2)}
+.search-results{max-height:300px;overflow-y:auto;padding:6px}
+.search-results .hint{text-align:center;padding:28px;color:var(--fg3);font-size:.78rem;font-family:var(--font-mono)}
+.search-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:var(--radius-sm);cursor:pointer;transition:background .1s}
+.search-item:hover,.search-item.selected{background:var(--surface2)}
+.search-item .si-icon{width:26px;height:26px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.search-item .si-name{font-size:.78rem;font-weight:500;color:var(--fg)}
+.search-item .si-meta{font-size:.67rem;color:var(--fg3);margin-top:1px;font-family:var(--font-mono)}
+.search-item .si-enter{margin-left:auto;width:18px;height:18px;color:var(--fg3);opacity:0;transition:opacity .1s}
+.search-item:hover .si-enter,.search-item.selected .si-enter{opacity:1}
+
+/* ─── Pagination ─── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:18px}
+.pagination button{padding:5px 13px;border-radius:var(--radius-xs);font-size:.72rem;font-weight:600;border:1px solid var(--border);color:var(--fg3);transition:all .12s;font-family:var(--font-mono)}
+.pagination button:hover:not(:disabled){color:var(--fg2);border-color:var(--border2)}
+.pagination button.active{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+.pagination button:disabled{opacity:.3;cursor:not-allowed}
+
+/* ─── Mobile ─── */
+.mobile-topbar{display:none;position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav-h);background:rgba(15,19,24,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 14px;align-items:center;justify-content:space-between}
+.mobile-topbar .logo{display:flex;align-items:center;gap:8px}
+.mobile-topbar .logo .brand-mark{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);flex-shrink:0}
+.mobile-topbar .logo-text{font-family:var(--font-mono);font-size:.82rem;font-weight:500;color:var(--fg)}
+.mobile-topbar .logo-text span{color:var(--accent)}
+.mobile-bottombar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;height:var(--tabbar-h);background:rgba(15,19,24,.96);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:0 4px}
+.mobile-bottombar nav{display:flex;height:100%}
+.mobile-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;color:var(--fg3);transition:color .14s;font-size:.58rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase}
+.mobile-tab.active{color:var(--accent)}
+.mobile-tab svg{width:19px;height:19px}
+.mobile-tab .tab-badge{position:absolute;top:4px;right:calc(50% - 17px);width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.mobile-tab .tab-indicator{position:absolute;top:0;left:20%;right:20%;height:2px;border-radius:0 0 2px 2px;background:var(--accent);opacity:0;transition:opacity .14s;box-shadow:0 0 8px var(--accent)}
+.mobile-tab.active .tab-indicator{opacity:1}
+
+/* ─── Mobile Drawer ─── */
+.drawer-overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;left:0;bottom:0;z-index:70;width:260px;background:var(--bg2);border-right:1px solid var(--border2);transform:translateX(-100%);transition:transform .22s ease;box-shadow:4px 0 40px rgba(0,0,0,.6)}
+.drawer.open{transform:translateX(0)}
+.drawer-header{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border);background:var(--accent-lo)}
+
+/* ─── Footer ─── */
+.app-footer{border-top:1px solid var(--border);margin-top:36px;padding:12px 0;display:flex;align-items:center;justify-content:space-between;font-size:.67rem;color:var(--fg3);font-family:var(--font-mono);letter-spacing:.3px}
+.app-footer .left{display:flex;align-items:center;gap:7px}
+
+@media(max-width:1023px){
+  .sidebar{display:none}
+  .mobile-topbar,.mobile-bottombar{display:flex}
+  .main{margin-left:0!important;padding-top:var(--nav-h);padding-bottom:var(--tabbar-h)}
+  .content{padding:18px 14px 36px}
+  .card-grid{grid-template-columns:1fr}
+}
+@media(min-width:1024px){.mobile-only{display:none!important}}
+@media(max-width:1023px){.app-footer{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ═══════ SIDEBAR ═══════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo" onclick="setTab('universities')">
+      <div class="sidebar-brand-mark"></div>
+      <div class="sidebar-logo-text">ISC<span>.exe</span></div>
+    </div>
+    <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
+    </button>
+  </div>
+  <div class="sidebar-search">
+    <button onclick="openSearch()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Search...</span><kbd>⌘K</kbd>
+    </button>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Navigation</div>
+    <button class="nav-item" data-tab="universities" onclick="setTab('universities')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+      <span class="nav-text">Universities</span>
+    </button>
+    <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+      <span class="nav-text">Test Deadlines</span>
+    </button>
+    <button class="nav-item" data-tab="college-deadlines" onclick="setTab('college-deadlines')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
+      <span class="nav-text">College Deadlines</span>
+    </button>
+    <button class="nav-item" data-tab="cutoffs" onclick="setTab('cutoffs')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      <span class="nav-text">Cutoffs</span>
+    </button>
+    <button class="nav-item" data-tab="my-list" onclick="setTab('my-list')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      <span class="nav-text">My List</span>
+      <span class="badge" id="bookmarkBadge" style="display:none">0</span>
+    </button>
+    <div class="nav-label" style="margin-top:10px">Quick Links</div>
+    <a class="nav-item" href="/" style="text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="nav-text">← Home</span>
+    </a>
+    <a class="nav-item" href="/resource" style="text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span class="nav-text">Resources</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <span class="pulse-dot"></span>
+    <span class="sidebar-footer-text">System Status: Optimal</span>
+  </div>
+</aside>
+
+<!-- ═══════ MOBILE TOPBAR ═══════ -->
+<header class="mobile-topbar mobile-only">
+  <div style="display:flex;align-items:center;gap:8px">
+    <button class="btn-icon" onclick="openDrawer()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+    <div class="logo">
+      <div class="brand-mark" style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent)"></div>
+      <span class="logo-text" style="font-family:var(--font-mono);font-size:.82rem;font-weight:500;color:var(--fg)">ISC<span style="color:var(--accent)">.exe</span></span>
+    </div>
+  </div>
+  <button class="btn-icon" onclick="openSearch()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+</header>
+
+<!-- ═══════ MOBILE BOTTOM TABS ═══════ -->
+<div class="mobile-bottombar mobile-only">
+  <nav>
+    <button class="mobile-tab" data-tab="universities" onclick="setTab('universities')">
+      <span class="tab-indicator"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+      Unis
+    </button>
+    <button class="mobile-tab" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
+      <span class="tab-indicator"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+      Tests
+    </button>
+    <button class="mobile-tab" data-tab="college-deadlines" onclick="setTab('college-deadlines')">
+      <span class="tab-indicator"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
+      Colleges
+    </button>
+    <button class="mobile-tab" data-tab="cutoffs" onclick="setTab('cutoffs')">
+      <span class="tab-indicator"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+      Cutoffs
+    </button>
+    <button class="mobile-tab" data-tab="my-list" onclick="setTab('my-list')">
+      <span class="tab-indicator"></span>
+      <span class="tab-badge" id="mobileBadge" style="display:none"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+      Saved
+    </button>
+  </nav>
+</div>
+
+<!-- ═══════ MOBILE DRAWER ═══════ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer mobile-only" id="drawer">
+  <div class="drawer-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-brand-mark"></div>
+      <div class="sidebar-logo-text">ISC<span>.exe</span></div>
+    </div>
+    <button class="btn-icon" onclick="closeDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div style="padding:10px">
+    <button style="width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;background:var(--surface);border:1px solid var(--border);color:var(--fg3);font-size:.78rem;font-family:var(--font-mono)" onclick="openSearch();closeDrawer()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search...
+    </button>
+  </div>
+  <nav class="sidebar-nav" style="padding:0 8px">
+    <button class="nav-item" data-tab="universities" onclick="setTab('universities');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><span>Universities</span>
+    </button>
+    <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><span>Test Deadlines</span>
+    </button>
+    <button class="nav-item" data-tab="college-deadlines" onclick="setTab('college-deadlines');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg><span>College Deadlines</span>
+    </button>
+    <button class="nav-item" data-tab="cutoffs" onclick="setTab('cutoffs');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span>Cutoffs</span>
+    </button>
+    <button class="nav-item" data-tab="my-list" onclick="setTab('my-list');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>My List</span>
+    </button>
+  </nav>
+</aside>
+
+<!-- ═══════ SEARCH MODAL ═══════ -->
+<div class="search-overlay" id="searchOverlay" onclick="closeSearch(event)">
+  <div class="search-backdrop"></div>
+  <div class="search-modal">
+    <div class="search-input-modal">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="searchInput" type="text" placeholder="Search universities, tests, cutoffs..." oninput="doSearch(this.value)" onkeydown="handleSearchKey(event)">
+      <button class="close-btn" onclick="closeSearch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="search-results" id="searchResults"><div class="hint">Start typing to search across all data...</div></div>
+  </div>
+</div>
+
+<!-- ═══════ MAIN CONTENT ═══════ -->
+<div class="main" id="mainArea">
+  <div class="content">
+    <div id="tabContent"></div>
+    <div class="app-footer">
+      <div class="left"><span class="pulse-dot"></span><span>SYSTEM STATUS: OPTIMAL 100%</span></div>
+      <span>© 2026 ISC.exe — College Applications</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════════════════════
+const SHEET_ID = '1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc';
+const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+// ═══════════════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════════════
+let state = {
+  tab: 'universities',
+  bookmarks: JSON.parse(localStorage.getItem('isc-bookmarks') || '[]'),
+  searchOpen: false,
+  searchSelected: 0,
+  searchCache: null
+};
+
+function saveBookmarks() {
+  localStorage.setItem('isc-bookmarks', JSON.stringify(state.bookmarks));
+  updateBadges();
+}
+
+function updateBadges() {
+  const n = state.bookmarks.length;
+  const sb = document.getElementById('bookmarkBadge');
+  const mb = document.getElementById('mobileBadge');
+  if (n > 0) {
+    if (sb) { sb.style.display = ''; sb.textContent = n > 9 ? '9+' : n; }
+    if (mb) { mb.style.display = ''; }
+  } else {
+    if (sb) sb.style.display = 'none';
+    if (mb) mb.style.display = 'none';
+  }
+}
+
+function isBookmarked(id) { return state.bookmarks.some(b => b.id === id); }
+
+function toggleBookmark(item) {
+  if (isBookmarked(item.id)) {
+    state.bookmarks = state.bookmarks.filter(b => b.id !== item.id);
+  } else {
+    state.bookmarks.push(item);
+  }
+  saveBookmarks();
+  renderTab();
+}
+
+function removeBookmark(id) {
+  state.bookmarks = state.bookmarks.filter(b => b.id !== id);
+  saveBookmarks();
+  renderTab();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function setTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.nav-item,.mobile-tab').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
+  });
+  renderTab();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function openDrawer() {
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('drawer').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SEARCH
+// ═══════════════════════════════════════════════════════════════
+function openSearch() {
+  state.searchOpen = true;
+  state.searchSelected = 0;
+  document.getElementById('searchOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('searchInput').focus(), 50);
+  loadSearchCache();
+}
+
+function closeSearch(e) {
+  if (e && e.target !== e.currentTarget) return;
+  state.searchOpen = false;
+  document.getElementById('searchOverlay').classList.remove('open');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').innerHTML = '<div class="hint">Start typing to search across all data...</div>';
+}
+
+async function loadSearchCache() {
+  if (state.searchCache) return;
+  try {
+    const [unis, tests, cds, cuts] = await Promise.all([
+      fetchSheet('Universities'), fetchSheet('Test Deadlines'), fetchSheet('College Deadlines'), fetchSheet('Cutoffs')
+    ]);
+    state.searchCache = { unis, tests, cds, cuts };
+  } catch(e) { console.error(e); }
+}
+
+function doSearch(q) {
+  if (!q.trim()) {
+    document.getElementById('searchResults').innerHTML = '<div class="hint">Start typing to search across all data...</div>';
+    return;
+  }
+  if (!state.searchCache) return;
+  const lq = q.toLowerCase();
+  const results = [];
+  const c = state.searchCache;
+  const iconColors = { university: 'var(--accent)', test: 'var(--amber)', cd: 'var(--cyan)', cutoff: 'var(--purple)' };
+  const tabMap = { university: 'universities', test: 'test-deadlines', cd: 'college-deadlines', cutoff: 'cutoffs' };
+
+  c.unis.forEach(u => {
+    if ((u.name||'').toLowerCase().includes(lq) || (u.shortName||'').toLowerCase().includes(lq) || (u.location||'').toLowerCase().includes(lq))
+      results.push({ type: 'university', name: u.shortName || u.name, meta: `${u.type} — ${u.location}`, tab: 'universities', id: u.id });
+  });
+  c.tests.forEach(t => {
+    if ((t.name||'').toLowerCase().includes(lq))
+      results.push({ type: 'test', name: t.name, meta: `Deadline: ${t.deadline} (${t.status})`, tab: 'test-deadlines', id: t.id });
+  });
+  c.cds.forEach(d => {
+    if ((d.collegeName||'').toLowerCase().includes(lq) || (d.program||'').toLowerCase().includes(lq))
+      results.push({ type: 'cd', name: `${d.collegeName} — ${d.program}`, meta: `Deadline: ${d.deadline} (${d.status})`, tab: 'college-deadlines', id: d.id });
+  });
+  c.cuts.forEach(r => {
+    if ((r.college||'').toLowerCase().includes(lq) || (r.exam||'').toLowerCase().includes(lq))
+      results.push({ type: 'cutoff', name: `${r.college} — ${r.exam}`, meta: `2024: ${r.cutoff2024} (${r.category})`, tab: 'cutoffs', id: `cut-${r.college}` });
+  });
+
+  state.searchSelected = 0;
+  if (results.length === 0) {
+    document.getElementById('searchResults').innerHTML = `<div class="hint">No results for "${q}"</div>`;
+    return;
+  }
+  const icons = {
+    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
+    test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
+    cd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>',
+    cutoff: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
+  };
+  document.getElementById('searchResults').innerHTML = results.slice(0, 20).map((r, i) =>
+    `<div class="search-item${i === 0 ? ' selected' : ''}" onclick="setTab('${r.tab}');closeSearch()" onmouseenter="state.searchSelected=${i};updateSearchHighlight()">
+      <div class="si-icon" style="color:${iconColors[r.type]};background:${iconColors[r.type]}18">${icons[r.type]}</div>
+      <div style="flex:1;min-width:0"><div class="si-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.name}</div><div class="si-meta" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.meta}</div></div>
+      <div class="si-enter"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </div>`
+  ).join('');
+}
+
+function updateSearchHighlight() {
+  document.querySelectorAll('.search-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === state.searchSelected);
+  });
+}
+
+function handleSearchKey(e) {
+  const items = document.querySelectorAll('.search-item');
+  if (e.key === 'ArrowDown') { e.preventDefault(); state.searchSelected = Math.min(state.searchSelected + 1, items.length - 1); updateSearchHighlight(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); state.searchSelected = Math.max(state.searchSelected - 1, 0); updateSearchHighlight(); }
+  else if (e.key === 'Enter') { const item = items[state.searchSelected]; if (item) item.click(); }
+  else if (e.key === 'Escape') { closeSearch(); }
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); state.searchOpen ? closeSearch() : openSearch(); }
+});
+
+// ═══════════════════════════════════════════════════════════════
+//  GOOGLE SHEETS FETCHER
+// ═══════════════════════════════════════════════════════════════
+async function fetchSheet(name) {
+  try {
+    const res = await fetch(`${GVIZ}&sheet=${encodeURIComponent(name)}`);
+    if (!res.ok) return [];
+    const text = await res.text();
+    const m = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
+    if (!m?.[1]) return [];
+    const data = JSON.parse(m[1]);
+    const cols = (data.table?.cols || []).map(c => c.label || c.id || '');
+    if (name === 'Cutoffs' && cols.every(c => !c)) {
+      const rows = data.table?.rows || [];
+      if (rows.length < 2) return [];
+      const headers = rows[0].c.map(cell => cell?.v != null ? String(cell.v) : '');
+      return rows.slice(2).map(row => {
+        const obj = {};
+        headers.forEach((h, i) => { const v = row.c?.[i]; obj[h] = v?.v != null ? String(v.v) : ''; });
+        return obj;
+      });
+    }
+    return (data.table?.rows || []).map(row => {
+      const obj = {};
+      cols.forEach((h, i) => { const v = row.c?.[i]; obj[h] = v?.v != null ? String(v.v) : ''; });
+      return obj;
+    });
+  } catch(e) { console.error(`Failed to fetch "${name}":`, e); return []; }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════════════
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function bookmarkIcon(id) {
+  const saved = isBookmarked(id);
+  return `<button class="btn-icon${saved ? ' saved' : ''}" onclick="event.stopPropagation();handleBookmarkClick('${esc(id)}')" title="${saved ? 'Remove bookmark' : 'Bookmark'}">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="${saved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+  </button>`;
+}
+
+function statusBadge(status) {
+  const cls = (status || '').toLowerCase();
+  return `<span class="status ${cls}"><span class="dot"></span>${esc(status)}</span>`;
+}
+
+function skeletonRows(n, cols) {
+  const widths = [180, 120, 100, 80, 60];
+  return Array.from({ length: n }, () =>
+    `<div class="skel-row">${Array.from({ length: cols }, (_, i) =>
+      `<div class="sk skeleton" style="width:${widths[i % widths.length]}px"></div>`).join('')}</div>`
+  ).join('');
+}
+
+function skeletonCards(n) {
+  return Array.from({ length: n }, () =>
+    `<div class="card"><div style="display:flex;gap:11px"><div class="skeleton" style="width:38px;height:38px;border-radius:7px"></div><div style="flex:1"><div class="skeleton" style="height:13px;width:60%;margin-bottom:7px"></div><div class="skeleton" style="height:11px;width:40%"></div></div></div></div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  TAB RENDERERS
+// ═══════════════════════════════════════════════════════════════
+async function renderTab() {
+  const el = document.getElementById('tabContent');
+  const renderers = { 'test-deadlines': renderTestDeadlines, 'universities': renderUniversities, 'college-deadlines': renderCollegeDeadlines, 'cutoffs': renderCutoffs, 'my-list': renderMyList };
+  if (renderers[state.tab]) await renderers[state.tab](el);
+}
+
+// ─── TEST DEADLINES ───
+async function renderTestDeadlines(el) {
+  el.innerHTML = `<div class="page-header"><h1>Test Deadlines</h1><p>Track upcoming entrance exam dates and deadlines</p></div><div class="stats-bar" id="tdStats"></div><div class="filter-bar"><div class="pill-group" id="tdFilter"></div></div><div class="table-wrap"><div class="table-scroll"><table><thead><tr><th onclick="sortTD('name')">Exam <span class="sort-icon">↕</span></th><th onclick="sortTD('examDate')">Exam Date <span class="sort-icon">↕</span></th><th onclick="sortTD('deadline')">Deadline <span class="sort-icon">↕</span></th><th onclick="sortTD('status')">Status <span class="sort-icon">↕</span></th><th>Actions</th></tr></thead><tbody id="tdBody">${skeletonRows(8, 5)}</tbody></table></div></div>`;
+
+  const rows = await fetchSheet('Test Deadlines');
+  const tests = rows.map(r => ({
+    id: r['Test Deadlines ID'] || r['ID'] || '',
+    name: r['Name'] || '', examDate: r['Exam Date'] || '', deadline: r['Deadline'] || '',
+    applyUrl: r['Apply URL'] || '', hasVideo: (r['Has Video'] || '').toUpperCase() === 'TRUE',
+    status: r['Status'] || 'Open', sortOrder: parseInt(r['Sort Order'] || '0') || 0
+  }));
+
+  window._tdData = tests;
+  window._tdFilter = 'all';
+  window._tdSort = { field: 'sortOrder', dir: 1 };
+
+  updateTDStats();
+  renderTDPills();
+  renderTDRows();
+}
+
+function updateTDStats() {
+  const d = window._tdData || [];
+  const open = d.filter(t => t.status === 'Open').length;
+  const upcoming = d.filter(t => t.status === 'Upcoming').length;
+  const closed = d.filter(t => t.status === 'Closed').length;
+  document.getElementById('tdStats').innerHTML =
+    `<span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span>`;
+}
+
+function renderTDPills() {
+  document.getElementById('tdFilter').innerHTML = ['all','open','upcoming','closed'].map(f =>
+    `<button class="pill${window._tdFilter === f ? ' active' : ''}" onclick="window._tdFilter='${f}';renderTDRows()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`
+  ).join('');
+}
+
+function sortTD(field) {
+  const s = window._tdSort;
+  if (s.field === field) s.dir *= -1; else { s.field = field; s.dir = 1; }
+  renderTDRows();
+}
+
+function renderTDRows() {
+  const { _tdData: tests, _tdFilter: filter, _tdSort: sort } = window;
+  let list = filter === 'all' ? [...tests] : tests.filter(t => t.status.toLowerCase() === filter);
+  list.sort((a, b) => {
+    const av = a[sort.field], bv = b[sort.field];
+    const an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return (an - bn) * sort.dir;
+    return String(av).localeCompare(String(bv)) * sort.dir;
+  });
+  document.getElementById('tdBody').innerHTML = list.length === 0 ?
+    '<tr><td colspan="5" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No records found</td></tr>' :
+    list.map((t, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
+      <td class="name"><span class="trunc">${esc(t.name)}</span></td>
+      <td><span style="display:flex;align-items:center;gap:4px;color:var(--fg3);font-size:.75rem;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${esc(t.examDate)}</span></td>
+      <td><span style="font-size:.75rem;font-weight:600;color:${t.status === 'Open' ? 'var(--amber)' : t.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'};display:flex;align-items:center;gap:4px;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(t.deadline)}</span></td>
+      <td>${statusBadge(t.status)}</td>
+      <td><div class="actions">${bookmarkIcon(t.id)}${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-sm red">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}${t.hasVideo ? `<a href="#" class="btn-sm purple"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></a>` : ''}</div></td>
+    </tr>`).join('');
+}
+
+// ─── UNIVERSITIES ───
+async function renderUniversities(el) {
+  el.innerHTML = `<div class="page-header"><h1>Indian Universities</h1><p>Loading institutions...</p></div><div class="card-grid">${skeletonCards(9)}</div>`;
+
+  const [uniRows, courseRows] = await Promise.all([fetchSheet('Universities'), fetchSheet('Courses')]);
+  const unis = uniRows.map(r => ({
+    id: r['Universities ID'] || r['ID'] || '', name: r['Full Name'] || '', shortName: r['Short Name'] || '',
+    location: r['Location'] || '', type: r['Type'] || '', color: r['Color'] || 'var(--accent)',
+    sortOrder: parseInt(r['Sort Order'] || '0') || 0
+  }));
+  const courses = courseRows.map(r => ({
+    id: r['Courses ID'] || r['ID'] || '', name: r['Course Name'] || '', duration: r['Duration'] || '',
+    eligibility: r['Eligibility'] || '', universityId: r['University ID'] || '',
+    sortOrder: parseInt(r['Sort Order'] || '0') || 0
+  }));
+
+  window._uniData = unis;
+  window._courseData = courses;
+  window._uniSearch = '';
+  window._uniTypeFilter = '';
+  window._uniPage = 1;
+  window._uniExpanded = null;
+  const PER = 20;
+
+  const types = [...new Set(unis.map(u => u.type))].filter(Boolean);
+  const typeColors = {
+    IIM: { bg: 'rgba(59,255,108,.08)', text: 'var(--accent)', border: 'var(--accent-md)' },
+    IIT: { bg: 'rgba(95,212,232,.08)', text: 'var(--cyan)', border: 'rgba(95,212,232,.25)' },
+    Private: { bg: 'rgba(191,95,255,.08)', text: 'var(--purple)', border: 'rgba(191,95,255,.25)' },
+    Central: { bg: 'rgba(255,184,48,.08)', text: 'var(--amber)', border: 'rgba(255,184,48,.25)' },
+    'Delhi University': { bg: 'rgba(255,107,107,.08)', text: 'var(--red)', border: 'rgba(255,107,107,.25)' },
+    NIT: { bg: 'rgba(95,212,232,.08)', text: 'var(--cyan)', border: 'rgba(95,212,232,.25)' },
+    Deemed: { bg: 'rgba(255,184,48,.08)', text: 'var(--amber)', border: 'rgba(255,184,48,.25)' }
+  };
+
+  function render() {
+    let list = [...unis];
+    if (window._uniSearch) { const q = window._uniSearch.toLowerCase(); list = list.filter(u => (u.name||'').toLowerCase().includes(q) || (u.shortName||'').toLowerCase().includes(q) || (u.location||'').toLowerCase().includes(q)); }
+    if (window._uniTypeFilter) list = list.filter(u => u.type === window._uniTypeFilter);
+    list.sort((a, b) => a.sortOrder - b.sortOrder);
+    const total = Math.max(1, Math.ceil(list.length / PER));
+    if (window._uniPage > total) window._uniPage = total;
+    const paged = list.slice((window._uniPage - 1) * PER, window._uniPage * PER);
+    const tc = (type) => typeColors[type] || { bg: 'rgba(59,255,108,.08)', text: 'var(--accent)', border: 'var(--accent-md)' };
+
+    el.innerHTML = `
+      <div class="page-header"><h1>Indian Universities</h1><p>Browse ${list.length}+ institutions across India</p></div>
+      <div class="filter-bar">
+        <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search institutions..." value="${esc(window._uniSearch)}" oninput="window._uniSearch=this.value;window._uniPage=1;window._renderUnis()"></div>
+        <div class="pill-group" style="overflow-x:auto">${['all', ...types].map(t => `<button class="pill${window._uniTypeFilter === t || (t === 'all' && !window._uniTypeFilter) ? ' active' : ''}" onclick="window._uniTypeFilter='${t === 'all' ? '' : t}';window._uniPage=1;window._renderUnis()">${t === 'all' ? 'All' : t}</button>`).join('')}</div>
+      </div>
+      <div class="card-grid">${paged.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><h3>No institutions found</h3><p>Try adjusting your search or filter</p></div>' :
+      paged.map((u, i) => {
+        const c = tc(u.type);
+        const abbr = (u.shortName || u.name).slice(0, 3).toUpperCase();
+        const isExpanded = window._uniExpanded === u.id;
+        const uniCourses = courses.filter(cr => cr.universityId === u.id).sort((a, b) => a.sortOrder - b.sortOrder);
+        const color = u.color && u.color.startsWith('#') ? u.color : c.text.replace('var(--','').replace(')','');
+        return `<div class="card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded='${isExpanded ? '' : u.id}';window._renderUnis()" style="cursor:pointer;${isExpanded ? 'border-color:var(--accent-md);background:var(--surface2)' : ''}">
+          <div class="card-header">
+            <div style="display:flex;align-items:start;gap:10px;flex:1;min-width:0">
+              <div class="card-avatar" style="background:${c.bg};color:${c.text};border-color:${c.border}">${abbr}</div>
+              <div class="card-info">
+                <h3>${esc(u.shortName || u.name)}</h3>
+                <div class="sub"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>${esc(u.location)}</div>
+                <span class="type-badge" style="background:${c.bg};color:${c.text};border-color:${c.border}">${esc(u.type)}</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
+              ${bookmarkIcon(u.id)}
+              <span style="color:var(--fg3);font-size:10px;transform:rotate(${isExpanded ? 90 : 0}deg);transition:transform .15s;display:inline-block">▶</span>
+            </div>
+          </div>
+          ${isExpanded ? (uniCourses.length ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span>${cr.eligibility ? `<span style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(cr.eligibility)}</span>` : ''}</span></div>`).join('')}</div>` : '<div style="padding:10px 0;font-size:.75rem;color:var(--fg3);font-family:var(--font-mono)">No courses listed</div>') : ''}
+        </div>`;
+      }).join('')}</div>
+      ${total > 1 ? `<div class="pagination"><button onclick="window._uniPage=Math.max(1,window._uniPage-1);window._renderUnis()" ${window._uniPage === 1 ? 'disabled' : ''}>← Prev</button>${Array.from({ length: total }, (_, i) => i + 1).map(p => `<button class="${p === window._uniPage ? 'active' : ''}" onclick="window._uniPage=${p};window._renderUnis()">${p}</button>`).join('')}<button onclick="window._uniPage=Math.min(${total},window._uniPage+1);window._renderUnis()" ${window._uniPage === total ? 'disabled' : ''}>Next →</button></div>` : ''}
+    `;
+  }
+
+  window._renderUnis = render;
+  render();
+}
+
+// ─── COLLEGE DEADLINES ───
+async function renderCollegeDeadlines(el) {
+  el.innerHTML = `<div class="page-header"><h1>College Deadlines</h1><p>Loading deadlines...</p></div><div class="card-grid">${skeletonCards(6)}</div>`;
+
+  const rows = await fetchSheet('College Deadlines');
+  const cds = rows.map(r => ({
+    id: r['College Deadlines ID'] || r['ID'] || '', collegeName: r['College Name'] || '', program: r['Program'] || '',
+    round: r['Round'] || '', deadline: r['Deadline'] || '', status: r['Status'] || 'Open',
+    applyUrl: r['Apply URL'] || '', notes: r['Notes'] || '', sortOrder: parseInt(r['Sort Order'] || '0') || 0
+  }));
+  cds.sort((a, b) => a.sortOrder - b.sortOrder);
+
+  window._cdData = cds;
+  window._cdFilter = 'all';
+  window._cdSearch = '';
+
+  function render() {
+    let list = [...cds];
+    if (window._cdFilter !== 'all') list = list.filter(d => d.status.toLowerCase() === window._cdFilter);
+    if (window._cdSearch) { const q = window._cdSearch.toLowerCase(); list = list.filter(d => (d.collegeName||'').toLowerCase().includes(q) || (d.program||'').toLowerCase().includes(q)); }
+    const open = cds.filter(d => d.status === 'Open').length;
+    const upcoming = cds.filter(d => d.status === 'Upcoming').length;
+    const closed = cds.filter(d => d.status === 'Closed').length;
+
+    el.innerHTML = `
+      <div class="page-header"><h1>College Deadlines</h1><p>Application deadlines for colleges and programs</p></div>
+      <div class="stats-bar"><span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span></div>
+      <div class="filter-bar">
+        <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
+        <div class="pill-group">${['all','open','upcoming','closed'].map(f => `<button class="pill${window._cdFilter === f ? ' active' : ''}" onclick="window._cdFilter='${f}';window._renderCDs()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`).join('')}</div>
+      </div>
+      <div class="card-grid">${list.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3></div>' :
+      list.map((d, i) => `<div class="card animate-in stagger-${Math.min(i, 5)}${d.status === 'Closed' ? ' dimmed' : ''}">
+        <div class="card-header">
+          <div class="card-info"><h3>${esc(d.collegeName)}</h3><div class="sub">${esc(d.program)}</div></div>
+          ${bookmarkIcon(d.id)}
+        </div>
+        <div class="card-meta">
+          ${d.round ? `<div class="card-meta-row"><span class="label">Round</span><span class="value">${esc(d.round)}</span></div>` : ''}
+          <div class="card-meta-row"><span class="label">Deadline</span><span class="value" style="color:${d.status === 'Open' ? 'var(--amber)' : d.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(d.deadline)}</span></div>
+          ${d.notes ? `<div class="card-meta-row"><span class="label">Notes</span><span class="value" style="color:var(--fg3);font-size:.68rem">${esc(d.notes)}</span></div>` : ''}
+        </div>
+        <div class="card-footer">
+          ${statusBadge(d.status)}
+          ${d.applyUrl && d.status !== 'Closed' ? `<a href="${esc(d.applyUrl)}" target="_blank" rel="noopener" class="btn-sm green" onclick="event.stopPropagation()">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}
+        </div>
+      </div>`).join('')}</div>
+    `;
+  }
+
+  window._renderCDs = render;
+  render();
+}
+
+// ─── CUTOFFS ───
+async function renderCutoffs(el) {
+  el.innerHTML = `<div class="page-header"><h1>Cutoffs</h1><p>Loading cutoffs...</p></div><div class="table-wrap"><div class="table-scroll"><table><thead><tr>${['College','Exam','2024','2023','2022','Category'].map(c => `<th>${c} <span class="sort-icon">↕</span></th>`).join('')}</tr></thead><tbody>${skeletonRows(10, 6)}</tbody></table></div></div>`;
+
+  const rows = await fetchSheet('Cutoffs');
+  const cutoffs = rows.map(r => ({
+    college: r['College'] || '', exam: r['Exam'] || '', cutoff2024: r['Cutoff 2024'] || '-', cutoff2023: r['Cutoff 2023'] || '-',
+    cutoff2022: r['Cutoff 2022'] || '-', category: r['Category'] || 'General'
+  }));
+
+  window._cutData = cutoffs;
+  window._cutFilter = 'all';
+  window._cutSort = { field: 'college', dir: 1 };
+
+  function ccClass(v) { const n = parseFloat(v); if (isNaN(n)) return 'cutoff-none'; if (n >= 97) return 'cutoff-high'; if (n >= 94) return 'cutoff-mid'; return 'cutoff-low'; }
+  function trendSvg(cur, prev) {
+    const cn = parseFloat(cur), pn = parseFloat(prev);
+    if (isNaN(cn) || isNaN(pn)) return '<span class="trend flat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg></span>';
+    if (cn > pn) return '<span class="trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></span>';
+    if (cn < pn) return '<span class="trend down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/></svg></span>';
+    return '<span class="trend flat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg></span>';
+  }
+
+  function render() {
+    let list = window._cutFilter === 'all' ? [...cutoffs] : cutoffs.filter(c => c.category === window._cutFilter);
+    const { field, dir } = window._cutSort;
+    list.sort((a, b) => {
+      const av = a[field], bv = b[field];
+      const an = parseFloat(av), bn = parseFloat(bv);
+      if (!isNaN(an) && !isNaN(bn)) return (an - bn) * dir;
+      return String(av).localeCompare(String(bv)) * dir;
+    });
+
+    el.innerHTML = `
+      <div class="page-header"><h1>Cutoffs</h1><p>Entrance exam cutoffs for top institutions (2022–2024)</p></div>
+      <div class="filter-bar">
+        <div class="pill-group">${['all','General','OBC','SC/ST'].map(c => `<button class="pill${window._cutFilter === c ? ' active' : ''}" onclick="window._cutFilter='${c}';window._renderCuts()">${c === 'all' ? 'All Categories' : c}</button>`).join('')}</div>
+        <div class="legend"><span class="leg"><span class="ldot" style="background:var(--accent)"></span>High (≥97%)</span><span class="leg"><span class="ldot" style="background:var(--amber)"></span>Mid (≥94%)</span><span class="leg"><span class="ldot" style="background:var(--red)"></span>Below</span></div>
+      </div>
+      <div class="table-wrap"><div class="table-scroll"><table>
+        <thead><tr>${[{f:'college',l:'College'},{f:'exam',l:'Exam'},{f:'cutoff2024',l:'2024'},{f:'cutoff2023',l:'2023'},{f:'cutoff2022',l:'2022'},{f:'category',l:'Category'}].map(c =>
+          `<th onclick="window._cutSort={field:'${c.f}',dir:window._cutSort.field==='${c.f}'?-window._cutSort.dir:1};window._renderCuts()">${c.l} <span class="sort-icon">↕</span></th>`).join('')}</tr></thead>
+        <tbody>${list.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No cutoff data found</td></tr>' : list.map((r, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
+          <td class="name">${esc(r.college)}</td>
+          <td style="color:var(--cyan);font-weight:600;font-size:.75rem;font-family:var(--font-mono)">${esc(r.exam)}</td>
+          <td class="${ccClass(r.cutoff2024)}">${esc(r.cutoff2024)}</td>
+          <td>${trendSvg(r.cutoff2024, r.cutoff2023)}<span class="${ccClass(r.cutoff2023)}">${esc(r.cutoff2023)}</span></td>
+          <td>${trendSvg(r.cutoff2023, r.cutoff2022)}<span class="${ccClass(r.cutoff2022)}">${esc(r.cutoff2022)}</span></td>
+          <td><span class="cat-badge">${esc(r.category)}</span></td>
+        </tr>`).join('')}</tbody>
+      </table></div></div>
+    `;
+  }
+
+  window._renderCuts = render;
+  render();
+}
+
+// ─── MY LIST ───
+function renderMyList(el) {
+  const bm = state.bookmarks;
+  const unis = bm.filter(b => b.type === 'university');
+  const tests = bm.filter(b => b.type === 'test');
+  const cds = bm.filter(b => b.type === 'college-deadline');
+  const icons = {
+    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
+    test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
+    'college-deadline': '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>'
+  };
+  const bgMap = {
+    university: 'background:var(--accent-lo);color:var(--accent);border-color:var(--accent-md)',
+    test: 'background:var(--amber-lo);color:var(--amber);border-color:rgba(255,184,48,.25)',
+    'college-deadline': 'background:var(--cyan-lo);color:var(--cyan);border-color:rgba(95,212,232,.25)'
+  };
+  const tabMap = { university: 'universities', test: 'test-deadlines', 'college-deadline': 'college-deadlines' };
+
+  if (bm.length === 0) {
+    el.innerHTML = `<div class="page-header"><h1>My List</h1><p>Your bookmarked universities, tests, and deadlines</p></div>
+      <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><h3>No saved items yet</h3><p>Bookmark universities, tests, or deadlines and they'll appear here</p></div>`;
+    return;
+  }
+
+  function section(title, items) {
+    if (!items.length) return '';
+    return `<div class="section-title">${title} <span class="count">${items.length}</span></div>
+      <div class="bookmark-grid">${items.map(b => `<div class="bookmark-card">
+        <div class="b-icon" style="${bgMap[b.type] || ''}">${icons[b.type] || ''}</div>
+        <div class="b-info" onclick="setTab('${tabMap[b.type] || ''}')"><div class="b-name">${esc(b.name)}</div>${b.meta ? `<div class="b-meta">${esc(b.meta)}</div>` : ''}</div>
+        <button class="b-del" onclick="removeBookmark('${esc(b.id)}')" title="Remove"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg></button>
+      </div>`).join('')}</div>`;
+  }
+
+  el.innerHTML = `<div class="page-header"><h1>My List</h1><p>${bm.length} saved item${bm.length !== 1 ? 's' : ''}</p></div>
+    ${section('Universities', unis)}${section('Test Deadlines', tests)}${section('College Deadlines', cds)}`;
+}
+
+// ─── BOOKMARK CLICK HANDLER ───
+function handleBookmarkClick(id) {
+  const tab = state.tab;
+  let item = null;
+  if (tab === 'test-deadlines' && window._tdData) {
+    const t = window._tdData.find(t => t.id === id);
+    if (t) item = { id: t.id, type: 'test', name: t.name, meta: `Deadline: ${t.deadline}` };
+  } else if (tab === 'universities' && window._uniData) {
+    const u = window._uniData.find(u => u.id === id);
+    if (u) item = { id: u.id, type: 'university', name: u.shortName || u.name, meta: `${u.type} — ${u.location}` };
+  } else if (tab === 'college-deadlines' && window._cdData) {
+    const d = window._cdData.find(d => d.id === id);
+    if (d) item = { id: d.id, type: 'college-deadline', name: `${d.collegeName} — ${d.program}`, meta: `Deadline: ${d.deadline}` };
+  }
+  if (item) toggleBookmark(item);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  updateBadges();
+  setTab('universities');
+});
+</script>
+</body>
+</html>
