@@ -291,8 +291,8 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 
 /* ─── Skeleton ─── */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
-.skel-row{height:48px;border-bottom:1px solid rgba(255,255,255,.03);display:flex;align-items:center;padding:0 14px;gap:14px}
-.skel-row .sk{height:12px;border-radius:4px}
+.skel-row{height:48px;border-bottom:1px solid rgba(255,255,255,.03)}
+.skel-row td{padding:0 14px}.skel-row .sk{height:12px;border-radius:4px}
 
 /* ─── Search Modal ─── */
 .search-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;opacity:0;pointer-events:none;transition:opacity .15s}
@@ -804,8 +804,8 @@ function statusBadge(status) {
 function skeletonRows(n, cols) {
   const widths = [180, 120, 100, 80, 60];
   return Array.from({ length: n }, () =>
-    `<div class="skel-row">${Array.from({ length: cols }, (_, i) =>
-      `<div class="sk skeleton" style="width:${widths[i % widths.length]}px"></div>`).join('')}</div>`
+    `<tr class="skel-row">${Array.from({ length: cols }, (_, i) =>
+      `<td><div class="sk skeleton" style="width:${widths[i % widths.length]}px"></div></td>`).join('')}</tr>`
   ).join('');
 }
 
