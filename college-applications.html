@@ -255,20 +255,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .course-item .cdot span{display:flex;align-items:center;gap:3px}
 .course-item .cdot svg{width:10px;height:10px}
 
-/* ─── Cutoffs ─── */
-.cutoff-high{color:var(--accent);font-weight:700;font-family:var(--font-mono)}
-.cutoff-mid{color:var(--amber);font-weight:700;font-family:var(--font-mono)}
-.cutoff-low{color:var(--red);font-weight:700;font-family:var(--font-mono)}
-.cutoff-none{color:var(--fg3);font-family:var(--font-mono)}
-.trend{display:inline-flex;align-items:center;gap:2px;margin-right:4px}
-.trend svg{width:11px;height:11px}
-.trend.up{color:var(--accent)}.trend.down{color:var(--red)}.trend.flat{color:var(--fg3)}
-.cat-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:500;background:var(--surface2);border:1px solid var(--border);color:var(--fg3);font-family:var(--font-mono);letter-spacing:.3px}
 
-/* ─── Legend ─── */
-.legend{display:flex;gap:12px;font-size:.7rem;color:var(--fg3);font-family:var(--font-mono)}
-.legend .leg{display:flex;align-items:center;gap:5px}
-.legend .leg .ldot{width:7px;height:7px;border-radius:50%}
 
 /* ─── Bookmarks ─── */
 .bookmark-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:7px}
@@ -288,6 +275,44 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .empty-state svg{width:44px;height:44px;color:var(--fg3);margin-bottom:14px;opacity:.35}
 .empty-state h3{font-size:.95rem;font-weight:600;color:var(--fg2)}
 .empty-state p{font-size:.78rem;color:var(--fg3);margin-top:5px;max-width:260px;line-height:1.6;font-family:var(--font-mono)}
+
+
+/* ─── University Image Cards ─── */
+.uni-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:all .25s cubic-bezier(.22,1,.36,1);cursor:pointer;position:relative}
+.uni-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.uni-card-img{width:100%;height:160px;object-fit:cover;background:var(--surface2);display:block;transition:transform .4s ease}
+.uni-card:hover .uni-card-img{transform:scale(1.04)}
+.uni-card-img-wrap{overflow:hidden;position:relative;height:160px;background:var(--surface2)}
+.uni-card-img-placeholder{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-family:var(--font-brand);font-size:1.8rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.5)}
+.uni-card-body{padding:14px 16px}
+.uni-card-name{font-size:.88rem;font-weight:600;color:var(--fg);margin-bottom:4px;line-height:1.3}
+.uni-card-location{font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.uni-card-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.uni-card-type{display:inline-flex;padding:3px 10px;border-radius:12px;font-size:.65rem;font-weight:600;letter-spacing:.3px;font-family:var(--font-mono)}
+.uni-card-actions{display:flex;gap:4px;align-items:center}
+.uni-card-overlay{position:absolute;top:8px;right:8px;z-index:2}
+
+/* ─── Enhanced Test Deadlines ─── */
+.td-table{width:100%;border-collapse:separate;border-spacing:0}
+.td-table thead th{padding:12px 16px;font-size:.68rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--fg3);font-family:var(--font-mono);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
+.td-table thead th:hover{color:var(--fg2)}
+.td-table tbody tr{transition:background .15s}
+.td-table tbody tr:hover{background:rgba(255,255,255,.02)}
+.td-table tbody td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.03);font-size:.82rem;vertical-align:middle}
+.td-name{font-weight:600;color:var(--fg);font-size:.85rem}
+.td-date{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:6px;background:rgba(95,212,232,.06);color:var(--cyan);font-family:var(--font-mono);font-size:.74rem;font-weight:500;border:1px solid rgba(95,212,232,.12)}
+.td-deadline{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:6px;font-family:var(--font-mono);font-size:.74rem;font-weight:600}
+.td-deadline.urgent{background:rgba(255,107,107,.06);color:var(--red);border:1px solid rgba(255,107,107,.12)}
+.td-deadline.normal{background:rgba(255,184,48,.06);color:var(--amber);border:1px solid rgba(255,184,48,.12)}
+.td-deadline.relaxed{background:rgba(59,255,108,.06);color:var(--accent);border:1px solid rgba(59,255,108,.12)}
+.td-deadline.tba{background:var(--surface);color:var(--fg3);border:1px solid var(--border)}
+.btn-apply{display:inline-flex;align-items:center;gap:5px;padding:6px 16px;border-radius:8px;font-size:.74rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.3px;background:var(--accent);color:var(--bg);border:none;cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-apply:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 4px 16px rgba(59,255,108,.25)}
+.btn-apply svg{width:12px;height:12px}
+.btn-video{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:.74rem;font-weight:500;font-family:var(--font-mono);background:var(--surface2);color:var(--fg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;text-decoration:none}
+.btn-video:hover{border-color:var(--border2);color:var(--fg);background:rgba(255,255,255,.05)}
+.btn-video svg{width:12px;height:12px}
+.td-actions{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
 
 /* ─── Skeleton ─── */
 .skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
@@ -433,10 +458,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
       <span class="nav-text">College Deadlines</span>
     </button>
-    <button class="nav-item" data-tab="cutoffs" onclick="setTab('cutoffs')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-      <span class="nav-text">Cutoffs</span>
-    </button>
+
     <button class="nav-item" data-tab="my-list" onclick="setTab('my-list')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
       <span class="nav-text">My List</span>
@@ -476,11 +498,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg>
       Colleges
     </button>
-    <button class="mobile-tab" data-tab="cutoffs" onclick="setTab('cutoffs')">
-      <span class="tab-indicator"></span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-      Cutoffs
-    </button>
+
     <button class="mobile-tab" data-tab="my-list" onclick="setTab('my-list')">
       <span class="tab-indicator"></span>
       <span class="tab-badge" id="mobileBadge" style="display:none"></span>
@@ -510,9 +528,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
     <button class="nav-item" data-tab="college-deadlines" onclick="setTab('college-deadlines');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01"/></svg><span>College Deadlines</span>
     </button>
-    <button class="nav-item" data-tab="cutoffs" onclick="setTab('cutoffs');closeDrawer()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg><span>Cutoffs</span>
-    </button>
+
     <button class="nav-item" data-tab="my-list" onclick="setTab('my-list');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>My List</span>
     </button>
@@ -525,7 +541,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
   <div class="search-modal">
     <div class="search-input-modal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="searchInput" type="text" placeholder="Search universities, tests, cutoffs..." oninput="doSearch(this.value)" onkeydown="handleSearchKey(event)">
+      <input id="searchInput" type="text" placeholder="Search universities, tests, deadlines..." oninput="doSearch(this.value)" onkeydown="handleSearchKey(event)">
       <button class="close-btn" onclick="closeSearch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="search-results" id="searchResults"><div class="hint">Start typing to search across all data...</div></div>
@@ -552,6 +568,48 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 // ═══════════════════════════════════════════════════════════════
 const SHEET_ID = '1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc';
 const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+
+// ═══════════════════════════════════════════════════════════════
+//  UNIVERSITY IMAGE MAP
+// ═══════════════════════════════════════════════════════════════
+const UNI_IMAGES = {
+  'iim-indore': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/IIM_Indore_Administrative_Block.jpg/1280px-IIM_Indore_Administrative_Block.jpg',
+  'iim-bangalore': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/IIM_Bangalore_Main_Building.jpg/1280px-IIM_Bangalore_Main_Building.jpg',
+  'iim-shillong': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/IIM_Shillong_Campus.jpg/1280px-IIM_Shillong_Campus.jpg',
+  'iim-kozhikode': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Indian_Institute_of_Management_Kozhikode.jpg/1280px-Indian_Institute_of_Management_Kozhikode.jpg',
+  'iim-rohtak': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/IIM_Rohtak_Campus.jpg/1280px-IIM_Rohtak_Campus.jpg',
+  'iim-lucknow': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/IIM_Lucknow_Noida_Campus.jpg/1280px-IIM_Lucknow_Noida_Campus.jpg',
+  'iim-mumbai': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/IIM_Mumbai_Campus.jpg/1280px-IIM_Mumbai_Campus.jpg',
+  'iim-ranchi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/IIM_Ranchi.jpg/1280px-IIM_Ranchi.jpg',
+  'iim-calcutta': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IIM_Calcutta_Auditorium.jpg/1280px-IIM_Calcutta_Auditorium.jpg',
+  'iim-ahmedabad': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/IIMA_Campus.jpg/1280px-IIMA_Campus.jpg',
+  'iim-nagpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/VNIT_Main_Building.jpg/1280px-VNIT_Main_Building.jpg',
+  'iim-bodh-gaya': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mahabodhi_temple_and_surrounding.jpg/1280px-Mahabodhi_temple_and_surrounding.jpg',
+  'iim-sirmaur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Paonta_Sahib_Gurudwara.jpg/1280px-Paonta_Sahib_Gurudwara.jpg',
+  'iit-bombay': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/IIT_Bombay_Main_Building.jpg/1280px-IIT_Bombay_Main_Building.jpg',
+  'iit-delhi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/IIT_Delhi_Main_Building.jpg/1280px-IIT_Delhi_Main_Building.jpg',
+  'iit-kanpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Iitk_airview.jpg/1280px-Iitk_airview.jpg',
+  'iit-madras': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/IIT_Madras.jpg/1280px-IIT_Madras.jpg',
+  'iit-kharagpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Main_building_of_IIT_Kharagpur.jpg/1280px-Main_building_of_IIT_Kharagpur.jpg',
+  'ashoka-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Ashoka_University_Campus.jpg/1280px-Ashoka_University_Campus.jpg',
+  'flame-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/FLAME_University_Campus.jpg/1280px-FLAME_University_Campus.jpg',
+  'krea-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Sri_City%2C_India.jpg/1280px-Sri_City%2C_India.jpg',
+  'srcc': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Shriram_college_of_commerce.JPG/1280px-Shriram_college_of_commerce.JPG',
+  'xlri': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/XLRI.JPG/1280px-XLRI.JPG',
+  'fms-delhi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/FMS_Delhi.jpg/1280px-FMS_Delhi.jpg',
+  'isb': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/ISB_Hyderabad_at_night.jpg/1280px-ISB_Hyderabad_at_night.jpg',
+  'bits-pilani': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BITS_Pilani_University.jpg/1280px-BITS_Pilani_University.jpg',
+  'jnu': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/JNU_Convention_Centre.jpg/1280px-JNU_Convention_Centre.jpg',
+  'tiss': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/TISS_Main_Campus.jpg/1280px-TISS_Main_Campus.jpg',
+  'christ-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Christ_University_Central_Campus.jpg/1280px-Christ_University_Central_Campus.jpg',
+};
+
+function getUniImage(id, name) {
+  if (UNI_IMAGES[id]) return UNI_IMAGES[id];
+  // Fallback: generate a gradient placeholder
+  return null;
+}
 
 // ═══════════════════════════════════════════════════════════════
 //  STATE
@@ -648,7 +706,7 @@ async function loadSearchCache() {
   if (state.searchCache) return;
   try {
     const [unis, tests, cds, cuts] = await Promise.all([
-      fetchSheet('Universities'), fetchSheet('Test Deadlines'), fetchSheet('College Deadlines'), fetchSheet('Cutoffs')
+      fetchSheet('Universities'), fetchSheet('Test Deadlines'), fetchSheet('College Deadlines'), Promise.resolve([])
     ]);
     state.searchCache = { unis, tests, cds, cuts };
   } catch(e) { console.error(e); }
@@ -683,10 +741,7 @@ function doSearch(q) {
     if ((d.collegeName||'').toLowerCase().includes(lq) || (d.program||'').toLowerCase().includes(lq))
       results.push({ type: 'cd', name: `${d.collegeName} — ${d.program}`, meta: `Deadline: ${d.deadline} (${d.status})`, tab: 'college-deadlines', id: d.id });
   });
-  (c.cuts||[]).forEach(r => {
-    if ((r.college||'').toLowerCase().includes(lq) || (r.exam||'').toLowerCase().includes(lq))
-      results.push({ type: 'cutoff', name: `${r.college} — ${r.exam}`, meta: `2024: ${r.cutoff2024} (${r.category})`, tab: 'cutoffs', id: `cut-${r.college}` });
-  });
+
 
   state.searchSelected = 0;
   if (results.length === 0) {
@@ -824,7 +879,6 @@ async function renderTab() {
     'test-deadlines': renderTestDeadlines,
     'universities': renderUniversities,
     'college-deadlines': renderCollegeDeadlines,
-    'cutoffs': renderCutoffs,
     'my-list': renderMyList
   };
   if (renderers[state.tab]) await renderers[state.tab](el);
@@ -832,11 +886,11 @@ async function renderTab() {
 
 // ─── TEST DEADLINES ───
 async function renderTestDeadlines(el) {
-  el.innerHTML = `<div class="page-header"><h1>Test Deadlines</h1><p>Track upcoming entrance exam dates and deadlines</p></div><div class="stats-bar" id="tdStats"></div><div class="filter-bar"><div class="pill-group" id="tdFilter"></div></div><div class="table-wrap"><div class="table-scroll"><table><thead><tr><th onclick="sortTD('name')">Exam <span class="sort-icon">↕</span></th><th onclick="sortTD('examDate')">Exam Date <span class="sort-icon">↕</span></th><th onclick="sortTD('deadline')">Deadline <span class="sort-icon">↕</span></th><th onclick="sortTD('status')">Status <span class="sort-icon">↕</span></th><th>Actions</th></tr></thead><tbody id="tdBody">${skeletonRows(8, 5)}</tbody></table></div></div>`;
+  el.innerHTML = `<div class="page-header"><h1>Test Deadlines</h1><p>Track upcoming entrance exam dates and deadlines</p></div><div class="stats-bar" id="tdStats"></div><div class="filter-bar"><div class="pill-group" id="tdFilter"></div></div><div class="table-wrap"><div class="table-scroll"><table class="td-table"><thead><tr><th onclick="sortTD('name')">Test <span class="sort-icon">↕</span></th><th onclick="sortTD('examDate')">Exam Date <span class="sort-icon">↕</span></th><th onclick="sortTD('deadline')">Deadline <span class="sort-icon">↕</span></th><th>Link</th><th>Status</th></tr></thead><tbody id="tdBody">${skeletonRows(8, 5)}</tbody></table></div></div>`;
 
   const rows = await fetchSheet('Test Deadlines');
   const tests = rows.map(r => ({
-    id: r['Test Deadlines ID'] || r['ID'] || r['id'] || '',
+    id: r['ID'] || r['id'] || '',
     name: r['Name'] || r['name'] || '',
     examDate: r['Exam Date'] || r['exam_date'] || '',
     deadline: r['Deadline'] || r['deadline'] || '',
@@ -878,6 +932,19 @@ function sortTD(field) {
   renderTDRows();
 }
 
+function getDeadlineClass(deadline, status) {
+  if (!deadline || deadline.toLowerCase().includes('tba') || deadline.toLowerCase().includes('announced')) return 'tba';
+  if (status === 'Closed') return 'normal';
+  try {
+    const d = new Date(deadline.replace(/\(.*\)/, '').trim());
+    const now = new Date();
+    const diff = (d - now) / (1000*60*60*24);
+    if (diff < 5) return 'urgent';
+    if (diff < 14) return 'normal';
+    return 'relaxed';
+  } catch(e) { return 'normal'; }
+}
+
 function renderTDRows() {
   const { _tdData: tests, _tdFilter: filter, _tdSort: sort } = window;
   let list = filter === 'all' ? [...tests] : tests.filter(t => t.status.toLowerCase() === filter);
@@ -892,11 +959,14 @@ function renderTDRows() {
   el.innerHTML = list.length === 0 ?
     '<tr><td colspan="5" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No records found.</td></tr>' :
     list.map((t, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
-      <td class="name"><span class="trunc">${esc(t.name)}</span></td>
-      <td><span style="display:flex;align-items:center;gap:4px;color:var(--fg3);font-size:.75rem;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${esc(t.examDate)}</span></td>
-      <td><span style="font-size:.75rem;font-weight:600;color:${t.status === 'Open' ? 'var(--amber)' : t.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'};display:flex;align-items:center;gap:4px;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(t.deadline)}</span></td>
+      <td><span class="td-name">${esc(t.name)}</span></td>
+      <td><span class="td-date">${esc(t.examDate)}</span></td>
+      <td><span class="td-deadline ${getDeadlineClass(t.deadline, t.status)}">${esc(t.deadline)}</span></td>
+      <td><div class="td-actions">
+        ${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-apply" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apply Now</a>` : ''}
+        ${t.hasVideo ? `<span class="btn-video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Video</span>` : ''}
+      </div></td>
       <td>${statusBadge(t.status)}</td>
-      <td><div class="actions">${bookmarkIcon(t.id)}${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-sm red">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}</div></td>
     </tr>`).join('');
 }
 
@@ -906,7 +976,7 @@ async function renderUniversities(el) {
 
   const [uniRows, courseRows] = await Promise.all([fetchSheet('Universities'), fetchSheet('Courses')]);
   const unis = uniRows.map(r => ({
-    id: r['Universities ID'] || r['ID'] || r['id'] || '',
+    id: r['ID'] || r['id'] || '',
     name: r['Full Name'] || r['Name'] || r['name'] || '',
     shortName: r['Short Name'] || r['short_name'] || '',
     location: r['Location'] || r['location'] || '',
@@ -915,7 +985,7 @@ async function renderUniversities(el) {
     sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
   const courses = courseRows.map(r => ({
-    id: r['Courses ID'] || r['ID'] || r['id'] || '',
+    id: r['ID'] || r['id'] || '',
     name: r['Course Name'] || r['Name'] || r['name'] || '',
     duration: r['Duration'] || r['duration'] || '',
     eligibility: r['Eligibility'] || r['eligibility'] || '',
@@ -929,7 +999,7 @@ async function renderUniversities(el) {
   window._uniTypeFilter = '';
   window._uniPage = 1;
   window._uniExpanded = null;
-  const PER = 20;
+  const PER = 24;
 
   const types = [...new Set(unis.map(u => u.type))].filter(Boolean);
   const typeColors = {
@@ -954,35 +1024,45 @@ async function renderUniversities(el) {
 
     el.innerHTML = `
       <div class="page-header"><h1>Indian Universities</h1><p>Browse ${list.length} institution${list.length !== 1 ? 's' : ''} across India</p></div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;margin-bottom:18px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--cyan);font-family:var(--font-mono)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        Click on any college to see list of course(s) offered
+      </div>
       <div class="filter-bar">
         <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search institutions..." value="${esc(window._uniSearch)}" oninput="window._uniSearch=this.value;window._uniPage=1;window._renderUnis()"></div>
         <div class="pill-group" style="overflow-x:auto">${['all', ...types].map(t => `<button class="pill${window._uniTypeFilter === t || (t === 'all' && !window._uniTypeFilter) ? ' active' : ''}" onclick="window._uniTypeFilter='${t === 'all' ? '' : t}';window._uniPage=1;window._renderUnis()">${t === 'all' ? 'All' : t}</button>`).join('')}</div>
       </div>
-      <div class="card-grid">${paged.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><h3>No institutions found</h3><p>Try adjusting your search or filter</p></div>' :
+      <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${paged.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><h3>No institutions found</h3><p>Try adjusting your search or filter</p></div>' :
       paged.map((u, i) => {
         const c = tc(u.type);
+        const img = getUniImage(u.id, u.shortName || u.name);
         const abbr = (u.shortName || u.name).slice(0, 3).toUpperCase();
         const isExpanded = window._uniExpanded === u.id;
         const uniCourses = courses.filter(cr => cr.universityId === u.id).sort((a, b) => a.sortOrder - b.sortOrder);
-        return `<div class="card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded=window._uniExpanded===u.id?null:u.id;window._renderUnis()" style="cursor:pointer">
-          <div class="card-header">
-            <div style="display:flex;align-items:start;gap:10px;flex:1;min-width:0">
-              <div class="card-avatar" style="background:${c.bg};color:${c.text};border-color:${c.border}">${abbr}</div>
-              <div class="card-info">
-                <h3>${esc(u.shortName || u.name)}</h3>
-                <div class="sub"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>${esc(u.location)}</div>
-                <span class="type-badge" style="background:${c.bg};color:${c.text};border-color:${c.border}">${esc(u.type)}</span>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
-              ${bookmarkIcon(u.id)}
-              <span style="color:var(--fg3);font-size:10px;display:inline-block;transition:transform .15s;transform:rotate(${isExpanded ? 90 : 0}deg)">▶</span>
-            </div>
+        const colorVal = u.color || c.text;
+
+        return `<div class="uni-card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded=window._uniExpanded==='${u.id}'?null:'${u.id}';window._renderUnis()">
+          <div class="uni-card-overlay">${bookmarkIcon(u.id)}</div>
+          <div class="uni-card-img-wrap">
+            ${img ? `<img class="uni-card-img" src="${img}" alt="${esc(u.shortName || u.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=uni-card-img-placeholder style=background:linear-gradient(135deg,${colorVal}22,${colorVal}08)>${abbr}</div>'">` :
+            `<div class="uni-card-img-placeholder" style="background:linear-gradient(135deg,${colorVal}22,${colorVal}08)">${abbr}</div>`}
           </div>
-          ${isExpanded ? (uniCourses.length ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span>${cr.eligibility ? `<span style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(cr.eligibility)}</span>` : ''}</span></div>`).join('')}</div>` : '<div style="padding:10px 0;font-size:.75rem;color:var(--fg3);font-family:var(--font-mono)">No courses listed for this institution yet</div>') : ''}
+          <div class="uni-card-body">
+            <div class="uni-card-name">${esc(u.shortName || u.name)}</div>
+            <div class="uni-card-location"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(u.location)}</div>
+            <div class="uni-card-footer">
+              <span class="uni-card-type" style="background:${c.bg};color:${c.text};border:1px solid ${c.border}">${esc(u.type)}</span>
+              ${uniCourses.length > 0 ? `<span style="font-size:.65rem;color:var(--fg3);font-family:var(--font-mono)">${uniCourses.length} course${uniCourses.length > 1 ? 's' : ''}</span>` : ''}
+            </div>
+            ${isExpanded && uniCourses.length > 0 ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span></span></div>`).join('')}</div>` : ''}
+          </div>
         </div>`;
       }).join('')}</div>
-      ${total > 1 ? `<div class="pagination"><button onclick="window._uniPage=Math.max(1,window._uniPage-1);window._renderUnis()" ${window._uniPage === 1 ? 'disabled' : ''}>← Prev</button>${Array.from({ length: total }, (_, i) => i + 1).map(p => `<button class="${p === window._uniPage ? 'active' : ''}" onclick="window._uniPage=${p};window._renderUnis()">${p}</button>`).join('')}<button onclick="window._uniPage=Math.min(${total},window._uniPage+1);window._renderUnis()" ${window._uniPage === total ? 'disabled' : ''}>Next →</button></div>` : ''}
+      ${total > 1 ? `<div class="pagination" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;font-family:var(--font-mono);font-size:.75rem">
+        <button class="pill" onclick="window._uniPage=Math.max(1,window._uniPage-1);window._renderUnis()" ${window._uniPage <= 1 ? 'disabled' : ''}>← Prev</button>
+        <span style="color:var(--fg3);padding:0 8px">${window._uniPage} / ${total}</span>
+        <button class="pill" onclick="window._uniPage=Math.min(${total},window._uniPage+1);window._renderUnis()" ${window._uniPage >= total ? 'disabled' : ''}>Next →</button>
+      </div>` : ''}
     `;
   }
 
@@ -1047,68 +1127,6 @@ async function renderCollegeDeadlines(el) {
   }
 
   window._renderCDs = render;
-  render();
-}
-
-// ─── CUTOFFS ───
-async function renderCutoffs(el) {
-  el.innerHTML = `<div class="page-header"><h1>Cutoffs</h1><p>Loading cutoffs...</p></div><div class="table-wrap"><div class="table-scroll"><table><thead><tr>${['College','Exam','2024','2023','2022','Category'].map(c => `<th>${c} <span class="sort-icon">↕</span></th>`).join('')}</tr></thead><tbody>${skeletonRows(10, 6)}</tbody></table></div></div>`;
-
-  const rows = await fetchSheet('Cutoffs');
-  const cutoffs = rows.map(r => ({
-    college: r['College'] || r['college'] || '',
-    exam: r['Exam'] || r['exam'] || '',
-    cutoff2024: r['Cutoff 2024'] || r['2024'] || '-',
-    cutoff2023: r['Cutoff 2023'] || r['2023'] || '-',
-    cutoff2022: r['Cutoff 2022'] || r['2022'] || '-',
-    category: r['Category'] || r['category'] || 'General'
-  })).filter(r => r.college);
-
-  window._cutData = cutoffs;
-  window._cutFilter = 'all';
-  window._cutSort = { field: 'college', dir: 1 };
-
-  function ccClass(v) { const n = parseFloat(v); if (isNaN(n)) return 'cutoff-none'; if (n >= 97) return 'cutoff-high'; if (n >= 94) return 'cutoff-mid'; return 'cutoff-low'; }
-  function trendSvg(cur, prev) {
-    const cn = parseFloat(cur), pn = parseFloat(prev);
-    if (isNaN(cn) || isNaN(pn)) return '<span class="trend flat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg></span>';
-    if (cn > pn) return '<span class="trend up"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></span>';
-    if (cn < pn) return '<span class="trend down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/></svg></span>';
-    return '<span class="trend flat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg></span>';
-  }
-
-  function render() {
-    let list = window._cutFilter === 'all' ? [...cutoffs] : cutoffs.filter(c => c.category === window._cutFilter);
-    const { field, dir } = window._cutSort;
-    list.sort((a, b) => {
-      const av = a[field], bv = b[field];
-      const an = parseFloat(av), bn = parseFloat(bv);
-      if (!isNaN(an) && !isNaN(bn)) return (an - bn) * dir;
-      return String(av).localeCompare(String(bv)) * dir;
-    });
-
-    el.innerHTML = `
-      <div class="page-header"><h1>Cutoffs</h1><p>Entrance exam cutoffs for top institutions</p></div>
-      <div class="filter-bar">
-        <div class="pill-group">${['all','General','OBC','SC/ST'].map(c => `<button class="pill${window._cutFilter === c ? ' active' : ''}" onclick="window._cutFilter='${c}';window._renderCuts()">${c === 'all' ? 'All Categories' : c}</button>`).join('')}</div>
-        <div class="legend"><span class="leg"><span class="ldot" style="background:var(--accent)"></span>High (≥97%)</span><span class="leg"><span class="ldot" style="background:var(--amber)"></span>Mid (≥94%)</span><span class="leg"><span class="ldot" style="background:var(--red)"></span>Below</span></div>
-      </div>
-      <div class="table-wrap"><div class="table-scroll"><table>
-        <thead><tr>${[{f:'college',l:'College'},{f:'exam',l:'Exam'},{f:'cutoff2024',l:'2024'},{f:'cutoff2023',l:'2023'},{f:'cutoff2022',l:'2022'},{f:'category',l:'Category'}].map(c =>
-          `<th onclick="window._cutSort={field:'${c.f}',dir:window._cutSort.field==='${c.f}'?-window._cutSort.dir:1};window._renderCuts()">${c.l} <span class="sort-icon">↕</span></th>`).join('')}</tr></thead>
-        <tbody>${list.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No cutoff data found. No cutoff data found.</td></tr>' : list.map((r, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
-          <td class="name">${esc(r.college)}</td>
-          <td style="color:var(--cyan);font-weight:600;font-size:.75rem;font-family:var(--font-mono)">${esc(r.exam)}</td>
-          <td class="${ccClass(r.cutoff2024)}">${esc(r.cutoff2024)}</td>
-          <td>${trendSvg(r.cutoff2024, r.cutoff2023)}<span class="${ccClass(r.cutoff2023)}">${esc(r.cutoff2023)}</span></td>
-          <td>${trendSvg(r.cutoff2023, r.cutoff2022)}<span class="${ccClass(r.cutoff2022)}">${esc(r.cutoff2022)}</span></td>
-          <td><span class="cat-badge">${esc(r.category)}</span></td>
-        </tr>`).join('')}</tbody>
-      </table></div></div>
-    `;
-  }
-
-  window._renderCuts = render;
   render();
 }
 
