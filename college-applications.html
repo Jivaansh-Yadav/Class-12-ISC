@@ -366,6 +366,28 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 }
 @media(min-width:1024px){.app-mobile-bottom{display:none!important}}
 @media(max-width:1023px){.app-footer{display:none}}
+
+/* ─── Search Page ─── */
+.search-hint{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--radius-sm);background:var(--accent-lo);border:1px solid var(--accent-md);margin-bottom:20px;font-size:.78rem;color:var(--fg2);font-family:var(--font-mono);letter-spacing:.2px}
+.search-hint svg{flex-shrink:0;color:var(--accent)}
+.search-section{margin-bottom:22px}
+.search-section h3{font-size:.82rem;font-weight:600;color:var(--fg);margin-bottom:10px;font-family:var(--font-mono);letter-spacing:.4px;text-transform:uppercase}
+.search-select-wrap{position:relative}
+.search-select{width:100%;padding:10px 14px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--fg);font-size:.82rem;font-family:var(--font);outline:none;cursor:pointer;transition:all .15s;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234e6078' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.search-select:focus{border-color:var(--accent-md);background-color:var(--surface2);background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233bff6c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+.search-select option{background:var(--bg2);color:var(--fg)}
+.search-results-count{font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);margin-top:12px;margin-bottom:10px;letter-spacing:.3px}
+.search-result-card{border:1px solid var(--border);border-radius:var(--radius);padding:15px;background:var(--surface);transition:all .18s;animation:fadeIn .3s ease both;position:relative;overflow:hidden;margin-bottom:10px}
+.search-result-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.search-result-card .src-header{display:flex;align-items:start;justify-content:space-between;gap:10px}
+.search-result-card .src-name{font-size:.88rem;font-weight:600;color:var(--fg)}
+.search-result-card .src-sub{font-size:.74rem;color:var(--fg3);margin-top:3px;font-family:var(--font-mono)}
+.search-result-card .src-meta{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);display:flex;flex-wrap:wrap;gap:8px}
+.search-result-card .src-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.3px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--fg3)}
+.search-result-card .src-tag.accent{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo)}
+.search-result-card .src-tag.amber{color:var(--amber);border-color:rgba(255,184,48,.25);background:var(--amber-lo)}
+.search-result-card .src-tag.cyan{color:var(--cyan);border-color:rgba(95,212,232,.25);background:var(--cyan-lo)}
+.search-result-card .src-actions{margin-top:10px;display:flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
@@ -429,6 +451,10 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Browse</div>
+    <button class="nav-item active" data-tab="search" onclick="setTab('search')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <span class="nav-text">Search</span>
+    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
       <span class="nav-text">Test Deadlines</span>
@@ -462,6 +488,11 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 <!-- ═══════ MOBILE BOTTOM TABS ═══════ -->
 <div class="app-mobile-bottom">
   <nav>
+    <button class="mobile-tab active" data-tab="search" onclick="setTab('search')">
+      <span class="tab-indicator"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      Search
+    </button>
     <button class="mobile-tab" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <span class="tab-indicator"></span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
@@ -493,6 +524,9 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
     <button class="btn-icon" onclick="closeDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <nav class="sidebar-nav" style="padding:8px">
+    <button class="nav-item active" data-tab="search" onclick="setTab('search');closeDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Search</span>
+    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><span>Test Deadlines</span>
     </button>
@@ -545,7 +579,7 @@ const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out
 //  STATE
 // ═══════════════════════════════════════════════════════════════
 let state = {
-  tab: 'test-deadlines',
+  tab: 'search',
   bookmarks: JSON.parse(localStorage.getItem('isc-bookmarks') || '[]'),
   searchOpen: false,
   searchSelected: 0,
@@ -800,6 +834,7 @@ function skeletonCards(n) {
 async function renderTab() {
   const el = document.getElementById('tabContent');
   const renderers = {
+    'search': renderSearchPage,
     'test-deadlines': renderTestDeadlines,
     'college-deadlines': renderCollegeDeadlines,
     'my-list': renderMyList
@@ -1014,8 +1049,158 @@ document.addEventListener('DOMContentLoaded', () => {
     navMark.style.boxShadow = `0 0 8px ${col}`;
   }
   updateBadges();
-  setTab('test-deadlines');
+  setTab('search');
 });
+
+// ═══════════════════════════════════════════════════════════════
+//  SEARCH PAGE
+// ═══════════════════════════════════════════════════════════════
+async function renderSearchPage(el) {
+  el.innerHTML = `<div class="page-header"><h1>University Search</h1><p>Find colleges, courses, and programs</p></div>
+    <div class="search-hint">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      Select a category below, then choose an option to start searching
+    </div>
+    <div class="search-section">
+      <h3>Search According To</h3>
+      <div class="pill-group" id="searchCategoryPills">
+        ${['course','college','city','test','math'].map(c => `<button class="pill${c==='course'?' active':''}" onclick="window._searchCategory='${c}';updateSearchPills();renderSearchDropdown()">${c==='math'?'Math':c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('')}
+      </div>
+    </div>
+    <div id="searchDropdownArea"></div>
+    <div id="searchResultsArea"></div>`;
+
+  window._searchCategory = 'course';
+
+  const [cds, tests] = await Promise.all([
+    fetchSheet('College Deadlines'),
+    fetchSheet('Test Deadlines')
+  ]);
+
+  window._searchCDs = cds;
+  window._searchTests = tests;
+
+  renderSearchDropdown();
+}
+
+function updateSearchPills() {
+  document.querySelectorAll('#searchCategoryPills .pill').forEach(p => {
+    const cat = p.textContent.toLowerCase();
+    p.classList.toggle('active', cat === (window._searchCategory === 'math' ? 'math' : window._searchCategory));
+  });
+}
+
+function renderSearchDropdown() {
+  const cat = window._searchCategory;
+  const area = document.getElementById('searchDropdownArea');
+  const resultsArea = document.getElementById('searchResultsArea');
+  if (!area) return;
+
+  let options = [];
+  let label = '';
+
+  if (cat === 'course') {
+    label = 'course';
+    options = [...new Set((window._searchCDs||[]).map(d => (d['Program']||d['program']||'').trim()).filter(Boolean))].sort();
+  } else if (cat === 'college') {
+    label = 'college';
+    options = [...new Set((window._searchCDs||[]).map(d => (d['College Name']||d['college_name']||d['College']||'').trim()).filter(Boolean))].sort();
+  } else if (cat === 'city') {
+    label = 'city';
+    options = [...new Set((window._searchCDs||[]).map(d => {
+      const notes = d['Notes']||d['notes']||'';
+      const cityMatch = notes.match(/(?:city|location|campus)[:\s]*([^\n,;]+)/i);
+      return cityMatch ? cityMatch[1].trim() : '';
+    }).filter(Boolean))].sort();
+    if (options.length === 0) options = ['No city data available'];
+  } else if (cat === 'test') {
+    label = 'test';
+    options = [...new Set((window._searchTests||[]).map(t => (t['Name']||t['name']||'').trim()).filter(Boolean))].sort();
+  } else if (cat === 'math') {
+    label = 'math requirement';
+    options = ['Math Mandatory', 'Math Not Mandatory'];
+  }
+
+  area.innerHTML = `<div class="search-section">
+    <h3>Search your ${label}!</h3>
+    <div class="search-select-wrap">
+      <select class="search-select" id="searchSelect" onchange="handleSearchSelect(this.value)">
+        <option value="">— Select an option —</option>
+        ${options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}
+      </select>
+    </div>
+  </div>`;
+
+  if (resultsArea) resultsArea.innerHTML = '';
+}
+
+function handleSearchSelect(value) {
+  const area = document.getElementById('searchResultsArea');
+  if (!area || !value) { if (area) area.innerHTML = ''; return; }
+
+  const cat = window._searchCategory;
+  let results = [];
+
+  if (cat === 'course') {
+    results = (window._searchCDs||[]).filter(d => (d['Program']||d['program']||'').trim() === value);
+  } else if (cat === 'college') {
+    results = (window._searchCDs||[]).filter(d => (d['College Name']||d['college_name']||d['College']||'').trim() === value);
+  } else if (cat === 'city') {
+    results = (window._searchCDs||[]).filter(d => {
+      const notes = d['Notes']||d['notes']||'';
+      const cityMatch = notes.match(/(?:city|location|campus)[:\s]*([^\n,;]+)/i);
+      return cityMatch && cityMatch[1].trim() === value;
+    });
+  } else if (cat === 'test') {
+    results = (window._searchCDs||[]).filter(d => {
+      const notes = (d['Notes']||d['notes']||'').toLowerCase();
+      return notes.includes(value.toLowerCase());
+    });
+  } else if (cat === 'math') {
+    const mathRequired = value === 'Math Mandatory';
+    results = (window._searchCDs||[]).filter(d => {
+      const notes = (d['Notes']||d['notes']||'').toLowerCase();
+      if (mathRequired) return notes.includes('math') && !notes.includes('not mandatory');
+      return notes.includes('not mandatory') || !notes.includes('math');
+    });
+  }
+
+  if (results.length === 0) {
+    area.innerHTML = `<div class="empty-state" style="margin-top:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><h3>No results found</h3><p>No matching programs for "${esc(value)}"</p></div>`;
+    return;
+  }
+
+  area.innerHTML = `<div class="search-results-count">${results.length} result${results.length!==1?'s':''} found</div>
+    ${results.map((r, i) => {
+      const collegeName = r['College Name']||r['college_name']||r['College']||'';
+      const program = r['Program']||r['program']||'';
+      const deadline = r['Deadline']||r['deadline']||'';
+      const status = r['Status']||r['status']||'Open';
+      const round = r['Round']||r['round']||'';
+      const notes = r['Notes']||r['notes']||'';
+      const applyUrl = r['Apply URL']||r['apply_url']||'';
+      const id = r['College Deadlines ID']||r['ID']||r['id']||'';
+      const sClass = status.toLowerCase();
+      return `<div class="search-result-card animate-in stagger-${Math.min(i,5)}">
+        <div class="src-header">
+          <div>
+            <div class="src-name">${esc(collegeName)}</div>
+            <div class="src-sub">${esc(program)}</div>
+          </div>
+          ${bookmarkIcon(id)}
+        </div>
+        <div class="src-meta">
+          ${deadline ? `<span class="src-tag cyan"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${esc(deadline)}</span>` : ''}
+          ${round ? `<span class="src-tag">Round: ${esc(round)}</span>` : ''}
+          <span class="src-tag ${sClass==='open'?'accent':sClass==='upcoming'?'amber':''}"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>${esc(status)}</span>
+        </div>
+        ${notes ? `<div style="margin-top:8px;font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);line-height:1.5">${esc(notes)}</div>` : ''}
+        <div class="src-actions">
+          ${applyUrl ? `<a href="${esc(applyUrl)}" target="_blank" rel="noopener" class="btn-apply" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apply Now</a>` : ''}
+        </div>
+      </div>`;
+    }).join('')}`;
+}
 </script>
 </body>
 </html>
