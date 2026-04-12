@@ -258,7 +258,7 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 .hero-disclaimer a:hover{color:var(--fg);}
 
 /* NAV CARDS */
-.nav-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px;width:100%;max-width:100%;position:relative;z-index:1;}
+.nav-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;width:100%;max-width:100%;position:relative;z-index:1;}
 .row-card{display:flex;flex-direction:column;padding:18px 18px 14px;border-radius:12px;text-decoration:none;color:inherit;position:relative;overflow:hidden;border:1px solid var(--border);border-top:2px solid var(--card-color,var(--accent));background:var(--surface);transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .2s,border-color .2s,background .2s;min-height:clamp(140px,20vw,180px);}
 .row-card::before{content:'';position:absolute;top:0;left:0;right:0;height:50px;background:linear-gradient(180deg,color-mix(in srgb,var(--card-color,var(--accent)) 9%,transparent) 0%,transparent 100%);pointer-events:none;}
 .row-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,color-mix(in srgb,var(--card-color,var(--accent)) 4%,transparent) 0%,transparent 55%);opacity:0;transition:opacity .2s;pointer-events:none;}
