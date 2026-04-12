@@ -277,21 +277,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .empty-state p{font-size:.78rem;color:var(--fg3);margin-top:5px;max-width:260px;line-height:1.6;font-family:var(--font-mono)}
 
 
-/* ─── University Image Cards ─── */
-.uni-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:var(--surface);transition:all .25s cubic-bezier(.22,1,.36,1);cursor:pointer;position:relative}
-.uni-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-.uni-card-img{width:100%;height:160px;object-fit:cover;background:var(--surface2);display:block;transition:transform .4s ease}
-.uni-card:hover .uni-card-img{transform:scale(1.04)}
-.uni-card-img-wrap{overflow:hidden;position:relative;height:160px;background:var(--surface2)}
-.uni-card-img-placeholder{width:100%;height:160px;display:flex;align-items:center;justify-content:center;font-family:var(--font-brand);font-size:1.8rem;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.5)}
-.uni-card-body{padding:14px 16px}
-.uni-card-name{font-size:.88rem;font-weight:600;color:var(--fg);margin-bottom:4px;line-height:1.3}
-.uni-card-location{font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);display:flex;align-items:center;gap:4px;margin-bottom:8px}
-.uni-card-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.uni-card-type{display:inline-flex;padding:3px 10px;border-radius:12px;font-size:.65rem;font-weight:600;letter-spacing:.3px;font-family:var(--font-mono)}
-.uni-card-actions{display:flex;gap:4px;align-items:center}
-.uni-card-overlay{position:absolute;top:8px;right:8px;z-index:2}
-
 /* ─── Enhanced Test Deadlines ─── */
 .td-table{width:100%;border-collapse:separate;border-spacing:0}
 .td-table thead th{padding:12px 16px;font-size:.68rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--fg3);font-family:var(--font-mono);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
@@ -309,9 +294,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .btn-apply{display:inline-flex;align-items:center;gap:5px;padding:6px 16px;border-radius:8px;font-size:.74rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.3px;background:var(--accent);color:var(--bg);border:none;cursor:pointer;transition:all .2s;text-decoration:none}
 .btn-apply:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 4px 16px rgba(59,255,108,.25)}
 .btn-apply svg{width:12px;height:12px}
-.btn-video{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;font-size:.74rem;font-weight:500;font-family:var(--font-mono);background:var(--surface2);color:var(--fg2);border:1px solid var(--border);cursor:pointer;transition:all .2s;text-decoration:none}
-.btn-video:hover{border-color:var(--border2);color:var(--fg);background:rgba(255,255,255,.05)}
-.btn-video svg{width:12px;height:12px}
+
 .td-actions{display:flex;align-items:center;gap:6px;flex-wrap:nowrap}
 
 /* ─── Skeleton ─── */
@@ -446,10 +429,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Browse</div>
-    <button class="nav-item" data-tab="universities" onclick="setTab('universities')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
-      <span class="nav-text">Universities</span>
-    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
       <span class="nav-text">Test Deadlines</span>
@@ -483,11 +462,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 <!-- ═══════ MOBILE BOTTOM TABS ═══════ -->
 <div class="app-mobile-bottom">
   <nav>
-    <button class="mobile-tab" data-tab="universities" onclick="setTab('universities')">
-      <span class="tab-indicator"></span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
-      Unis
-    </button>
     <button class="mobile-tab" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <span class="tab-indicator"></span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
@@ -519,9 +493,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
     <button class="btn-icon" onclick="closeDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <nav class="sidebar-nav" style="padding:8px">
-    <button class="nav-item" data-tab="universities" onclick="setTab('universities');closeDrawer()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><span>Universities</span>
-    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><span>Test Deadlines</span>
     </button>
@@ -541,7 +512,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
   <div class="search-modal">
     <div class="search-input-modal">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <input id="searchInput" type="text" placeholder="Search universities, tests, deadlines..." oninput="doSearch(this.value)" onkeydown="handleSearchKey(event)">
+      <input id="searchInput" type="text" placeholder="Search tests, deadlines..." oninput="doSearch(this.value)" onkeydown="handleSearchKey(event)">
       <button class="close-btn" onclick="closeSearch()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="search-results" id="searchResults"><div class="hint">Start typing to search across all data...</div></div>
@@ -571,51 +542,10 @@ const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out
 
 
 // ═══════════════════════════════════════════════════════════════
-//  UNIVERSITY IMAGE MAP
-// ═══════════════════════════════════════════════════════════════
-const UNI_IMAGES = {
-  'iim-indore': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/IIM_Indore_Administrative_Block.jpg/1280px-IIM_Indore_Administrative_Block.jpg',
-  'iim-bangalore': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/IIM_Bangalore_Main_Building.jpg/1280px-IIM_Bangalore_Main_Building.jpg',
-  'iim-shillong': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/IIM_Shillong_Campus.jpg/1280px-IIM_Shillong_Campus.jpg',
-  'iim-kozhikode': 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Indian_Institute_of_Management_Kozhikode.jpg/1280px-Indian_Institute_of_Management_Kozhikode.jpg',
-  'iim-rohtak': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/IIM_Rohtak_Campus.jpg/1280px-IIM_Rohtak_Campus.jpg',
-  'iim-lucknow': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/IIM_Lucknow_Noida_Campus.jpg/1280px-IIM_Lucknow_Noida_Campus.jpg',
-  'iim-mumbai': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/IIM_Mumbai_Campus.jpg/1280px-IIM_Mumbai_Campus.jpg',
-  'iim-ranchi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/IIM_Ranchi.jpg/1280px-IIM_Ranchi.jpg',
-  'iim-calcutta': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/IIM_Calcutta_Auditorium.jpg/1280px-IIM_Calcutta_Auditorium.jpg',
-  'iim-ahmedabad': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/IIMA_Campus.jpg/1280px-IIMA_Campus.jpg',
-  'iim-nagpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/VNIT_Main_Building.jpg/1280px-VNIT_Main_Building.jpg',
-  'iim-bodh-gaya': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mahabodhi_temple_and_surrounding.jpg/1280px-Mahabodhi_temple_and_surrounding.jpg',
-  'iim-sirmaur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Paonta_Sahib_Gurudwara.jpg/1280px-Paonta_Sahib_Gurudwara.jpg',
-  'iit-bombay': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/IIT_Bombay_Main_Building.jpg/1280px-IIT_Bombay_Main_Building.jpg',
-  'iit-delhi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/IIT_Delhi_Main_Building.jpg/1280px-IIT_Delhi_Main_Building.jpg',
-  'iit-kanpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Iitk_airview.jpg/1280px-Iitk_airview.jpg',
-  'iit-madras': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/IIT_Madras.jpg/1280px-IIT_Madras.jpg',
-  'iit-kharagpur': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Main_building_of_IIT_Kharagpur.jpg/1280px-Main_building_of_IIT_Kharagpur.jpg',
-  'ashoka-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Ashoka_University_Campus.jpg/1280px-Ashoka_University_Campus.jpg',
-  'flame-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/FLAME_University_Campus.jpg/1280px-FLAME_University_Campus.jpg',
-  'krea-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Sri_City%2C_India.jpg/1280px-Sri_City%2C_India.jpg',
-  'srcc': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Shriram_college_of_commerce.JPG/1280px-Shriram_college_of_commerce.JPG',
-  'xlri': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/XLRI.JPG/1280px-XLRI.JPG',
-  'fms-delhi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/FMS_Delhi.jpg/1280px-FMS_Delhi.jpg',
-  'isb': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/ISB_Hyderabad_at_night.jpg/1280px-ISB_Hyderabad_at_night.jpg',
-  'bits-pilani': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/BITS_Pilani_University.jpg/1280px-BITS_Pilani_University.jpg',
-  'jnu': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/JNU_Convention_Centre.jpg/1280px-JNU_Convention_Centre.jpg',
-  'tiss': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/TISS_Main_Campus.jpg/1280px-TISS_Main_Campus.jpg',
-  'christ-university': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Christ_University_Central_Campus.jpg/1280px-Christ_University_Central_Campus.jpg',
-};
-
-function getUniImage(id, name) {
-  if (UNI_IMAGES[id]) return UNI_IMAGES[id];
-  // Fallback: generate a gradient placeholder
-  return null;
-}
-
-// ═══════════════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════════════
 let state = {
-  tab: 'universities',
+  tab: 'test-deadlines',
   bookmarks: JSON.parse(localStorage.getItem('isc-bookmarks') || '[]'),
   searchOpen: false,
   searchSelected: 0,
@@ -705,10 +635,10 @@ function closeSearch(e) {
 async function loadSearchCache() {
   if (state.searchCache) return;
   try {
-    const [unis, tests, cds, cuts] = await Promise.all([
-      fetchSheet('Universities'), fetchSheet('Test Deadlines'), fetchSheet('College Deadlines'), Promise.resolve([])
+    const [tests, cds] = await Promise.all([
+      fetchSheet('Test Deadlines'), fetchSheet('College Deadlines')
     ]);
-    state.searchCache = { unis, tests, cds, cuts };
+    state.searchCache = { tests, cds };
   } catch(e) { console.error(e); }
 }
 
@@ -721,18 +651,12 @@ function doSearch(q) {
   const lq = q.toLowerCase();
   const results = [];
   const c = state.searchCache;
-  const iconColors = { university: 'var(--accent)', test: 'var(--amber)', cd: 'var(--cyan)', cutoff: 'var(--purple)' };
+  const iconColors = { test: 'var(--amber)', cd: 'var(--cyan)' };
   const icons = {
-    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
     test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
-    cd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>',
-    cutoff: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
+    cd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>'
   };
 
-  (c.unis||[]).forEach(u => {
-    if ((u.name||'').toLowerCase().includes(lq) || (u.shortName||'').toLowerCase().includes(lq) || (u.location||'').toLowerCase().includes(lq))
-      results.push({ type: 'university', name: u.shortName || u.name, meta: `${u.type} — ${u.location}`, tab: 'universities', id: u.id });
-  });
   (c.tests||[]).forEach(t => {
     if ((t.name||'').toLowerCase().includes(lq))
       results.push({ type: 'test', name: t.name, meta: `Deadline: ${t.deadline} (${t.status})`, tab: 'test-deadlines', id: t.id });
@@ -877,7 +801,6 @@ async function renderTab() {
   const el = document.getElementById('tabContent');
   const renderers = {
     'test-deadlines': renderTestDeadlines,
-    'universities': renderUniversities,
     'college-deadlines': renderCollegeDeadlines,
     'my-list': renderMyList
   };
@@ -895,8 +818,7 @@ async function renderTestDeadlines(el) {
     examDate: r['Exam Date'] || r['exam_date'] || '',
     deadline: r['Deadline'] || r['deadline'] || '',
     applyUrl: r['Apply URL'] || r['apply_url'] || '',
-    hasVideo: (r['Has Video'] || r['has_video'] || '').toUpperCase() === 'TRUE',
-    status: r['Status'] || r['status'] || 'Open',
+    status: (r['Status'] || r['status'] || 'Open'),
     sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
 
@@ -964,110 +886,9 @@ function renderTDRows() {
       <td><span class="td-deadline ${getDeadlineClass(t.deadline, t.status)}">${esc(t.deadline)}</span></td>
       <td><div class="td-actions">
         ${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-apply" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apply Now</a>` : ''}
-        ${t.hasVideo ? `<span class="btn-video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Video</span>` : ''}
       </div></td>
       <td>${statusBadge(t.status)}</td>
     </tr>`).join('');
-}
-
-// ─── UNIVERSITIES ───
-async function renderUniversities(el) {
-  el.innerHTML = `<div class="page-header"><h1>Indian Universities</h1><p>Loading institutions...</p></div><div class="card-grid">${skeletonCards(9)}</div>`;
-
-  const [uniRows, courseRows] = await Promise.all([fetchSheet('Universities'), fetchSheet('Courses')]);
-  const unis = uniRows.map(r => ({
-    id: r['ID'] || r['id'] || '',
-    name: r['Full Name'] || r['Name'] || r['name'] || '',
-    shortName: r['Short Name'] || r['short_name'] || '',
-    location: r['Location'] || r['location'] || '',
-    type: r['Type'] || r['type'] || '',
-    color: r['Color'] || r['color'] || 'var(--accent)',
-    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
-  }));
-  const courses = courseRows.map(r => ({
-    id: r['ID'] || r['id'] || '',
-    name: r['Course Name'] || r['Name'] || r['name'] || '',
-    duration: r['Duration'] || r['duration'] || '',
-    eligibility: r['Eligibility'] || r['eligibility'] || '',
-    universityId: r['University ID'] || r['university_id'] || '',
-    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
-  }));
-
-  window._uniData = unis;
-  window._courseData = courses;
-  window._uniSearch = '';
-  window._uniTypeFilter = '';
-  window._uniPage = 1;
-  window._uniExpanded = null;
-  const PER = 24;
-
-  const types = [...new Set(unis.map(u => u.type))].filter(Boolean);
-  const typeColors = {
-    IIM: { bg: 'rgba(59,255,108,.08)', text: 'var(--accent)', border: 'var(--accent-md)' },
-    IIT: { bg: 'rgba(95,212,232,.08)', text: 'var(--cyan)', border: 'rgba(95,212,232,.25)' },
-    Private: { bg: 'rgba(191,95,255,.08)', text: 'var(--purple)', border: 'rgba(191,95,255,.25)' },
-    Central: { bg: 'rgba(255,184,48,.08)', text: 'var(--amber)', border: 'rgba(255,184,48,.25)' },
-    'Delhi University': { bg: 'rgba(255,107,107,.08)', text: 'var(--red)', border: 'rgba(255,107,107,.25)' },
-    NIT: { bg: 'rgba(95,212,232,.08)', text: 'var(--cyan)', border: 'rgba(95,212,232,.25)' },
-    Deemed: { bg: 'rgba(255,184,48,.08)', text: 'var(--amber)', border: 'rgba(255,184,48,.25)' }
-  };
-
-  function render() {
-    let list = [...unis];
-    if (window._uniSearch) { const q = window._uniSearch.toLowerCase(); list = list.filter(u => (u.name||'').toLowerCase().includes(q) || (u.shortName||'').toLowerCase().includes(q) || (u.location||'').toLowerCase().includes(q)); }
-    if (window._uniTypeFilter) list = list.filter(u => u.type === window._uniTypeFilter);
-    list.sort((a, b) => a.sortOrder - b.sortOrder);
-    const total = Math.max(1, Math.ceil(list.length / PER));
-    if (window._uniPage > total) window._uniPage = total;
-    const paged = list.slice((window._uniPage - 1) * PER, window._uniPage * PER);
-    const tc = (type) => typeColors[type] || { bg: 'rgba(59,255,108,.08)', text: 'var(--accent)', border: 'var(--accent-md)' };
-
-    el.innerHTML = `
-      <div class="page-header"><h1>Indian Universities</h1><p>Browse ${list.length} institution${list.length !== 1 ? 's' : ''} across India</p></div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;margin-bottom:18px;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--cyan);font-family:var(--font-mono)">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        Click on any college to see list of course(s) offered
-      </div>
-      <div class="filter-bar">
-        <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search institutions..." value="${esc(window._uniSearch)}" oninput="window._uniSearch=this.value;window._uniPage=1;window._renderUnis()"></div>
-        <div class="pill-group" style="overflow-x:auto">${['all', ...types].map(t => `<button class="pill${window._uniTypeFilter === t || (t === 'all' && !window._uniTypeFilter) ? ' active' : ''}" onclick="window._uniTypeFilter='${t === 'all' ? '' : t}';window._uniPage=1;window._renderUnis()">${t === 'all' ? 'All' : t}</button>`).join('')}</div>
-      </div>
-      <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${paged.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><h3>No institutions found</h3><p>Try adjusting your search or filter</p></div>' :
-      paged.map((u, i) => {
-        const c = tc(u.type);
-        const img = getUniImage(u.id, u.shortName || u.name);
-        const abbr = (u.shortName || u.name).slice(0, 3).toUpperCase();
-        const isExpanded = window._uniExpanded === u.id;
-        const uniCourses = courses.filter(cr => cr.universityId === u.id).sort((a, b) => a.sortOrder - b.sortOrder);
-        const colorVal = u.color || c.text;
-
-        return `<div class="uni-card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded=window._uniExpanded==='${u.id}'?null:'${u.id}';window._renderUnis()">
-          <div class="uni-card-overlay">${bookmarkIcon(u.id)}</div>
-          <div class="uni-card-img-wrap">
-            ${img ? `<img class="uni-card-img" src="${img}" alt="${esc(u.shortName || u.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=uni-card-img-placeholder style=background:linear-gradient(135deg,${colorVal}22,${colorVal}08)>${abbr}</div>'">` :
-            `<div class="uni-card-img-placeholder" style="background:linear-gradient(135deg,${colorVal}22,${colorVal}08)">${abbr}</div>`}
-          </div>
-          <div class="uni-card-body">
-            <div class="uni-card-name">${esc(u.shortName || u.name)}</div>
-            <div class="uni-card-location"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${esc(u.location)}</div>
-            <div class="uni-card-footer">
-              <span class="uni-card-type" style="background:${c.bg};color:${c.text};border:1px solid ${c.border}">${esc(u.type)}</span>
-              ${uniCourses.length > 0 ? `<span style="font-size:.65rem;color:var(--fg3);font-family:var(--font-mono)">${uniCourses.length} course${uniCourses.length > 1 ? 's' : ''}</span>` : ''}
-            </div>
-            ${isExpanded && uniCourses.length > 0 ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span></span></div>`).join('')}</div>` : ''}
-          </div>
-        </div>`;
-      }).join('')}</div>
-      ${total > 1 ? `<div class="pagination" style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;font-family:var(--font-mono);font-size:.75rem">
-        <button class="pill" onclick="window._uniPage=Math.max(1,window._uniPage-1);window._renderUnis()" ${window._uniPage <= 1 ? 'disabled' : ''}>← Prev</button>
-        <span style="color:var(--fg3);padding:0 8px">${window._uniPage} / ${total}</span>
-        <button class="pill" onclick="window._uniPage=Math.min(${total},window._uniPage+1);window._renderUnis()" ${window._uniPage >= total ? 'disabled' : ''}>Next →</button>
-      </div>` : ''}
-    `;
-  }
-
-  window._renderUnis = render;
-  render();
 }
 
 // ─── COLLEGE DEADLINES ───
@@ -1133,24 +954,21 @@ async function renderCollegeDeadlines(el) {
 // ─── MY LIST ───
 function renderMyList(el) {
   const bm = state.bookmarks;
-  const unis = bm.filter(b => b.type === 'university');
   const tests = bm.filter(b => b.type === 'test');
   const cds = bm.filter(b => b.type === 'college-deadline');
   const icons = {
-    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
     test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
     'college-deadline': '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>'
   };
   const bgMap = {
-    university: 'background:var(--accent-lo);color:var(--accent);border-color:var(--accent-md)',
     test: 'background:var(--amber-lo);color:var(--amber);border-color:rgba(255,184,48,.25)',
     'college-deadline': 'background:var(--cyan-lo);color:var(--cyan);border-color:rgba(95,212,232,.25)'
   };
-  const tabMap = { university: 'universities', test: 'test-deadlines', 'college-deadline': 'college-deadlines' };
+  const tabMap = { test: 'test-deadlines', 'college-deadline': 'college-deadlines' };
 
   if (bm.length === 0) {
-    el.innerHTML = `<div class="page-header"><h1>My List</h1><p>Your bookmarked universities, tests, and deadlines</p></div>
-      <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><h3>No saved items yet</h3><p>Bookmark universities, tests, or deadlines and they'll appear here</p></div>`;
+    el.innerHTML = `<div class="page-header"><h1>My List</h1><p>Your bookmarked tests and deadlines</p></div>
+      <div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><h3>No saved items yet</h3><p>Bookmark tests or deadlines and they'll appear here</p></div>`;
     return;
   }
 
@@ -1165,7 +983,7 @@ function renderMyList(el) {
   }
 
   el.innerHTML = `<div class="page-header"><h1>My List</h1><p>${bm.length} saved item${bm.length !== 1 ? 's' : ''}</p></div>
-    ${section('Universities', unis)}${section('Test Deadlines', tests)}${section('College Deadlines', cds)}`;
+    ${section('Test Deadlines', tests)}${section('College Deadlines', cds)}`;
 }
 
 // ─── BOOKMARK CLICK HANDLER ───
@@ -1175,9 +993,6 @@ function handleBookmarkClick(id) {
   if (tab === 'test-deadlines' && window._tdData) {
     const t = window._tdData.find(t => t.id === id);
     if (t) item = { id: t.id, type: 'test', name: t.name, meta: `Deadline: ${t.deadline}` };
-  } else if (tab === 'universities' && window._uniData) {
-    const u = window._uniData.find(u => u.id === id);
-    if (u) item = { id: u.id, type: 'university', name: u.shortName || u.name, meta: `${u.type} — ${u.location}` };
   } else if (tab === 'college-deadlines' && window._cdData) {
     const d = window._cdData.find(d => d.id === id);
     if (d) item = { id: d.id, type: 'college-deadline', name: `${d.collegeName} — ${d.program}`, meta: `Deadline: ${d.deadline}` };
@@ -1199,7 +1014,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navMark.style.boxShadow = `0 0 8px ${col}`;
   }
   updateBadges();
-  setTab('universities');
+  setTab('test-deadlines');
 });
 </script>
 </body>
