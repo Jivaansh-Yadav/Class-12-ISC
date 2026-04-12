@@ -50,7 +50,6 @@
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-@media(min-width:701px){*,*::before,*::after{cursor:none !important;}}
 html,body{height:100%;}
 :root{
   --bg:#0b110d;--bg2:#111a14;--surface:#131c16;--surface2:#18231b;
@@ -60,17 +59,12 @@ html,body{height:100%;}
   --fg:#edf3ed;--fg2:#b3c2b3;--fg3:#677965;--amber:#ccb176;
   --grad-a:#bf5fff;--grad-b:#ff5fa0;
 }
-body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;min-height:100vh;cursor:none;}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;min-height:100vh;}
 body.light-mode{color:var(--fg);}
 body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.018;}
 .grid-bg{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--accent-subtle, rgba(200,141,183,0.022)) 1px,transparent 1px),linear-gradient(90deg,var(--accent-subtle, rgba(110,182,255,0.022)) 1px,transparent 1px);background-size:52px 52px;}
 
-/* CURSOR */
-#cur,#cur-ring{position:fixed;pointer-events:none;top:0;left:0;will-change:transform;}
-#cur{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent),0 0 14px color-mix(in srgb,var(--accent) 65%,transparent);z-index:10001;opacity:0;transition:width .18s cubic-bezier(.34,1.56,.64,1),height .18s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,opacity .2s;}
-#cur-ring{width:22px;height:22px;border:1.5px solid color-mix(in srgb,var(--accent) 40%,transparent);border-radius:50%;z-index:10000;opacity:0;transition:width .25s cubic-bezier(.34,1.56,.64,1),height .25s cubic-bezier(.34,1.56,.64,1),border-color .25s,border-radius .25s,box-shadow .25s,opacity .3s;}
-.cur-trail{position:fixed;pointer-events:none;z-index:9998;top:0;left:0;width:4px;height:4px;border-radius:50%;background:var(--accent);opacity:0;will-change:transform;}
-
+/* HERO SECTION ANIMATION */
 body{animation:pgIn .4s ease both;}
 @keyframes pgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes breathe{0%,100%{opacity:.45}50%{opacity:.85}}
@@ -359,12 +353,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
 </head>
 <body>
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
-<div class="cur-trail" id="t0"></div>
-<div class="cur-trail" id="t1"></div>
-<div class="cur-trail" id="t2"></div>
-<div class="cur-trail" id="t3"></div>
 <div class="grid-bg"></div>
 
 <nav class="nav">
@@ -596,128 +584,6 @@ body.grad-mode .fp-dot{background:linear-gradient(135deg,var(--grad-a),var(--gra
  * @typedef {{ a: string; b: string; name?: string }} Gradient
  * @typedef {{ bg: string; bg2: string; surface: string; surface2: string; border: string; border2: string; light?: boolean; fg?: string; fg2?: string; fg3?: string; name: string }} UITheme
  */
-
-// ─── CURSOR MODULE ────────────────────────────────────────────────────────────
-
-(function initCursor() {
-  /** @type {HTMLElement | null} */
-  const dot = document.getElementById('cur');
-  /** @type {HTMLElement | null} */
-  const ring = document.getElementById('cur-ring');
-  if (!dot || !ring) return;
-
-  /** @type {HTMLElement[]} */
-  const trails = /** @type {HTMLElement[]} */ ([0, 1, 2, 3]
-    .map(i => document.getElementById('t' + i))
-    .filter(Boolean));
-
-  /** @type {Vec2} */
-  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-  /** @type {Vec2} */
-  let ring_pos = { x: mouse.x, y: mouse.y };
-
-  /** History buffer for trail positions @type {Vec2[]} */
-  const HISTORY_LEN = 20;
-  let history = /** @type {Vec2[]} */ (Array.from({ length: HISTORY_LEN }, () => ({ ...mouse })));
-
-  let visible = false;
-  let isHover = false;
-  let dotSize = 8;
-  let ringSize = 22;
-  const LERP = 0.22;
-
-  /** @param {number} a @param {number} b @param {number} t @returns {number} */
-  const lerp = (a, b, t) => a + (b - a) * t;
-
-  /** @param {number} x @param {number} y @param {number} [scale] */
-  function positionDot(x, y, scale) {
-    const h = dotSize / 2;
-    dot.style.transform = `translate(${x - h}px,${y - h}px)${scale ? ` scale(${scale})` : ''}`;
-  }
-
-  /** @param {number} x @param {number} y */
-  function positionRing(x, y) {
-    const h = ringSize / 2;
-    ring.style.transform = `translate(${x - h}px,${y - h}px)`;
-  }
-
-  document.addEventListener('mousemove', (/** @type {MouseEvent} */ e) => {
-    mouse = { x: e.clientX, y: e.clientY };
-    if (!visible) {
-      visible = true;
-      dot.style.opacity = '1';
-      ring.style.opacity = '0.85';
-    }
-    positionDot(mouse.x, mouse.y);
-  });
-
-  document.addEventListener('mouseleave', () => {
-    visible = false;
-    dot.style.opacity = '0';
-    ring.style.opacity = '0';
-    trails.forEach(t => { t.style.opacity = '0'; });
-  });
-
-  const HOVER_SELECTOR = 'a,button,.row-card,.preset,.color-trigger,.disc-btn,.reset-btn,.apply-btn,.nav-link,.star-btn';
-
-  /** @param {boolean} on */
-  function setHoverState(on) {
-    isHover = on;
-    if (on) {
-      dotSize = 10; ringSize = 38;
-      dot.style.width = dotSize + 'px'; dot.style.height = dotSize + 'px';
-      dot.style.boxShadow = '0 0 14px var(--accent),0 0 32px var(--accent)';
-      ring.style.width = ringSize + 'px'; ring.style.height = ringSize + 'px';
-      ring.style.borderRadius = '10px';
-      ring.style.borderColor = 'color-mix(in srgb,var(--accent) 65%,transparent)';
-    } else {
-      dotSize = 8; ringSize = 22;
-      dot.style.width = dotSize + 'px'; dot.style.height = dotSize + 'px';
-      dot.style.boxShadow = '0 0 8px var(--accent),0 0 20px var(--accent)';
-      ring.style.width = ringSize + 'px'; ring.style.height = ringSize + 'px';
-      ring.style.borderRadius = '50%';
-      ring.style.borderColor = 'color-mix(in srgb,var(--accent) 40%,transparent)';
-    }
-  }
-
-  document.addEventListener('mouseover', (/** @type {MouseEvent} */ e) => {
-    setHoverState(!!(/** @type {Element} */ (e.target)).closest(HOVER_SELECTOR));
-  });
-
-  document.addEventListener('mousedown', () => {
-    positionDot(mouse.x, mouse.y, 0.5);
-    ring.style.borderColor = 'color-mix(in srgb,var(--accent) 90%,transparent)';
-  });
-
-  document.addEventListener('mouseup', () => {
-    positionDot(mouse.x, mouse.y, 1);
-    setHoverState(isHover);
-  });
-
-  /** @type {number[]} */
-  const TRAIL_OFFSETS = [3, 6, 9, 13];
-
-  function animationTick() {
-    ring_pos.x = lerp(ring_pos.x, mouse.x, LERP);
-    ring_pos.y = lerp(ring_pos.y, mouse.y, LERP);
-    positionRing(ring_pos.x, ring_pos.y);
-
-    history.unshift({ ...mouse });
-    if (history.length > HISTORY_LEN) history.pop();
-
-    trails.forEach((el, i) => {
-      const idx = Math.min(TRAIL_OFFSETS[i], history.length - 1);
-      const pos = history[idx];
-      el.style.transform = `translate(${pos.x - 2}px,${pos.y - 2}px)`;
-      el.style.opacity = visible ? String((0.18 - i * 0.04).toFixed(3)) : '0';
-    });
-
-    requestAnimationFrame(animationTick);
-  }
-
-  requestAnimationFrame(animationTick);
-})();
-
 
 // ─── NAV SLIDE TABS MODULE ────────────────────────────────────────────────────
 
