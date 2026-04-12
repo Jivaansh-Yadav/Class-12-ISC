@@ -69,6 +69,45 @@ body.light-mode .ui-theme-swatch.active::after{color:rgba(0,0,0,.5);text-shadow:
 body.light-mode .sidebar-head{background:linear-gradient(180deg,var(--accent-lo) 0%,transparent 100%);}
 body.light-mode .sidebar-heading{color:var(--fg);}
 body.light-mode .sidebar-sub{color:var(--fg3);}
+body.light-mode .stream-trigger{border-color:rgba(0,0,0,.08);background:rgba(0,0,0,.02);box-shadow:0 0 0 1px rgba(0,0,0,.03) inset,0 4px 24px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.04);}
+body.light-mode .stream-trigger:hover{border-color:rgba(0,0,0,.14);box-shadow:0 0 0 1px rgba(0,0,0,.04) inset,0 8px 40px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);}
+body.light-mode .stream-trigger.open{border-color:rgba(0,0,0,.18);box-shadow:0 0 0 1px rgba(0,0,0,.05) inset,0 12px 48px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04);}
+body.light-mode .stream-trigger-icon-bg{opacity:.08;}
+body.light-mode .stream-trigger:hover .stream-trigger-icon-bg,
+body.light-mode .stream-trigger.open .stream-trigger-icon-bg{opacity:.14;}
+body.light-mode .stream-trigger-label{color:rgba(0,0,0,.3);}
+body.light-mode .stream-trigger:hover .stream-trigger-label{color:rgba(0,0,0,.45);}
+body.light-mode .stream-trigger-name{color:rgba(0,0,0,.75);}
+body.light-mode .stream-trigger:hover .stream-trigger-name{color:#000;}
+body.light-mode .stream-caret{color:rgba(0,0,0,.3);border-left-color:rgba(0,0,0,.06);}
+body.light-mode .stream-trigger:hover .stream-caret{color:rgba(0,0,0,.55);background:rgba(0,0,0,.03);}
+body.light-mode .stream-trigger.open .stream-caret{color:rgba(0,0,0,.7);background:rgba(0,0,0,.04);}
+body.light-mode .stream-trigger::after{box-shadow:0 0 8px var(--stream-color,var(--accent)),0 0 20px color-mix(in srgb,var(--stream-color,var(--accent)) 20%,transparent);}
+body.light-mode .stream-trigger-fill{display:none;}
+body.light-mode .stream-trigger-glow{display:none;}
+body.light-mode .stream-hint{color:rgba(0,0,0,.28);}
+body.light-mode .stream-hint:hover{color:rgba(0,0,0,.42);}
+body.light-mode .stream-hint::before,body.light-mode .stream-hint::after{background:linear-gradient(90deg,transparent,rgba(0,0,0,.1),transparent);}
+body.light-mode .stream-dropdown{background:rgba(255,255,255,.98);border-color:rgba(0,0,0,.08);box-shadow:0 0 0 1px rgba(0,0,0,.03) inset,0 32px 80px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.06);}
+body.light-mode .stream-dropdown::before{background:linear-gradient(90deg,transparent,rgba(0,0,0,.15),transparent);}
+body.light-mode .sd-header{border-bottom-color:rgba(0,0,0,.05);background:rgba(0,0,0,.015);}
+body.light-mode .sd-header-label{color:rgba(0,0,0,.3);}
+body.light-mode .sd-highlight{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.05);}
+body.light-mode .sd-item:hover{border-color:rgba(0,0,0,.08);}
+body.light-mode .sd-item.active{border-color:color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent);}
+body.light-mode .sd-item-fill{filter:blur(25px) saturate(180%);}
+body.light-mode .sd-item-icon-wrap{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.06);}
+body.light-mode .sd-item:hover .sd-item-icon-wrap{background:rgba(0,0,0,.05);}
+body.light-mode .sd-item-name{color:rgba(0,0,0,.5);}
+body.light-mode .sd-item:hover .sd-item-name{color:rgba(0,0,0,.82);}
+body.light-mode .sd-item.active .sd-item-name{color:#000;}
+body.light-mode .sd-item-label{color:rgba(0,0,0,.18);}
+body.light-mode .sd-item:hover .sd-item-label{color:rgba(0,0,0,.3);}
+body.light-mode .sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 65%,rgba(0,0,0,.3));}
+body.light-mode .sd-item-chip{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.06);color:rgba(0,0,0,.2);}
+body.light-mode .sd-divider{background:linear-gradient(90deg,transparent,rgba(0,0,0,.06),transparent);}
+body.light-mode .sd-footer{border-top-color:rgba(0,0,0,.04);background:rgba(0,0,0,.01);color:rgba(0,0,0,.18);}
+body.light-mode .confetti-particle{opacity:.7;}
 body.light-mode .search-box{background:var(--surface);border-color:var(--border2);}
 body.light-mode #subjectSearch{color:var(--fg);}
 body.light-mode #subjectSearch::placeholder{color:var(--fg3);}
@@ -93,6 +132,9 @@ body.light-mode .cc-body{color:var(--fg2);}
 body.light-mode .cc-handle{color:var(--fg3);}
 body.light-mode .cc-tag{background:var(--surface2);border-color:var(--border2);color:var(--fg2);}
 body.light-mode .sidebar-label{color:color-mix(in srgb,var(--accent) 55%,#000);opacity:.9;}
+body.light-mode .sd-item-icon{color:color-mix(in srgb,var(--item-color,var(--accent)) 45%,#000);}
+body.light-mode .sd-item:hover .sd-item-icon{color:color-mix(in srgb,var(--item-color,var(--accent)) 70%,#000);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--item-color,var(--accent)) 25%,transparent));}
+body.light-mode .sd-item.active .sd-item-icon{color:color-mix(in srgb,var(--item-color,var(--accent)) 80%,#000);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent));}
 body.light-mode body::after{opacity:.012;}
 body.light-mode body::before{background:radial-gradient(ellipse 90% 60% at 12% 110%,color-mix(in srgb,var(--accent) 4%,transparent) 0%,transparent 65%),radial-gradient(ellipse 70% 45% at 88% -5%,rgba(100,160,255,0.015) 0%,transparent 60%);}
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 90% 60% at 12% 110%,color-mix(in srgb,var(--accent) 10%,transparent) 0%,transparent 65%),radial-gradient(ellipse 70% 45% at 88% -5%,rgba(100,160,255,0.045) 0%,transparent 60%);}
@@ -200,6 +242,239 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .ui-theme-swatch.active::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:rgba(255,255,255,.8);font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);}
 .ui-theme-swatch-inner{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;}
 .ui-swatch-band{flex:1;}
+
+/* ══ PREMIUM STREAM DROPDOWN ══ */
+.stream-dropdown-wrap{
+  padding:6px 8px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+  background:var(--bg2);
+  position:relative;
+  z-index:50;
+}
+.stream-trigger{
+  width:100%;
+  display:flex;align-items:center;gap:0;
+  padding:0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  cursor:pointer;
+  overflow:hidden;
+  position:relative;
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.02) inset,0 4px 24px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.3);
+  transition:border-color .35s,box-shadow .35s,transform .3s cubic-bezier(.34,1.56,.64,1);
+  will-change:border-color,box-shadow,transform;
+}
+.stream-trigger::after{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--stream-color,var(--accent));
+  box-shadow:0 0 16px var(--stream-color,var(--accent)),0 0 40px color-mix(in srgb,var(--stream-color,var(--accent)) 40%,transparent);
+  transition:background .5s,box-shadow .5s;
+  z-index:3;pointer-events:none;
+}
+.stream-trigger:hover{border-color:rgba(255,255,255,.14);box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 8px 40px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);transform:translateY(-1px);}
+.stream-trigger.open{border-color:rgba(255,255,255,.18);box-shadow:0 0 0 1px rgba(255,255,255,.05) inset,0 12px 48px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.3);transform:translateY(-2px);}
+.stream-trigger-fill{
+  position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,var(--stream-color,var(--accent)),color-mix(in srgb,var(--stream-color,var(--accent)) 60%,#fff));
+  transform:translateX(-105%);
+  transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s ease;
+  z-index:0;opacity:0;pointer-events:none;
+  filter:blur(30px) saturate(200%);
+}
+.stream-trigger:hover .stream-trigger-fill,
+.stream-trigger.open .stream-trigger-fill{transform:translateX(-30%);opacity:.08;}
+.stream-trigger-glow{
+  position:absolute;top:-1px;left:20%;right:20%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--stream-color,var(--accent)),transparent);
+  opacity:0;transition:opacity .4s ease;z-index:4;pointer-events:none;filter:blur(.5px);
+}
+.stream-trigger:hover .stream-trigger-glow,
+.stream-trigger.open .stream-trigger-glow{opacity:.6;animation:glowLineShimmer 3s ease-in-out infinite;}
+@keyframes glowLineShimmer{0%,100%{opacity:.4;}50%{opacity:.8;}}
+.stream-trigger-icon-panel{
+  width:38px;height:38px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:2;overflow:hidden;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.stream-trigger:hover .stream-trigger-icon-panel{transform:scale(1.03);}
+.stream-trigger-icon-bg{
+  position:absolute;inset:3px;border-radius:8px;
+  background:var(--stream-color,var(--accent));
+  opacity:.12;transition:opacity .3s ease,background .5s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.stream-trigger:hover .stream-trigger-icon-bg,
+.stream-trigger.open .stream-trigger-icon-bg{opacity:.22;transform:scale(1.05);}
+.stream-trigger-icon-panel svg{
+  position:relative;z-index:1;display:block;width:16px;height:16px;
+  color:var(--stream-color,var(--accent));
+  transition:color .5s ease,filter .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--stream-color,var(--accent)) 50%,transparent));
+}
+.stream-trigger:hover .stream-trigger-icon-panel svg{transform:scale(1.08);filter:drop-shadow(0 0 12px color-mix(in srgb,var(--stream-color,var(--accent)) 70%,transparent));}
+.stream-trigger-text{
+  flex:1;padding:8px 10px;
+  position:relative;z-index:2;text-align:left;min-width:0;
+}
+.stream-trigger-label{
+  font-family:var(--font-mono);font-size:7px;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.22);display:block;margin-bottom:2px;
+  transition:color .3s ease;
+}
+.stream-trigger:hover .stream-trigger-label{color:rgba(255,255,255,.35);}
+.stream-trigger-name{
+  font-family:var(--font-brand);font-size:12.5px;font-weight:600;color:rgba(255,255,255,.88);
+  display:block;letter-spacing:.3px;transition:color .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.stream-trigger:hover .stream-trigger-name{color:#fff;transform:translateX(2px);}
+.stream-caret{
+  width:34px;height:38px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.45);
+  position:relative;z-index:2;
+  border-left:1px solid rgba(255,255,255,.06);
+  transition:color .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1),background .2s ease;
+}
+.stream-caret svg{transition:transform .4s cubic-bezier(.34,1.56,.64,1),filter .3s ease;filter:drop-shadow(0 0 2px rgba(0,0,0,.5));}
+.stream-trigger:hover .stream-caret{color:rgba(255,255,255,.75);background:rgba(255,255,255,.04);}
+.stream-trigger:hover .stream-caret svg{transform:translateY(1px);}
+.stream-trigger.open .stream-caret{color:#fff;background:rgba(255,255,255,.06);}
+.stream-trigger.open .stream-caret svg{transform:rotate(180deg);}
+.stream-particles{position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;overflow:hidden;opacity:0;transition:opacity .5s ease;}
+.stream-trigger:hover .stream-particles,
+.stream-trigger.open .stream-particles{opacity:1;}
+.stream-dropdown{
+  position:fixed;
+  background:color-mix(in srgb,var(--bg) 96%,transparent);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  overflow:hidden;
+  backdrop-filter:blur(50px) saturate(200%);
+  -webkit-backdrop-filter:blur(50px) saturate(200%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.03) inset,0 32px 80px rgba(0,0,0,.85),0 8px 24px rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;
+  transform:translateY(-12px) scale(.96);
+  transform-origin:top center;
+  transition:opacity .3s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1);
+  z-index:9000;
+}
+.stream-dropdown::before{
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  z-index:10;pointer-events:none;
+}
+.stream-dropdown::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:120px;
+  background:linear-gradient(180deg,var(--stream-color,var(--accent)),transparent);
+  opacity:.03;pointer-events:none;transition:background .5s ease;filter:blur(40px);z-index:0;
+}
+.stream-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1);}
+.sd-header{
+  padding:8px 12px 6px;border-bottom:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.015);
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+.sd-header-label{font-family:var(--font-mono);font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);}
+.sd-items{padding:4px;position:relative;z-index:1;}
+.sd-highlight{
+  position:absolute;left:4px;right:4px;
+  border-radius:10px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  transition:top .35s cubic-bezier(.22,1,.36,1),height .35s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;z-index:0;
+}
+.sd-highlight::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--highlight-color,var(--accent));opacity:.04;
+  filter:blur(15px);transition:background .4s ease;
+}
+.sd-item{
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:10px;
+  cursor:pointer;border:1px solid transparent;background:transparent;
+  width:100%;text-align:left;
+  transition:border-color .25s ease,background .25s ease;
+  z-index:1;
+}
+.sd-item-fill{
+  position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(135deg,var(--item-color,var(--accent)),color-mix(in srgb,var(--item-color,var(--accent)) 50%,#fff));
+  transform:translateX(-110%);transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .45s ease;
+  z-index:0;opacity:0;pointer-events:none;filter:blur(25px) saturate(180%);
+}
+.sd-item:hover .sd-item-fill,
+.sd-item.active .sd-item-fill{transform:translateX(-20%);opacity:.1;}
+.sd-item:hover{border-color:rgba(255,255,255,.08);}
+.sd-item.active{border-color:color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent);}
+.sd-item-icon-wrap{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  position:relative;z-index:1;transition:all .3s cubic-bezier(.22,1,.36,1);overflow:hidden;
+}
+.sd-item-icon-wrap::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:var(--item-color,var(--accent));opacity:0;transition:opacity .3s ease;
+}
+.sd-item:hover .sd-item-icon-wrap{background:rgba(255,255,255,.06);border-color:color-mix(in srgb,var(--item-color,var(--accent)) 30%,rgba(255,255,255,.08));transform:scale(1.05);}
+.sd-item:hover .sd-item-icon-wrap::before{opacity:.08;}
+.sd-item.active .sd-item-icon-wrap{
+  background:color-mix(in srgb,var(--item-color,var(--accent)) 14%,rgba(255,255,255,.04));
+  border-color:color-mix(in srgb,var(--item-color,var(--accent)) 45%,transparent);
+  box-shadow:0 0 20px color-mix(in srgb,var(--item-color,var(--accent)) 15%,transparent),0 0 6px color-mix(in srgb,var(--item-color,var(--accent)) 20%,transparent) inset;
+}
+.sd-item.active .sd-item-icon-wrap::before{opacity:.12;}
+.sd-item-icon{display:block;width:15px;height:15px;color:rgba(255,255,255,.3);position:relative;z-index:1;transition:color .3s ease,filter .3s ease,transform .3s cubic-bezier(.34,1.56,.64,1);}
+.sd-item:hover .sd-item-icon{color:var(--item-color,var(--accent));filter:drop-shadow(0 0 6px color-mix(in srgb,var(--item-color,var(--accent)) 50%,transparent));transform:scale(1.05);}
+.sd-item.active .sd-item-icon{color:var(--item-color,var(--accent));filter:drop-shadow(0 0 8px color-mix(in srgb,var(--item-color,var(--accent)) 60%,transparent));}
+.sd-item-info{flex:1;min-width:0;position:relative;z-index:1;}
+.sd-item-name{font-family:var(--font-brand);font-size:12px;font-weight:600;color:rgba(255,255,255,.55);display:block;letter-spacing:.2px;transition:color .25s ease,transform .25s cubic-bezier(.34,1.56,.64,1);}
+.sd-item:hover .sd-item-name{color:rgba(255,255,255,.92);transform:translateX(2px);}
+.sd-item.active .sd-item-name{color:#fff;text-shadow:0 0 20px color-mix(in srgb,var(--item-color,var(--accent)) 30%,transparent);}
+.sd-item-label{font-family:var(--font-mono);font-size:8px;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.18);display:block;margin-top:2px;transition:color .25s ease;}
+.sd-item:hover .sd-item-label{color:rgba(255,255,255,.3);}
+.sd-item.active .sd-item-label{color:color-mix(in srgb,var(--item-color,var(--accent)) 65%,rgba(255,255,255,.3));}
+.sd-item-chips{display:flex;gap:3px;margin-top:3px;flex-wrap:wrap;}
+.sd-item-chip{
+  font-family:var(--font-mono);font-size:7px;padding:1px 5px;border-radius:3px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  color:rgba(255,255,255,.2);letter-spacing:.3px;text-transform:uppercase;transition:all .25s ease;
+}
+.sd-item:hover .sd-item-chip{background:color-mix(in srgb,var(--item-color,var(--accent)) 8%,rgba(255,255,255,.03));border-color:color-mix(in srgb,var(--item-color,var(--accent)) 18%,transparent);color:color-mix(in srgb,var(--item-color,var(--accent)) 55%,rgba(255,255,255,.25));}
+.sd-item.active .sd-item-chip{background:color-mix(in srgb,var(--item-color,var(--accent)) 10%,rgba(255,255,255,.03));border-color:color-mix(in srgb,var(--item-color,var(--accent)) 22%,transparent);color:color-mix(in srgb,var(--item-color,var(--accent)) 60%,rgba(255,255,255,.3));}
+.sd-item-check{
+  width:20px;height:20px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;position:relative;z-index:1;
+  background:color-mix(in srgb,var(--item-color,var(--accent)) 12%,rgba(0,0,0,.2));
+  border:1.5px solid color-mix(in srgb,var(--item-color,var(--accent)) 45%,transparent);
+  color:var(--item-color,var(--accent));
+  transition:opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s ease;
+  transform:scale(.5);
+}
+.sd-item-check svg{display:block;color:inherit;width:9px;height:9px;}
+.sd-item.active .sd-item-check{opacity:1;transform:scale(1);box-shadow:0 0 12px color-mix(in srgb,var(--item-color,var(--accent)) 20%,transparent);}
+.sd-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:3px 8px;}
+.sd-footer{padding:7px 12px;border-top:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.01);font-family:var(--font-mono);font-size:8.5px;color:rgba(255,255,255,.18);letter-spacing:.4px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;}
+.sd-footer-dot{width:4px;height:4px;border-radius:50%;background:var(--accent,#3bff6c);animation:footerBreathe 3s ease-in-out infinite;box-shadow:0 0 6px var(--accent,#3bff6c);}
+@keyframes footerBreathe{0%,100%{opacity:.4;}50%{opacity:1;}}
+.stream-hint{text-align:center;padding:5px 0 1px;font-family:var(--font-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.18);cursor:pointer;user-select:none;transition:color .3s ease;}
+.stream-hint:hover{color:rgba(255,255,255,.35);}
+.stream-hint::before,.stream-hint::after{content:'';display:inline-block;width:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);vertical-align:middle;margin:0 6px;}
+.stream-transition-flash{position:fixed;inset:0;z-index:9998;pointer-events:none;background:var(--stream-color,var(--accent));opacity:0;filter:blur(100px) saturate(200%);transition:opacity .15s ease;}
+.stream-transition-flash.active{animation:flashPulse .6s ease-out forwards;}
+@keyframes flashPulse{0%{opacity:.08;}100%{opacity:0;}}
+.confetti-particle{position:absolute;width:4px;height:4px;border-radius:50%;pointer-events:none;z-index:100;animation:confettiBurst .7s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes confettiBurst{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0);}}
+@keyframes itemSlideIn{from{opacity:0;transform:translateY(8px) scale(.97);filter:blur(4px);}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}}
 
 /* ══ LAYOUT ══ */
 .layout{display:grid;grid-template-columns:var(--sidebar-width) minmax(0,1fr);height:100vh;padding-top:var(--nav-h);}
@@ -430,6 +705,108 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
       <div class="sidebar-heading">Best Channels<br>to Learn From</div>
       <div class="sidebar-sub">ISC 2026 · handpicked · ranked</div>
     </div>
+
+    <div class="stream-dropdown-wrap" id="streamDropdownWrap">
+      <button class="stream-trigger" id="streamTrigger" onclick="toggleStreamDropdown()">
+        <span class="stream-trigger-fill"></span>
+        <span class="stream-trigger-glow"></span>
+        <canvas class="stream-particles" id="triggerParticles"></canvas>
+        <span class="stream-trigger-icon-panel" id="streamTriggerIconPanel">
+          <span class="stream-trigger-icon-bg" id="streamTriggerIconBg"></span>
+          <svg id="streamTriggerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="14" y1="1" x2="14" y2="23"/>
+            <path d="M19 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/>
+          </svg>
+        </span>
+        <span class="stream-trigger-text">
+          <span class="stream-trigger-label">Active Stream</span>
+          <span class="stream-trigger-name" id="streamTriggerName">Commerce</span>
+        </span>
+        <span class="stream-caret">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </span>
+      </button>
+      <div class="stream-hint" onclick="toggleStreamDropdown()">tap to switch</div>
+
+      <div class="stream-dropdown" id="streamDropdown">
+        <div class="sd-header">
+          <span class="sd-header-label">Select Stream</span>
+        </div>
+        <div class="sd-items" id="sdItems">
+          <div class="sd-highlight" id="sdHighlight"></div>
+
+          <button class="sd-item active" data-stream="commerce" style="--item-color:#ffb830" onclick="selectStream('commerce',this)">
+            <span class="sd-item-fill"></span>
+            <div class="sd-item-icon-wrap">
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="14" y1="1" x2="14" y2="23"/>
+                <path d="M19 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/>
+              </svg>
+            </div>
+            <span class="sd-item-info">
+              <span class="sd-item-name">Commerce</span>
+              <span class="sd-item-label">Accounts · Economics · BSt</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">Popular</span>
+              </span>
+            </span>
+            <span class="sd-item-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+
+          <button class="sd-item" data-stream="science" style="--item-color:#3bff6c" onclick="selectStream('science',this)">
+            <span class="sd-item-fill"></span>
+            <div class="sd-item-icon-wrap">
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/>
+                <path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/>
+                <path d="M3 9h18"/>
+              </svg>
+            </div>
+            <span class="sd-item-info">
+              <span class="sd-item-name">Science</span>
+              <span class="sd-item-label">Physics · Chemistry · Biology</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">Trending</span>
+              </span>
+            </span>
+            <span class="sd-item-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+
+          <div class="sd-divider"></div>
+
+          <button class="sd-item" data-stream="humanities" style="--item-color:#bf5fff" onclick="selectStream('humanities',this)">
+            <span class="sd-item-fill"></span>
+            <div class="sd-item-icon-wrap">
+              <svg class="sd-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <span class="sd-item-info">
+              <span class="sd-item-name">Humanities &amp; Arts</span>
+              <span class="sd-item-label">History · Pol Sci · Geography</span>
+              <span class="sd-item-chips">
+                <span class="sd-item-chip">Creative</span>
+              </span>
+            </span>
+            <span class="sd-item-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+          </button>
+        </div>
+        <div class="sd-footer">
+          <span class="sd-footer-dot"></span>
+          ISC Class XII &middot; 2025&ndash;26
+        </div>
+      </div>
+    </div>
+
     <div class="search-wrap">
       <div class="search-box">
         <span class="search-ico">◎</span>
@@ -481,6 +858,7 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 let DATA = { commerce: [], science: [] };
 let activeGroup = null;
 let subjectFilter = '';
+let activeStream = 'commerce';
 
 async function loadChannels() {
   try {
@@ -529,25 +907,25 @@ function applyAvatar(el, url) {
 /* ══ RENDER SUBJECTS ══ */
 function renderSubjects() {
   const wrap = document.getElementById('subjList'); wrap.innerHTML='';
-  const groups = DATA.commerce.concat(DATA.science);
-  const filteredGroups = groups.filter(g => {
+  const streamGroups = DATA[activeStream] || [];
+  const filteredGroups = streamGroups.filter(g => {
     if (!subjectFilter) return true;
     const hay = `${g.subject} ${(g.channels||[]).map(ch => `${ch.name||''} ${ch.handle||''}`).join(' ')}`.toLowerCase();
     return hay.includes(subjectFilter);
   });
 
-  if (!groups.length) { wrap.innerHTML = `<div class="sidebar-loading"><p>No subjects yet.</p></div>`; return; }
-
-  const streamCount = { commerce: DATA.commerce.length, science: DATA.science.length };
-
-  if (DATA.commerce.length) {
-    const lbl = document.createElement('div'); lbl.className = 'cluster-label'; lbl.textContent = '📊 COMMERCE'; wrap.appendChild(lbl);
-    DATA.commerce.filter(g => !subjectFilter || `${g.subject} ${(g.channels||[]).map(ch => `${ch.name||''} ${ch.handle||''}`).join(' ')}`.toLowerCase().includes(subjectFilter)).forEach(g => { const b = buildSubjItem(g); wrap.appendChild(b); });
+  if (!streamGroups.length) {
+    wrap.innerHTML = `<div class="sidebar-loading"><p>No channels in this stream yet.</p></div>`;
+    return;
   }
-  if (DATA.science.length) {
-    const lbl = document.createElement('div'); lbl.className = 'cluster-label'; lbl.textContent = '🔬 SCIENCE'; wrap.appendChild(lbl);
-    DATA.science.filter(g => !subjectFilter || `${g.subject} ${(g.channels||[]).map(ch => `${ch.name||''} ${ch.handle||''}`).join(' ')}`.toLowerCase().includes(subjectFilter)).forEach(g => { const b = buildSubjItem(g); wrap.appendChild(b); });
-  }
+
+  const streamEmoji = { commerce: '📊', science: '🔬', humanities: '📚' };
+  const lbl = document.createElement('div');
+  lbl.className = 'cluster-label';
+  lbl.textContent = `${streamEmoji[activeStream] || '📂'} ${activeStream.toUpperCase()}`;
+  wrap.appendChild(lbl);
+
+  filteredGroups.forEach(g => { const b = buildSubjItem(g); wrap.appendChild(b); });
 
   if (!filteredGroups.length && subjectFilter) { wrap.innerHTML += `<div class="subj-empty">No subjects matched your search.</div>`; }
 }
@@ -816,7 +1194,179 @@ if (subjectSearch) {
   });
 }
 
+/* ══ PREMIUM STREAM DROPDOWN ══ */
+const STREAM_ICONS = {
+  commerce: `<svg id="streamTriggerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="14" y1="1" x2="14" y2="23"/><path d="M19 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg>`,
+  science: `<svg id="streamTriggerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v8"/><path d="m3 9 3.31 9.34A2 2 0 0 0 8.2 20h7.6a2 2 0 0 0 1.89-1.66L21 9"/><path d="M3 9h18"/></svg>`,
+  humanities: `<svg id="streamTriggerIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+};
+const STREAM_META = {
+  commerce:   {name:'Commerce',         color:'#ffb830'},
+  science:    {name:'Science',           color:'#3bff6c'},
+  humanities: {name:'Humanities & Arts', color:'#bf5fff'},
+};
+
+let streamDropdownOpen = false;
+let particleAnimId = null;
+const particleCanvas = document.getElementById('triggerParticles');
+const pCtx = particleCanvas.getContext('2d');
+let particles = [];
+
+function initStreamDropdown() {
+  const dd = document.getElementById('streamDropdown');
+  document.body.appendChild(dd);
+  const trig = document.getElementById('streamTrigger');
+  trig.style.setProperty('--stream-color', '#ffb830');
+  requestAnimationFrame(() => positionHighlight(activeStream));
+  function reposition() {
+    if (!streamDropdownOpen) return;
+    const r = trig.getBoundingClientRect();
+    dd.style.top = (r.bottom + 8) + 'px'; dd.style.left = r.left + 'px'; dd.style.width = r.width + 'px';
+  }
+  window.addEventListener('resize', reposition, {passive: true});
+  document.querySelector('.sidebar').addEventListener('scroll', reposition, {passive: true});
+  document.addEventListener('click', e => {
+    if (streamDropdownOpen && !document.getElementById('streamDropdownWrap').contains(e.target) && !dd.contains(e.target)) closeStreamDropdown();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && streamDropdownOpen) closeStreamDropdown(); });
+}
+
+function toggleStreamDropdown() {
+  streamDropdownOpen = !streamDropdownOpen;
+  const dd = document.getElementById('streamDropdown');
+  const trig = document.getElementById('streamTrigger');
+  if (streamDropdownOpen) {
+    const r = trig.getBoundingClientRect();
+    dd.style.top = (r.bottom + 8) + 'px'; dd.style.left = r.left + 'px'; dd.style.width = r.width + 'px';
+    positionHighlight(activeStream);
+    startTriggerParticles();
+    document.querySelectorAll('.sd-item').forEach((item, i) => {
+      item.style.animation = 'none'; item.offsetHeight;
+      item.style.animation = `itemSlideIn .45s cubic-bezier(.22,1,.36,1) ${i * .04}s both`;
+    });
+  } else {
+    stopTriggerParticles();
+  }
+  dd.classList.toggle('open', streamDropdownOpen);
+  trig.classList.toggle('open', streamDropdownOpen);
+}
+
+function closeStreamDropdown() {
+  streamDropdownOpen = false;
+  document.getElementById('streamDropdown').classList.remove('open');
+  document.getElementById('streamTrigger').classList.remove('open');
+  stopTriggerParticles();
+}
+
+function positionHighlight(s) {
+  const items = [...document.querySelectorAll('.sd-item')];
+  const idx = items.findIndex(i => i.dataset.stream === s);
+  if (idx < 0) return;
+  const hl = document.getElementById('sdHighlight');
+  const item = items[idx];
+  const color = STREAM_META[s]?.color || '#3bff6c';
+  hl.style.setProperty('--highlight-color', color);
+  hl.style.top = item.offsetTop + 'px';
+  hl.style.height = item.offsetHeight + 'px';
+}
+
+function selectStream(s, btn) {
+  const meta = STREAM_META[s];
+  if (!meta) return;
+  activeStream = s;
+  // Transition flash
+  const flash = document.createElement('div');
+  flash.className = 'stream-transition-flash';
+  flash.style.background = meta.color;
+  document.body.appendChild(flash);
+  requestAnimationFrame(() => flash.classList.add('active'));
+  setTimeout(() => flash.remove(), 700);
+  // Confetti
+  if (btn) spawnConfetti(btn, meta.color);
+  // Update trigger
+  const trig = document.getElementById('streamTrigger');
+  trig.style.setProperty('--stream-color', meta.color);
+  trig.querySelector('.stream-trigger-icon-bg').style.background = meta.color;
+  trig.querySelector('#streamTriggerIcon').outerHTML = STREAM_ICONS[s];
+  document.getElementById('streamTriggerIcon').style.color = meta.color;
+  document.getElementById('streamTriggerName').textContent = meta.name;
+  // Update dropdown items
+  document.querySelectorAll('.sd-item').forEach(i => i.classList.toggle('active', i.dataset.stream === s));
+  positionHighlight(s);
+  closeStreamDropdown();
+  // Reset selection and re-render
+  activeGroup = null;
+  showEmpty();
+  renderSubjects();
+}
+
+function spawnConfetti(fromEl, color) {
+  const rect = fromEl.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div'); p.className = 'confetti-particle';
+    const angle = (Math.PI * 2 / 12) * i + (Math.random() - .5) * .5;
+    const dist = 30 + Math.random() * 50;
+    p.style.cssText = `left:${cx}px;top:${cy}px;background:${color};box-shadow:0 0 6px ${color};--tx:${Math.cos(angle) * dist}px;--ty:${Math.sin(angle) * dist}px;width:${3 + Math.random() * 4}px;height:${3 + Math.random() * 4}px;`;
+    document.body.appendChild(p); setTimeout(() => p.remove(), 750);
+  }
+}
+
+/* ── TRIGGER PARTICLE SYSTEM ── */
+function resizeParticleCanvas() {
+  const trig = document.getElementById('streamTrigger');
+  const rect = trig.getBoundingClientRect();
+  particleCanvas.width = rect.width * devicePixelRatio;
+  particleCanvas.height = rect.height * devicePixelRatio;
+  particleCanvas.style.width = rect.width + 'px';
+  particleCanvas.style.height = rect.height + 'px';
+  pCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+
+class TriggerParticle {
+  constructor(w, h, color) { this.reset(w, h, color); }
+  reset(w, h, color) {
+    this.x = Math.random() * w; this.y = h + Math.random() * 10; this.size = .5 + Math.random() * 1.5;
+    this.speedY = -(0.3 + Math.random() * 0.6); this.speedX = (Math.random() - .5) * .3;
+    this.opacity = .2 + Math.random() * .5; this.maxLife = 80 + Math.random() * 80; this.life = 0;
+    this.color = color;
+  }
+  update(w, h) {
+    this.x += this.speedX; this.y += this.speedY; this.life++;
+    this.opacity = Math.max(0, this.opacity - 0.004);
+    if (this.life >= this.maxLife || this.y < -5) this.reset(w, h, this.color);
+  }
+  draw(ctx) {
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color; ctx.globalAlpha = this.opacity; ctx.fill(); ctx.globalAlpha = 1;
+  }
+}
+
+function startTriggerParticles() {
+  resizeParticleCanvas();
+  const trig = document.getElementById('streamTrigger');
+  const rect = trig.getBoundingClientRect(); const w = rect.width, h = rect.height;
+  const color = STREAM_META[activeStream]?.color || '#ffb830';
+  if (!particles.length) {
+    for (let i = 0; i < 18; i++) { const p = new TriggerParticle(w, h, color); p.life = Math.random() * p.maxLife; particles.push(p); }
+  }
+  function animate() {
+    const r2 = trig.getBoundingClientRect(); const w2 = r2.width, h2 = r2.height;
+    pCtx.clearRect(0, 0, w2, h2);
+    const c = STREAM_META[activeStream]?.color || '#ffb830';
+    particles.forEach(p => { p.color = c; p.update(w2, h2); p.draw(pCtx); });
+    particleAnimId = requestAnimationFrame(animate);
+  }
+  if (!particleAnimId) animate();
+}
+
+function stopTriggerParticles() {
+  if (particleAnimId) { cancelAnimationFrame(particleAnimId); particleAnimId = null; }
+  pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+}
+
 loadChannels();
+initStreamDropdown();
 </script>
 </body>
 </html>
