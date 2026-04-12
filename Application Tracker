@@ -4,12 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ISC.exe — College Applications</title>
+<script>
+  (function(){
+    const s=localStorage.getItem('isc-accent');
+    const g=localStorage.getItem('isc-gradient');
+    if(g){const gr=JSON.parse(g);const r=parseInt(gr.a.slice(1,3),16),gv=parseInt(gr.a.slice(3,5),16),b=parseInt(gr.a.slice(5,7),16);document.documentElement.style.setProperty('--accent',gr.a);document.documentElement.style.setProperty('--accent-lo',`rgba(${r},${gv},${b},0.10)`);document.documentElement.style.setProperty('--grad-a',gr.a);document.documentElement.style.setProperty('--grad-b',gr.b);}
+    else if(s){const r=parseInt(s.slice(1,3),16),gv=parseInt(s.slice(3,5),16),b=parseInt(s.slice(5,7),16);document.documentElement.style.setProperty('--accent',s);document.documentElement.style.setProperty('--accent-lo',`rgba(${r},${gv},${b},0.10)`);}
+  })();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-/* ═══════════════════════════════════════════════════════════════
-   ISC.exe College Applications — Restyled to match resource.html
-   Sheet ID: 1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc
-   ═══════════════════════════════════════════════════════════════ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#0f1318;--bg2:#131921;--surface:#1a2230;--surface2:#1f2938;
@@ -49,20 +53,44 @@ input{font-family:inherit}
 @keyframes breathe{0%,100%{opacity:.4}50%{opacity:.95}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
-@keyframes glowPulse{0%,100%{box-shadow:0 0 8px var(--accent-lo)}50%{box-shadow:0 0 16px var(--accent-md)}}
 .animate-in{animation:fadeIn .3s ease both}
 .stagger-1{animation-delay:.04s}.stagger-2{animation-delay:.08s}.stagger-3{animation-delay:.12s}
 .stagger-4{animation-delay:.16s}.stagger-5{animation-delay:.20s}
 
-/* ─── Sidebar ─── */
-.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(170deg,var(--surface) 0%,var(--bg2) 60%,var(--bg) 100%);border-right:1px solid var(--border2);display:flex;flex-direction:column;z-index:40;transition:width .22s ease;box-shadow:1px 0 20px rgba(0,0,0,.4)}
+/* ─── TOP NAV (ISC.exe standard) ─── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 22px;
+  background:rgba(15,19,24,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border2);
+}
+.tn-left{display:flex;align-items:center;gap:14px;}
+.tn-brand{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--fg);display:flex;align-items:center;gap:9px;text-decoration:none;}
+.tn-brand-mark{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);flex-shrink:0;animation:breathe 2.5s ease-in-out infinite;}
+.tn-brand span{color:var(--accent);}
+.tn-links{display:flex;align-items:center;gap:4px;}
+.tn-link{
+  text-decoration:none;color:var(--fg3);font-family:var(--font-mono);font-size:11.5px;
+  padding:6px 13px;border:1px solid transparent;border-radius:6px;transition:all .18s;
+}
+.tn-link:hover{color:var(--fg2);border-color:var(--border2);background:var(--surface);}
+.tn-link.active-page{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo);}
+.tn-right{display:flex;align-items:center;gap:6px;}
+.tn-search-btn{
+  display:flex;align-items:center;gap:7px;padding:6px 13px;
+  border:1px solid var(--border2);border-radius:6px;background:var(--surface);
+  color:var(--fg3);font-family:var(--font-mono);font-size:11.5px;transition:all .18s;
+}
+.tn-search-btn:hover{border-color:var(--accent);color:var(--fg2);background:var(--accent-lo);}
+.tn-search-btn kbd{font-size:10px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;color:var(--fg3);}
+
+/* ─── Sidebar (internal nav for this page) ─── */
+.sidebar{position:fixed;top:var(--nav-h);left:0;bottom:0;width:var(--sidebar-w);background:linear-gradient(170deg,var(--surface) 0%,var(--bg2) 60%,var(--bg) 100%);border-right:1px solid var(--border2);display:flex;flex-direction:column;z-index:40;transition:width .22s ease;box-shadow:1px 0 20px rgba(0,0,0,.4)}
 .sidebar.collapsed{width:var(--sidebar-collapsed)}
-.sidebar-header{height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--accent-lo),transparent);flex-shrink:0}
-.sidebar-logo{display:flex;align-items:center;gap:9px;cursor:pointer}
-.sidebar-brand-mark{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);flex-shrink:0;animation:breathe 2.5s ease-in-out infinite}
-.sidebar-logo-text{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--fg);letter-spacing:.03em}
-.sidebar-logo-text span{color:var(--accent)}
-.sidebar.collapsed .sidebar-logo-text,.sidebar.collapsed .sidebar-search,.sidebar.collapsed .nav-label,.sidebar.collapsed .nav-text,.sidebar.collapsed .badge,.sidebar.collapsed .sidebar-footer-text{display:none}
+.sidebar-header{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--border);background:linear-gradient(90deg,var(--accent-lo),transparent);flex-shrink:0}
+.sidebar-title{font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);}
+.sidebar.collapsed .sidebar-title,.sidebar.collapsed .sidebar-search,.sidebar.collapsed .nav-label,.sidebar.collapsed .nav-text,.sidebar.collapsed .badge,.sidebar.collapsed .sidebar-footer-text{display:none}
 .sidebar-search{margin:10px 10px 4px;flex-shrink:0}
 .sidebar-search button{width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--fg3);font-size:.78rem;transition:all .15s;font-family:var(--font-mono);letter-spacing:.4px}
 .sidebar-search button:hover{border-color:var(--accent);color:var(--fg2);background:var(--accent-lo)}
@@ -84,7 +112,7 @@ input{font-family:inherit}
 .sidebar-footer-text{font-size:.62rem;font-weight:500;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;font-family:var(--font-mono)}
 
 /* ─── Main ─── */
-.main{margin-left:var(--sidebar-w);min-height:100vh;transition:margin .22s ease;position:relative;z-index:1}
+.main{margin-left:var(--sidebar-w);min-height:100vh;transition:margin .22s ease;position:relative;z-index:1;padding-top:var(--nav-h);}
 .sidebar.collapsed~.main{margin-left:var(--sidebar-collapsed)}
 .content{max-width:1180px;margin:0 auto;padding:26px 28px 60px}
 .tab-content{animation:fadeIn .25s ease both}
@@ -160,7 +188,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:11px}
 .card{border:1px solid var(--border);border-radius:var(--radius);padding:15px;background:var(--surface);transition:all .18s;animation:fadeIn .3s ease both;position:relative;overflow:hidden}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--card-accent,var(--accent));opacity:0;transition:opacity .2s}
-.card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 20px rgba(59,255,108,.04)}
+.card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.4)}
 .card:hover::before{opacity:.7}
 .card-header{display:flex;align-items:start;justify-content:space-between;gap:10px}
 .card-avatar{width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;border:1px solid;flex-shrink:0;letter-spacing:.02em;font-family:var(--font-mono)}
@@ -225,7 +253,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .skel-row .sk{height:12px;border-radius:4px}
 
 /* ─── Search Modal ─── */
-.search-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;opacity:0;pointer-events:none;transition:opacity .15s}
+.search-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;opacity:0;pointer-events:none;transition:opacity .15s}
 .search-overlay.open{opacity:1;pointer-events:auto}
 .search-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(10px)}
 .search-modal{position:relative;width:100%;max-width:520px;margin:0 16px;border-radius:var(--radius);border:1px solid var(--border2);border-top:2px solid var(--accent);background:var(--bg2);box-shadow:0 32px 80px rgba(0,0,0,.8);overflow:hidden;transform:scale(.97);transition:transform .15s}
@@ -253,14 +281,9 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .pagination button.active{background:var(--accent);color:#000;border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
 .pagination button:disabled{opacity:.3;cursor:not-allowed}
 
-/* ─── Mobile ─── */
-.mobile-topbar{display:none;position:fixed;top:0;left:0;right:0;z-index:50;height:var(--nav-h);background:rgba(15,19,24,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:0 14px;align-items:center;justify-content:space-between}
-.mobile-topbar .logo{display:flex;align-items:center;gap:8px}
-.mobile-topbar .logo .brand-mark{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent);flex-shrink:0}
-.mobile-topbar .logo-text{font-family:var(--font-mono);font-size:.82rem;font-weight:500;color:var(--fg)}
-.mobile-topbar .logo-text span{color:var(--accent)}
-.mobile-bottombar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;height:var(--tabbar-h);background:rgba(15,19,24,.96);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:0 4px}
-.mobile-bottombar nav{display:flex;height:100%}
+/* ─── Mobile bottombar for this page (app tabs) ─── */
+.app-mobile-bottom{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;height:var(--tabbar-h);background:rgba(15,19,24,.96);backdrop-filter:blur(18px);border-top:1px solid var(--border);padding:0 4px}
+.app-mobile-bottom nav{display:flex;height:100%}
 .mobile-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;color:var(--fg3);transition:color .14s;font-size:.58rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.5px;text-transform:uppercase}
 .mobile-tab.active{color:var(--accent)}
 .mobile-tab svg{width:19px;height:19px}
@@ -279,26 +302,51 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 .app-footer{border-top:1px solid var(--border);margin-top:36px;padding:12px 0;display:flex;align-items:center;justify-content:space-between;font-size:.67rem;color:var(--fg3);font-family:var(--font-mono);letter-spacing:.3px}
 .app-footer .left{display:flex;align-items:center;gap:7px}
 
+/* ─── Error Banner ─── */
+.sheet-error{background:var(--red-lo);border:1px solid rgba(255,107,107,.3);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-family:var(--font-mono);font-size:.75rem;color:var(--red);display:none;}
+.sheet-error.visible{display:block;}
+
 @media(max-width:1023px){
   .sidebar{display:none}
-  .mobile-topbar,.mobile-bottombar{display:flex}
+  .app-mobile-bottom{display:flex}
+  .top-nav .tn-links{display:none}
   .main{margin-left:0!important;padding-top:var(--nav-h);padding-bottom:var(--tabbar-h)}
   .content{padding:18px 14px 36px}
   .card-grid{grid-template-columns:1fr}
 }
-@media(min-width:1024px){.mobile-only{display:none!important}}
+@media(min-width:1024px){.app-mobile-bottom{display:none!important}}
 @media(max-width:1023px){.app-footer{display:none}}
 </style>
 </head>
 <body>
 
-<!-- ═══════ SIDEBAR ═══════ -->
+<!-- ═══════ ISC.exe TOP NAV ═══════ -->
+<nav class="top-nav">
+  <div class="tn-left">
+    <a class="tn-brand" href="/">
+      <div class="tn-brand-mark" id="navMark"></div>
+      ISC<span>.exe</span>
+    </a>
+    <div class="tn-links">
+      <a class="tn-link" href="/">Home</a>
+      <a class="tn-link" href="/resource">Resources</a>
+      <a class="tn-link" href="/timetable">Timetable</a>
+      <a class="tn-link" href="/channels">Channels</a>
+      <a class="tn-link active-page" href="/college-applications">College Apps</a>
+    </div>
+  </div>
+  <div class="tn-right">
+    <button class="tn-search-btn" onclick="openSearch()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      Search <kbd>⌘K</kbd>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══════ INTERNAL SIDEBAR (College Apps nav) ═══════ -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <div class="sidebar-logo" onclick="setTab('universities')">
-      <div class="sidebar-brand-mark"></div>
-      <div class="sidebar-logo-text">ISC<span>.exe</span></div>
-    </div>
+    <span class="sidebar-title">College Apps</span>
     <button class="collapse-btn" onclick="toggleSidebar()" title="Collapse sidebar">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>
     </button>
@@ -310,7 +358,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
     </button>
   </div>
   <nav class="sidebar-nav">
-    <div class="nav-label">Navigation</div>
+    <div class="nav-label">Browse</div>
     <button class="nav-item" data-tab="universities" onclick="setTab('universities')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
       <span class="nav-text">Universities</span>
@@ -332,36 +380,24 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
       <span class="nav-text">My List</span>
       <span class="badge" id="bookmarkBadge" style="display:none">0</span>
     </button>
-    <div class="nav-label" style="margin-top:10px">Quick Links</div>
-    <a class="nav-item" href="/" style="text-decoration:none">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span class="nav-text">← Home</span>
-    </a>
+    <div class="nav-label" style="margin-top:10px">Site Links</div>
     <a class="nav-item" href="/resource" style="text-decoration:none">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
       <span class="nav-text">Resources</span>
     </a>
+    <a class="nav-item" href="/timetable" style="text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="nav-text">Timetable</span>
+    </a>
   </nav>
   <div class="sidebar-footer">
     <span class="pulse-dot"></span>
-    <span class="sidebar-footer-text">System Status: Optimal</span>
+    <span class="sidebar-footer-text">Data from Google Sheets</span>
   </div>
 </aside>
 
-<!-- ═══════ MOBILE TOPBAR ═══════ -->
-<header class="mobile-topbar mobile-only">
-  <div style="display:flex;align-items:center;gap:8px">
-    <button class="btn-icon" onclick="openDrawer()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
-    <div class="logo">
-      <div class="brand-mark" style="width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px var(--accent)"></div>
-      <span class="logo-text" style="font-family:var(--font-mono);font-size:.82rem;font-weight:500;color:var(--fg)">ISC<span style="color:var(--accent)">.exe</span></span>
-    </div>
-  </div>
-  <button class="btn-icon" onclick="openSearch()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
-</header>
-
 <!-- ═══════ MOBILE BOTTOM TABS ═══════ -->
-<div class="mobile-bottombar mobile-only">
+<div class="app-mobile-bottom">
   <nav>
     <button class="mobile-tab" data-tab="universities" onclick="setTab('universities')">
       <span class="tab-indicator"></span>
@@ -394,20 +430,15 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 
 <!-- ═══════ MOBILE DRAWER ═══════ -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<aside class="drawer mobile-only" id="drawer">
+<aside class="drawer" id="drawer">
   <div class="drawer-header">
-    <div class="sidebar-logo">
-      <div class="sidebar-brand-mark"></div>
-      <div class="sidebar-logo-text">ISC<span>.exe</span></div>
+    <div style="display:flex;align-items:center;gap:9px">
+      <div style="width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></div>
+      <span style="font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--fg)">ISC<span style="color:var(--accent)">.exe</span></span>
     </div>
     <button class="btn-icon" onclick="closeDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
-  <div style="padding:10px">
-    <button style="width:100%;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:7px;background:var(--surface);border:1px solid var(--border);color:var(--fg3);font-size:.78rem;font-family:var(--font-mono)" onclick="openSearch();closeDrawer()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>Search...
-    </button>
-  </div>
-  <nav class="sidebar-nav" style="padding:0 8px">
+  <nav class="sidebar-nav" style="padding:8px">
     <button class="nav-item" data-tab="universities" onclick="setTab('universities');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg><span>Universities</span>
     </button>
@@ -442,6 +473,9 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 <!-- ═══════ MAIN CONTENT ═══════ -->
 <div class="main" id="mainArea">
   <div class="content">
+    <div class="sheet-error" id="sheetError">
+      ⚠ Could not load data from Google Sheets. Make sure the sheet is publicly shared (<b>Anyone with the link → Viewer</b>). Sheet ID: <code>1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc</code>
+    </div>
     <div id="tabContent"></div>
     <div class="app-footer">
       <div class="left"><span class="pulse-dot"></span><span>SYSTEM STATUS: OPTIMAL 100%</span></div>
@@ -455,7 +489,7 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 //  CONFIG
 // ═══════════════════════════════════════════════════════════════
 const SHEET_ID = '1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc';
-const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+const GVIZ = `https://docs.google.com/spreadsheets/d/${1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc}/gviz/tq?tqx=out:json`;
 
 // ═══════════════════════════════════════════════════════════════
 //  STATE
@@ -568,21 +602,26 @@ function doSearch(q) {
   const results = [];
   const c = state.searchCache;
   const iconColors = { university: 'var(--accent)', test: 'var(--amber)', cd: 'var(--cyan)', cutoff: 'var(--purple)' };
-  const tabMap = { university: 'universities', test: 'test-deadlines', cd: 'college-deadlines', cutoff: 'cutoffs' };
+  const icons = {
+    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
+    test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
+    cd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>',
+    cutoff: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
+  };
 
-  c.unis.forEach(u => {
+  (c.unis||[]).forEach(u => {
     if ((u.name||'').toLowerCase().includes(lq) || (u.shortName||'').toLowerCase().includes(lq) || (u.location||'').toLowerCase().includes(lq))
       results.push({ type: 'university', name: u.shortName || u.name, meta: `${u.type} — ${u.location}`, tab: 'universities', id: u.id });
   });
-  c.tests.forEach(t => {
+  (c.tests||[]).forEach(t => {
     if ((t.name||'').toLowerCase().includes(lq))
       results.push({ type: 'test', name: t.name, meta: `Deadline: ${t.deadline} (${t.status})`, tab: 'test-deadlines', id: t.id });
   });
-  c.cds.forEach(d => {
+  (c.cds||[]).forEach(d => {
     if ((d.collegeName||'').toLowerCase().includes(lq) || (d.program||'').toLowerCase().includes(lq))
       results.push({ type: 'cd', name: `${d.collegeName} — ${d.program}`, meta: `Deadline: ${d.deadline} (${d.status})`, tab: 'college-deadlines', id: d.id });
   });
-  c.cuts.forEach(r => {
+  (c.cuts||[]).forEach(r => {
     if ((r.college||'').toLowerCase().includes(lq) || (r.exam||'').toLowerCase().includes(lq))
       results.push({ type: 'cutoff', name: `${r.college} — ${r.exam}`, meta: `2024: ${r.cutoff2024} (${r.category})`, tab: 'cutoffs', id: `cut-${r.college}` });
   });
@@ -592,12 +631,6 @@ function doSearch(q) {
     document.getElementById('searchResults').innerHTML = `<div class="hint">No results for "${q}"</div>`;
     return;
   }
-  const icons = {
-    university: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>',
-    test: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>',
-    cd: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/></svg>',
-    cutoff: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>'
-  };
   document.getElementById('searchResults').innerHTML = results.slice(0, 20).map((r, i) =>
     `<div class="search-item${i === 0 ? ' selected' : ''}" onclick="setTab('${r.tab}');closeSearch()" onmouseenter="state.searchSelected=${i};updateSearchHighlight()">
       <div class="si-icon" style="color:${iconColors[r.type]};background:${iconColors[r.type]}18">${icons[r.type]}</div>
@@ -626,39 +659,73 @@ document.addEventListener('keydown', e => {
 });
 
 // ═══════════════════════════════════════════════════════════════
-//  GOOGLE SHEETS FETCHER
+//  GOOGLE SHEETS FETCHER — FIXED
+//  The gviz endpoint strips surrounding whitespace from the JSONP.
+//  Some sheets (especially Cutoffs) have unlabelled columns when
+//  the sheet has a merged-header layout. We handle both cases:
+//    1. Labelled columns (cols[i].label set) → standard path
+//    2. Unlabelled columns → treat row 0 as headers (old behaviour)
 // ═══════════════════════════════════════════════════════════════
 async function fetchSheet(name) {
   try {
-    const res = await fetch(`${GVIZ}&sheet=${encodeURIComponent(name)}`);
-    if (!res.ok) return [];
+    const res = await fetch(`${GVIZ}&sheet=${encodeURIComponent(name)}&headers=1`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const text = await res.text();
-    const m = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?\s*$/);
-    if (!m?.[1]) return [];
+    // The gviz response is JSONP: google.visualization.Query.setResponse({...});
+    const m = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*?)\);\s*$/);
+    if (!m?.[1]) { console.warn(`No gviz payload for sheet: ${name}`); return []; }
     const data = JSON.parse(m[1]);
-    const cols = (data.table?.cols || []).map(c => c.label || c.id || '');
-    if (name === 'Cutoffs' && cols.every(c => !c)) {
-      const rows = data.table?.rows || [];
-      if (rows.length < 2) return [];
-      const headers = rows[0].c.map(cell => cell?.v != null ? String(cell.v) : '');
-      return rows.slice(2).map(row => {
+
+    const tableData = data.table;
+    if (!tableData) return [];
+
+    const rawCols = tableData.cols || [];
+    const rawRows = tableData.rows || [];
+
+    // ── Case 1: columns have labels (normal sheet with a header row) ──
+    const hasLabels = rawCols.some(c => c.label && c.label.trim() !== '');
+    if (hasLabels) {
+      const cols = rawCols.map(c => (c.label || c.id || '').trim());
+      return rawRows.map(row => {
         const obj = {};
-        headers.forEach((h, i) => { const v = row.c?.[i]; obj[h] = v?.v != null ? String(v.v) : ''; });
+        cols.forEach((h, i) => {
+          const cell = row.c?.[i];
+          obj[h] = cell?.v != null ? String(cell.v) : (cell?.f != null ? String(cell.f) : '');
+        });
         return obj;
-      });
+      }).filter(r => Object.values(r).some(v => v !== ''));
     }
-    return (data.table?.rows || []).map(row => {
+
+    // ── Case 2: no labels — first non-empty row is the header row ──
+    // Find first row with actual content
+    let headerRowIdx = 0;
+    for (let i = 0; i < rawRows.length; i++) {
+      const hasContent = rawRows[i]?.c?.some(cell => cell?.v != null && String(cell.v).trim() !== '');
+      if (hasContent) { headerRowIdx = i; break; }
+    }
+    const headers = (rawRows[headerRowIdx]?.c || []).map(cell =>
+      cell?.v != null ? String(cell.v).trim() : ''
+    );
+    return rawRows.slice(headerRowIdx + 1).map(row => {
       const obj = {};
-      cols.forEach((h, i) => { const v = row.c?.[i]; obj[h] = v?.v != null ? String(v.v) : ''; });
+      headers.forEach((h, i) => {
+        const cell = row.c?.[i];
+        obj[h] = cell?.v != null ? String(cell.v) : (cell?.f != null ? String(cell.f) : '');
+      });
       return obj;
-    });
-  } catch(e) { console.error(`Failed to fetch "${name}":`, e); return []; }
+    }).filter(r => Object.values(r).some(v => v !== ''));
+
+  } catch(e) {
+    console.error(`Failed to fetch sheet "${name}":`, e);
+    document.getElementById('sheetError').classList.add('visible');
+    return [];
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  HELPERS
 // ═══════════════════════════════════════════════════════════════
-function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function esc(s) { const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML; }
 
 function bookmarkIcon(id) {
   const saved = isBookmarked(id);
@@ -691,7 +758,13 @@ function skeletonCards(n) {
 // ═══════════════════════════════════════════════════════════════
 async function renderTab() {
   const el = document.getElementById('tabContent');
-  const renderers = { 'test-deadlines': renderTestDeadlines, 'universities': renderUniversities, 'college-deadlines': renderCollegeDeadlines, 'cutoffs': renderCutoffs, 'my-list': renderMyList };
+  const renderers = {
+    'test-deadlines': renderTestDeadlines,
+    'universities': renderUniversities,
+    'college-deadlines': renderCollegeDeadlines,
+    'cutoffs': renderCutoffs,
+    'my-list': renderMyList
+  };
   if (renderers[state.tab]) await renderers[state.tab](el);
 }
 
@@ -701,10 +774,14 @@ async function renderTestDeadlines(el) {
 
   const rows = await fetchSheet('Test Deadlines');
   const tests = rows.map(r => ({
-    id: r['Test Deadlines ID'] || r['ID'] || '',
-    name: r['Name'] || '', examDate: r['Exam Date'] || '', deadline: r['Deadline'] || '',
-    applyUrl: r['Apply URL'] || '', hasVideo: (r['Has Video'] || '').toUpperCase() === 'TRUE',
-    status: r['Status'] || 'Open', sortOrder: parseInt(r['Sort Order'] || '0') || 0
+    id: r['Test Deadlines ID'] || r['ID'] || r['id'] || '',
+    name: r['Name'] || r['name'] || '',
+    examDate: r['Exam Date'] || r['exam_date'] || '',
+    deadline: r['Deadline'] || r['deadline'] || '',
+    applyUrl: r['Apply URL'] || r['apply_url'] || '',
+    hasVideo: (r['Has Video'] || r['has_video'] || '').toUpperCase() === 'TRUE',
+    status: r['Status'] || r['status'] || 'Open',
+    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
 
   window._tdData = tests;
@@ -721,12 +798,14 @@ function updateTDStats() {
   const open = d.filter(t => t.status === 'Open').length;
   const upcoming = d.filter(t => t.status === 'Upcoming').length;
   const closed = d.filter(t => t.status === 'Closed').length;
-  document.getElementById('tdStats').innerHTML =
+  const el = document.getElementById('tdStats');
+  if (el) el.innerHTML =
     `<span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span>`;
 }
 
 function renderTDPills() {
-  document.getElementById('tdFilter').innerHTML = ['all','open','upcoming','closed'].map(f =>
+  const el = document.getElementById('tdFilter');
+  if (el) el.innerHTML = ['all','open','upcoming','closed'].map(f =>
     `<button class="pill${window._tdFilter === f ? ' active' : ''}" onclick="window._tdFilter='${f}';renderTDRows()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`
   ).join('');
 }
@@ -746,14 +825,16 @@ function renderTDRows() {
     if (!isNaN(an) && !isNaN(bn)) return (an - bn) * sort.dir;
     return String(av).localeCompare(String(bv)) * sort.dir;
   });
-  document.getElementById('tdBody').innerHTML = list.length === 0 ?
-    '<tr><td colspan="5" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No records found</td></tr>' :
+  const el = document.getElementById('tdBody');
+  if (!el) return;
+  el.innerHTML = list.length === 0 ?
+    '<tr><td colspan="5" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No records found. Check your Google Sheet has a "Test Deadlines" tab with data.</td></tr>' :
     list.map((t, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
       <td class="name"><span class="trunc">${esc(t.name)}</span></td>
       <td><span style="display:flex;align-items:center;gap:4px;color:var(--fg3);font-size:.75rem;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>${esc(t.examDate)}</span></td>
       <td><span style="font-size:.75rem;font-weight:600;color:${t.status === 'Open' ? 'var(--amber)' : t.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'};display:flex;align-items:center;gap:4px;font-family:var(--font-mono)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(t.deadline)}</span></td>
       <td>${statusBadge(t.status)}</td>
-      <td><div class="actions">${bookmarkIcon(t.id)}${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-sm red">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}${t.hasVideo ? `<a href="#" class="btn-sm purple"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg></a>` : ''}</div></td>
+      <td><div class="actions">${bookmarkIcon(t.id)}${t.applyUrl ? `<a href="${esc(t.applyUrl)}" target="_blank" rel="noopener" class="btn-sm red">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}</div></td>
     </tr>`).join('');
 }
 
@@ -763,14 +844,21 @@ async function renderUniversities(el) {
 
   const [uniRows, courseRows] = await Promise.all([fetchSheet('Universities'), fetchSheet('Courses')]);
   const unis = uniRows.map(r => ({
-    id: r['Universities ID'] || r['ID'] || '', name: r['Full Name'] || '', shortName: r['Short Name'] || '',
-    location: r['Location'] || '', type: r['Type'] || '', color: r['Color'] || 'var(--accent)',
-    sortOrder: parseInt(r['Sort Order'] || '0') || 0
+    id: r['Universities ID'] || r['ID'] || r['id'] || '',
+    name: r['Full Name'] || r['Name'] || r['name'] || '',
+    shortName: r['Short Name'] || r['short_name'] || '',
+    location: r['Location'] || r['location'] || '',
+    type: r['Type'] || r['type'] || '',
+    color: r['Color'] || r['color'] || 'var(--accent)',
+    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
   const courses = courseRows.map(r => ({
-    id: r['Courses ID'] || r['ID'] || '', name: r['Course Name'] || '', duration: r['Duration'] || '',
-    eligibility: r['Eligibility'] || '', universityId: r['University ID'] || '',
-    sortOrder: parseInt(r['Sort Order'] || '0') || 0
+    id: r['Courses ID'] || r['ID'] || r['id'] || '',
+    name: r['Course Name'] || r['Name'] || r['name'] || '',
+    duration: r['Duration'] || r['duration'] || '',
+    eligibility: r['Eligibility'] || r['eligibility'] || '',
+    universityId: r['University ID'] || r['university_id'] || '',
+    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
 
   window._uniData = unis;
@@ -803,7 +891,7 @@ async function renderUniversities(el) {
     const tc = (type) => typeColors[type] || { bg: 'rgba(59,255,108,.08)', text: 'var(--accent)', border: 'var(--accent-md)' };
 
     el.innerHTML = `
-      <div class="page-header"><h1>Indian Universities</h1><p>Browse ${list.length}+ institutions across India</p></div>
+      <div class="page-header"><h1>Indian Universities</h1><p>Browse ${list.length} institution${list.length !== 1 ? 's' : ''} across India</p></div>
       <div class="filter-bar">
         <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Search institutions..." value="${esc(window._uniSearch)}" oninput="window._uniSearch=this.value;window._uniPage=1;window._renderUnis()"></div>
         <div class="pill-group" style="overflow-x:auto">${['all', ...types].map(t => `<button class="pill${window._uniTypeFilter === t || (t === 'all' && !window._uniTypeFilter) ? ' active' : ''}" onclick="window._uniTypeFilter='${t === 'all' ? '' : t}';window._uniPage=1;window._renderUnis()">${t === 'all' ? 'All' : t}</button>`).join('')}</div>
@@ -814,8 +902,7 @@ async function renderUniversities(el) {
         const abbr = (u.shortName || u.name).slice(0, 3).toUpperCase();
         const isExpanded = window._uniExpanded === u.id;
         const uniCourses = courses.filter(cr => cr.universityId === u.id).sort((a, b) => a.sortOrder - b.sortOrder);
-        const color = u.color && u.color.startsWith('#') ? u.color : c.text.replace('var(--','').replace(')','');
-        return `<div class="card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded='${isExpanded ? '' : u.id}';window._renderUnis()" style="cursor:pointer;${isExpanded ? 'border-color:var(--accent-md);background:var(--surface2)' : ''}">
+        return `<div class="card animate-in stagger-${Math.min(i, 5)}" onclick="window._uniExpanded=window._uniExpanded===u.id?null:u.id;window._renderUnis()" style="cursor:pointer">
           <div class="card-header">
             <div style="display:flex;align-items:start;gap:10px;flex:1;min-width:0">
               <div class="card-avatar" style="background:${c.bg};color:${c.text};border-color:${c.border}">${abbr}</div>
@@ -827,10 +914,10 @@ async function renderUniversities(el) {
             </div>
             <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
               ${bookmarkIcon(u.id)}
-              <span style="color:var(--fg3);font-size:10px;transform:rotate(${isExpanded ? 90 : 0}deg);transition:transform .15s;display:inline-block">▶</span>
+              <span style="color:var(--fg3);font-size:10px;display:inline-block;transition:transform .15s;transform:rotate(${isExpanded ? 90 : 0}deg)">▶</span>
             </div>
           </div>
-          ${isExpanded ? (uniCourses.length ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span>${cr.eligibility ? `<span style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(cr.eligibility)}</span>` : ''}</span></div>`).join('')}</div>` : '<div style="padding:10px 0;font-size:.75rem;color:var(--fg3);font-family:var(--font-mono)">No courses listed</div>') : ''}
+          ${isExpanded ? (uniCourses.length ? `<div class="courses-list">${uniCourses.map(cr => `<div class="course-item"><span class="cname">${esc(cr.name)}</span><span class="cdot"><span><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(cr.duration)}</span>${cr.eligibility ? `<span style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(cr.eligibility)}</span>` : ''}</span></div>`).join('')}</div>` : '<div style="padding:10px 0;font-size:.75rem;color:var(--fg3);font-family:var(--font-mono)">No courses listed for this institution yet</div>') : ''}
         </div>`;
       }).join('')}</div>
       ${total > 1 ? `<div class="pagination"><button onclick="window._uniPage=Math.max(1,window._uniPage-1);window._renderUnis()" ${window._uniPage === 1 ? 'disabled' : ''}>← Prev</button>${Array.from({ length: total }, (_, i) => i + 1).map(p => `<button class="${p === window._uniPage ? 'active' : ''}" onclick="window._uniPage=${p};window._renderUnis()">${p}</button>`).join('')}<button onclick="window._uniPage=Math.min(${total},window._uniPage+1);window._renderUnis()" ${window._uniPage === total ? 'disabled' : ''}>Next →</button></div>` : ''}
@@ -847,9 +934,15 @@ async function renderCollegeDeadlines(el) {
 
   const rows = await fetchSheet('College Deadlines');
   const cds = rows.map(r => ({
-    id: r['College Deadlines ID'] || r['ID'] || '', collegeName: r['College Name'] || '', program: r['Program'] || '',
-    round: r['Round'] || '', deadline: r['Deadline'] || '', status: r['Status'] || 'Open',
-    applyUrl: r['Apply URL'] || '', notes: r['Notes'] || '', sortOrder: parseInt(r['Sort Order'] || '0') || 0
+    id: r['College Deadlines ID'] || r['ID'] || r['id'] || '',
+    collegeName: r['College Name'] || r['college_name'] || r['College'] || '',
+    program: r['Program'] || r['program'] || '',
+    round: r['Round'] || r['round'] || '',
+    deadline: r['Deadline'] || r['deadline'] || '',
+    status: r['Status'] || r['status'] || 'Open',
+    applyUrl: r['Apply URL'] || r['apply_url'] || '',
+    notes: r['Notes'] || r['notes'] || '',
+    sortOrder: parseInt(r['Sort Order'] || r['sort_order'] || '0') || 0
   }));
   cds.sort((a, b) => a.sortOrder - b.sortOrder);
 
@@ -872,7 +965,7 @@ async function renderCollegeDeadlines(el) {
         <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
         <div class="pill-group">${['all','open','upcoming','closed'].map(f => `<button class="pill${window._cdFilter === f ? ' active' : ''}" onclick="window._cdFilter='${f}';window._renderCDs()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`).join('')}</div>
       </div>
-      <div class="card-grid">${list.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3></div>' :
+      <div class="card-grid">${list.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3><p>Check your "College Deadlines" sheet tab has data</p></div>' :
       list.map((d, i) => `<div class="card animate-in stagger-${Math.min(i, 5)}${d.status === 'Closed' ? ' dimmed' : ''}">
         <div class="card-header">
           <div class="card-info"><h3>${esc(d.collegeName)}</h3><div class="sub">${esc(d.program)}</div></div>
@@ -901,9 +994,13 @@ async function renderCutoffs(el) {
 
   const rows = await fetchSheet('Cutoffs');
   const cutoffs = rows.map(r => ({
-    college: r['College'] || '', exam: r['Exam'] || '', cutoff2024: r['Cutoff 2024'] || '-', cutoff2023: r['Cutoff 2023'] || '-',
-    cutoff2022: r['Cutoff 2022'] || '-', category: r['Category'] || 'General'
-  }));
+    college: r['College'] || r['college'] || '',
+    exam: r['Exam'] || r['exam'] || '',
+    cutoff2024: r['Cutoff 2024'] || r['2024'] || '-',
+    cutoff2023: r['Cutoff 2023'] || r['2023'] || '-',
+    cutoff2022: r['Cutoff 2022'] || r['2022'] || '-',
+    category: r['Category'] || r['category'] || 'General'
+  })).filter(r => r.college);
 
   window._cutData = cutoffs;
   window._cutFilter = 'all';
@@ -929,7 +1026,7 @@ async function renderCutoffs(el) {
     });
 
     el.innerHTML = `
-      <div class="page-header"><h1>Cutoffs</h1><p>Entrance exam cutoffs for top institutions (2022–2024)</p></div>
+      <div class="page-header"><h1>Cutoffs</h1><p>Entrance exam cutoffs for top institutions</p></div>
       <div class="filter-bar">
         <div class="pill-group">${['all','General','OBC','SC/ST'].map(c => `<button class="pill${window._cutFilter === c ? ' active' : ''}" onclick="window._cutFilter='${c}';window._renderCuts()">${c === 'all' ? 'All Categories' : c}</button>`).join('')}</div>
         <div class="legend"><span class="leg"><span class="ldot" style="background:var(--accent)"></span>High (≥97%)</span><span class="leg"><span class="ldot" style="background:var(--amber)"></span>Mid (≥94%)</span><span class="leg"><span class="ldot" style="background:var(--red)"></span>Below</span></div>
@@ -937,7 +1034,7 @@ async function renderCutoffs(el) {
       <div class="table-wrap"><div class="table-scroll"><table>
         <thead><tr>${[{f:'college',l:'College'},{f:'exam',l:'Exam'},{f:'cutoff2024',l:'2024'},{f:'cutoff2023',l:'2023'},{f:'cutoff2022',l:'2022'},{f:'category',l:'Category'}].map(c =>
           `<th onclick="window._cutSort={field:'${c.f}',dir:window._cutSort.field==='${c.f}'?-window._cutSort.dir:1};window._renderCuts()">${c.l} <span class="sort-icon">↕</span></th>`).join('')}</tr></thead>
-        <tbody>${list.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No cutoff data found</td></tr>' : list.map((r, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
+        <tbody>${list.length === 0 ? '<tr><td colspan="6" style="text-align:center;padding:48px;color:var(--fg3);font-family:var(--font-mono)">No cutoff data found. Check your "Cutoffs" sheet tab and column names (College, Exam, Cutoff 2024, Cutoff 2023, Cutoff 2022, Category).</td></tr>' : list.map((r, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
           <td class="name">${esc(r.college)}</td>
           <td style="color:var(--cyan);font-weight:600;font-size:.75rem;font-family:var(--font-mono)">${esc(r.exam)}</td>
           <td class="${ccClass(r.cutoff2024)}">${esc(r.cutoff2024)}</td>
@@ -1012,6 +1109,15 @@ function handleBookmarkClick(id) {
 //  INIT
 // ═══════════════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  // Apply saved accent colour to nav mark
+  const accent = localStorage.getItem('isc-accent');
+  const grad = localStorage.getItem('isc-gradient');
+  const navMark = document.getElementById('navMark');
+  if (navMark) {
+    const col = grad ? JSON.parse(grad).a : (accent || '#3bff6c');
+    navMark.style.background = col;
+    navMark.style.boxShadow = `0 0 8px ${col}`;
+  }
   updateBadges();
   setTab('universities');
 });
