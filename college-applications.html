@@ -745,7 +745,7 @@ async function fetchSheet(name) {
     const rawRows = tableData.rows || [];
 
     // ── Case 1: columns have labels (normal sheet with a header row) ──
-    const hasLabels = rawCols.some(c => c.label && c.label.trim() !== '');
+    const labelledCount = rawCols.filter(c => c.label && c.label.trim() !== '').length; const hasLabels = labelledCount > rawCols.length / 2;
     if (hasLabels) {
       const cols = rawCols.map(c => (c.label || c.id || '').trim());
       return rawRows.map(row => {
