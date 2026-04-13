@@ -691,7 +691,6 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
   </div>
 </nav>
 
-<!-- MAINTENANCE BANNER -->
 <div class="maint-banner">
   <span class="maint-pill">MAINT</span>
   <span class="maint-icon">🔧</span>
@@ -991,7 +990,15 @@ function mkCard(ch, g, idx) {
   const tags = document.createElement('div'); tags.className = 'cc-tags';
   (ch.tags || []).slice(0, 3).forEach(t => { const s = document.createElement('span'); s.className = 'cc-tag' + (t === 'TOP PICK' ? ' t-top' : t.includes('PYQ') || t.includes('Maha') ? ' t-pyq' : ''); s.textContent = t; tags.appendChild(s); });
   body.appendChild(tags);
-  const desc = document.createElement('div'); desc.className = 'cc-desc'; desc.textContent = ch.desc || ''; body.appendChild(desc);
+  const desc = document.createElement('div');
+  desc.className = 'cc-desc';
+  // Use textContent (never innerHTML) so arbitrary YouTube descriptions
+  // cannot inject markup. -webkit-line-clamp will still clamp correctly.
+  const descText = (ch.desc || '').trim();
+  if (descText) {
+    desc.textContent = descText;
+    body.appendChild(desc);
+  }
   card.appendChild(body);
 
   const yt = document.createElement('a'); yt.className = 'cc-yt'; yt.href = ch.url || '#'; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
