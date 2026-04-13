@@ -1,747 +1,353 @@
-{
-  "commerce": [
-    {
-      "subject": "Accountancy",
-      "color": "#378add",
-      "bg": "#0a1020",
-      "icon": "🧾",
-      "channels": [
-        {
-          "id": "rajat_acc",
-          "name": "Rajat Arora",
-          "handle": "@rajataroraofficial",
-          "av": "📊",
-          "isTop": true,
-          "desc": "Top for conceptual depth, tricky problems, and quick revisions. Students consistently score 95+.",
-          "tags": [
-            "TOP PICK",
-            "Conceptual Depth",
-            "95+ Results"
-          ],
-          "url": "https://www.youtube.com/@rajataroraofficial",
-          "pat": "circuit",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kmQE0tZ6Qe3wEzyWsXYwztLG8vdF7LgX5GWPwWV05V53k=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/mLETVJIcpdJxiHqXLoelaYoow8iKBERFOYTtkSFsZKdr_aXQXPWMovqE0IwrJGQfDs89zvuu=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "sunil_acc",
-          "name": "Sunil Panda",
-          "handle": "@sunilpandaofficial",
-          "av": "🧾",
-          "isTop": false,
-          "desc": "Community favourite — full lectures, scoring tips, complete syllabus with board-exam focus.",
-          "tags": [
-            "Community Fav",
-            "Full Lectures",
-            "ISC Focus"
-          ],
-          "url": "https://www.youtube.com/@sunilpandaofficial",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/QEGh26V-RkzSZK7uTkEG7I9wDIiujJ0laL8gelY7-bqVgF7A5Of_D2YU6ZXLhUoqdH4hBXf74w=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ibI2OuQnEzvV2moAciiwohbWoKaleQCMwem6v2rm2nenAhS5TbN48gpoiheyLbsqkz37A5AO=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "parag_acc",
-          "name": "CA Parag Gupta",
-          "handle": "@caparaggupta",
-          "av": "🏆",
-          "isTop": false,
-          "desc": "Guess papers, marathons, sure-shot questions. Great for 100-target revision.",
-          "tags": [
-            "Advanced",
-            "Guess Papers",
-            "100-Target"
-          ],
-          "url": "https://www.youtube.com/@caparaggupta",
-          "pat": "triangles",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mQbmRmTcXoDOOvxIqQhIxZrNlH_pG_jwWu-WvycG1Zn78=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/zr5V7GB04j6iQIEvQY63Hpi0O4VBCEhZcrNNVGY-YaY8kp755CXTTlvYhCTszy-MYFIEJZdM=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "shubham_acc",
-          "name": "Shubham Jagdish",
-          "handle": "@ShubhamJagdish",
-          "av": "💡",
-          "isTop": true,
-          "desc": "ISC commerce legend — crystal-clear concepts, real exam strategy, TEDx speaker. Special papers & marathons available.",
-          "tags": [
-            "TOP PICK",
-            "One-Stop",
-            "Obsession"
-          ],
-          "url": "https://www.youtube.com/user/shubhamnidhi",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/sQoYwxFOEYWAssQIcCfok4qYGrwPi-5sbn_7KLocFD-dnU9jq7b_PkXgSJOWbtDDZkYSIuBYdA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/-xYKRnORM2Qd5-osnX-ab9volEgFaPk-WEdDdYHfceyyXNczOEZVoT7FaDU8hoGhyhVijSrt2w=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "gaurav_acc",
-          "name": "Gaurav Jain",
-          "handle": "@gauravjain",
-          "av": "🧠",
-          "isTop": true,
-          "desc": "Known as Commerce Baba, highly praised for high-energy teaching and making Accountancy extremely engaging.",
-          "tags": [
-            "TOP PICK",
-            "High Energy"
-          ],
-          "url": "https://www.youtube.com/@gauravjain",
-          "pat": "hexagons",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mCQwFx5OlMpo0FgSVAonVjRi7fkefB4hIYpg150Gu8WA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "hardik_acc",
-          "name": "Hardik Manchanda",
-          "handle": "@HardikManchanda",
-          "av": "👨‍🏫",
-          "isTop": false,
-          "desc": "Excellent for detailed concept clarity and tackling difficult board-level numericals.",
-          "tags": [
-            "Concept Clarity"
-          ],
-          "url": "https://www.youtube.com/@HardikManchanda",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kC5Zr2kJOaePe2Z0uI-t0Vz9GIay0B0xdZFIYAvChhJQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        }
-      ]
-    },
-    {
-      "subject": "Economics",
-      "color": "#639922",
-      "bg": "#0e1808",
-      "icon": "📈",
-      "channels": [
-        {
-          "id": "sunil_eco",
-          "name": "Sunil Panda",
-          "handle": "@sunilpandaofficial",
-          "av": "📈",
-          "isTop": true,
-          "desc": "Best for theory + numericals. Strong ISC board focus across all macro topics.",
-          "tags": [
-            "TOP PICK",
-            "Theory+Numericals"
-          ],
-          "url": "https://www.youtube.com/@sunilpandaofficial",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/QEGh26V-RkzSZK7uTkEG7I9wDIiujJ0laL8gelY7-bqVgF7A5Of_D2YU6ZXLhUoqdH4hBXf74w=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ibI2OuQnEzvV2moAciiwohbWoKaleQCMwem6v2rm2nenAhS5TbN48gpoiheyLbsqkz37A5AO=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "shubham_eco",
-          "name": "Shubham Jagdish",
-          "handle": "@ShubhamJagdish",
-          "av": "💡",
-          "isTop": false,
-          "desc": "Excellent Economics under Obsession — macro and micro with ISC exam precision. Special Paper 1/2/3 series recommended.",
-          "tags": [
-            "ISC Focused",
-            "Macro+Micro"
-          ],
-          "url": "https://www.youtube.com/user/shubhamnidhi",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/sQoYwxFOEYWAssQIcCfok4qYGrwPi-5sbn_7KLocFD-dnU9jq7b_PkXgSJOWbtDDZkYSIuBYdA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/-xYKRnORM2Qd5-osnX-ab9volEgFaPk-WEdDdYHfceyyXNczOEZVoT7FaDU8hoGhyhVijSrt2w=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "asian_academy_eco",
-          "name": "Asian Academy E-Classes",
-          "handle": "@asianacademye-classes",
-          "av": "🎓",
-          "isTop": true,
-          "desc": "Highly recommended hidden gem for ISC Economics. Concepts are clear with proper notes for 95+ scores.",
-          "tags": [
-            "Hidden Gem",
-            "ISC Focused",
-            "Concepts"
-          ],
-          "url": "https://www.youtube.com/@asianacademye-classes",
-          "pat": "lines",
-          "avatarUrl": "https://yt3.ggpht.com/WKAzH31-YRXO6V2uUMFz1Ps7slHCPQWjAc4BXk_x4ge8slEX428XkGZmFQv24sOObMGz2QMdx8k=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "gaurav_eco",
-          "name": "Gaurav Jain",
-          "handle": "@gauravjain",
-          "av": "🧠",
-          "isTop": false,
-          "desc": "Simplifies complex macro and Indian economic development concepts with great mnemonics.",
-          "tags": [
-            "Mnemonics",
-            "Engaging"
-          ],
-          "url": "https://www.youtube.com/@gauravjain",
-          "pat": "hexagons",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mCQwFx5OlMpo0FgSVAonVjRi7fkefB4hIYpg150Gu8WA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        }
-      ]
-    },
-    {
-      "subject": "Business Studies",
-      "color": "#ba7517",
-      "bg": "#1e1208",
-      "icon": "🏢",
-      "channels": [
-        {
-          "id": "aryan_bst",
-          "name": "Aryan Tutorials",
-          "handle": "@AryanTutorials",
-          "av": "📋",
-          "isTop": false,
-          "desc": "2026-specific important topics and paper analysis. Great last-minute prep.",
-          "tags": [
-            "2026 Specific",
-            "Paper Analysis"
-          ],
-          "url": "https://www.youtube.com/@AryanTutorials",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_lRlXJwRsY0feEJ3_ZQAECFIMDd07XskCvX2PWj92um1mY=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/QgtvZ4RoWNIndtA5U9SAFml4vmQRzVJd5gdphLCE4K9v4M_1tD0Wwa2IJaV0f-lPXLyRuHyq=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "ashwin_s_commerce_wo_mmxlyv91",
-          "name": "Ashwin's Commerce World",
-          "handle": "@AshwinsCommerceWorld",
-          "av": "📺",
-          "isTop": false,
-          "desc": "Commerce Subjects ONLY:\nICSE 9 & 10\nISC 11 & 12\nCBSE 11 & 12\nCUET",
-          "tags": [
-            "Commerce",
-            "SCCommerce",
-            "Class 12",
-            "People Reccomendation"
-          ],
-          "url": "https://www.youtube.com/@AshwinsCommerceWorld",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/F7_6pW2DY3JyEE-Zf79NAqv14OW8ra6JfPY2DhtapiGEBjLkPbPKcMMEqAnzYpvLpGUzq0PbjQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/p7DXkHIGY04UiJUsjkep4nnO2YRNqzJVvJEB0MdpkRikqfvHKqd2p2lRCRRgxvLLGoL4DmuHG7w=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "sunil_bst",
-          "name": "Sunil Panda",
-          "handle": "@sunilpandaofficial",
-          "av": "🏢",
-          "isTop": true,
-          "desc": "One-shots and detailed case-study practice for maximizing Business Studies scores.",
-          "tags": [
-            "TOP PICK",
-            "Case Studies"
-          ],
-          "url": "https://www.youtube.com/@sunilpandaofficial",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/QEGh26V-RkzSZK7uTkEG7I9wDIiujJ0laL8gelY7-bqVgF7A5Of_D2YU6ZXLhUoqdH4hBXf74w=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ibI2OuQnEzvV2moAciiwohbWoKaleQCMwem6v2rm2nenAhS5TbN48gpoiheyLbsqkz37A5AO=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "English",
-      "color": "#e8a05f",
-      "bg": "#1e1408",
-      "icon": "📖",
-      "channels": [
-        {
-          "id": "aryan_eng",
-          "name": "Aryan Tutorials",
-          "handle": "@AryanTutorials",
-          "av": "✍️",
-          "isTop": true,
-          "desc": "Dominates 2026 prep — Paper 1/2, grammar, directed writing, CFQs, and literature.",
-          "tags": [
-            "TOP PICK",
-            "Paper 1+2",
-            "Literature"
-          ],
-          "url": "https://www.youtube.com/@AryanTutorials",
-          "pat": "lines",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_lRlXJwRsY0feEJ3_ZQAECFIMDd07XskCvX2PWj92um1mY=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/QgtvZ4RoWNIndtA5U9SAFml4vmQRzVJd5gdphLCE4K9v4M_1tD0Wwa2IJaV0f-lPXLyRuHyq=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "sudhir_eng",
-          "name": "Study with Sudhir",
-          "handle": "@StudywithSudhir",
-          "av": "📝",
-          "isTop": false,
-          "desc": "Solid English coverage alongside multi-subject commerce support.",
-          "tags": [
-            "Solid Coverage",
-            "Multi-Subject"
-          ],
-          "url": "https://www.youtube.com/@StudywithSudhir",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/TT8MIUneWI5Xg430s0jyzVZIqoiiwGIu6rlCrLgMo-02ROHBeDl8bDTk9u9NbvrzzHfyUhQlT94=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZQE0DgyYX57toycsBDWOUdfmCrRjw4T1DRkxZUkpTkFFP_08lcGhrfqlypQpQC9WmaoUc087=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "english_express",
-          "name": "The English Express (Ranjana Chatterjee)",
-          "handle": "@TheEnglishExpress",
-          "av": "🗣️",
-          "isTop": true,
-          "desc": "Exceptional channel for ISC English Literature (Macbeth/Tempest, Poetry) and Language (Phrasal Verbs, Transformation).",
-          "tags": [
-            "TOP PICK",
-            "Literature",
-            "Language"
-          ],
-          "url": "https://www.youtube.com/@TheEnglishExpress",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mgGx7956UACbtsTChNXoxK-ySQJJtQhGi46GSZvQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        }
-      ]
-    }
-  ],
-  "science": [
-    {
-      "subject": "Physics",
-      "color": "#5fd4e8",
-      "bg": "#081620",
-      "icon": "⚛️",
-      "channels": [
-        {
-          "id": "yash_phy",
-          "name": "Yash Maheshwari",
-          "handle": "@YASHHESH",
-          "av": "👨‍🏫",
-          "isTop": true,
-          "desc": "Top pick for ISC derivations, full lectures, competency questions, and 2026 expected questions.",
-          "tags": [
-            "TOP PICK",
-            "Derivations",
-            "Full Syllabus"
-          ],
-          "url": "https://www.youtube.com/@YASHHESH",
-          "pat": "circuit",
-          "avatarUrl": "https://yt3.ggpht.com/jtJeh-RBZlyUU81h0N5haFeX7T88iCoIe_BvcA-rLdOOSSpcCN0I_BA9Z-Yg4O8PMYfLfKt8eQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZgsjV55CNR6nm9S2Q_0UsXGN8KIfzs4LzwrLUg3yUHWX4sARwg-a-t4IpQsh7LGPGvTj_UqOhfw=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "umesh_phy",
-          "name": "PHYSICS with Umesh Rajoria",
-          "handle": "@PHYSICSwithUmeshRajoria",
-          "av": "🧲",
-          "isTop": false,
-          "desc": "Great resource for detailed chapter-wise ISC/CBSE physics concepts, one-shots, and handwritten notes.",
-          "tags": [
-            "One-Shots",
-            "Handwritten Notes"
-          ],
-          "url": "https://www.youtube.com/@PHYSICSwithUmeshRajoria",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/MQldQc7oxp43Eia3PxkHip2kEQ0VscusifqLoRWNZyrvuqkpkR788vizbo0XFf0ayoVJRbw=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/IGOXpii__lxOHvdWVv1ZmwK3eWxIMWRm3EiUfolOlGfxurhDFqiCtNDTz9fX01yu_7ZQpv0q=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "science_and_fun_phy",
-          "name": "Science and Fun",
-          "handle": "@scienceandfun9th10th11th",
-          "av": "🧪",
-          "isTop": true,
-          "desc": "Ashu Ghai is highly recommended by seniors for deep conceptual clarity and making Physics incredibly fun.",
-          "tags": [
-            "TOP PICK",
-            "Conceptual",
-            "Fun"
-          ],
-          "url": "https://www.youtube.com/@scienceandfun9th10th11th",
-          "pat": "cells",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_nRm-xqfLJJWynoHGMhyHMwYUsNZJiWKxev5sYnIaf7KvGvXFXY-L9EqaMrhr3VzoI0SQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "arvind_phy",
-          "name": "Arvind Academy",
-          "handle": "@ArvindAcademy",
-          "av": "🎯",
-          "isTop": true,
-          "desc": "Masterful 5-day and 15-day revision roadmaps specifically tailored for scoring 95+ in Class 12 Boards.",
-          "tags": [
-            "Roadmaps",
-            "Score Booster"
-          ],
-          "url": "https://www.youtube.com/@ArvindAcademy",
-          "pat": "triangles",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_m3_B4XoSJHMCvRW6MFXl7J3NYrs_kPXrgcVrsKEP04-Fc=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/6yHrB4gXLIzt6M9PvRvvxkx4cFZ8A9b9DJmiT1A3ByWx7bRhBwnTTGkzSb-_tMIGh8C8odYmOcs=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "ssp_phy",
-          "name": "Sachin Sir Physics",
-          "handle": "@sachinsirphysics",
-          "av": "⚡",
-          "isTop": false,
-          "desc": "Known for his high-energy 'SSP' style, offering great one-shots and physics numerical solving techniques.",
-          "tags": [
-            "High Energy",
-            "One Shots"
-          ],
-          "url": "https://www.youtube.com/@sachinsirphysics",
-          "pat": "circuit",
-          "avatarUrl": "https://yt3.ggpht.com/HVfc8VTwukpQswzpLfBa4luCxu74ZUNdX73KILJ47iaYdPKWegHh5XFCcgIkrra6zm5e3ED59hY=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/YQK513M9qT0V0H0UoZnWe0XaQqP8uu1B_IVIGEaTzQgXoKpTOXf_ejUM5a0vg7zeL1pz936_eBE=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "Chemistry",
-      "color": "#5fffa0",
-      "bg": "#081e12",
-      "icon": "🧪",
-      "channels": [
-        {
-          "id": "yash_chem",
-          "name": "Yash Maheshwari",
-          "handle": "@YASHHESH",
-          "av": "👨‍🏫",
-          "isTop": true,
-          "desc": "Full ISC syllabus — strong inorganic/organic breakdown with board-exam strategy.",
-          "tags": [
-            "TOP PICK",
-            "Full Syllabus"
-          ],
-          "url": "https://www.youtube.com/@YASHHESH",
-          "pat": "hexagons",
-          "avatarUrl": "https://yt3.ggpht.com/jtJeh-RBZlyUU81h0N5haFeX7T88iCoIe_BvcA-rLdOOSSpcCN0I_BA9Z-Yg4O8PMYfLfKt8eQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZgsjV55CNR6nm9S2Q_0UsXGN8KIfzs4LzwrLUg3yUHWX4sARwg-a-t4IpQsh7LGPGvTj_UqOhfw=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "edufyhub_chem",
-          "name": "EdufyHub",
-          "handle": "@EdufyHub",
-          "av": "🔬",
-          "isTop": false,
-          "desc": "2026 paper analysis, maha-revision, exact board-style questions.",
-          "tags": [
-            "Paper Analysis",
-            "Maha-Revision"
-          ],
-          "url": "https://www.youtube.com/@EdufyHub",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kFKyUfpTt-g7ZZ-6LZ1sANP6791YgWTIsbAPxggknb2p4vMYee8SivclGdDEQnvFVPyg=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "bharat_chem",
-          "name": "Bharat Panchal - Chemistry Guruji",
-          "handle": "@BharatPanchalChemistry",
-          "av": "⚗️",
-          "isTop": true,
-          "desc": "An absolute legend for Chemistry boards. His 30-minute revision videos and cheat notes are lifesavers.",
-          "tags": [
-            "TOP PICK",
-            "Legendary Notes",
-            "Organic"
-          ],
-          "url": "https://www.youtube.com/@BharatPanchalChemistry",
-          "pat": "cells",
-          "avatarUrl": "https://yt3.ggpht.com/LzMv1aR7s4eEv2qbPwfZVC_4Di8eMb61FZQkDACNaJUXgwYptMRxgGpY7NbtzKOMhCwncNmeFQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/8cjaqe700p0NpdNDONFWcfRhhojTbMci2rztNXqiRH3T8iAh1A30j6m-qUyX9VXSyYBqhgDl=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "sourabh_chem",
-          "name": "Sourabh Raina",
-          "handle": "@SourabhRaina",
-          "av": "🧪",
-          "isTop": false,
-          "desc": "Excellent for name reactions, PYQs, and quick, straightforward revision of complex chapters.",
-          "tags": [
-            "PYQs",
-            "Quick Revision"
-          ],
-          "url": "https://www.youtube.com/@SourabhRaina",
-          "pat": "lines",
-          "avatarUrl": "https://yt3.ggpht.com/td4UrZe49X3luU9rAnjTauibcCgoy5djSoBg_pMjMQVPNeSGGXthyfKOYSuwq4Io2gq-A-4Rgg=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/1XjGSEHGj7WlM5Y5bsahmGcSPZJGim-JNxEZCezTt_PdTYlqDzFn51304s4KFDwgN1MrChlg=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "Biology",
-      "color": "#7ab86a",
-      "bg": "#0c1e0c",
-      "icon": "🌿",
-      "channels": [
-        {
-          "id": "yash_bio",
-          "name": "Yash Maheshwari",
-          "handle": "@YASHHESH",
-          "av": "👨‍🏫",
-          "isTop": true,
-          "desc": "Elite for maha-revision, sure-shot topics, and 95+ strategy.",
-          "tags": [
-            "TOP PICK",
-            "Maha-Revision"
-          ],
-          "url": "https://www.youtube.com/@YASHHESH",
-          "pat": "cells",
-          "avatarUrl": "https://yt3.ggpht.com/jtJeh-RBZlyUU81h0N5haFeX7T88iCoIe_BvcA-rLdOOSSpcCN0I_BA9Z-Yg4O8PMYfLfKt8eQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZgsjV55CNR6nm9S2Q_0UsXGN8KIfzs4LzwrLUg3yUHWX4sARwg-a-t4IpQsh7LGPGvTj_UqOhfw=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "edufyhub_bio",
-          "name": "EdufyHub",
-          "handle": "@EdufyHub",
-          "av": "🔬",
-          "isTop": false,
-          "desc": "Specializes in last-minute Maha-Revision sessions, important diagrams, and expected board question patterns for ISC 2026 Biology.",
-          "tags": [
-            "Maha-Revision",
-            "Diagrams",
-            "2026 Focus"
-          ],
-          "url": "https://www.youtube.com/@EdufyHub",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kFKyUfpTt-g7ZZ-6LZ1sANP6791YgWTIsbAPxggknb2p4vMYee8SivclGdDEQnvFVPyg=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "isc_wallah_bio",
-          "name": "ISC Wallah Class 11 & 12",
-          "handle": "@iscwallahclass11-12",
-          "av": "🧬",
-          "isTop": true,
-          "desc": "Dedicated Physics Wallah channel for ISC. Highly recommended for full Biology syllabus coverage, clear basics, and board preparation.",
-          "tags": [
-            "TOP PICK",
-            "Full Syllabus",
-            "Dedicated ISC"
-          ],
-          "url": "https://www.youtube.com/@iscwallahclass11-12",
-          "pat": "circuit",
-          "avatarUrl": "https://yt3.ggpht.com/98KytRXaQTfmXAvco01qtYgZfIESFntN8a1LuGZiTlPWIQQiRliKcKDqhYwD0YXEaCGHJQdNNA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/jTE9cs4RwGbK6GMMY7Oc14oeSAlHK9nEanYOjKv79_XKVd8SzlE66N4Dq-zBl3LUmhWPCDHSztk=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "garima_bio",
-          "name": "Garima Goel Biology",
-          "handle": "@GarimaGoelBiology",
-          "av": "🌱",
-          "isTop": false,
-          "desc": "Incredible mnemonics and diagram breakdowns. While heavy on NEET, her board-specific content is top-tier.",
-          "tags": [
-            "Mnemonics",
-            "Diagrams"
-          ],
-          "url": "https://www.youtube.com/@GarimaGoelBiology",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/NZqIuP5HhkB_8MGgJkNowspCty9RE7utquNwTgnILR1A_lEOt8cjAFnOcpGwUZeSAqblAIiEsQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/SNn92HJiLjsQndcK7Pu80N9__2O6Rp4m_qAU06q88GClmwFlEadNLaxCNGmi6u7c8kaWB-CgSg=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "Mathematics",
-      "color": "#7f77dd",
-      "bg": "#10101e",
-      "icon": "📐",
-      "channels": [
-        {
-          "id": "yash_maths",
-          "name": "Yash Maheshwari",
-          "handle": "@YASHHESH",
-          "av": "👨‍🏫",
-          "isTop": true,
-          "desc": "One-shots, integration/vectors/3D, important questions, ISC pattern solutions. Also available on Unacademy.",
-          "tags": [
-            "TOP PICK",
-            "One-Shots",
-            "Integration"
-          ],
-          "url": "https://www.youtube.com/@YASHHESH",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/jtJeh-RBZlyUU81h0N5haFeX7T88iCoIe_BvcA-rLdOOSSpcCN0I_BA9Z-Yg4O8PMYfLfKt8eQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZgsjV55CNR6nm9S2Q_0UsXGN8KIfzs4LzwrLUg3yUHWX4sARwg-a-t4IpQsh7LGPGvTj_UqOhfw=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "nivedita_maths",
-          "name": "Maths by Nivedita",
-          "handle": "@mathsclass12iscbynivedita",
-          "av": "📐",
-          "isTop": false,
-          "desc": "PYQs, S Chand solutions, detailed chapter-wise explanations for ISC Class 12 Maths.",
-          "tags": [
-            "PYQ Focused",
-            "S Chand",
-            "Detailed Solutions"
-          ],
-          "url": "https://www.youtube.com/c/mathsclass12iscbynivedita",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_lP_68EFSxvkxHhp0u00T-i6BmJaaWAOYOmbEllX51IeA=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        },
-        {
-          "id": "nexa_maths",
-          "name": "Nexa Classes",
-          "handle": "@NexaClasses11th12th",
-          "av": "📐",
-          "isTop": false,
-          "desc": "Strong for Class 12 Maths one-shots and concept clarity (highly recommended in community).",
-          "tags": [
-            "One-Shots",
-            "Concept Clarity"
-          ],
-          "url": "https://www.youtube.com/@NexaClasses11th12th",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/XL1OIN3JCCmq61KiYo4NhbKcqlC0BD7KF4IC3cbJ-63uh5ublnMLN0TzTfNGWKa97OpTrq0XSCM=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/RvBqBg39xMWzkZEy5BKjmdBf0UX29BXlmrze8D9n11LUTcXlUk4MdvRbh4R9fDf4vLpVTFKv8Q=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "cisce_maths",
-          "name": "CISCE Class Videos",
-          "handle": "@CISCEClassVideos",
-          "av": "🔢",
-          "isTop": false,
-          "desc": "An underrated channel strongly recommended by seniors for thorough ISC Maths coverage and scoring 95+.",
-          "tags": [
-            "Underrated",
-            "Thorough Coverage"
-          ],
-          "url": "https://www.youtube.com/@CISCEClassVideos",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/p4Tfwes0EhFHPZX_bJNP1rMpPO77nLYr5dk3vPSIk2zATjTNyAYvWKM8EA6bdyObm-UPZmF90RI=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/Cj--DWhUze5ARkAiuItx-AAGeQv4n_ZYr7d5dAmcyv9nmRyFStnGO8sufM9GF-L6yG98G2pYyzc=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "anurag_maths",
-          "name": "Anurag Chauhan",
-          "handle": "@anuragchauhanmaths",
-          "av": "➕",
-          "isTop": true,
-          "desc": "Extremely popular for ISC-specific mathematics. He covers ML Aggarwal solutions and strict ISC board formats.",
-          "tags": [
-            "TOP PICK",
-            "ISC Specific",
-            "ML Aggarwal"
-          ],
-          "url": "https://www.youtube.com/@anuragchauhanmaths",
-          "pat": "triangles",
-          "avatarUrl": "https://yt3.ggpht.com/oTqdAKEYxY9xxHvpmoeKP95lSxYS-x23rjUGlrxeMENo4u_P24zLfStzMRIJGd_2t9MMQVYBZQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/MZr-8hOCXrG-53XCjkmWY5c0h_ISxvWRjYr5jfPDuG3AOmNzDczGEvR8UFR6H-talJTz12SBdw=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "neha_maths",
-          "name": "Neha Agrawal Mathematically Inclined",
-          "handle": "@nehaagrawalmathematically",
-          "av": "➗",
-          "isTop": false,
-          "desc": "Fantastic tricks and shortcuts for calculus and algebra, highly useful for checking board answers quickly.",
-          "tags": [
-            "Tricks",
-            "Calculus"
-          ],
-          "url": "https://www.youtube.com/@nehaagrawalmathematically",
-          "pat": "hexagons",
-          "avatarUrl": "https://yt3.ggpht.com/HH5nZkIY0BgKsetI15uC3ijyuCht_LvHWDGPLdzH2hmUspSJCosR2RGTJqPDAXbozMm187gUAkc=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/WO3RiGNCvB3Wchw3LD-QKblSv7UtfGH6ChXaZjfltxcSlZXPV5Q6txNKTASh3Dn96nXJlCdBZQ=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "Computer Science",
-      "color": "#00bfff",
-      "bg": "#081020",
-      "icon": "💻",
-      "channels": [
-        {
-          "id": "amplify_cs",
-          "name": "Amplify Learning - Class 11, 12",
-          "handle": "@AmplifyLearning2",
-          "av": "💻",
-          "isTop": true,
-          "desc": "Community favourite for ISC Computer Science — full syllabus, Java programming, Boolean algebra, data structures, paper pattern & 2026 strategy.",
-          "tags": [
-            "TOP PICK",
-            "Computer Science",
-            "Programming",
-            "2026 Strategy"
-          ],
-          "url": "https://www.youtube.com/@AmplifyLearning2",
-          "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/gNWBPU8DXb15ePVl08g_a2nFTtO4NshQgDjJPgwlMqGlWfdTYN6NPtDp6PHADq9xgdH0uqBRfQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/N37Q8XSKO8mbt3j6VezR6i7io6rc45LBeOJfxbPL6VwXjEftFhAnm5C8kw2ZRLWuABBkN1pS=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "leaf_cs",
-          "name": "Leaf Classes",
-          "handle": "@LeafClasses",
-          "av": "🖥️",
-          "isTop": true,
-          "desc": "The absolute gold standard for ISC Java. Brilliant explanations for arrays, strings, and recursive programming.",
-          "tags": [
-            "TOP PICK",
-            "ISC Java",
-            "Coding"
-          ],
-          "url": "https://www.youtube.com/@LeafClasses",
-          "pat": "circuit",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kDI6Njl2H6Q0cNuWg7fmk5EjscW85GtSoozoUve5NSD8M=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/EA6QHPQlHamxDWVvs-JQKycXgEs8HHHaztYIT5wuRL4wGbCetVJ8QumvkpHOBhPnz4aO6SRirg=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        }
-      ]
-    },
-    {
-      "subject": "English",
-      "color": "#e8a05f",
-      "bg": "#1e1408",
-      "icon": "📖",
-      "channels": [
-        {
-          "id": "aryan_eng_sci",
-          "name": "Aryan Tutorials",
-          "handle": "@AryanTutorials",
-          "av": "✍️",
-          "isTop": true,
-          "desc": "Dominates 2026 prep — Paper 1/2, grammar, directed writing, CFQs, and literature.",
-          "tags": [
-            "TOP PICK",
-            "Paper 1+2",
-            "Literature"
-          ],
-          "url": "https://www.youtube.com/@AryanTutorials",
-          "pat": "lines",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_lRlXJwRsY0feEJ3_ZQAECFIMDd07XskCvX2PWj92um1mY=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/QgtvZ4RoWNIndtA5U9SAFml4vmQRzVJd5gdphLCE4K9v4M_1tD0Wwa2IJaV0f-lPXLyRuHyq=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "sudhir_eng_sci",
-          "name": "Study with Sudhir",
-          "handle": "@StudywithSudhir",
-          "av": "📝",
-          "isTop": false,
-          "desc": "Solid English coverage alongside multi-subject commerce support.",
-          "tags": [
-            "Solid Coverage",
-            "Multi-Subject"
-          ],
-          "url": "https://www.youtube.com/@StudywithSudhir",
-          "pat": "waves",
-          "avatarUrl": "https://yt3.ggpht.com/TT8MIUneWI5Xg430s0jyzVZIqoiiwGIu6rlCrLgMo-02ROHBeDl8bDTk9u9NbvrzzHfyUhQlT94=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": "https://yt3.googleusercontent.com/ZQE0DgyYX57toycsBDWOUdfmCrRjw4T1DRkxZUkpTkFFP_08lcGhrfqlypQpQC9WmaoUc087=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
-        },
-        {
-          "id": "english_express_sci",
-          "name": "The English Express (Ranjana Chatterjee)",
-          "handle": "@TheEnglishExpress",
-          "av": "🗣️",
-          "isTop": true,
-          "desc": "Exceptional channel for ISC English Literature (Macbeth/Tempest, Poetry) and Language (Phrasal Verbs, Transformation).",
-          "tags": [
-            "TOP PICK",
-            "Literature",
-            "Language"
-          ],
-          "url": "https://www.youtube.com/@TheEnglishExpress",
-          "pat": "grid",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_mgGx7956UACbtsTChNXoxK-ySQJJtQhGi46GSZvQ=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
-        }
-      ]
-    }
-  ]
+/**
+ * ISC.exe — YouTube Channel Image Sync (v2)
+ * ==========================================
+ * Dramatically improved accuracy for finding channel avatars/banners.
+ *
+ * Resolution chain per channel:
+ *   1. forHandle (modern @handle)
+ *   2. forHandle with stripped/cleaned handle variants
+ *   3. Channel ID extracted from URL (/channel/UC...)
+ *   4. forUsername (legacy /user/ URLs)
+ *   5. Search by channel name + subject keyword
+ *   6. Search by channel name alone
+ *
+ * Run: YOUTUBE_API_KEY=... tsx scripts/update-channels.ts
+ */
+
+import 'dotenv/config';
+import { readFile, writeFile } from 'fs/promises';
+import { join } from 'path';
+
+// ─── TYPES ───────────────────────────────────────────────────────────────────
+
+interface Channel {
+  id: string;
+  name: string;
+  handle?: string;
+  av?: string;
+  isTop?: boolean;
+  desc?: string;
+  tags?: string[];
+  url?: string;
+  pat?: string;
+  avatarUrl?: string;
+  bannerUrl?: string;
 }
+
+interface SubjectGroup {
+  subject: string;
+  color: string;
+  bg: string;
+  icon: string;
+  channels: Channel[];
+}
+
+interface ChannelData {
+  [stream: string]: SubjectGroup[];
+}
+
+interface FetchResult {
+  avatar: string | null;
+  banner: string | null;
+  channelTitle?: string;  // for verification
+}
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+
+const API_KEY = process.env.YOUTUBE_API_KEY;
+const BASE = 'https://youtube.googleapis.com/youtube/v3';
+const DELAY_MS = 300; // between API calls — be gentle on quota
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+/** Extract high-res avatar URL, bumping to s800 */
+function extractAvatar(items: any[]): string | null {
+  if (!items?.length) return null;
+  const t = items[0]?.snippet?.thumbnails;
+  const url = t?.high?.url || t?.medium?.url || t?.default?.url || null;
+  if (!url) return null;
+  // Ensure s800 resolution
+  return url.replace(/=s\d+-/, '=s800-');
+}
+
+/** Extract banner URL */
+function extractBanner(items: any[]): string | null {
+  if (!items?.length) return null;
+  let b = items[0]?.brandingSettings?.image?.bannerExternalUrl || null;
+  if (b) b += '=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj';
+  return b;
+}
+
+/** Extract channel title for name-matching verification */
+function extractTitle(items: any[]): string {
+  return items?.[0]?.snippet?.title || '';
+}
+
+function makeResult(items: any[]): FetchResult {
+  return {
+    avatar: extractAvatar(items),
+    banner: extractBanner(items),
+    channelTitle: extractTitle(items),
+  };
+}
+
+/** Fetch and parse YouTube API response */
+async function ytFetch(url: string): Promise<any[]> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`     ⚠ API error ${res.status}: ${body.slice(0, 200)}`);
+      return [];
+    }
+    const data = await res.json();
+    if (data.error) {
+      console.error(`     ⚠ API error: ${data.error.message}`);
+      return [];
+    }
+    return data.items || [];
+  } catch (e) {
+    console.error(`     ⚠ Fetch error: ${e}`);
+    return [];
+  }
+}
+
+// ─── RESOLUTION STRATEGIES ───────────────────────────────────────────────────
+
+/** Try YouTube's forHandle endpoint */
+async function byHandle(handle: string): Promise<FetchResult> {
+  const clean = handle.replace(/^@+/, '');
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&forHandle=${encodeURIComponent(clean)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/** Try YouTube's forUsername endpoint (legacy) */
+async function byUsername(username: string): Promise<FetchResult> {
+  const clean = username.replace(/^@+/, '');
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&forUsername=${encodeURIComponent(clean)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/** Fetch by explicit channel ID */
+async function byId(channelId: string): Promise<FetchResult> {
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&id=${encodeURIComponent(channelId)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/**
+ * Search YouTube for a channel — returns top candidate.
+ * Uses name + optional subject hint for better accuracy.
+ */
+async function bySearch(name: string, hint = ''): Promise<FetchResult> {
+  const query = hint ? `${name} ${hint}` : name;
+  const searchItems = await ytFetch(
+    `${BASE}/search?part=snippet&q=${encodeURIComponent(query)}&type=channel&maxResults=3&key=${API_KEY}`
+  );
+  if (!searchItems.length) return { avatar: null, banner: null };
+
+  // Try to find the best match by checking channel title similarity
+  for (const item of searchItems) {
+    const channelId = item?.snippet?.channelId;
+    if (!channelId) continue;
+    await sleep(DELAY_MS);
+    const result = await byId(channelId);
+    // If the title roughly matches the channel name we're looking for, use it
+    const title = (result.channelTitle || '').toLowerCase();
+    const nameLower = name.toLowerCase();
+    const words = nameLower.split(/\s+/).filter(w => w.length > 2);
+    const matchScore = words.filter(w => title.includes(w)).length;
+    if (matchScore >= Math.min(2, words.length)) {
+      console.log(`     ✓ Search match: "${result.channelTitle}" (score ${matchScore}/${words.length})`);
+      return result;
+    }
+  }
+
+  // Fall back to first result if no good match
+  const channelId = searchItems[0]?.snippet?.channelId;
+  if (!channelId) return { avatar: null, banner: null };
+  await sleep(DELAY_MS);
+  const result = await byId(channelId);
+  console.log(`     ~ Search fallback: "${result.channelTitle}"`);
+  return result;
+}
+
+/** Extract a /channel/UC... ID from any YouTube URL */
+function extractChannelId(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/youtube\.com\/channel\/(UC[\w-]+)/);
+  return m ? m[1] : null;
+}
+
+/** Extract /user/... from a YouTube URL */
+function extractUsername(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/youtube\.com\/user\/([^/?#]+)/);
+  return m ? m[1] : null;
+}
+
+/** Extract @handle from a URL like youtube.com/@handle */
+function extractHandleFromUrl(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/youtube\.com\/@([^/?#]+)/);
+  return m ? m[1] : null;
+}
+
+// ─── MAIN RESOLVER ───────────────────────────────────────────────────────────
+
+/**
+ * Full resolution chain for a single channel.
+ * Tries multiple strategies in order of reliability.
+ */
+async function resolveChannel(ch: Channel, subjectHint = ''): Promise<FetchResult> {
+  const tried: string[] = [];
+
+  // Strategy 1: forHandle with the explicit handle field
+  if (ch.handle) {
+    tried.push(`handle:${ch.handle}`);
+    await sleep(DELAY_MS);
+    const r = await byHandle(ch.handle);
+    if (r.avatar) { console.log(`     → Found via forHandle (${ch.handle})`); return r; }
+  }
+
+  // Strategy 2: Handle extracted from the URL
+  const urlHandle = extractHandleFromUrl(ch.url);
+  if (urlHandle && urlHandle !== ch.handle?.replace('@', '')) {
+    const handleToTry = `@${urlHandle}`;
+    tried.push(`url-handle:${handleToTry}`);
+    await sleep(DELAY_MS);
+    const r = await byHandle(handleToTry);
+    if (r.avatar) { console.log(`     → Found via URL-extracted handle (@${urlHandle})`); return r; }
+  }
+
+  // Strategy 3: Channel ID from URL
+  const channelId = extractChannelId(ch.url);
+  if (channelId) {
+    tried.push(`id:${channelId}`);
+    await sleep(DELAY_MS);
+    const r = await byId(channelId);
+    if (r.avatar) { console.log(`     → Found via channel ID (${channelId})`); return r; }
+  }
+
+  // Strategy 4: Legacy username from /user/ URL
+  const username = extractUsername(ch.url);
+  if (username) {
+    tried.push(`username:${username}`);
+    await sleep(DELAY_MS);
+    const r = await byUsername(username);
+    if (r.avatar) { console.log(`     → Found via username (${username})`); return r; }
+
+    // Also try it as a handle
+    await sleep(DELAY_MS);
+    const r2 = await byHandle(`@${username}`);
+    if (r2.avatar) { console.log(`     → Found via username-as-handle (@${username})`); return r2; }
+  }
+
+  // Strategy 5: Search with subject context
+  if (ch.name) {
+    tried.push(`search:"${ch.name}" + "${subjectHint}"`);
+    await sleep(DELAY_MS);
+    const r = await bySearch(ch.name, subjectHint);
+    if (r.avatar) { return r; }
+  }
+
+  // Strategy 6: Search by name alone (no subject hint)
+  if (ch.name && subjectHint) {
+    tried.push(`search:"${ch.name}"`);
+    await sleep(DELAY_MS);
+    const r = await bySearch(ch.name);
+    if (r.avatar) { return r; }
+  }
+
+  console.log(`     ✗ Not found. Tried: ${tried.join(', ')}`);
+  return { avatar: null, banner: null };
+}
+
+// ─── MAIN ────────────────────────────────────────────────────────────────────
+
+async function main(): Promise<void> {
+  if (!API_KEY || API_KEY === 'your_api_key_here') {
+    console.error('❌  YOUTUBE_API_KEY env var is missing or invalid.');
+    process.exit(1);
+  }
+
+  const jsonPath = join(process.cwd(), 'channels.json');
+  console.log('📂 Loading channels.json…\n');
+  const raw = await readFile(jsonPath, 'utf-8');
+  const data: ChannelData = JSON.parse(raw);
+
+  /**
+   * Dedup cache — keyed by "handle|name" so duplicate channels
+   * (e.g. Yash appearing in Physics, Chemistry, Bio, Maths) are
+   * only fetched once from the API.
+   */
+  const cache = new Map<string, FetchResult>();
+
+  let updated = 0, skipped = 0, notFound = 0;
+
+  for (const [streamKey, groups] of Object.entries(data)) {
+    for (const group of groups) {
+      console.log(`\n[${streamKey.toUpperCase()}] ▸ ${group.subject}`);
+
+      for (const ch of group.channels) {
+        const cacheKey = (ch.handle || '') + '|' + ch.name;
+
+        // Serve from cache for duplicate channels
+        if (cache.has(cacheKey)) {
+          const cached = cache.get(cacheKey)!;
+          if (cached.avatar || cached.banner) {
+            let changed = false;
+            if (cached.avatar && ch.avatarUrl !== cached.avatar) { ch.avatarUrl = cached.avatar; changed = true; }
+            if (cached.banner && ch.bannerUrl !== cached.banner) { ch.bannerUrl = cached.banner; changed = true; }
+            if (changed) { updated++; console.log(`  [cached ✓] ${ch.name}`); }
+            else console.log(`  [cached =] ${ch.name}`);
+          } else {
+            console.log(`  [cached ✗] ${ch.name}`);
+          }
+          continue;
+        }
+
+        // Skip channels with no handle and no URL
+        if (!ch.handle && !ch.url && !ch.name) {
+          console.log(`  [-] ${ch.name}: nothing to search with`);
+          skipped++;
+          cache.set(cacheKey, { avatar: null, banner: null });
+          continue;
+        }
+
+        console.log(`  ▸ ${ch.name}  (${ch.handle ?? ch.url ?? 'name only'})`);
+        const result = await resolveChannel(ch, group.subject);
+        cache.set(cacheKey, result);
+
+        if (!result.avatar && !result.banner) {
+          notFound++;
+          continue;
+        }
+
+        let changed = false;
+        if (result.avatar && ch.avatarUrl !== result.avatar) { ch.avatarUrl = result.avatar; changed = true; }
+        if (result.banner && ch.bannerUrl !== result.banner) { ch.bannerUrl = result.banner; changed = true; }
+        if (changed) updated++;
+      }
+    }
+  }
+
+  console.log('\n════════════════════════════════');
+  console.log(`✅  Updated:   ${updated}`);
+  console.log(`✗   Not found: ${notFound}`);
+  console.log(`⏭   Skipped:   ${skipped}`);
+  console.log('════════════════════════════════\n');
+
+  console.log('💾 Saving channels.json…');
+  await writeFile(jsonPath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+  console.log('✓  Done.');
+}
+
+main().catch(err => { console.error('Fatal:', err); process.exit(1); });

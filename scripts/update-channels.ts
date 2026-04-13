@@ -1,6 +1,24 @@
+/**
+ * ISC.exe — YouTube Channel Image Sync (v2)
+ * ==========================================
+ * Dramatically improved accuracy for finding channel avatars/banners.
+ *
+ * Resolution chain per channel:
+ *   1. forHandle (modern @handle)
+ *   2. forHandle with stripped/cleaned handle variants
+ *   3. Channel ID extracted from URL (/channel/UC...)
+ *   4. forUsername (legacy /user/ URLs)
+ *   5. Search by channel name + subject keyword
+ *   6. Search by channel name alone
+ *
+ * Run: YOUTUBE_API_KEY=... tsx scripts/update-channels.ts
+ */
+
 import 'dotenv/config';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
+
+// ─── TYPES ───────────────────────────────────────────────────────────────────
 
 interface Channel {
   id: string;
@@ -25,231 +43,311 @@ interface SubjectGroup {
 }
 
 interface ChannelData {
-  commerce?: SubjectGroup[];
-  science?: SubjectGroup[];
-  humanities?: SubjectGroup[];
-  [key: string]: SubjectGroup[] | undefined;
+  [stream: string]: SubjectGroup[];
 }
 
 interface FetchResult {
   avatar: string | null;
   banner: string | null;
+  channelTitle?: string;  // for verification
 }
+
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const BASE = 'https://youtube.googleapis.com/youtube/v3';
+const DELAY_MS = 300; // between API calls — be gentle on quota
 
-/** Sleep to avoid quota hammering */
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 
-/** Extract channel ID from a YouTube URL */
-function extractChannelIdFromUrl(url?: string): string | null {
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+/** Extract high-res avatar URL, bumping to s800 */
+function extractAvatar(items: any[]): string | null {
+  if (!items?.length) return null;
+  const t = items[0]?.snippet?.thumbnails;
+  const url = t?.high?.url || t?.medium?.url || t?.default?.url || null;
+  if (!url) return null;
+  // Ensure s800 resolution
+  return url.replace(/=s\d+-/, '=s800-');
+}
+
+/** Extract banner URL */
+function extractBanner(items: any[]): string | null {
+  if (!items?.length) return null;
+  let b = items[0]?.brandingSettings?.image?.bannerExternalUrl || null;
+  if (b) b += '=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj';
+  return b;
+}
+
+/** Extract channel title for name-matching verification */
+function extractTitle(items: any[]): string {
+  return items?.[0]?.snippet?.title || '';
+}
+
+function makeResult(items: any[]): FetchResult {
+  return {
+    avatar: extractAvatar(items),
+    banner: extractBanner(items),
+    channelTitle: extractTitle(items),
+  };
+}
+
+/** Fetch and parse YouTube API response */
+async function ytFetch(url: string): Promise<any[]> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      const body = await res.text();
+      console.error(`     ⚠ API error ${res.status}: ${body.slice(0, 200)}`);
+      return [];
+    }
+    const data = await res.json();
+    if (data.error) {
+      console.error(`     ⚠ API error: ${data.error.message}`);
+      return [];
+    }
+    return data.items || [];
+  } catch (e) {
+    console.error(`     ⚠ Fetch error: ${e}`);
+    return [];
+  }
+}
+
+// ─── RESOLUTION STRATEGIES ───────────────────────────────────────────────────
+
+/** Try YouTube's forHandle endpoint */
+async function byHandle(handle: string): Promise<FetchResult> {
+  const clean = handle.replace(/^@+/, '');
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&forHandle=${encodeURIComponent(clean)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/** Try YouTube's forUsername endpoint (legacy) */
+async function byUsername(username: string): Promise<FetchResult> {
+  const clean = username.replace(/^@+/, '');
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&forUsername=${encodeURIComponent(clean)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/** Fetch by explicit channel ID */
+async function byId(channelId: string): Promise<FetchResult> {
+  const items = await ytFetch(
+    `${BASE}/channels?part=snippet,brandingSettings&id=${encodeURIComponent(channelId)}&key=${API_KEY}`
+  );
+  return makeResult(items);
+}
+
+/**
+ * Search YouTube for a channel — returns top candidate.
+ * Uses name + optional subject hint for better accuracy.
+ */
+async function bySearch(name: string, hint = ''): Promise<FetchResult> {
+  const query = hint ? `${name} ${hint}` : name;
+  const searchItems = await ytFetch(
+    `${BASE}/search?part=snippet&q=${encodeURIComponent(query)}&type=channel&maxResults=3&key=${API_KEY}`
+  );
+  if (!searchItems.length) return { avatar: null, banner: null };
+
+  // Try to find the best match by checking channel title similarity
+  for (const item of searchItems) {
+    const channelId = item?.snippet?.channelId;
+    if (!channelId) continue;
+    await sleep(DELAY_MS);
+    const result = await byId(channelId);
+    // If the title roughly matches the channel name we're looking for, use it
+    const title = (result.channelTitle || '').toLowerCase();
+    const nameLower = name.toLowerCase();
+    const words = nameLower.split(/\s+/).filter(w => w.length > 2);
+    const matchScore = words.filter(w => title.includes(w)).length;
+    if (matchScore >= Math.min(2, words.length)) {
+      console.log(`     ✓ Search match: "${result.channelTitle}" (score ${matchScore}/${words.length})`);
+      return result;
+    }
+  }
+
+  // Fall back to first result if no good match
+  const channelId = searchItems[0]?.snippet?.channelId;
+  if (!channelId) return { avatar: null, banner: null };
+  await sleep(DELAY_MS);
+  const result = await byId(channelId);
+  console.log(`     ~ Search fallback: "${result.channelTitle}"`);
+  return result;
+}
+
+/** Extract a /channel/UC... ID from any YouTube URL */
+function extractChannelId(url?: string): string | null {
   if (!url) return null;
   const m = url.match(/youtube\.com\/channel\/(UC[\w-]+)/);
   return m ? m[1] : null;
 }
 
-/** Try fetching by forHandle (strips leading @) */
-async function fetchByHandle(handle: string): Promise<FetchResult> {
-  const clean = handle.replace(/^@/, '');
-  const url = `${BASE}/channels?part=snippet,brandingSettings&forHandle=${encodeURIComponent(clean)}&key=${API_KEY}`;
-  const res = await fetch(url);
-  if (!res.ok) return { avatar: null, banner: null };
-  const data = await res.json();
-  return extractFromItems(data.items);
+/** Extract /user/... from a YouTube URL */
+function extractUsername(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/youtube\.com\/user\/([^/?#]+)/);
+  return m ? m[1] : null;
 }
 
-/** Try fetching by forUsername (legacy usernames) */
-async function fetchByUsername(username: string): Promise<FetchResult> {
-  const clean = username.replace(/^@/, '');
-  const url = `${BASE}/channels?part=snippet,brandingSettings&forUsername=${encodeURIComponent(clean)}&key=${API_KEY}`;
-  const res = await fetch(url);
-  if (!res.ok) return { avatar: null, banner: null };
-  const data = await res.json();
-  return extractFromItems(data.items);
+/** Extract @handle from a URL like youtube.com/@handle */
+function extractHandleFromUrl(url?: string): string | null {
+  if (!url) return null;
+  const m = url.match(/youtube\.com\/@([^/?#]+)/);
+  return m ? m[1] : null;
 }
 
-/** Try fetching by channel ID */
-async function fetchById(channelId: string): Promise<FetchResult> {
-  const url = `${BASE}/channels?part=snippet,brandingSettings&id=${channelId}&key=${API_KEY}`;
-  const res = await fetch(url);
-  if (!res.ok) return { avatar: null, banner: null };
-  const data = await res.json();
-  return extractFromItems(data.items);
-}
+// ─── MAIN RESOLVER ───────────────────────────────────────────────────────────
 
-/** Search as last resort */
-async function fetchBySearch(name: string): Promise<FetchResult> {
-  const url = `${BASE}/search?part=snippet&q=${encodeURIComponent(name)}&type=channel&maxResults=1&key=${API_KEY}`;
-  const res = await fetch(url);
-  if (!res.ok) return { avatar: null, banner: null };
-  const data = await res.json();
-  if (!data.items?.length) return { avatar: null, banner: null };
+/**
+ * Full resolution chain for a single channel.
+ * Tries multiple strategies in order of reliability.
+ */
+async function resolveChannel(ch: Channel, subjectHint = ''): Promise<FetchResult> {
+  const tried: string[] = [];
 
-  const channelId: string | undefined = data.items[0]?.snippet?.channelId;
-  if (!channelId) return { avatar: null, banner: null };
-
-  // Now fetch full channel details with the ID
-  await sleep(200);
-  return fetchById(channelId);
-}
-
-/** Extract avatar + banner from API items array */
-function extractFromItems(items: any[]): FetchResult {
-  if (!items?.length) return { avatar: null, banner: null };
-  const ch = items[0];
-
-  const avatar =
-    ch.snippet?.thumbnails?.high?.url ||
-    ch.snippet?.thumbnails?.medium?.url ||
-    ch.snippet?.thumbnails?.default?.url ||
-    null;
-
-  let banner: string | null = ch.brandingSettings?.image?.bannerExternalUrl || null;
-  if (banner) {
-    banner = `${banner}=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj`;
+  // Strategy 1: forHandle with the explicit handle field
+  if (ch.handle) {
+    tried.push(`handle:${ch.handle}`);
+    await sleep(DELAY_MS);
+    const r = await byHandle(ch.handle);
+    if (r.avatar) { console.log(`     → Found via forHandle (${ch.handle})`); return r; }
   }
 
-  if (avatar || banner) {
-    console.log(`     title: ${ch.snippet?.title ?? 'unknown'} | avatar: ${avatar ? '✓' : '✗'} | banner: ${banner ? '✓' : '✗'}`);
+  // Strategy 2: Handle extracted from the URL
+  const urlHandle = extractHandleFromUrl(ch.url);
+  if (urlHandle && urlHandle !== ch.handle?.replace('@', '')) {
+    const handleToTry = `@${urlHandle}`;
+    tried.push(`url-handle:${handleToTry}`);
+    await sleep(DELAY_MS);
+    const r = await byHandle(handleToTry);
+    if (r.avatar) { console.log(`     → Found via URL-extracted handle (@${urlHandle})`); return r; }
   }
 
-  return { avatar, banner };
-}
-
-/** Main fetch with fallback chain: handle → username → channelId from URL → search */
-async function fetchYoutubeImages(channel: Channel): Promise<FetchResult> {
-  if (!API_KEY || API_KEY === 'your_api_key_here') {
-    console.error('  [!] YOUTUBE_API_KEY is missing or invalid.');
-    process.exit(1);
-  }
-
-  // 1. Try forHandle
-  if (channel.handle) {
-    const r = await fetchByHandle(channel.handle);
-    if (r.avatar || r.banner) return r;
-    await sleep(150);
-
-    // 2. Try forUsername (same value, different endpoint)
-    const r2 = await fetchByUsername(channel.handle);
-    if (r2.avatar || r2.banner) return r2;
-    await sleep(150);
-  }
-
-  // 3. Try channel ID extracted from URL
-  const channelId = extractChannelIdFromUrl(channel.url);
+  // Strategy 3: Channel ID from URL
+  const channelId = extractChannelId(ch.url);
   if (channelId) {
-    const r3 = await fetchById(channelId);
-    if (r3.avatar || r3.banner) return r3;
-    await sleep(150);
+    tried.push(`id:${channelId}`);
+    await sleep(DELAY_MS);
+    const r = await byId(channelId);
+    if (r.avatar) { console.log(`     → Found via channel ID (${channelId})`); return r; }
   }
 
-  // 4. Search by channel name as last resort
-  if (channel.name) {
-    console.log(`     ↳ falling back to search for: "${channel.name}"`);
-    const r4 = await fetchBySearch(channel.name);
-    if (r4.avatar || r4.banner) return r4;
+  // Strategy 4: Legacy username from /user/ URL
+  const username = extractUsername(ch.url);
+  if (username) {
+    tried.push(`username:${username}`);
+    await sleep(DELAY_MS);
+    const r = await byUsername(username);
+    if (r.avatar) { console.log(`     → Found via username (${username})`); return r; }
+
+    // Also try it as a handle
+    await sleep(DELAY_MS);
+    const r2 = await byHandle(`@${username}`);
+    if (r2.avatar) { console.log(`     → Found via username-as-handle (@${username})`); return r2; }
   }
 
+  // Strategy 5: Search with subject context
+  if (ch.name) {
+    tried.push(`search:"${ch.name}" + "${subjectHint}"`);
+    await sleep(DELAY_MS);
+    const r = await bySearch(ch.name, subjectHint);
+    if (r.avatar) { return r; }
+  }
+
+  // Strategy 6: Search by name alone (no subject hint)
+  if (ch.name && subjectHint) {
+    tried.push(`search:"${ch.name}"`);
+    await sleep(DELAY_MS);
+    const r = await bySearch(ch.name);
+    if (r.avatar) { return r; }
+  }
+
+  console.log(`     ✗ Not found. Tried: ${tried.join(', ')}`);
   return { avatar: null, banner: null };
 }
 
+// ─── MAIN ────────────────────────────────────────────────────────────────────
+
 async function main(): Promise<void> {
   if (!API_KEY || API_KEY === 'your_api_key_here') {
-    console.error('❌ YOUTUBE_API_KEY env var is missing.');
+    console.error('❌  YOUTUBE_API_KEY env var is missing or invalid.');
     process.exit(1);
   }
 
   const jsonPath = join(process.cwd(), 'channels.json');
-  console.log('📂 Loading channels.json...\n');
-  const rawData = await readFile(jsonPath, 'utf-8');
-  const data: ChannelData = JSON.parse(rawData);
+  console.log('📂 Loading channels.json…\n');
+  const raw = await readFile(jsonPath, 'utf-8');
+  const data: ChannelData = JSON.parse(raw);
 
-  // Deduplicate channels across streams so we don't hit the API twice
-  // for the same channel (e.g. Yash appears in every science subject)
-  const seen = new Map<string, FetchResult>();
+  /**
+   * Dedup cache — keyed by "handle|name" so duplicate channels
+   * (e.g. Yash appearing in Physics, Chemistry, Bio, Maths) are
+   * only fetched once from the API.
+   */
+  const cache = new Map<string, FetchResult>();
 
-  let updatedCount = 0;
-  let skippedCount = 0;
-  let notFoundCount = 0;
+  let updated = 0, skipped = 0, notFound = 0;
 
-  for (const streamKey of Object.keys(data)) {
-    const stream = data[streamKey];
-    if (!stream) continue;
+  for (const [streamKey, groups] of Object.entries(data)) {
+    for (const group of groups) {
+      console.log(`\n[${streamKey.toUpperCase()}] ▸ ${group.subject}`);
 
-    for (const group of stream) {
-      console.log(`\n[${streamKey.toUpperCase()}] ${group.subject}`);
+      for (const ch of group.channels) {
+        const cacheKey = (ch.handle || '') + '|' + ch.name;
 
-      for (const channel of group.channels) {
-        const cacheKey = channel.handle ?? channel.name;
-
-        // Use cached result for duplicate channels
-        if (seen.has(cacheKey)) {
-          const cached = seen.get(cacheKey)!;
-          let modified = false;
-          if (cached.avatar && channel.avatarUrl !== cached.avatar) {
-            channel.avatarUrl = cached.avatar;
-            modified = true;
-          }
-          if (cached.banner && channel.bannerUrl !== cached.banner) {
-            channel.bannerUrl = cached.banner;
-            modified = true;
-          }
-          if (modified) {
-            updatedCount++;
-            console.log(`  [cached] ${channel.name}`);
+        // Serve from cache for duplicate channels
+        if (cache.has(cacheKey)) {
+          const cached = cache.get(cacheKey)!;
+          if (cached.avatar || cached.banner) {
+            let changed = false;
+            if (cached.avatar && ch.avatarUrl !== cached.avatar) { ch.avatarUrl = cached.avatar; changed = true; }
+            if (cached.banner && ch.bannerUrl !== cached.banner) { ch.bannerUrl = cached.banner; changed = true; }
+            if (changed) { updated++; console.log(`  [cached ✓] ${ch.name}`); }
+            else console.log(`  [cached =] ${ch.name}`);
           } else {
-            console.log(`  [skip-dup] ${channel.name}`);
+            console.log(`  [cached ✗] ${ch.name}`);
           }
           continue;
         }
 
-        if (!channel.handle && !channel.url) {
-          console.log(`  [-] ${channel.name}: no handle or URL — skipping`);
-          skippedCount++;
-          seen.set(cacheKey, { avatar: null, banner: null });
+        // Skip channels with no handle and no URL
+        if (!ch.handle && !ch.url && !ch.name) {
+          console.log(`  [-] ${ch.name}: nothing to search with`);
+          skipped++;
+          cache.set(cacheKey, { avatar: null, banner: null });
           continue;
         }
 
-        console.log(`  → ${channel.name} (${channel.handle ?? 'no handle'})`);
-        const result = await fetchYoutubeImages(channel);
-        seen.set(cacheKey, result);
+        console.log(`  ▸ ${ch.name}  (${ch.handle ?? ch.url ?? 'name only'})`);
+        const result = await resolveChannel(ch, group.subject);
+        cache.set(cacheKey, result);
 
         if (!result.avatar && !result.banner) {
-          console.log(`     ✗ not found`);
-          notFoundCount++;
+          notFound++;
           continue;
         }
 
-        let modified = false;
-        if (result.avatar && channel.avatarUrl !== result.avatar) {
-          channel.avatarUrl = result.avatar;
-          modified = true;
-        }
-        if (result.banner && channel.bannerUrl !== result.banner) {
-          channel.bannerUrl = result.banner;
-          modified = true;
-        }
-        if (modified) updatedCount++;
-
-        // Respect quota: 250ms between unique API calls
-        await sleep(250);
+        let changed = false;
+        if (result.avatar && ch.avatarUrl !== result.avatar) { ch.avatarUrl = result.avatar; changed = true; }
+        if (result.banner && ch.bannerUrl !== result.banner) { ch.bannerUrl = result.banner; changed = true; }
+        if (changed) updated++;
       }
     }
   }
 
-  console.log('\n=============================');
-  console.log(`✅ Updated:   ${updatedCount} channels`);
-  console.log(`❓ Not found: ${notFoundCount} channels`);
-  console.log(`⏭  Skipped:   ${skippedCount} channels`);
-  console.log('=============================\n');
+  console.log('\n════════════════════════════════');
+  console.log(`✅  Updated:   ${updated}`);
+  console.log(`✗   Not found: ${notFound}`);
+  console.log(`⏭   Skipped:   ${skipped}`);
+  console.log('════════════════════════════════\n');
 
-  console.log('💾 Saving channels.json...');
+  console.log('💾 Saving channels.json…');
   await writeFile(jsonPath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
-  console.log('✓ Saved successfully.');
+  console.log('✓  Done.');
 }
 
-main().catch(error => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-});
+main().catch(err => { console.error('Fatal:', err); process.exit(1); });
