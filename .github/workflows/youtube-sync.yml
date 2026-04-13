@@ -2,9 +2,8 @@ name: Sync YouTube Channels
 
 on:
   schedule:
-    # Runs automatically every Sunday at Midnight UTC to keep banners fresh
-    - cron: '0 0 * * 0' 
-  workflow_dispatch:      # Allows you to click "Run workflow" manually in the Actions tab
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   update-channels:
@@ -27,9 +26,8 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run TypeScript Channel Sync (YouTube API)
+      - name: Run Channel Sync
         env:
-          # Pulls your secure API key from GitHub repository secrets
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: npm run sync:channels
 
@@ -38,11 +36,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add channels.json
-          
-          # Only commit if the script actually updated channels.json
           if git diff --staged --quiet; then
-            echo "No channel image changes required. Everything is up to date."
+            echo "No changes to commit"
           else
-            git commit -m "chore: auto-update YouTube channel images via API [skip ci]"
+            git commit -m "chore: update YouTube channel images [skip ci]"
             git push origin main
           fi
