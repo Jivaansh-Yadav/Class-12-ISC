@@ -26,7 +26,6 @@ The repository currently organizes resources across three main academic streams:
 ## ✨ Features
 * **🗂️ Organized Structure:** Content is strictly categorized by subject and chapter.
 * **💨 Lightning Fast:** Built with a minimal UI to ensure resources load instantly on any connection.
-* **📱 Responsive:** Works perfectly across desktops, tablets, and phones.
 * **📥 Direct Downloads:** Get the PDFs and notes you need with zero paywalls or redirects.
 
 ## 🤝 Contributing
