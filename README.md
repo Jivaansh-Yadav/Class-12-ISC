@@ -1,30 +1,36 @@
-# 📚 Class 12 ISC Resources (Built with AI + GitHub tutorials from YouTube)
+<div align="center">
+  <h1>🎓 Class 12 ISC Resources</h1>
+  <p><strong>A clean, minimal hub for ISC Class 12 study materials.</strong></p>
+  
+  <a href="https://class-12-isc.vercel.app/">Live Website</a> • 
+  <a href="#-subjects">Subjects</a> • 
+  <a href="#-features">Features</a> • 
+  <a href="#-contributing">Contributing</a>
 
-A clean and simple website built to organize **ISC Class 12** study
-materials in one place. **New updates will be coming soon**
+  <br><br>
+</div>
 
-🔗 Website live at: https://class-12-isc.vercel.app/
+Finding organized study material for board exams shouldn't be hard. This open-source platform brings together notes, resources, and previous year papers for ISC students into one easy-to-navigate website. 
 
-## 📂 Subjects Included
-### Commerce
-<img width="434" height="330" alt="Commerce-subject-cluster" src="https://github.com/user-attachments/assets/e55bea5e-33f4-42cc-981a-61c804a840c3" />
+Built specifically for the Class 12 curriculum, it is designed to be fast, free, and distraction-free.
 
-### Science
-<img width="434" height="329" alt="Science-subject-cluster" src="https://github.com/user-attachments/assets/6dc89294-4fb9-4f34-8205-8a595106a649" />
+## 📚 Subjects
+The repository currently organizes resources across three main academic streams:
 
-### Humaities & Arts
-<img width="438" height="235" alt="Humanities-and-Arts-subject-cluster" src="https://github.com/user-attachments/assets/af252cab-ddad-465b-a99b-f3d3515497f1" />
+* **Commerce:** Accounts, Commerce, Economics, Business Studies, Mathematics
+* **Science:** Physics, Chemistry, Biology, Computer Science, Mathematics
+* **Humanities & Arts:** English, Psychology, Sociology, Geography
 
+*(Note: See the repository images for full subject clusters).*
 
-## 🚀 Features
+## ✨ Features
+* **🗂️ Organized Structure:** Content is strictly categorized by subject and chapter.
+* **💨 Lightning Fast:** Built with a minimal UI to ensure resources load instantly on any connection.
+* **📱 Responsive:** Works perfectly across desktops, tablets, and phones.
+* **📥 Direct Downloads:** Get the PDFs and notes you need with zero paywalls or redirects.
 
--   🗂️ Organized subject-wise folders
--   💨 Easy access to notes & resources
--   🎨 Minimal UI
--   🌐 Works on all devices
--   📥 Downloadable resources
--   🆓 Free to use
+## 🤝 Contributing
+Built and maintained by Hrishiraj Nagawade. If you have better notes, mock papers, or want to help improve the site layout, your contributions are highly appreciated! 
 
-## 💪 Contributing
-
-Contributions are always welcome! hrooshi@duck.com
+Feel free to open a pull request or reach out with resources:
+📧 **Email:** hrooshi@duck.com
