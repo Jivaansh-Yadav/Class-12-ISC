@@ -895,11 +895,18 @@ function makeSVG(pat, color, bg, w=400, h=150) {
 
 function applyAvatar(el, url) {
   if (!url) return;
+  const fallbackEmoji = el.textContent; // Save the emoji first!
   el.textContent = '';
   const img = document.createElement('img');
-  img.src = url; img.alt = '';
+  img.src = url; 
+  img.alt = '';
   img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
-  img.onerror = () => img.remove();
+  
+  // If the image breaks, remove it and put the emoji back
+  img.onerror = () => { 
+    img.remove(); 
+    el.textContent = fallbackEmoji; 
+  };
   el.appendChild(img);
 }
 

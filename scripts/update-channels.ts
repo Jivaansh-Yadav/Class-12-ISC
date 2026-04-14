@@ -93,9 +93,8 @@ function extractBanner(items: Record<string, unknown>[]): string | null {
   if (!items?.length) return null;
   const raw: string | null =
     (items[0] as any)?.brandingSettings?.image?.bannerExternalUrl || null;
-  return raw
-    ? raw + '=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj'
-    : null;
+  // Using =w1060 instead of =w2120 is much safer and prevents 404 errors on smaller original uploads
+  return raw ? raw + '=w1060-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj' : null;
 }
 
 function extractTitle(items: Record<string, unknown>[]): string {
