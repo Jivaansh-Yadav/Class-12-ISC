@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<script>
+  // Redirect to mobile layout for small screens or mobile agents
+  if (window.innerWidth <= 820 || /Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+    window.location.replace('/resource-mobile');
+  }
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
 <script>
   (function(){
