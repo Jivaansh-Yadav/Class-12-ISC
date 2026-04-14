@@ -367,27 +367,56 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 @media(min-width:1024px){.app-mobile-bottom{display:none!important}}
 @media(max-width:1023px){.app-footer{display:none}}
 
-/* ─── Search Page ─── */
-.search-hint{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:var(--radius-sm);background:var(--accent-lo);border:1px solid var(--accent-md);margin-bottom:20px;font-size:.78rem;color:var(--fg2);font-family:var(--font-mono);letter-spacing:.2px}
-.search-hint svg{flex-shrink:0;color:var(--accent)}
-.search-section{margin-bottom:22px}
-.search-section h3{font-size:.82rem;font-weight:600;color:var(--fg);margin-bottom:10px;font-family:var(--font-mono);letter-spacing:.4px;text-transform:uppercase}
-.search-select-wrap{position:relative}
-.search-select{width:100%;padding:10px 14px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border);color:var(--fg);font-size:.82rem;font-family:var(--font);outline:none;cursor:pointer;transition:all .15s;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234e6078' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
-.search-select:focus{border-color:var(--accent-md);background-color:var(--surface2);background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233bff6c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
-.search-select option{background:var(--bg2);color:var(--fg)}
-.search-results-count{font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);margin-top:12px;margin-bottom:10px;letter-spacing:.3px}
-.search-result-card{border:1px solid var(--border);border-radius:var(--radius);padding:15px;background:var(--surface);transition:all .18s;animation:fadeIn .3s ease both;position:relative;overflow:hidden;margin-bottom:10px}
-.search-result-card:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,0,0,.3)}
-.search-result-card .src-header{display:flex;align-items:start;justify-content:space-between;gap:10px}
-.search-result-card .src-name{font-size:.88rem;font-weight:600;color:var(--fg)}
-.search-result-card .src-sub{font-size:.74rem;color:var(--fg3);margin-top:3px;font-family:var(--font-mono)}
-.search-result-card .src-meta{margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);display:flex;flex-wrap:wrap;gap:8px}
-.search-result-card .src-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.3px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--fg3)}
-.search-result-card .src-tag.accent{color:var(--accent);border-color:var(--accent-md);background:var(--accent-lo)}
-.search-result-card .src-tag.amber{color:var(--amber);border-color:rgba(255,184,48,.25);background:var(--amber-lo)}
-.search-result-card .src-tag.cyan{color:var(--cyan);border-color:rgba(95,212,232,.25);background:var(--cyan-lo)}
-.search-result-card .src-actions{margin-top:10px;display:flex;align-items:center;gap:8px}
+/* ─── College Deadlines Table (Screenshot Style) ─── */
+.cd-table-wrap{border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.cd-table{width:100%;border-collapse:collapse}
+.cd-table thead th{padding:13px 18px;font-size:.7rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--fg3);font-family:var(--font-mono);border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;background:var(--bg2)}
+.cd-table tbody tr{transition:background .15s;border-bottom:1px solid rgba(255,255,255,.03)}
+.cd-table tbody tr:nth-child(even){background:rgba(255,255,255,.012)}
+.cd-table tbody tr:hover{background:var(--surface2)}
+.cd-table tbody tr:last-child{border-bottom:none}
+.cd-table tbody td{padding:14px 18px;font-size:.82rem;vertical-align:middle;color:var(--fg2)}
+
+/* College Name Column */
+.cd-college{font-weight:600;color:var(--fg);font-size:.85rem}
+.cd-college .cd-program{font-weight:400;color:var(--fg3);font-size:.72rem;margin-top:3px;font-family:var(--font-mono);letter-spacing:.2px}
+
+/* Deadline Pill */
+.cd-deadline-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:8px;font-family:var(--font-mono);font-size:.74rem;font-weight:600;white-space:nowrap}
+.cd-deadline-pill.countdown{background:rgba(95,212,232,.08);color:var(--cyan);border:1px solid rgba(95,212,232,.15)}
+.cd-deadline-pill.urgent{background:rgba(255,107,107,.08);color:var(--red);border:1px solid rgba(255,107,107,.15)}
+.cd-deadline-pill.relaxed{background:rgba(59,255,108,.08);color:var(--accent);border:1px solid rgba(59,255,108,.15)}
+.cd-deadline-pill.closed{background:rgba(255,255,255,.03);color:var(--fg3);border:1px solid var(--border)}
+.cd-deadline-pill.nodate{background:rgba(255,107,107,.06);color:var(--red);border:1px solid rgba(255,107,107,.12);font-weight:500}
+.cd-deadline-pill .cd-clock{width:13px;height:13px;flex-shrink:0;opacity:.7}
+
+/* Apply Now Button */
+.cd-apply-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 18px;border-radius:8px;font-size:.74rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.4px;background:#8b1a2b;color:#fff;border:none;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap}
+.cd-apply-btn:hover{background:#a5213a;transform:translateY(-1px);box-shadow:0 4px 16px rgba(139,26,43,.35)}
+.cd-apply-btn svg{width:12px;height:12px;flex-shrink:0}
+
+/* Status Badge */
+.cd-status{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:8px;font-size:.72rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.4px;text-transform:uppercase}
+.cd-status .cd-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.cd-status.open{background:rgba(59,255,108,.08);color:var(--accent);border:1px solid rgba(59,255,108,.15)}
+.cd-status.open .cd-dot{background:var(--accent);box-shadow:0 0 6px var(--accent);animation:breathe 2s infinite}
+.cd-status.upcoming{background:rgba(255,184,48,.08);color:var(--amber);border:1px solid rgba(255,184,48,.15)}
+.cd-status.upcoming .cd-dot{background:var(--amber);box-shadow:0 0 6px var(--amber);animation:breathe 2.5s infinite}
+.cd-status.closed{background:rgba(255,255,255,.03);color:var(--fg3);border:1px solid var(--border)}
+.cd-status.closed .cd-dot{background:var(--fg3)}
+
+/* Page Title Banner */
+.cd-page-banner{text-align:center;margin-bottom:22px}
+.cd-page-banner h1{font-family:var(--font-brand);font-size:1.45rem;font-weight:700;color:var(--fg);letter-spacing:-.01em}
+.cd-page-banner p{font-size:.78rem;color:var(--fg3);margin-top:4px;font-family:var(--font-mono);letter-spacing:.3px}
+
+/* Responsive */
+@media(max-width:768px){
+  .cd-table thead{display:none}
+  .cd-table tbody tr{display:block;padding:14px;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface)}
+  .cd-table tbody td{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border:none;font-size:.8rem}
+  .cd-table tbody td::before{content:attr(data-label);font-weight:600;color:var(--fg3);font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;font-family:var(--font-mono);margin-right:12px}
+}
 </style>
 </head>
 <body>
@@ -451,10 +480,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
   </div>
   <nav class="sidebar-nav">
     <div class="nav-label">Browse</div>
-    <button class="nav-item active" data-tab="search" onclick="setTab('search')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      <span class="nav-text">Search</span>
-    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
       <span class="nav-text">Test Deadlines</span>
@@ -488,11 +513,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 <!-- ═══════ MOBILE BOTTOM TABS ═══════ -->
 <div class="app-mobile-bottom">
   <nav>
-    <button class="mobile-tab active" data-tab="search" onclick="setTab('search')">
-      <span class="tab-indicator"></span>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      Search
-    </button>
     <button class="mobile-tab" data-tab="test-deadlines" onclick="setTab('test-deadlines')">
       <span class="tab-indicator"></span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
@@ -524,9 +544,6 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
     <button class="btn-icon" onclick="closeDrawer()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <nav class="sidebar-nav" style="padding:8px">
-    <button class="nav-item active" data-tab="search" onclick="setTab('search');closeDrawer()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Search</span>
-    </button>
     <button class="nav-item" data-tab="test-deadlines" onclick="setTab('test-deadlines');closeDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg><span>Test Deadlines</span>
     </button>
@@ -571,15 +588,15 @@ td .trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:28
 // ═══════════════════════════════════════════════════════════════
 //  CONFIG
 // ═══════════════════════════════════════════════════════════════
-const SHEET_ID = '1urL--moHE7g4DYOFA6UW9PjNhqFIFThQShi6R7OkZXM;
-const GVIZ = `https://docs.google.com/spreadsheets/d/${1urL--moHE7g4DYOFA6UW9PjNhqFIFThQShi6R7OkZXM}/gviz/tq?tqx=out:json`;
+const SHEET_ID = '1cK1OazOmaZ3WelovEe2jIzZ6cNfOCBG2LdVoZF398bc';
+const GVIZ = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 
 
 // ═══════════════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════════════
 let state = {
-  tab: 'search',
+  tab: 'test-deadlines',
   bookmarks: JSON.parse(localStorage.getItem('isc-bookmarks') || '[]'),
   searchOpen: false,
   searchSelected: 0,
@@ -834,7 +851,6 @@ function skeletonCards(n) {
 async function renderTab() {
   const el = document.getElementById('tabContent');
   const renderers = {
-    'search': renderSearchPage,
     'test-deadlines': renderTestDeadlines,
     'college-deadlines': renderCollegeDeadlines,
     'my-list': renderMyList
@@ -927,8 +943,80 @@ function renderTDRows() {
 }
 
 // ─── COLLEGE DEADLINES ───
+function getDeadlineCountdown(deadlineStr) {
+  if (!deadlineStr || deadlineStr.trim() === '' || deadlineStr.toLowerCase().includes('tba') || deadlineStr.toLowerCase().includes('not available') || deadlineStr.toLowerCase().includes('n/a')) {
+    return { text: 'Deadline not available', cls: 'nodate', hasDate: false };
+  }
+  // Try multiple date formats
+  let parsed = null;
+  const formats = [
+    /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/,      // DD/MM/YYYY or MM/DD/YYYY
+    /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/,        // YYYY-MM-DD
+    /^(\d{1,2})\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s*,?\s*(\d{4})$/i,
+    /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+(\d{1,2})\s*,?\s*(\d{4})$/i
+  ];
+  const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+
+  // DD/MM/YYYY or MM/DD/YYYY
+  let m = deadlineStr.match(formats[0]);
+  if (m) {
+    const a = parseInt(m[1]), b = parseInt(m[2]), c = parseInt(m[3]);
+    // Assume DD/MM/YYYY if DD > 12, otherwise try both
+    if (a > 12) parsed = new Date(c, b - 1, a);
+    else if (b > 12) parsed = new Date(c, a - 1, b);
+    else parsed = new Date(c, b - 1, a); // default DD/MM/YYYY
+  }
+  // YYYY-MM-DD
+  if (!parsed) {
+    m = deadlineStr.match(formats[1]);
+    if (m) parsed = new Date(parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3]));
+  }
+  // DD Mon YYYY
+  if (!parsed) {
+    m = deadlineStr.match(formats[2]);
+    if (m) parsed = new Date(parseInt(m[3]), months[m[2].toLowerCase().slice(0,3)], parseInt(m[1]));
+  }
+  // Mon DD, YYYY
+  if (!parsed) {
+    m = deadlineStr.match(formats[3]);
+    if (m) parsed = new Date(parseInt(m[3]), months[m[1].toLowerCase().slice(0,3)], parseInt(m[2]));
+  }
+
+  if (!parsed || isNaN(parsed.getTime())) return { text: deadlineStr, cls: 'countdown', hasDate: false };
+
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  parsed.setHours(0,0,0,0);
+  const diffMs = parsed - now;
+  const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) return { text: 'Closed', cls: 'closed', hasDate: true };
+  if (diffDays === 0) return { text: 'Last Day', cls: 'urgent', hasDate: true };
+  if (diffDays === 1) return { text: '1 Day Left', cls: 'urgent', hasDate: true };
+  if (diffDays <= 7) return { text: `${diffDays} Days Left`, cls: 'urgent', hasDate: true };
+  if (diffDays <= 21) return { text: `${diffDays} Days Left`, cls: 'countdown', hasDate: true };
+  return { text: `${diffDays} Days Left`, cls: 'relaxed', hasDate: true };
+}
+
+function cdDeadlinePill(d) {
+  const countdown = getDeadlineCountdown(d.deadline);
+  const statusLower = (d.status || '').toLowerCase();
+  if (statusLower === 'closed') {
+    return `<span class="cd-deadline-pill closed"><svg class="cd-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Closed</span>`;
+  }
+  return `<span class="cd-deadline-pill ${countdown.cls}"><svg class="cd-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(countdown.text)}</span>`;
+}
+
+function cdStatusBadge(status) {
+  const cls = (status || '').toLowerCase();
+  const dot = '<span class="cd-dot"></span>';
+  if (cls === 'open') return `<span class="cd-status open">${dot}Open</span>`;
+  if (cls === 'upcoming') return `<span class="cd-status upcoming">${dot}Upcoming</span>`;
+  return `<span class="cd-status closed">${dot}${esc(status)}</span>`;
+}
+
 async function renderCollegeDeadlines(el) {
-  el.innerHTML = `<div class="page-header"><h1>College Deadlines</h1><p>Loading deadlines...</p></div><div class="card-grid">${skeletonCards(6)}</div>`;
+  el.innerHTML = `<div class="cd-page-banner"><h1>Application Open</h1><p>Loading deadlines...</p></div><div class="cd-table-wrap"><table class="cd-table"><thead><tr><th>College</th><th>Deadline</th><th>Apply to College</th><th>Status</th></tr></thead><tbody>${skeletonRows(8, 4)}</tbody></table></div>`;
 
   const rows = await fetchSheet('College Deadlines');
   const cds = rows.map(r => ({
@@ -956,29 +1044,25 @@ async function renderCollegeDeadlines(el) {
     const upcoming = cds.filter(d => d.status === 'Upcoming').length;
     const closed = cds.filter(d => d.status === 'Closed').length;
 
+    const applyArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+
     el.innerHTML = `
-      <div class="page-header"><h1>College Deadlines</h1><p>Application deadlines for colleges and programs</p></div>
-      <div class="stats-bar"><span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span></div>
-      <div class="filter-bar">
-        <div class="search-input"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
+      <div class="cd-page-banner"><h1>Application Open</h1><p>Track college application deadlines and apply directly</p></div>
+      <div class="stats-bar" style="justify-content:center"><span class="stat-chip green"><span class="dot"></span>${open} open</span><span class="stat-chip amber"><span class="dot"></span>${upcoming} upcoming</span><span class="stat-chip gray"><span class="dot"></span>${closed} closed</span></div>
+      <div class="filter-bar" style="justify-content:center">
+        <div class="search-input" style="max-width:360px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input type="text" placeholder="Filter by college or program..." value="${esc(window._cdSearch)}" oninput="window._cdSearch=this.value;window._renderCDs()"></div>
         <div class="pill-group">${['all','open','upcoming','closed'].map(f => `<button class="pill${window._cdFilter === f ? ' active' : ''}" onclick="window._cdFilter='${f}';window._renderCDs()">${f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}</button>`).join('')}</div>
       </div>
-      <div class="card-grid">${list.length === 0 ? '<div style="grid-column:1/-1" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3><p>No deadlines found</p></div>' :
-      list.map((d, i) => `<div class="card animate-in stagger-${Math.min(i, 5)}${d.status === 'Closed' ? ' dimmed' : ''}">
-        <div class="card-header">
-          <div class="card-info"><h3>${esc(d.collegeName)}</h3><div class="sub">${esc(d.program)}</div></div>
-          ${bookmarkIcon(d.id)}
-        </div>
-        <div class="card-meta">
-          ${d.round ? `<div class="card-meta-row"><span class="label">Round</span><span class="value">${esc(d.round)}</span></div>` : ''}
-          <div class="card-meta-row"><span class="label">Deadline</span><span class="value" style="color:${d.status === 'Open' ? 'var(--amber)' : d.status === 'Upcoming' ? 'var(--cyan)' : 'var(--fg3)'}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${esc(d.deadline)}</span></div>
-          ${d.notes ? `<div class="card-meta-row"><span class="label">Notes</span><span class="value" style="color:var(--fg3);font-size:.68rem">${esc(d.notes)}</span></div>` : ''}
-        </div>
-        <div class="card-footer">
-          ${statusBadge(d.status)}
-          ${d.applyUrl && d.status !== 'Closed' ? `<a href="${esc(d.applyUrl)}" target="_blank" rel="noopener" class="btn-sm green" onclick="event.stopPropagation()">Apply <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg></a>` : ''}
-        </div>
-      </div>`).join('')}</div>
+      <div class="cd-table-wrap"><table class="cd-table">
+        <thead><tr><th>College</th><th>Deadline</th><th>Apply to College</th><th>Status</th></tr></thead>
+        <tbody>${list.length === 0 ? '<tr><td colspan="4" style="text-align:center;padding:48px 0"><div class="empty-state" style="padding:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom:10px"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><h3>No deadlines found</h3><p>Try adjusting your filters</p></div></td></tr>' :
+        list.map((d, i) => `<tr class="animate-in stagger-${Math.min(i, 5)}">
+          <td data-label="College"><div class="cd-college">${esc(d.collegeName)}${d.program ? `<div class="cd-program">${esc(d.program)}</div>` : ''}</div></td>
+          <td data-label="Deadline">${cdDeadlinePill(d)}</td>
+          <td data-label="Apply">${d.applyUrl && d.status !== 'Closed' ? `<a href="${esc(d.applyUrl)}" target="_blank" rel="noopener" class="cd-apply-btn">${applyArrow} Apply Now</a>` : '<span style="color:var(--fg3);font-size:.74rem;font-family:var(--font-mono)">—</span>'}</td>
+          <td data-label="Status">${cdStatusBadge(d.status)}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
     `;
   }
 
@@ -1049,158 +1133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     navMark.style.boxShadow = `0 0 8px ${col}`;
   }
   updateBadges();
-  setTab('search');
+  setTab('test-deadlines');
 });
-
-// ═══════════════════════════════════════════════════════════════
-//  SEARCH PAGE
-// ═══════════════════════════════════════════════════════════════
-async function renderSearchPage(el) {
-  el.innerHTML = `<div class="page-header"><h1>University Search</h1><p>Find colleges, courses, and programs</p></div>
-    <div class="search-hint">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      Select a category below, then choose an option to start searching
-    </div>
-    <div class="search-section">
-      <h3>Search According To</h3>
-      <div class="pill-group" id="searchCategoryPills">
-        ${['course','college','city','test','math'].map(c => `<button class="pill${c==='course'?' active':''}" onclick="window._searchCategory='${c}';updateSearchPills();renderSearchDropdown()">${c==='math'?'Math':c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('')}
-      </div>
-    </div>
-    <div id="searchDropdownArea"></div>
-    <div id="searchResultsArea"></div>`;
-
-  window._searchCategory = 'course';
-
-  const [cds, tests] = await Promise.all([
-    fetchSheet('College Deadlines'),
-    fetchSheet('Test Deadlines')
-  ]);
-
-  window._searchCDs = cds;
-  window._searchTests = tests;
-
-  renderSearchDropdown();
-}
-
-function updateSearchPills() {
-  document.querySelectorAll('#searchCategoryPills .pill').forEach(p => {
-    const cat = p.textContent.toLowerCase();
-    p.classList.toggle('active', cat === (window._searchCategory === 'math' ? 'math' : window._searchCategory));
-  });
-}
-
-function renderSearchDropdown() {
-  const cat = window._searchCategory;
-  const area = document.getElementById('searchDropdownArea');
-  const resultsArea = document.getElementById('searchResultsArea');
-  if (!area) return;
-
-  let options = [];
-  let label = '';
-
-  if (cat === 'course') {
-    label = 'course';
-    options = [...new Set((window._searchCDs||[]).map(d => (d['Program']||d['program']||'').trim()).filter(Boolean))].sort();
-  } else if (cat === 'college') {
-    label = 'college';
-    options = [...new Set((window._searchCDs||[]).map(d => (d['College Name']||d['college_name']||d['College']||'').trim()).filter(Boolean))].sort();
-  } else if (cat === 'city') {
-    label = 'city';
-    options = [...new Set((window._searchCDs||[]).map(d => {
-      const notes = d['Notes']||d['notes']||'';
-      const cityMatch = notes.match(/(?:city|location|campus)[:\s]*([^\n,;]+)/i);
-      return cityMatch ? cityMatch[1].trim() : '';
-    }).filter(Boolean))].sort();
-    if (options.length === 0) options = ['No city data available'];
-  } else if (cat === 'test') {
-    label = 'test';
-    options = [...new Set((window._searchTests||[]).map(t => (t['Name']||t['name']||'').trim()).filter(Boolean))].sort();
-  } else if (cat === 'math') {
-    label = 'math requirement';
-    options = ['Math Mandatory', 'Math Not Mandatory'];
-  }
-
-  area.innerHTML = `<div class="search-section">
-    <h3>Search your ${label}!</h3>
-    <div class="search-select-wrap">
-      <select class="search-select" id="searchSelect" onchange="handleSearchSelect(this.value)">
-        <option value="">— Select an option —</option>
-        ${options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}
-      </select>
-    </div>
-  </div>`;
-
-  if (resultsArea) resultsArea.innerHTML = '';
-}
-
-function handleSearchSelect(value) {
-  const area = document.getElementById('searchResultsArea');
-  if (!area || !value) { if (area) area.innerHTML = ''; return; }
-
-  const cat = window._searchCategory;
-  let results = [];
-
-  if (cat === 'course') {
-    results = (window._searchCDs||[]).filter(d => (d['Program']||d['program']||'').trim() === value);
-  } else if (cat === 'college') {
-    results = (window._searchCDs||[]).filter(d => (d['College Name']||d['college_name']||d['College']||'').trim() === value);
-  } else if (cat === 'city') {
-    results = (window._searchCDs||[]).filter(d => {
-      const notes = d['Notes']||d['notes']||'';
-      const cityMatch = notes.match(/(?:city|location|campus)[:\s]*([^\n,;]+)/i);
-      return cityMatch && cityMatch[1].trim() === value;
-    });
-  } else if (cat === 'test') {
-    results = (window._searchCDs||[]).filter(d => {
-      const notes = (d['Notes']||d['notes']||'').toLowerCase();
-      return notes.includes(value.toLowerCase());
-    });
-  } else if (cat === 'math') {
-    const mathRequired = value === 'Math Mandatory';
-    results = (window._searchCDs||[]).filter(d => {
-      const notes = (d['Notes']||d['notes']||'').toLowerCase();
-      if (mathRequired) return notes.includes('math') && !notes.includes('not mandatory');
-      return notes.includes('not mandatory') || !notes.includes('math');
-    });
-  }
-
-  if (results.length === 0) {
-    area.innerHTML = `<div class="empty-state" style="margin-top:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><h3>No results found</h3><p>No matching programs for "${esc(value)}"</p></div>`;
-    return;
-  }
-
-  area.innerHTML = `<div class="search-results-count">${results.length} result${results.length!==1?'s':''} found</div>
-    ${results.map((r, i) => {
-      const collegeName = r['College Name']||r['college_name']||r['College']||'';
-      const program = r['Program']||r['program']||'';
-      const deadline = r['Deadline']||r['deadline']||'';
-      const status = r['Status']||r['status']||'Open';
-      const round = r['Round']||r['round']||'';
-      const notes = r['Notes']||r['notes']||'';
-      const applyUrl = r['Apply URL']||r['apply_url']||'';
-      const id = r['College Deadlines ID']||r['ID']||r['id']||'';
-      const sClass = status.toLowerCase();
-      return `<div class="search-result-card animate-in stagger-${Math.min(i,5)}">
-        <div class="src-header">
-          <div>
-            <div class="src-name">${esc(collegeName)}</div>
-            <div class="src-sub">${esc(program)}</div>
-          </div>
-          ${bookmarkIcon(id)}
-        </div>
-        <div class="src-meta">
-          ${deadline ? `<span class="src-tag cyan"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${esc(deadline)}</span>` : ''}
-          ${round ? `<span class="src-tag">Round: ${esc(round)}</span>` : ''}
-          <span class="src-tag ${sClass==='open'?'accent':sClass==='upcoming'?'amber':''}"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>${esc(status)}</span>
-        </div>
-        ${notes ? `<div style="margin-top:8px;font-size:.72rem;color:var(--fg3);font-family:var(--font-mono);line-height:1.5">${esc(notes)}</div>` : ''}
-        <div class="src-actions">
-          ${applyUrl ? `<a href="${esc(applyUrl)}" target="_blank" rel="noopener" class="btn-apply" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Apply Now</a>` : ''}
-        </div>
-      </div>`;
-    }).join('')}`;
-}
 </script>
 </body>
 </html>
