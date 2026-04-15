@@ -859,34 +859,12 @@ function getChannelKeys(ch) {
   return Array.from(keys);
 }
 
-function toLegacySafeId(value) {
-  return String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-}
-
-function getChannelKeys(ch) {
-  const keys = new Set();
-  const add = (v) => { const k = toLegacySafeId(v); if (k) keys.add(k); };
-  add(ch.handle || '');
-  add((ch.handle || '').replace(/^@/, ''));
-  add(ch.name || '');
-  const url = String(ch.url || '');
-  const atMatch = url.match(/youtube\.com\/@([^/?#]+)/i);
-  const channelMatch = url.match(/youtube\.com\/channel\/([^/?#]+)/i);
-  if (atMatch) add(atMatch[1]);
-  if (channelMatch) add(channelMatch[1]);
-  return Array.from(keys);
-}
-
 async function fetchRatings(channelKeys) {
   if (!supabaseClient) return { avg: 0, count: 0 };
   const cacheKey = channelKeys.join('|');
   if (ratingsCache[cacheKey]) return ratingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId);
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').in('channel_id', channelKeys);
     if (error) throw error;
     const ratings = data || [];
     const numericRatings = ratings.map(r => Number(r.rating)).filter(n => Number.isFinite(n) && n > 0);
@@ -902,7 +880,9 @@ async function fetchUserRating(channelKeys) {
   const cacheKey = channelKeys.join('|') + '_' + fp;
   if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    // Build OR filter: (channel_id.eq(key1),channel_id.eq(key2),...) AND user_fingerprint.eq(fp)
+    const orClauses = channelKeys.map(k => `channel_id.eq.${k}`).join(',');
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').or(orClauses).eq('user_fingerprint', fp).maybeSingle();
     if (error) throw error;
     userRatingsCache[cacheKey] = data ? Number(data.rating) || 0 : 0;
     return userRatingsCache[cacheKey];
@@ -912,19 +892,23 @@ async function fetchUserRating(channelKeys) {
 async function submitRating(primaryChannelId, channelName, channelKeys, rating) {
   if (!supabaseClient) return false;
   const fp = getUserFingerprint();
+  const cacheKey = channelKeys.join('|');
   try {
-    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    // Check if user already voted under any of the channel's identifiers
+    const orClauses = channelKeys.map(k => `channel_id.eq.${k}`).join(',');
+    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').or(orClauses).eq('user_fingerprint', fp).maybeSingle();
     if (existingErr) throw existingErr;
     if (existing) {
       const { error: updateErr } = await supabaseClient.from(VOTES_TABLE).update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
       if (updateErr) throw updateErr;
     } else {
-      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
+      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: primaryChannelId, channel_name: channelName, user_fingerprint: fp, rating });
       if (insertErr) throw insertErr;
     }
-    delete ratingsCache[channelId];
-    delete userRatingsCache[channelId + '_' + fp];
-    userRatingsCache[channelId + '_' + fp] = rating;
+    // Invalidate caches using correct keys
+    delete ratingsCache[cacheKey];
+    delete userRatingsCache[cacheKey + '_' + fp];
+    userRatingsCache[cacheKey + '_' + fp] = rating;
     return true;
   } catch(e) { console.warn('Rating submit error:', e); return false; }
 }
