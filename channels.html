@@ -23,7 +23,7 @@
       document.documentElement.style.setProperty('--accent-md',`rgba(${r},${gv},${b},0.20)`);}
   })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>ISC.exe — YouTube Channels</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
@@ -804,10 +804,14 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIs
 // Safe Supabase init — the SDK loads before this script
 let supabaseClient = null;
 try {
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
+  if (typeof supabase !== 'undefined' && typeof supabase.createClient === 'function') {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    console.log("Supabase successfully initialized using global object.");
+  } else if (window.supabase && typeof window.supabase.createClient === 'function') {
     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    console.log("Supabase successfully initialized using window object.");
   } else {
-    console.warn('Supabase SDK not loaded; ratings will be display-only.');
+    console.warn('Supabase SDK not loaded; ratings will be display-only. Check your network or script tags.');
   }
 } catch(e) {
   console.warn('Supabase init error:', e);
