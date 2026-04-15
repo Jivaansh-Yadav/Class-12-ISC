@@ -90,6 +90,13 @@ body.light-mode .cc-star.empty svg{fill:rgba(0,0,0,.06);stroke:rgba(0,0,0,.12);}
 body.light-mode .cc-rating-avg{color:var(--fg);}
 body.light-mode .cc-rating-count{color:var(--fg3);}
 body.light-mode .cc-rating-toast{background:rgba(255,255,255,.95);border-color:rgba(245,200,66,.4);color:#b8860b;box-shadow:0 12px 40px rgba(0,0,0,.15);}
+body.light-mode .cc-rating-top{background:var(--surface2);border-color:var(--border2);}
+body.light-mode .cc-rating-count .vote-icon{opacity:.4;}
+body.light-mode .sort-btn{border-color:var(--border2);color:var(--fg3);}
+body.light-mode .sort-btn:hover{border-color:var(--accent);color:var(--fg);}
+body.light-mode .sort-btn.active{background:var(--surface2);border-color:var(--border2);color:var(--accent);}
+body.light-mode .cc-rank-badge.rank-other{background:var(--surface);color:var(--fg3);border-color:var(--border2);}
+body.light-mode .cc-rating{padding:2px 16px 16px;}
 
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 90% 60% at 12% 110%,color-mix(in srgb,var(--accent) 10%,transparent) 0%,transparent 65%),radial-gradient(ellipse 70% 45% at 88% -5%,rgba(100,160,255,0.045) 0%,transparent 60%);}
 body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");opacity:0.028;}
@@ -354,17 +361,32 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .cc-tag.t-pyq{background:rgba(212,168,75,.12);border-color:rgba(212,168,75,.32);color:#e0b85a;font-weight:600;}
 
 /* ══ STAR RATING — REDESIGNED ══ */
-.cc-rating{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px;}
-.cc-rating-top{display:flex;align-items:center;gap:10px;}
-.cc-rating-summary{display:flex;align-items:baseline;gap:5px;flex-shrink:0;}
-.cc-rating-avg{font-family:var(--font-brand);font-size:22px;font-weight:700;color:var(--fg);line-height:1;}
-.cc-rating-max{font-size:12px;color:var(--fg3);font-family:var(--font-mono);}
-.cc-rating-meta{flex:1;}
-.cc-rating-count{font-family:var(--font-mono);font-size:10px;color:var(--fg3);letter-spacing:.3px;display:block;margin-bottom:4px;}
-.cc-rating-bar-wrap{height:4px;background:var(--border);border-radius:4px;overflow:hidden;width:100%;max-width:160px;}
+.cc-rating{padding:2px 16px 16px;display:flex;flex-direction:column;gap:8px;}
+.cc-rating-top{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;background:color-mix(in srgb,var(--surface2) 80%,var(--surface));border:1px solid var(--border);}
+.cc-rating-summary{display:flex;align-items:baseline;gap:4px;flex-shrink:0;}
+.cc-rating-avg{font-family:var(--font-brand);font-size:26px;font-weight:700;color:var(--fg);line-height:1;}
+.cc-rating-max{font-size:13px;color:var(--fg3);font-family:var(--font-mono);font-weight:500;}
+.cc-rating-meta{flex:1;display:flex;flex-direction:column;gap:4px;}
+.cc-rating-count{font-family:var(--font-mono);font-size:10px;color:var(--fg3);letter-spacing:.3px;display:flex;align-items:center;gap:4px;}
+.cc-rating-count .vote-icon{font-size:10px;opacity:.6;}
+.cc-rating-bar-wrap{height:5px;background:var(--border);border-radius:4px;overflow:hidden;width:100%;max-width:180px;}
 .cc-rating-bar-fill{height:100%;background:linear-gradient(90deg,#f5c842,#ffd060);border-radius:4px;transition:width .6s cubic-bezier(.22,1,.36,1);}
 .cc-rating-badge{font-family:var(--font-mono);font-size:9px;padding:3px 9px;border-radius:20px;background:rgba(59,255,108,.1);border:1px solid rgba(59,255,108,.3);color:var(--accent);font-weight:600;flex-shrink:0;display:none;}
-.cc-rating-badge.visible{display:inline-block;}
+.cc-rating-badge.visible{display:inline-flex;align-items:center;gap:3px;}
+
+/* Rank badge on cards */
+.cc-rank-badge{position:absolute;top:8px;right:9px;z-index:5;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-family:var(--font-brand);font-size:12px;font-weight:700;letter-spacing:-.2px;border:1.5px solid transparent;transition:all .25s;}
+.cc-rank-badge.rank-1{background:linear-gradient(135deg,#ffd700,#ffb800);color:#1a1200;border-color:rgba(255,215,0,.6);box-shadow:0 2px 10px rgba(255,215,0,.35);}
+.cc-rank-badge.rank-2{background:linear-gradient(135deg,#c0c0c0,#a8a8a8);color:#1a1a1a;border-color:rgba(192,192,192,.5);box-shadow:0 2px 8px rgba(192,192,192,.25);}
+.cc-rank-badge.rank-3{background:linear-gradient(135deg,#cd7f32,#b87333);color:#1a1200;border-color:rgba(205,127,50,.5);box-shadow:0 2px 8px rgba(205,127,50,.25);}
+.cc-rank-badge.rank-other{background:var(--surface2);color:var(--fg3);border-color:var(--border2);}
+
+/* Sort control in infobar */
+.sort-control{display:flex;align-items:center;gap:4px;margin-left:auto;flex-shrink:0;}
+.sort-label{font-family:var(--font-mono);font-size:9px;color:var(--fg3);letter-spacing:.5px;text-transform:uppercase;}
+.sort-btn{font-family:var(--font-mono);font-size:9px;padding:3px 9px;border-radius:5px;border:1px solid var(--border2);background:transparent;color:var(--fg3);cursor:pointer;transition:all .18s;letter-spacing:.3px;text-transform:uppercase;font-weight:500;}
+.sort-btn:hover{border-color:var(--accent);color:var(--fg);}
+.sort-btn.active{background:var(--accent-lo);border-color:color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent);}
 
 .cc-rate-row{display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
 .cc-rate-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--fg3);margin-bottom:2px;}
@@ -634,6 +656,8 @@ async function loadChannels() {
   DATA.commerce = DATA.commerce || [];
   DATA.science = DATA.science || [];
   DATA.humanities = DATA.humanities || [];
+  // Pre-fetch all ratings for sorting/ranking
+  fetchAllRatings();
   renderSubjects();
 }
 
@@ -717,6 +741,7 @@ function selectSubject(g, block) {
   ib.style.borderBottomColor = `color-mix(in srgb,${g.color} 20%,var(--border2))`;
   renderGrid(g);
   document.getElementById('mainPanel').classList.add('mobile-open');
+  document.getElementById('panelInfobar').querySelectorAll && document.getElementById('panelInfobar').querySelectorAll('.sort-control').forEach(el => el.remove());
 }
 
 function showEmpty() {
@@ -732,10 +757,71 @@ function renderGrid(g) {
   const grid = document.getElementById('chGrid');
   document.getElementById('panelEmpty').style.display = 'none';
   grid.style.display = 'grid'; grid.innerHTML = '';
-  (g.channels || []).forEach((ch, idx) => grid.appendChild(mkCard(ch, g, idx)));
+
+  // Show sort control
+  const ib = document.getElementById('panelInfobar');
+  let sc = ib.querySelector('.sort-control');
+  if (!sc) {
+    sc = document.createElement('div'); sc.className = 'sort-control';
+    sc.innerHTML = '<span class="sort-label">Sort:</span>';
+    const btnRating = document.createElement('button'); btnRating.className = 'sort-btn active'; btnRating.textContent = 'Top Rated';
+    const btnVotes = document.createElement('button'); btnVotes.className = 'sort-btn'; btnVotes.textContent = 'Most Votes';
+    const btnDefault = document.createElement('button'); btnDefault.className = 'sort-btn'; btnDefault.textContent = 'Default';
+    sc.appendChild(btnRating); sc.appendChild(btnVotes); sc.appendChild(btnDefault);
+    ib.appendChild(sc);
+
+    const setSort = (mode) => {
+      sc.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      if (mode === 'rating') btnRating.classList.add('active');
+      else if (mode === 'votes') btnVotes.classList.add('active');
+      else btnDefault.classList.add('active');
+      renderGrid(g);
+    };
+    btnRating.onclick = () => setSort('rating');
+    btnVotes.onclick = () => setSort('votes');
+    btnDefault.onclick = () => setSort('default');
+  }
+
+  let channels = [...(g.channels || [])];
+  const activeSortBtn = sc.querySelector('.sort-btn.active');
+  const sortMode = activeSortBtn ? (activeSortBtn.textContent.includes('Votes') ? 'votes' : activeSortBtn.textContent.includes('Default') ? 'default' : 'rating') : 'rating';
+
+  if (sortMode !== 'default') {
+    // All ratings already pre-fetched on page load; just use the cache
+    if (supabaseClient && Object.keys(allRatingsData).length === 0) {
+      fetchAllRatings().then(() => renderGrid(g)); // retry after fetch
+      return;
+    }
+    channels = channels.map(ch => {
+      const voteId = ch.voteId || computeVoteId(ch.name, g.subject);
+      const rd = allRatingsData[voteId] || { avg: 0, count: 0 };
+      return { ch, voteId, avg: rd.avg, count: rd.count };
+    });
+
+    if (sortMode === 'rating') {
+      channels.sort((a, b) => b.avg - a.avg || b.count - a.count);
+    } else {
+      channels.sort((a, b) => b.count - a.count || b.avg - a.avg);
+    }
+
+    // Assign ranks (1-based, skip ties get same rank)
+    let currentRank = 0, prevAvg = -1, prevCount = -1;
+    channels.forEach((item, i) => {
+      if (item.avg !== prevAvg || item.count !== prevCount) {
+        currentRank = i + 1;
+        prevAvg = item.avg;
+        prevCount = item.count;
+      }
+      item.rank = currentRank;
+    });
+
+    channels.forEach((item, idx) => grid.appendChild(mkCard(item.ch, g, idx, item.rank, item.avg, item.count)));
+  } else {
+    channels.forEach((ch, idx) => grid.appendChild(mkCard(ch, g, idx)));
+  }
 }
 
-function mkCard(ch, g, idx) {
+function mkCard(ch, g, idx, rank, preloadedAvg, preloadedCount) {
   const card = document.createElement('div');
   card.className = 'ch-card'; card.style.setProperty('--subj-color', g.color); card.style.animationDelay = (idx * .05) + 's';
 
@@ -745,6 +831,11 @@ function mkCard(ch, g, idx) {
   const bn = ch.bannerUrl || '';
   if (bn) { const bi = document.createElement('img'); bi.className = 'banner'; bi.src = bn; bi.alt = ''; bi.onerror = () => bi.remove(); cover.appendChild(bi); }
   if (ch.isTop) { const tb = document.createElement('div'); tb.className = 'cc-top'; tb.textContent = '★ TOP'; cover.appendChild(tb); }
+  if (rank && rank <= 3) {
+    const rb = document.createElement('div'); rb.className = 'cc-rank-badge rank-' + rank;
+    rb.textContent = '#' + rank;
+    cover.appendChild(rb);
+  }
   const av = document.createElement('div'); av.className = 'cc-av'; av.textContent = ch.av || '📺';
   if (ch.avatarUrl) applyAvatar(av, ch.avatarUrl);
   cover.appendChild(av);
@@ -787,7 +878,7 @@ function mkCard(ch, g, idx) {
   card.appendChild(body);
 
   // Rating widget
-  card.appendChild(buildRatingWidget(ch, g));
+  card.appendChild(buildRatingWidget(ch, g, preloadedAvg, preloadedCount));
 
   // YT button
   const yt = document.createElement('a'); yt.className = 'cc-yt'; yt.href = ch.url || '#'; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
@@ -823,6 +914,24 @@ try {
    Example: "rajat_acc", "sunil_eco", "shubham_bst" */
 
 const ratingsCache = {};
+const allRatingsData = {}; // Batch cache for all votes (used for sorting)
+
+// Fetch ALL votes in one call — used for ranking/sorting
+async function fetchAllRatings() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('id, total, count');
+    if (error) throw error;
+    (data || []).forEach(row => {
+      const avg = Number(row.count) > 0 ? Math.round((Number(row.total) / Number(row.count)) * 10) / 10 : 0;
+      allRatingsData[row.id] = { avg, count: Number(row.count) };
+      ratingsCache[row.id] = { avg, count: Number(row.count) };
+    });
+    console.log('Loaded', Object.keys(allRatingsData).length, 'channel ratings from Supabase.');
+  } catch(e) {
+    console.warn('Batch ratings fetch error:', e);
+  }
+}
 const USER_VOTES_KEY = 'isc-user-votes-v1';
 
 function getUserVotes() {
@@ -985,7 +1094,7 @@ function showRatingToast(rating) {
 
 const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
-function buildRatingWidget(ch, g) {
+function buildRatingWidget(ch, g, preloadedAvg, preloadedCount) {
   const channelName = ch.name || '';
   // Use voteId from channel data if available, otherwise derive from name + subject
   const voteId = ch.voteId || computeVoteId(ch.name, g ? g.subject : '');
@@ -996,14 +1105,17 @@ function buildRatingWidget(ch, g) {
   const topRow = document.createElement('div'); topRow.className = 'cc-rating-top';
 
   const summary = document.createElement('div'); summary.className = 'cc-rating-summary';
-  const avgEl = document.createElement('span'); avgEl.className = 'cc-rating-avg'; avgEl.textContent = '\u2014';
+  const avgEl = document.createElement('span'); avgEl.className = 'cc-rating-avg'; avgEl.textContent = preloadedAvg > 0 ? preloadedAvg.toFixed(1) : '\u2014';
   const maxEl = document.createElement('span'); maxEl.className = 'cc-rating-max'; maxEl.textContent = '/5';
   summary.appendChild(avgEl); summary.appendChild(maxEl);
 
   const meta = document.createElement('div'); meta.className = 'cc-rating-meta';
-  const countEl = document.createElement('span'); countEl.className = 'cc-rating-count'; countEl.textContent = 'Loading\u2026';
+  const countEl = document.createElement('span'); countEl.className = 'cc-rating-count';
+  countEl.innerHTML = (preloadedCount > 0 ? preloadedCount + ' rating' + (preloadedCount !== 1 ? 's' : '') : '\u2014')
+    + (preloadedCount > 0 ? ' <span class="vote-icon">\u25CF</span>' : '');
   const barWrap = document.createElement('div'); barWrap.className = 'cc-rating-bar-wrap';
-  const barFill = document.createElement('div'); barFill.className = 'cc-rating-bar-fill'; barFill.style.width = '0%';
+  const barFill = document.createElement('div'); barFill.className = 'cc-rating-bar-fill';
+  barFill.style.width = preloadedAvg > 0 ? ((preloadedAvg / 5) * 100) + '%' : '0%';
   barWrap.appendChild(barFill); meta.appendChild(countEl); meta.appendChild(barWrap);
 
   const badge = document.createElement('span'); badge.className = 'cc-rating-badge';
@@ -1071,21 +1183,31 @@ function buildRatingWidget(ch, g) {
   rateRow.appendChild(starsWrap);
   wrap.appendChild(rateRow);
 
-  // Load ratings async from Supabase
-  (async () => {
-    const ratingData = await fetchRatings(voteId);
+  // If we have preloaded data, skip fetch — otherwise load from Supabase
+  if (preloadedAvg === undefined || preloadedCount === undefined) {
+    (async () => {
+      const ratingData = await fetchRatings(voteId);
+      const myRating = getStoredUserVote(voteId);
+      avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '\u2014';
+      countEl.innerHTML = ratingData.count
+        ? ratingData.count + ' rating' + (ratingData.count !== 1 ? 's' : '') + ' <span class="vote-icon">\u25CF</span>'
+        : 'Be the first to rate';
+      barFill.style.width = ratingData.count ? ((ratingData.avg / 5) * 100) + '%' : '0%';
+      if (myRating > 0) {
+        userRating = myRating;
+        setStarDisplay(0, myRating);
+        badge.classList.add('visible');
+      }
+    })();
+  } else {
+    // Preloaded data already set above, just check user vote
     const myRating = getStoredUserVote(voteId);
-    avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '\u2014';
-    countEl.textContent = ratingData.count
-      ? ratingData.count + ' rating' + (ratingData.count !== 1 ? 's' : '')
-      : 'Be the first to rate';
-    barFill.style.width = ratingData.count ? ((ratingData.avg / 5) * 100) + '%' : '0%';
     if (myRating > 0) {
       userRating = myRating;
       setStarDisplay(0, myRating);
       badge.classList.add('visible');
     }
-  })();
+  }
 
   return wrap;
 }
