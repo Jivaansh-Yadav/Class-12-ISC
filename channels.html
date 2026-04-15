@@ -799,7 +799,8 @@ function mkCard(ch, g, idx) {
 
 /* ══ SUPABASE RATING SYSTEM ══ */
 const SUPABASE_URL = 'https://kswlexxuceivjkjkxsdm.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd2xleHh1Y2Vpdmpramt4c2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzU2NzksImV4cCI6MjA4OTI1MTY3OX0.mbUoMFoFUrJvmJb16WsHeOMsDuWm7LPRdEKsqu_wbUk';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd2xleHh1Y2Vpdmpramt4c2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzU2NzksImV4cCI6MjA4OTI1MTY3OX0.mbUoMFoFUrJvmJb16WsHeOMsDuWm7LPRdEKsqu_wbUk';
+const VOTES_TABLE = 'votes';
 
 // Safe Supabase init — the SDK loads before this script
 let supabaseClient = null;
@@ -833,7 +834,7 @@ async function fetchRatings(channelId) {
   if (!supabaseClient) return { avg: 0, count: 0 };
   if (ratingsCache[channelId]) return ratingsCache[channelId];
   try {
-    const { data, error } = await supabaseClient.from('votes').select('rating').eq('channel_id', channelId);
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId);
     if (error) throw error;
     const ratings = data || [];
     const avg = ratings.length ? (ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) : 0;
@@ -848,7 +849,7 @@ async function fetchUserRating(channelId) {
   const cacheKey = channelId + '_' + fp;
   if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from('votes').select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
     if (error) throw error;
     userRatingsCache[cacheKey] = data ? data.rating : 0;
     return userRatingsCache[cacheKey];
@@ -859,16 +860,18 @@ async function submitRating(channelId, channelName, rating) {
   if (!supabaseClient) return false;
   const fp = getUserFingerprint();
   try {
-    const { data: existing } = await supabaseClient.from('votes').select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    if (existingErr) throw existingErr;
     if (existing) {
-      await supabaseClient.from('votes').update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
+      const { error: updateErr } = await supabaseClient.from(VOTES_TABLE).update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
+      if (updateErr) throw updateErr;
     } else {
-      await supabaseClient.from('votes').insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
+      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
+      if (insertErr) throw insertErr;
     }
     delete ratingsCache[channelId];
     delete userRatingsCache[channelId + '_' + fp];
     userRatingsCache[channelId + '_' + fp] = rating;
-    showRatingToast(rating);
     return true;
   } catch(e) { console.warn('Rating submit error:', e); return false; }
 }
