@@ -848,8 +848,28 @@ function getChannelKeys(ch) {
     const k = toLegacySafeId(raw);
     if (k) keys.add(k);
   };
-  add(ch.id || '');
-  add(ch.channel_id || '');
+  add(ch.handle || '');
+  add((ch.handle || '').replace(/^@/, ''));
+  add(ch.name || '');
+  const url = String(ch.url || '');
+  const atMatch = url.match(/youtube\.com\/@([^/?#]+)/i);
+  const channelMatch = url.match(/youtube\.com\/channel\/([^/?#]+)/i);
+  if (atMatch) add(atMatch[1]);
+  if (channelMatch) add(channelMatch[1]);
+  return Array.from(keys);
+}
+
+function toLegacySafeId(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function getChannelKeys(ch) {
+  const keys = new Set();
+  const add = (v) => { const k = toLegacySafeId(v); if (k) keys.add(k); };
   add(ch.handle || '');
   add((ch.handle || '').replace(/^@/, ''));
   add(ch.name || '');
@@ -866,24 +886,9 @@ async function fetchRatings(channelKeys) {
   const cacheKey = channelKeys.join('|');
   if (ratingsCache[cacheKey]) return ratingsCache[cacheKey];
   try {
-    const fallbackCols = ['channel_id', 'channel_name', 'channel', 'name', 'handle'];
-    const ratings = [];
-
-    for (const col of fallbackCols) {
-      const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').in(col, channelKeys);
-      if (error) {
-        const msg = String(error.message || '');
-        // Try next possible channel-identifying column when schema varies.
-        if (/column|does not exist|42703|schema/i.test(msg)) continue;
-        throw error;
-      }
-      for (const row of (data || [])) {
-        ratings.push(row);
-      }
-      // If we found ratings on one known column, no need to keep probing others.
-      if (ratings.length) break;
-    }
-
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId);
+    if (error) throw error;
+    const ratings = data || [];
     const numericRatings = ratings.map(r => Number(r.rating)).filter(n => Number.isFinite(n) && n > 0);
     const avg = numericRatings.length ? (numericRatings.reduce((s, r) => s + r, 0) / numericRatings.length) : 0;
     ratingsCache[cacheKey] = { avg: Math.round(avg * 10) / 10, count: numericRatings.length };
@@ -892,16 +897,14 @@ async function fetchRatings(channelKeys) {
 }
 
 async function fetchUserRating(channelKeys) {
-  const cacheKey = channelKeys.join('|');
+  if (!supabaseClient) return 0;
+  const fp = getUserFingerprint();
+  const cacheKey = channelKeys.join('|') + '_' + fp;
   if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
   try {
-    const raw = localStorage.getItem(LOCAL_RATING_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
-    let val = 0;
-    for (const key of channelKeys) {
-      if (parsed[key]) { val = Number(parsed[key]) || 0; break; }
-    }
-    userRatingsCache[cacheKey] = val;
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    if (error) throw error;
+    userRatingsCache[cacheKey] = data ? Number(data.rating) || 0 : 0;
     return userRatingsCache[cacheKey];
   } catch(e) { console.warn('User rating local cache error:', e); return 0; }
 }
@@ -910,34 +913,18 @@ async function submitRating(primaryChannelId, channelName, channelKeys, rating) 
   if (!supabaseClient) return false;
   const fp = getUserFingerprint();
   try {
-    const payloadCandidates = [
-      { channel_id: primaryChannelId, channel_name: channelName, user_fingerprint: fp, rating },
-      { channel_id: primaryChannelId, channel_name: channelName, rating },
-      { channel_id: primaryChannelId, rating },
-      { channel_name: channelName, rating }
-    ];
-
-    let lastErr = null;
-    let wrote = false;
-    for (const payload of payloadCandidates) {
-      const { error } = await supabaseClient.from(VOTES_TABLE).insert(payload);
-      if (!error) { wrote = true; break; }
-      lastErr = error;
-      const msg = String(error.message || '');
-      if (!/column|schema|inserted row|permission|violates/i.test(msg)) break;
+    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
+    if (existingErr) throw existingErr;
+    if (existing) {
+      const { error: updateErr } = await supabaseClient.from(VOTES_TABLE).update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
+      if (updateErr) throw updateErr;
+    } else {
+      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
+      if (insertErr) throw insertErr;
     }
-    if (!wrote) throw lastErr || new Error('Unknown vote insert error');
-
-    // Store per-device rated value for UI state (independent of DB schema differences)
-    const raw = localStorage.getItem(LOCAL_RATING_KEY);
-    const parsed = raw ? JSON.parse(raw) : {};
-    parsed[primaryChannelId] = rating;
-    localStorage.setItem(LOCAL_RATING_KEY, JSON.stringify(parsed));
-
-    const ratingsCacheKey = channelKeys.join('|');
-    delete ratingsCache[ratingsCacheKey];
-    delete userRatingsCache[ratingsCacheKey];
-    userRatingsCache[ratingsCacheKey] = rating;
+    delete ratingsCache[channelId];
+    delete userRatingsCache[channelId + '_' + fp];
+    userRatingsCache[channelId + '_' + fp] = rating;
     return true;
   } catch(e) { console.warn('Rating submit error:', e); return false; }
 }
@@ -959,8 +946,7 @@ const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4
 function buildRatingWidget(ch) {
   const channelName = ch.name || '';
   const detectedKeys = getChannelKeys(ch);
-  const explicitId = String(ch.id || ch.channel_id || '').trim();
-  const primaryChannelId = explicitId || detectedKeys[0] || toLegacySafeId(channelName) || 'unknown_channel';
+  const primaryChannelId = detectedKeys[0] || toLegacySafeId(channelName) || 'unknown_channel';
   const channelKeys = detectedKeys.length ? detectedKeys : [primaryChannelId];
   const wrap = document.createElement('div');
   wrap.className = 'cc-rating';
