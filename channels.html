@@ -856,7 +856,7 @@ async function fetchRatings(channelKeys) {
   const cacheKey = channelKeys.join('|');
   if (ratingsCache[cacheKey]) return ratingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').in('channel_id', channelKeys);
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId);
     if (error) throw error;
     const ratings = data || [];
     const numericRatings = ratings.map(r => Number(r.rating)).filter(n => Number.isFinite(n) && n > 0);
@@ -872,14 +872,7 @@ async function fetchUserRating(channelKeys) {
   const cacheKey = channelKeys.join('|') + '_' + fp;
   if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient
-      .from(VOTES_TABLE)
-      .select('rating')
-      .in('channel_id', channelKeys)
-      .eq('user_fingerprint', fp)
-      .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
     if (error) throw error;
     userRatingsCache[cacheKey] = data ? Number(data.rating) || 0 : 0;
     return userRatingsCache[cacheKey];
@@ -890,26 +883,18 @@ async function submitRating(primaryChannelId, channelName, channelKeys, rating) 
   if (!supabaseClient) return false;
   const fp = getUserFingerprint();
   try {
-    const { data: existing, error: existingErr } = await supabaseClient
-      .from(VOTES_TABLE)
-      .select('id')
-      .in('channel_id', channelKeys)
-      .eq('user_fingerprint', fp)
-      .order('updated_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
     if (existingErr) throw existingErr;
     if (existing) {
       const { error: updateErr } = await supabaseClient.from(VOTES_TABLE).update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
       if (updateErr) throw updateErr;
     } else {
-      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: primaryChannelId, channel_name: channelName, user_fingerprint: fp, rating });
+      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
       if (insertErr) throw insertErr;
     }
-    const ratingsCacheKey = channelKeys.join('|');
-    delete ratingsCache[ratingsCacheKey];
-    delete userRatingsCache[ratingsCacheKey + '_' + fp];
-    userRatingsCache[ratingsCacheKey + '_' + fp] = rating;
+    delete ratingsCache[channelId];
+    delete userRatingsCache[channelId + '_' + fp];
+    userRatingsCache[channelId + '_' + fp] = rating;
     return true;
   } catch(e) { console.warn('Rating submit error:', e); return false; }
 }
