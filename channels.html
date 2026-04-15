@@ -787,7 +787,7 @@ function mkCard(ch, g, idx) {
   card.appendChild(body);
 
   // Rating widget
-  card.appendChild(buildRatingWidget(ch));
+  card.appendChild(buildRatingWidget(ch, g));
 
   // YT button
   const yt = document.createElement('a'); yt.className = 'cc-yt'; yt.href = ch.url || '#'; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
@@ -817,100 +817,158 @@ try {
   console.warn('Supabase init error:', e);
 }
 
-function getUserFingerprint() {
-  let fp = localStorage.getItem('isc-fp');
-  if (!fp) {
-    fp = 'fp_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem('isc-fp', fp);
-  }
-  return fp;
-}
+/* ── DB schema: votes(id TEXT PK, total NUMERIC, count INT) ──
+   Each row = one channel. total = sum of all ratings, count = number of votes.
+   DB IDs follow the pattern: {shortname}_{subject_code}
+   Example: "rajat_acc", "sunil_eco", "shubham_bst" */
 
 const ratingsCache = {};
-const userRatingsCache = {};
-const LOCAL_RATING_KEY = 'isc-local-ratings-v1';
+const USER_VOTES_KEY = 'isc-user-votes-v1';
 
-function toLegacySafeId(value) {
-  return String(value || '')
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '_')
-    .replace(/^_+|_+$/g, '');
+function getUserVotes() {
+  try { return JSON.parse(localStorage.getItem(USER_VOTES_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveUserVote(voteId, rating) {
+  const votes = getUserVotes();
+  votes[voteId] = rating;
+  localStorage.setItem(USER_VOTES_KEY, JSON.stringify(votes));
+}
+function getStoredUserVote(voteId) {
+  return getUserVotes()[voteId] || 0;
 }
 
-function getChannelKeys(ch) {
-  const keys = new Set();
-  const add = (v) => {
-    const raw = String(v || '').trim();
-    if (!raw) return;
-    keys.add(raw);
-    keys.add(raw.toLowerCase());
-    const k = toLegacySafeId(raw);
-    if (k) keys.add(k);
-  };
-  add(ch.handle || '');
-  add((ch.handle || '').replace(/^@/, ''));
-  add(ch.name || '');
-  const url = String(ch.url || '');
-  const atMatch = url.match(/youtube\.com\/@([^/?#]+)/i);
-  const channelMatch = url.match(/youtube\.com\/channel\/([^/?#]+)/i);
-  if (atMatch) add(atMatch[1]);
-  if (channelMatch) add(channelMatch[1]);
-  return Array.from(keys);
+// Map common subject names to DB abbreviations
+const SUBJECT_CODES = {
+  'accounts': 'acc', 'accountancy': 'acc',
+  'economics': 'eco', 'economic': 'eco',
+  'business studies': 'bst', 'business': 'bst',
+  'chemistry': 'chem',
+  'physics': 'phy',
+  'mathematics': 'maths', 'maths': 'maths', 'math': 'maths',
+  'biology': 'bio',
+  'english': 'eng',
+  'computer science': 'cs', 'computer': 'cs',
+  'hindi': 'hin',
+  'physical education': 'pe',
+  'history': 'his',
+  'political science': 'polsci', 'polity': 'polsci',
+  'geography': 'geo',
+  'sociology': 'soc',
+  'psychology': 'psy',
+  'philosophy': 'phil',
+};
+
+function getSubjectCode(subject) {
+  if (!subject) return 'gen';
+  const lower = subject.toLowerCase().trim();
+  // Check direct match first
+  if (SUBJECT_CODES[lower]) return SUBJECT_CODES[lower];
+  // Check partial match (longest key first)
+  const sorted = Object.keys(SUBJECT_CODES).sort((a, b) => b.length - a.length);
+  for (const key of sorted) {
+    if (lower.includes(key)) return SUBJECT_CODES[key];
+  }
+  // Check for sub-suffixes like "Core", "Elective"
+  const suffixes = { 'core': '_c', 'elective': '_e', 'supplementary': '_s', 'honours': '_h' };
+  for (const [suf, code] of Object.entries(suffixes)) {
+    if (lower.includes(suf)) {
+      // Try to get the base subject code
+      const base = lower.replace(suf, '').trim();
+      for (const key of sorted) {
+        if (base.includes(key)) return SUBJECT_CODES[key] + code;
+      }
+      return lower.replace(/[^a-z]/g, '').slice(0, 3) + code;
+    }
+  }
+  // Fallback: first 3 alpha chars
+  return lower.replace(/[^a-z]/g, '').slice(0, 3) || 'gen';
 }
 
-async function fetchRatings(channelKeys) {
+function getShortName(name) {
+  if (!name) return 'unknown';
+  // Remove common titles/prefixes
+  let clean = name.replace(/^(CA|Dr\.?|Prof\.?|Mr\.?|Ms\.?|Mrs\.?|Er\.?)\s+/i, '').trim();
+  // Remove anything in parentheses or brackets at the end
+  clean = clean.replace(/\s*[(\[][\w\s]*[)\]]\s*$/g, '').trim();
+  // Take the first word as the short name
+  const firstWord = clean.split(/\s+/)[0];
+  return firstWord.toLowerCase().replace(/[^a-z0-9]/g, '') || 'unknown';
+}
+
+function computeVoteId(channelName, subject) {
+  const short = getShortName(channelName);
+  const subCode = getSubjectCode(subject);
+  return short + '_' + subCode;
+}
+
+// Fetch aggregated ratings for a single channel by its DB vote ID
+async function fetchRatings(voteId) {
   if (!supabaseClient) return { avg: 0, count: 0 };
-  const cacheKey = channelKeys.join('|');
-  if (ratingsCache[cacheKey]) return ratingsCache[cacheKey];
+  if (ratingsCache[voteId]) return ratingsCache[voteId];
   try {
-    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').in('channel_id', channelKeys);
+    const { data, error } = await supabaseClient
+      .from(VOTES_TABLE)
+      .select('total, count')
+      .eq('id', voteId)
+      .maybeSingle();
     if (error) throw error;
-    const ratings = data || [];
-    const numericRatings = ratings.map(r => Number(r.rating)).filter(n => Number.isFinite(n) && n > 0);
-    const avg = numericRatings.length ? (numericRatings.reduce((s, r) => s + r, 0) / numericRatings.length) : 0;
-    ratingsCache[cacheKey] = { avg: Math.round(avg * 10) / 10, count: numericRatings.length };
-    return ratingsCache[cacheKey];
-  } catch(e) { console.warn('Rating fetch error:', e); return { avg: 0, count: 0 }; }
+    if (!data || !data.count) {
+      ratingsCache[voteId] = { avg: 0, count: 0 };
+      return ratingsCache[voteId];
+    }
+    const avg = Math.round((Number(data.total) / Number(data.count)) * 10) / 10;
+    ratingsCache[voteId] = { avg, count: Number(data.count) };
+    return ratingsCache[voteId];
+  } catch(e) {
+    console.warn('Rating fetch error for', voteId, ':', e);
+    return { avg: 0, count: 0 };
+  }
 }
 
-async function fetchUserRating(channelKeys) {
-  if (!supabaseClient) return 0;
-  const fp = getUserFingerprint();
-  const cacheKey = channelKeys.join('|') + '_' + fp;
-  if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
-  try {
-    // Build OR filter: (channel_id.eq(key1),channel_id.eq(key2),...) AND user_fingerprint.eq(fp)
-    const orClauses = channelKeys.map(k => `channel_id.eq.${k}`).join(',');
-    const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').or(orClauses).eq('user_fingerprint', fp).maybeSingle();
-    if (error) throw error;
-    userRatingsCache[cacheKey] = data ? Number(data.rating) || 0 : 0;
-    return userRatingsCache[cacheKey];
-  } catch(e) { console.warn('User rating local cache error:', e); return 0; }
-}
-
-async function submitRating(primaryChannelId, channelName, channelKeys, rating) {
+// Submit a rating: updates the aggregated row in the DB
+async function submitRating(voteId, rating) {
   if (!supabaseClient) return false;
-  const fp = getUserFingerprint();
-  const cacheKey = channelKeys.join('|');
+  const oldRating = getStoredUserVote(voteId);
+  const isNewVote = (oldRating === 0);
+  const delta = rating - oldRating;
+
   try {
-    // Check if user already voted under any of the channel's identifiers
-    const orClauses = channelKeys.map(k => `channel_id.eq.${k}`).join(',');
-    const { data: existing, error: existingErr } = await supabaseClient.from(VOTES_TABLE).select('id').or(orClauses).eq('user_fingerprint', fp).maybeSingle();
-    if (existingErr) throw existingErr;
+    // Check if row already exists
+    const { data: existing, error: fetchErr } = await supabaseClient
+      .from(VOTES_TABLE)
+      .select('total, count')
+      .eq('id', voteId)
+      .maybeSingle();
+    if (fetchErr) throw fetchErr;
+
     if (existing) {
-      const { error: updateErr } = await supabaseClient.from(VOTES_TABLE).update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
+      // Update: adjust total by the difference, increment count only for new votes
+      const newTotal = Number(existing.total) + delta;
+      const newCount = isNewVote ? Number(existing.count) + 1 : Number(existing.count);
+      const { error: updateErr } = await supabaseClient
+        .from(VOTES_TABLE)
+        .update({ total: newTotal, count: newCount })
+        .eq('id', voteId);
       if (updateErr) throw updateErr;
     } else {
-      const { error: insertErr } = await supabaseClient.from(VOTES_TABLE).insert({ channel_id: primaryChannelId, channel_name: channelName, user_fingerprint: fp, rating });
+      // Insert new row for this channel
+      const { error: insertErr } = await supabaseClient
+        .from(VOTES_TABLE)
+        .insert({ id: voteId, total: rating, count: 1 });
       if (insertErr) throw insertErr;
     }
-    // Invalidate caches using correct keys
-    delete ratingsCache[cacheKey];
-    delete userRatingsCache[cacheKey + '_' + fp];
-    userRatingsCache[cacheKey + '_' + fp] = rating;
+
+    // Save user's vote locally
+    saveUserVote(voteId, rating);
+
+    // Invalidate the ratings cache so next fetch gets fresh data
+    delete ratingsCache[voteId];
     return true;
-  } catch(e) { console.warn('Rating submit error:', e); return false; }
+  } catch(e) {
+    console.warn('Rating submit error for', voteId, ':', e);
+    return false;
+  }
 }
 
 function showRatingToast(rating) {
@@ -919,7 +977,7 @@ function showRatingToast(rating) {
   const toast = document.createElement('div');
   toast.className = 'cc-rating-toast';
   const msg = rating === 5 ? 'Perfect score!' : rating >= 4 ? 'Great rating!' : rating >= 3 ? 'Rating saved!' : 'Thanks for your feedback!';
-  toast.innerHTML = `<span>⭐</span> ${msg} <span style="opacity:.5">(${rating}/5)</span>`;
+  toast.innerHTML = '<span>\u2B50</span> ' + msg + ' <span style="opacity:.5">(' + rating + '/5)</span>';
   document.body.appendChild(toast);
   requestAnimationFrame(() => { requestAnimationFrame(() => toast.classList.add('show')); });
   setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 350); }, 2200);
@@ -927,11 +985,10 @@ function showRatingToast(rating) {
 
 const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
-function buildRatingWidget(ch) {
+function buildRatingWidget(ch, g) {
   const channelName = ch.name || '';
-  const detectedKeys = getChannelKeys(ch);
-  const primaryChannelId = detectedKeys[0] || toLegacySafeId(channelName) || 'unknown_channel';
-  const channelKeys = detectedKeys.length ? detectedKeys : [primaryChannelId];
+  // Use voteId from channel data if available, otherwise derive from name + subject
+  const voteId = ch.voteId || computeVoteId(ch.name, g ? g.subject : '');
   const wrap = document.createElement('div');
   wrap.className = 'cc-rating';
 
@@ -939,18 +996,18 @@ function buildRatingWidget(ch) {
   const topRow = document.createElement('div'); topRow.className = 'cc-rating-top';
 
   const summary = document.createElement('div'); summary.className = 'cc-rating-summary';
-  const avgEl = document.createElement('span'); avgEl.className = 'cc-rating-avg'; avgEl.textContent = '—';
+  const avgEl = document.createElement('span'); avgEl.className = 'cc-rating-avg'; avgEl.textContent = '\u2014';
   const maxEl = document.createElement('span'); maxEl.className = 'cc-rating-max'; maxEl.textContent = '/5';
   summary.appendChild(avgEl); summary.appendChild(maxEl);
 
   const meta = document.createElement('div'); meta.className = 'cc-rating-meta';
-  const countEl = document.createElement('span'); countEl.className = 'cc-rating-count'; countEl.textContent = 'Loading…';
+  const countEl = document.createElement('span'); countEl.className = 'cc-rating-count'; countEl.textContent = 'Loading\u2026';
   const barWrap = document.createElement('div'); barWrap.className = 'cc-rating-bar-wrap';
   const barFill = document.createElement('div'); barFill.className = 'cc-rating-bar-fill'; barFill.style.width = '0%';
   barWrap.appendChild(barFill); meta.appendChild(countEl); meta.appendChild(barWrap);
 
   const badge = document.createElement('span'); badge.className = 'cc-rating-badge';
-  badge.textContent = 'Rated ✓';
+  badge.textContent = 'Rated \u2713';
 
   topRow.appendChild(summary); topRow.appendChild(meta); topRow.appendChild(badge);
   wrap.appendChild(topRow);
@@ -968,7 +1025,7 @@ function buildRatingWidget(ch) {
     const star = document.createElement('button');
     star.className = 'cc-star empty';
     star.innerHTML = STAR_SVG;
-    star.setAttribute('aria-label', `Rate ${i} star${i > 1 ? 's' : ''}`);
+    star.setAttribute('aria-label', 'Rate ' + i + ' star' + (i > 1 ? 's' : ''));
     star.dataset.val = i;
     stars.push(star);
     starsWrap.appendChild(star);
@@ -1000,10 +1057,10 @@ function buildRatingWidget(ch) {
     setStarDisplay(0, val);
     stars.forEach((st, i) => { if (i < val) { st.classList.add('user-rated'); setTimeout(() => st.classList.remove('user-rated'), 400); } });
     badge.classList.add('visible');
-    const ok = await submitRating(primaryChannelId, channelName, channelKeys, val);
+    const ok = await submitRating(voteId, val);
     if (ok) {
-      const fresh = await fetchRatings(channelKeys);
-      avgEl.textContent = fresh.count ? fresh.avg.toFixed(1) : '—';
+      const fresh = await fetchRatings(voteId);
+      avgEl.textContent = fresh.count ? fresh.avg.toFixed(1) : '\u2014';
       countEl.textContent = fresh.count ? fresh.count + ' rating' + (fresh.count !== 1 ? 's' : '') : 'No ratings yet';
       barFill.style.width = fresh.count ? ((fresh.avg / 5) * 100) + '%' : '0%';
       showRatingToast(val);
@@ -1014,10 +1071,11 @@ function buildRatingWidget(ch) {
   rateRow.appendChild(starsWrap);
   wrap.appendChild(rateRow);
 
-  // Load ratings async
+  // Load ratings async from Supabase
   (async () => {
-    const [ratingData, myRating] = await Promise.all([fetchRatings(channelKeys), fetchUserRating(channelKeys)]);
-    avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '—';
+    const ratingData = await fetchRatings(voteId);
+    const myRating = getStoredUserVote(voteId);
+    avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '\u2014';
     countEl.textContent = ratingData.count
       ? ratingData.count + ' rating' + (ratingData.count !== 1 ? 's' : '')
       : 'Be the first to rate';
