@@ -344,7 +344,7 @@
         {
           "id": "edufyhub_chem",
           "name": "EdufyHub",
-          "handle": "@EdufyHub",
+          "handle": "@Edufy_Hub",
           "av": "🔬",
           "isTop": false,
           "desc": "2026 paper analysis, maha-revision, exact board-style questions.",
@@ -352,10 +352,10 @@
             "Paper Analysis",
             "Maha-Revision"
           ],
-          "url": "https://www.youtube.com/@EdufyHub",
+          "url": "https://www.youtube.com/@Edufy_Hub",
           "pat": "dots",
-          "avatarUrl": "https://yt3.ggpht.com/ytc/AIdro_kFKyUfpTt-g7ZZ-6LZ1sANP6791YgWTIsbAPxggknb2p4vMYee8SivclGdDEQnvFVPyg=s800-c-k-c0x00ffffff-no-rj",
-          "bannerUrl": ""
+          "avatarUrl": "https://yt3.ggpht.com/flrECLUEjkZTYP9c97y5QB9WsAInE6-CU6bZ7tMfKX2mMW4vx0i980EFI4kecIiFv80b7ysJLA=s800-c-k-c0x00ffffff-no-rj",
+          "bannerUrl": "https://yt3.googleusercontent.com/uGNzo2eVsKxR0zELwbMHAJQpnJZVTVV_u5sc9DbPu7U7kaDfv4f8RkoRvJhC3ZJ88u3d0Q_c3A=w2120-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj"
         },
         {
           "id": "chementor_chem",
