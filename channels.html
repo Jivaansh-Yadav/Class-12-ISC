@@ -787,8 +787,7 @@ function mkCard(ch, g, idx) {
   card.appendChild(body);
 
   // Rating widget
-  const chId = (ch.handle || ch.name || '').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
-  card.appendChild(buildRatingWidget(chId, ch.name));
+  card.appendChild(buildRatingWidget(ch));
 
   // YT button
   const yt = document.createElement('a'); yt.className = 'cc-yt'; yt.href = ch.url || '#'; yt.target = '_blank'; yt.rel = 'noopener noreferrer';
@@ -799,7 +798,8 @@ function mkCard(ch, g, idx) {
 
 /* ══ SUPABASE RATING SYSTEM ══ */
 const SUPABASE_URL = 'https://kswlexxuceivjkjkxsdm.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd2xleHh1Y2Vpdmpramt4c2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzU2NzksImV4cCI6MjA4OTI1MTY3OX0.mbUoMFoFUrJvmJb16WsHeOMsDuWm7LPRdEKsqu_wbUk';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtzd2xleHh1Y2Vpdmpramt4c2RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2NzU2NzksImV4cCI6MjA4OTI1MTY3OX0.mbUoMFoFUrJvmJb16WsHeOMsDuWm7LPRdEKsqu_wbUk';
+const VOTES_TABLE = 'votes';
 
 // Safe Supabase init — the SDK loads before this script
 let supabaseClient = null;
@@ -828,47 +828,116 @@ function getUserFingerprint() {
 
 const ratingsCache = {};
 const userRatingsCache = {};
+const LOCAL_RATING_KEY = 'isc-local-ratings-v1';
 
-async function fetchRatings(channelId) {
+function toLegacySafeId(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function getChannelKeys(ch) {
+  const keys = new Set();
+  const add = (v) => {
+    const raw = String(v || '').trim();
+    if (!raw) return;
+    keys.add(raw);
+    keys.add(raw.toLowerCase());
+    const k = toLegacySafeId(raw);
+    if (k) keys.add(k);
+  };
+  add(ch.id || '');
+  add(ch.channel_id || '');
+  add(ch.handle || '');
+  add((ch.handle || '').replace(/^@/, ''));
+  add(ch.name || '');
+  const url = String(ch.url || '');
+  const atMatch = url.match(/youtube\.com\/@([^/?#]+)/i);
+  const channelMatch = url.match(/youtube\.com\/channel\/([^/?#]+)/i);
+  if (atMatch) add(atMatch[1]);
+  if (channelMatch) add(channelMatch[1]);
+  return Array.from(keys);
+}
+
+async function fetchRatings(channelKeys) {
   if (!supabaseClient) return { avg: 0, count: 0 };
-  if (ratingsCache[channelId]) return ratingsCache[channelId];
+  const cacheKey = channelKeys.join('|');
+  if (ratingsCache[cacheKey]) return ratingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from('votes').select('rating').eq('channel_id', channelId);
-    if (error) throw error;
-    const ratings = data || [];
-    const avg = ratings.length ? (ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) : 0;
-    ratingsCache[channelId] = { avg: Math.round(avg * 10) / 10, count: ratings.length };
-    return ratingsCache[channelId];
+    const fallbackCols = ['channel_id', 'channel_name', 'channel', 'name', 'handle'];
+    const ratings = [];
+
+    for (const col of fallbackCols) {
+      const { data, error } = await supabaseClient.from(VOTES_TABLE).select('rating').in(col, channelKeys);
+      if (error) {
+        const msg = String(error.message || '');
+        // Try next possible channel-identifying column when schema varies.
+        if (/column|does not exist|42703|schema/i.test(msg)) continue;
+        throw error;
+      }
+      for (const row of (data || [])) {
+        ratings.push(row);
+      }
+      // If we found ratings on one known column, no need to keep probing others.
+      if (ratings.length) break;
+    }
+
+    const numericRatings = ratings.map(r => Number(r.rating)).filter(n => Number.isFinite(n) && n > 0);
+    const avg = numericRatings.length ? (numericRatings.reduce((s, r) => s + r, 0) / numericRatings.length) : 0;
+    ratingsCache[cacheKey] = { avg: Math.round(avg * 10) / 10, count: numericRatings.length };
+    return ratingsCache[cacheKey];
   } catch(e) { console.warn('Rating fetch error:', e); return { avg: 0, count: 0 }; }
 }
 
-async function fetchUserRating(channelId) {
-  if (!supabaseClient) return 0;
-  const fp = getUserFingerprint();
-  const cacheKey = channelId + '_' + fp;
+async function fetchUserRating(channelKeys) {
+  const cacheKey = channelKeys.join('|');
   if (userRatingsCache[cacheKey] !== undefined) return userRatingsCache[cacheKey];
   try {
-    const { data, error } = await supabaseClient.from('votes').select('rating').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
-    if (error) throw error;
-    userRatingsCache[cacheKey] = data ? data.rating : 0;
+    const raw = localStorage.getItem(LOCAL_RATING_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    let val = 0;
+    for (const key of channelKeys) {
+      if (parsed[key]) { val = Number(parsed[key]) || 0; break; }
+    }
+    userRatingsCache[cacheKey] = val;
     return userRatingsCache[cacheKey];
-  } catch(e) { console.warn('User rating fetch error:', e); return 0; }
+  } catch(e) { console.warn('User rating local cache error:', e); return 0; }
 }
 
-async function submitRating(channelId, channelName, rating) {
+async function submitRating(primaryChannelId, channelName, channelKeys, rating) {
   if (!supabaseClient) return false;
   const fp = getUserFingerprint();
   try {
-    const { data: existing } = await supabaseClient.from('votes').select('id').eq('channel_id', channelId).eq('user_fingerprint', fp).maybeSingle();
-    if (existing) {
-      await supabaseClient.from('votes').update({ rating, updated_at: new Date().toISOString() }).eq('id', existing.id);
-    } else {
-      await supabaseClient.from('votes').insert({ channel_id: channelId, channel_name: channelName, user_fingerprint: fp, rating });
+    const payloadCandidates = [
+      { channel_id: primaryChannelId, channel_name: channelName, user_fingerprint: fp, rating },
+      { channel_id: primaryChannelId, channel_name: channelName, rating },
+      { channel_id: primaryChannelId, rating },
+      { channel_name: channelName, rating }
+    ];
+
+    let lastErr = null;
+    let wrote = false;
+    for (const payload of payloadCandidates) {
+      const { error } = await supabaseClient.from(VOTES_TABLE).insert(payload);
+      if (!error) { wrote = true; break; }
+      lastErr = error;
+      const msg = String(error.message || '');
+      if (!/column|schema|inserted row|permission|violates/i.test(msg)) break;
     }
-    delete ratingsCache[channelId];
-    delete userRatingsCache[channelId + '_' + fp];
-    userRatingsCache[channelId + '_' + fp] = rating;
-    showRatingToast(rating);
+    if (!wrote) throw lastErr || new Error('Unknown vote insert error');
+
+    // Store per-device rated value for UI state (independent of DB schema differences)
+    const raw = localStorage.getItem(LOCAL_RATING_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    parsed[primaryChannelId] = rating;
+    localStorage.setItem(LOCAL_RATING_KEY, JSON.stringify(parsed));
+
+    const ratingsCacheKey = channelKeys.join('|');
+    delete ratingsCache[ratingsCacheKey];
+    delete userRatingsCache[ratingsCacheKey];
+    userRatingsCache[ratingsCacheKey] = rating;
     return true;
   } catch(e) { console.warn('Rating submit error:', e); return false; }
 }
@@ -887,7 +956,12 @@ function showRatingToast(rating) {
 
 const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
-function buildRatingWidget(channelId, channelName) {
+function buildRatingWidget(ch) {
+  const channelName = ch.name || '';
+  const detectedKeys = getChannelKeys(ch);
+  const explicitId = String(ch.id || ch.channel_id || '').trim();
+  const primaryChannelId = explicitId || detectedKeys[0] || toLegacySafeId(channelName) || 'unknown_channel';
+  const channelKeys = detectedKeys.length ? detectedKeys : [primaryChannelId];
   const wrap = document.createElement('div');
   wrap.className = 'cc-rating';
 
@@ -956,9 +1030,9 @@ function buildRatingWidget(channelId, channelName) {
     setStarDisplay(0, val);
     stars.forEach((st, i) => { if (i < val) { st.classList.add('user-rated'); setTimeout(() => st.classList.remove('user-rated'), 400); } });
     badge.classList.add('visible');
-    const ok = await submitRating(channelId, channelName, val);
+    const ok = await submitRating(primaryChannelId, channelName, channelKeys, val);
     if (ok) {
-      const fresh = await fetchRatings(channelId);
+      const fresh = await fetchRatings(channelKeys);
       avgEl.textContent = fresh.count ? fresh.avg.toFixed(1) : '—';
       countEl.textContent = fresh.count ? fresh.count + ' rating' + (fresh.count !== 1 ? 's' : '') : 'No ratings yet';
       barFill.style.width = fresh.count ? ((fresh.avg / 5) * 100) + '%' : '0%';
@@ -972,7 +1046,7 @@ function buildRatingWidget(channelId, channelName) {
 
   // Load ratings async
   (async () => {
-    const [ratingData, myRating] = await Promise.all([fetchRatings(channelId), fetchUserRating(channelId)]);
+    const [ratingData, myRating] = await Promise.all([fetchRatings(channelKeys), fetchUserRating(channelKeys)]);
     avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '—';
     countEl.textContent = ratingData.count
       ? ratingData.count + ' rating' + (ratingData.count !== 1 ? 's' : '')
