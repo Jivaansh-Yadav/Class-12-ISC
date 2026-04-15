@@ -828,6 +828,36 @@ function getUserFingerprint() {
 
 const ratingsCache = {};
 const userRatingsCache = {};
+const LOCAL_RATING_KEY = 'isc-local-ratings-v1';
+
+function toLegacySafeId(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+function getChannelKeys(ch) {
+  const keys = new Set();
+  const add = (v) => {
+    const raw = String(v || '').trim();
+    if (!raw) return;
+    keys.add(raw);
+    keys.add(raw.toLowerCase());
+    const k = toLegacySafeId(raw);
+    if (k) keys.add(k);
+  };
+  add(ch.handle || '');
+  add((ch.handle || '').replace(/^@/, ''));
+  add(ch.name || '');
+  const url = String(ch.url || '');
+  const atMatch = url.match(/youtube\.com\/@([^/?#]+)/i);
+  const channelMatch = url.match(/youtube\.com\/channel\/([^/?#]+)/i);
+  if (atMatch) add(atMatch[1]);
+  if (channelMatch) add(channelMatch[1]);
+  return Array.from(keys);
+}
 
 function toLegacySafeId(value) {
   return String(value || '')
@@ -876,7 +906,7 @@ async function fetchUserRating(channelKeys) {
     if (error) throw error;
     userRatingsCache[cacheKey] = data ? Number(data.rating) || 0 : 0;
     return userRatingsCache[cacheKey];
-  } catch(e) { console.warn('User rating fetch error:', e); return 0; }
+  } catch(e) { console.warn('User rating local cache error:', e); return 0; }
 }
 
 async function submitRating(primaryChannelId, channelName, channelKeys, rating) {
