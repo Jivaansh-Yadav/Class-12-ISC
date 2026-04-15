@@ -23,7 +23,6 @@
       document.documentElement.style.setProperty('--accent-md',`rgba(${r},${gv},${b},0.20)`);}
   })();
 </script>
-<!-- Supabase SDK — must load before page script -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <title>ISC.exe — YouTube Channels</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet"/>
@@ -353,31 +352,42 @@ body.grad-mode .trigger-swatch{background:linear-gradient(135deg,var(--grad-a),v
 .cc-tag{font-family:var(--font-mono);font-size:8px;padding:3px 8px;border-radius:5px;background:var(--surface2);border:1px solid var(--border2);color:var(--fg2);text-transform:uppercase;letter-spacing:.4px;font-weight:500;}
 .cc-tag.t-top{background:color-mix(in srgb,var(--accent) 14%,var(--surface));border-color:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--accent);font-weight:700;}
 .cc-tag.t-pyq{background:rgba(212,168,75,.12);border-color:rgba(212,168,75,.32);color:#e0b85a;font-weight:600;}
-.cc-desc{font-size:13.5px;color:var(--fg2);line-height:1.75;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-weight:400;}
 
-/* ══ STAR RATING ══ */
-.cc-rating{padding:0 16px 14px;display:flex;align-items:center;gap:10px;position:relative;}
-.cc-stars{display:flex;gap:2px;position:relative;}
-.cc-star{width:28px;height:28px;cursor:pointer;position:relative;transition:transform .2s cubic-bezier(.34,1.56,.64,1),filter .2s;display:flex;align-items:center;justify-content:center;border:none;background:none;padding:0;-webkit-tap-highlight-color:transparent;}
-.cc-star:hover{transform:scale(1.25);}
+/* ══ STAR RATING — REDESIGNED ══ */
+.cc-rating{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px;}
+.cc-rating-top{display:flex;align-items:center;gap:10px;}
+.cc-rating-summary{display:flex;align-items:baseline;gap:5px;flex-shrink:0;}
+.cc-rating-avg{font-family:var(--font-brand);font-size:22px;font-weight:700;color:var(--fg);line-height:1;}
+.cc-rating-max{font-size:12px;color:var(--fg3);font-family:var(--font-mono);}
+.cc-rating-meta{flex:1;}
+.cc-rating-count{font-family:var(--font-mono);font-size:10px;color:var(--fg3);letter-spacing:.3px;display:block;margin-bottom:4px;}
+.cc-rating-bar-wrap{height:4px;background:var(--border);border-radius:4px;overflow:hidden;width:100%;max-width:160px;}
+.cc-rating-bar-fill{height:100%;background:linear-gradient(90deg,#f5c842,#ffd060);border-radius:4px;transition:width .6s cubic-bezier(.22,1,.36,1);}
+.cc-rating-badge{font-family:var(--font-mono);font-size:9px;padding:3px 9px;border-radius:20px;background:rgba(59,255,108,.1);border:1px solid rgba(59,255,108,.3);color:var(--accent);font-weight:600;flex-shrink:0;display:none;}
+.cc-rating-badge.visible{display:inline-block;}
+
+.cc-rate-row{display:flex;flex-direction:column;gap:6px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;}
+.cc-rate-label{font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--fg3);margin-bottom:2px;}
+.cc-stars-input{display:flex;gap:4px;align-items:center;}
+.cc-star{width:32px;height:32px;cursor:pointer;position:relative;transition:transform .15s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;justify-content:center;border:none;background:none;padding:0;-webkit-tap-highlight-color:transparent;}
+.cc-star:hover{transform:scale(1.2);}
 .cc-star:active{transform:scale(1.05);}
-.cc-star svg{width:22px;height:22px;transition:all .25s cubic-bezier(.22,1,.36,1);filter:drop-shadow(0 0 0 transparent);}
-.cc-star.empty svg{fill:var(--surface2);stroke:var(--border2);stroke-width:1;}
-.cc-star.filled svg{fill:#f5c842;stroke:#e0b020;stroke-width:.5;filter:drop-shadow(0 0 6px rgba(245,200,66,.4));}
-.cc-star.hover-preview svg{fill:rgba(245,200,66,.45);stroke:rgba(224,176,32,.5);stroke-width:.5;}
-.cc-star.user-rated svg{animation:starPop .4s cubic-bezier(.34,1.56,.64,1);}
-@keyframes starPop{0%{transform:scale(1)}50%{transform:scale(1.35)}100%{transform:scale(1)}}
-.cc-rating-info{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
-.cc-rating-avg{font-family:var(--font-brand);font-size:16px;font-weight:700;color:var(--fg);letter-spacing:.2px;line-height:1;}
-.cc-rating-count{font-family:var(--font-mono);font-size:8.5px;color:var(--fg3);letter-spacing:.3px;text-transform:uppercase;}
-.cc-rating-badge{font-family:var(--font-mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.25);color:#f5c842;font-weight:600;white-space:nowrap;transition:all .2s;}
-.cc-rating-badge.rated{background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--accent);}
-.cc-rating-shimmer{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;}
-.cc-rating-shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(245,200,66,.08),transparent);animation:ratingShimmer 3s ease-in-out infinite;}
-@keyframes ratingShimmer{0%{left:-100%}50%{left:100%}100%{left:100%}}
+.cc-star svg{width:26px;height:26px;transition:all .2s cubic-bezier(.22,1,.36,1);}
+.cc-star.empty svg{fill:var(--surface2);stroke:var(--border2);stroke-width:1.2;}
+.cc-star.filled svg{fill:#f5c842;stroke:#d4a200;stroke-width:.5;filter:drop-shadow(0 0 4px rgba(245,200,66,.4));}
+.cc-star.preview svg{fill:rgba(245,200,66,.5);stroke:rgba(245,200,66,.7);stroke-width:.8;}
+.cc-star.user-rated svg{animation:starBounce .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes starBounce{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
+.cc-rate-hint{font-family:var(--font-mono);font-size:9px;color:var(--fg3);letter-spacing:.3px;transition:all .2s;min-height:14px;}
 
-/* RATING TOAST */
-.cc-rating-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:10000;padding:10px 20px;border-radius:10px;background:color-mix(in srgb,var(--bg) 95%,transparent);border:1px solid rgba(245,200,66,.3);backdrop-filter:blur(20px);font-family:var(--font-mono);font-size:11px;color:#f5c842;letter-spacing:.3px;box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 20px rgba(245,200,66,.1);opacity:0;transition:opacity .3s,transform .3s cubic-bezier(.22,1,.36,1);pointer-events:none;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+/* DESC truncation */
+.cc-desc{font-size:13.5px;color:var(--fg2);line-height:1.75;flex:1;font-weight:400;}
+.cc-desc.clamped{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.cc-show-more{background:none;border:none;cursor:pointer;font-family:var(--font-mono);font-size:10px;color:var(--accent);letter-spacing:.3px;padding:4px 0;transition:opacity .15s;}
+.cc-show-more:hover{opacity:.75;}
+
+/* Rating toast */
+.cc-rating-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:10000;padding:10px 20px;border-radius:10px;background:color-mix(in srgb,var(--bg) 95%,transparent);border:1px solid rgba(245,200,66,.3);backdrop-filter:blur(20px);font-family:var(--font-mono);font-size:11px;color:#f5c842;letter-spacing:.3px;box-shadow:0 12px 40px rgba(0,0,0,.6);opacity:0;transition:opacity .3s,transform .3s cubic-bezier(.22,1,.36,1);pointer-events:none;display:flex;align-items:center;gap:8px;white-space:nowrap;}
 .cc-rating-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* YT BUTTON */
@@ -751,14 +761,32 @@ function mkCard(ch, g, idx) {
     s.textContent = t; tags.appendChild(s);
   });
   body.appendChild(tags);
+
+  // Description with show more/less
   const descText = (ch.desc || '').trim();
   if (descText) {
-    const desc = document.createElement('div'); desc.className = 'cc-desc';
-    desc.textContent = descText; body.appendChild(desc);
+    const descWrap = document.createElement('div');
+    const desc = document.createElement('div');
+    desc.className = 'cc-desc clamped';
+    desc.textContent = descText;
+    descWrap.appendChild(desc);
+
+    // Only add toggle if text is long enough to clamp
+    if (descText.length > 120) {
+      const toggle = document.createElement('button');
+      toggle.className = 'cc-show-more';
+      toggle.textContent = 'Show more';
+      toggle.addEventListener('click', () => {
+        const clamped = desc.classList.toggle('clamped');
+        toggle.textContent = clamped ? 'Show more' : 'Show less';
+      });
+      descWrap.appendChild(toggle);
+    }
+    body.appendChild(descWrap);
   }
   card.appendChild(body);
 
-  // Rating widget (above YT button)
+  // Rating widget
   const chId = (ch.handle || ch.name || '').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
   card.appendChild(buildRatingWidget(chId, ch.name));
 
@@ -858,88 +886,98 @@ const STAR_SVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4
 function buildRatingWidget(channelId, channelName) {
   const wrap = document.createElement('div');
   wrap.className = 'cc-rating';
-  wrap.innerHTML = '<div class="cc-rating-shimmer"></div>';
 
-  const starsWrap = document.createElement('div');
-  starsWrap.className = 'cc-stars';
+  // Top row: summary (avg + bar + count) + badge
+  const topRow = document.createElement('div'); topRow.className = 'cc-rating-top';
 
+  const summary = document.createElement('div'); summary.className = 'cc-rating-summary';
+  const avgEl = document.createElement('span'); avgEl.className = 'cc-rating-avg'; avgEl.textContent = '—';
+  const maxEl = document.createElement('span'); maxEl.className = 'cc-rating-max'; maxEl.textContent = '/5';
+  summary.appendChild(avgEl); summary.appendChild(maxEl);
+
+  const meta = document.createElement('div'); meta.className = 'cc-rating-meta';
+  const countEl = document.createElement('span'); countEl.className = 'cc-rating-count'; countEl.textContent = 'Loading…';
+  const barWrap = document.createElement('div'); barWrap.className = 'cc-rating-bar-wrap';
+  const barFill = document.createElement('div'); barFill.className = 'cc-rating-bar-fill'; barFill.style.width = '0%';
+  barWrap.appendChild(barFill); meta.appendChild(countEl); meta.appendChild(barWrap);
+
+  const badge = document.createElement('span'); badge.className = 'cc-rating-badge';
+  badge.textContent = 'Rated ✓';
+
+  topRow.appendChild(summary); topRow.appendChild(meta); topRow.appendChild(badge);
+  wrap.appendChild(topRow);
+
+  // Input row
+  const rateRow = document.createElement('div'); rateRow.className = 'cc-rate-row';
+  const rateLabel = document.createElement('div'); rateLabel.className = 'cc-rate-label'; rateLabel.textContent = 'Rate this channel';
+  const starsWrap = document.createElement('div'); starsWrap.className = 'cc-stars-input';
+  const hint = document.createElement('div'); hint.className = 'cc-rate-hint';
+
+  const HINTS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Must watch!'];
   const stars = [];
+
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement('button');
     star.className = 'cc-star empty';
     star.innerHTML = STAR_SVG;
-    star.dataset.value = i;
-    star.setAttribute('aria-label', `Rate ${i} stars`);
+    star.setAttribute('aria-label', `Rate ${i} star${i > 1 ? 's' : ''}`);
+    star.dataset.val = i;
     stars.push(star);
     starsWrap.appendChild(star);
   }
+  starsWrap.appendChild(hint);
 
-  const info = document.createElement('div');
-  info.className = 'cc-rating-info';
-  info.innerHTML = '<span class="cc-rating-avg">—</span><span class="cc-rating-count">loading...</span>';
+  let userRating = 0;
 
-  const badge = document.createElement('div');
-  badge.className = 'cc-rating-badge';
-  badge.textContent = 'RATE';
-  badge.style.display = 'none';
-
-  wrap.appendChild(starsWrap);
-  wrap.appendChild(info);
-  wrap.appendChild(badge);
-
-  // Hover preview
-  starsWrap.addEventListener('mouseover', (e) => {
-    const btn = e.target.closest('.cc-star');
-    if (!btn) return;
-    const val = parseInt(btn.dataset.value);
-    stars.forEach((s, idx) => {
-      s.classList.toggle('hover-preview', idx < val && !s.classList.contains('filled'));
+  function setStarDisplay(hovVal, userVal) {
+    stars.forEach((s, i) => {
+      const filled = hovVal > 0 ? i < hovVal : i < userVal;
+      const preview = hovVal > 0 && i < hovVal && i >= userVal;
+      s.className = 'cc-star ' + (filled ? (preview && hovVal !== userVal ? 'preview' : 'filled') : 'empty');
     });
-  });
-  starsWrap.addEventListener('mouseout', () => {
-    stars.forEach(s => s.classList.remove('hover-preview'));
-  });
+    hint.textContent = hovVal > 0 ? HINTS[hovVal] : (userVal > 0 ? HINTS[userVal] : '');
+  }
 
-  // Click to rate
-  starsWrap.addEventListener('click', async (e) => {
-    const btn = e.target.closest('.cc-star');
-    if (!btn) return;
-    const val = parseInt(btn.dataset.value);
-    // Optimistic UI update
-    stars.forEach((s, idx) => {
-      s.classList.remove('hover-preview');
-      s.classList.toggle('filled', idx < val);
-      s.classList.toggle('empty', idx >= val);
-      if (idx < val) s.classList.add('user-rated');
-    });
-    badge.textContent = 'RATED ✓';
-    badge.classList.add('rated');
-    badge.style.display = '';
-    setTimeout(() => stars.forEach(s => s.classList.remove('user-rated')), 500);
+  starsWrap.addEventListener('mouseover', e => {
+    const s = e.target.closest('.cc-star');
+    if (s) setStarDisplay(parseInt(s.dataset.val), userRating);
+  });
+  starsWrap.addEventListener('mouseleave', () => setStarDisplay(0, userRating));
 
+  starsWrap.addEventListener('click', async e => {
+    const s = e.target.closest('.cc-star');
+    if (!s) return;
+    const val = parseInt(s.dataset.val);
+    userRating = val;
+    setStarDisplay(0, val);
+    stars.forEach((st, i) => { if (i < val) { st.classList.add('user-rated'); setTimeout(() => st.classList.remove('user-rated'), 400); } });
+    badge.classList.add('visible');
     const ok = await submitRating(channelId, channelName, val);
     if (ok) {
       const fresh = await fetchRatings(channelId);
-      info.querySelector('.cc-rating-avg').textContent = fresh.avg.toFixed(1);
-      info.querySelector('.cc-rating-count').textContent = fresh.count + ' rating' + (fresh.count !== 1 ? 's' : '');
+      avgEl.textContent = fresh.count ? fresh.avg.toFixed(1) : '—';
+      countEl.textContent = fresh.count ? fresh.count + ' rating' + (fresh.count !== 1 ? 's' : '') : 'No ratings yet';
+      barFill.style.width = fresh.count ? ((fresh.avg / 5) * 100) + '%' : '0%';
+      showRatingToast(val);
     }
   });
 
-  // Load initial ratings
+  rateRow.appendChild(rateLabel);
+  rateRow.appendChild(starsWrap);
+  wrap.appendChild(rateRow);
+
+  // Load ratings async
   (async () => {
-    const [ratingData, userRating] = await Promise.all([fetchRatings(channelId), fetchUserRating(channelId)]);
-    info.querySelector('.cc-rating-avg').textContent = ratingData.count ? ratingData.avg.toFixed(1) : '—';
-    info.querySelector('.cc-rating-count').textContent = ratingData.count
+    const [ratingData, myRating] = await Promise.all([fetchRatings(channelId), fetchUserRating(channelId)]);
+    avgEl.textContent = ratingData.count ? ratingData.avg.toFixed(1) : '—';
+    countEl.textContent = ratingData.count
       ? ratingData.count + ' rating' + (ratingData.count !== 1 ? 's' : '')
-      : 'No ratings yet';
-    if (userRating > 0) {
-      stars.forEach((s, idx) => {
-        s.classList.toggle('filled', idx < userRating);
-        s.classList.toggle('empty', idx >= userRating);
-      });
-      badge.textContent = 'RATED ✓';
-      badge.classList.add('rated');
-      badge.style.display = '';
+      : 'Be the first to rate';
+    barFill.style.width = ratingData.count ? ((ratingData.avg / 5) * 100) + '%' : '0%';
+    if (myRating > 0) {
+      userRating = myRating;
+      setStarDisplay(0, myRating);
+      badge.classList.add('visible');
     }
   })();
 
